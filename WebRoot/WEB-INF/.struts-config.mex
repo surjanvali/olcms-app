@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlowViewLayout Version="1.2">
+  <StrutsActivity path="/Welcome.do" location="350,650" dimension="248,104" />
+  <StrutsActivity path="/sessionExpired.do" location="1250,1150" dimension="231,96" />
+  <StrutsActivity path="/HomePage.do" location="50,50" dimension="248,104" />
+  <StrutsActivity path="/Login.do" location="350,50" dimension="243,104" />
+  <StrutsActivity path="/Logout.do" location="1850,50" dimension="236,96" />
+  <StrutsActivity path="/AjaxModels.do" location="1250,350" dimension="239,96" />
+  <StrutsActivity path="/ChangePassword.do" location="1850,550" dimension="289,96" />
+  <StrutsActivity path="/registerMLO.do" location="1850,750" dimension="266,96" />
+  <StrutsActivity path="/registerNodal.do" location="1850,950" dimension="308,96" />
+  <StrutsActivity path="/CaseRegistration.do" location="1850,1150" dimension="286,96" />
+  <StrutsActivity path="/NodalOfficerChangeReq.do" location="1850,1350" dimension="349,96" />
+  <StrutsActivity path="/NodalOfficerChangeReqDist.do" location="1850,1550" dimension="369,96" />
+  <StrutsActivity path="/NodalOfficerAbstract.do" location="50,1250" dimension="342,96" />
+  <StrutsActivity path="/MLOAbstract.do" location="1250,1350" dimension="298,96" />
+  <StrutsActivity path="/ChangeRequestAbstract.do" location="1250,1550" dimension="362,96" />
+  <StrutsActivity path="/RetrieveNicData.do" location="350,250" dimension="362,96" />
+  <StrutsActivity path="/WPAffidavit.do" location="1550,250" dimension="308,96" />
+  <StrutsActivity path="/HighCourtCasesList.do" location="50,450" dimension="302,96" />
+  <StrutsActivity path="/HighCourtCasesListLaw.do" location="2750,1250" dimension="323,96" />
+  <StrutsActivity path="/AllHighCourtCasesReport.do" location="2450,1450" dimension="330,96" />
+  <StrutsActivity path="/HighCourtCasesAssignedList.do" location="1850,2050" dimension="329,96" />
+  <StrutsActivity path="/GPOAck.do" location="650,450" dimension="322,96" />
+  <StrutsActivity path="/eCourtCasesData.do" location="950,2050" dimension="373,96" />
+  <StrutsActivity path="/UsersCreated.do" location="2150,1750" dimension="299,96" />
+  <StrutsActivity path="/StatesMaster.do" location="1850,2250" dimension="297,96" />
+  <StrutsActivity path="/ActsMaster.do" location="650,2550" dimension="289,96" />
+  <StrutsActivity path="/CaseTypesMaster.do" location="1250,2650" dimension="320,96" />
+  <StrutsActivity path="/DeptMaster.do" location="50,2550" dimension="256,96" />
+  <StrutsActivity path="/UpdateCaseDept.do" location="2450,850" dimension="283,96" />
+  <StrutsActivity path="/AssignedCasesToSection.do" location="1850,2450" dimension="327,96" />
+  <StrutsActivity path="/ClosedCasesReport.do" location="2450,2150" dimension="317,96" />
+  <StrutsActivity path="/HighCourtCauseList.do" location="2450,2750" dimension="301,96" />
+  <StrutsActivity path="/HCCaseStatusAbstractReport.do" location="2450,350" dimension="313,96" />
+  <StrutsActivity path="/LoginStatusReport.do" location="50,2950" dimension="292,96" />
+  <StrutsActivity path="/CaseAssignmentStatus.do" location="950,3050" dimension="315,96" />
+  <StrutsActivity path="/OfficersRegistered.do" location="2750,550" dimension="291,96" />
+  <StrutsActivity path="Login;6" location="350,1750" dimension="92,81" />
+  <StrutsActivity path="Logout;6" location="50,650" dimension="203,87" />
+  <StrutsActivity path="Welcome;6" location="950,1450" dimension="107,81" />
+  <StrutsActivity path="InvalidAccess;6" location="950,1650" dimension="117,81" />
+  <StrutsActivity path="sessionExpired;6" location="1550,1750" dimension="123,81" />
+  <StrutsActivity path="UserLayout" location="950,650" dimension="97,53" />
+  <StrutsActivity path="UserLayoutNew" location="2150,350" dimension="113,51" />
+  <StrutsActivity path="/FrontPage.jsp" location="650,650" dimension="116,53" />
+  <StrutsActivity path="/jsp/BaseLayout/Login.jsp" location="650,1850" dimension="168,51" />
+  <StrutsActivity path="page.logout" location="950,1850" dimension="94,51" />
+  <StrutsActivity path="page.changePswd" location="1250,1850" dimension="126,51" />
+  <StrutsActivity path="registerMLO" location="1850,1850" dimension="95,51" />
+  <StrutsActivity path="regNodalOfficer" location="50,1950" dimension="115,51" />
+  <StrutsActivity path="caseRegForm" location="350,1950" dimension="101,51" />
+  <StrutsActivity path="noChangeReq" location="1550,1950" dimension="105,51" />
+  <StrutsActivity path="noChangeReqDist" location="650,2050" dimension="125,51" />
+  <StrutsActivity path="nodalofcrabstract" location="350,1450" dimension="123,51" />
+  <StrutsActivity path="mloabstract" location="650,1450" dimension="93,51" />
+  <StrutsActivity path="changereqabstract" location="650,1650" dimension="128,51" />
+  <StrutsActivity path="wpaffidavitpage" location="350,2350" dimension="115,51" />
+  <StrutsActivity path="assignhighcourtcase" location="350,2150" dimension="138,51" />
+  <StrutsActivity path="highcourtcases" location="650,2350" dimension="110,51" />
+  <StrutsActivity path="highcourtcaseslaw" location="2750,1650" dimension="128,51" />
+  <StrutsActivity path="allhighcourtcases" location="2450,550" dimension="122,51" />
+  <StrutsActivity path="assignedhccases" location="1550,2450" dimension="117,51" />
+  <StrutsActivity path="gpoack" location="950,2350" dimension="69,51" />
+  <StrutsActivity path="ecourtscasesdata" location="1250,2350" dimension="120,51" />
+  <StrutsActivity path="usersreport" location="1550,2150" dimension="89,51" />
+  <StrutsActivity path="statesreport" location="1850,2650" dimension="92,51" />
+  <StrutsActivity path="actsreport" location="350,2750" dimension="83,51" />
+  <StrutsActivity path="casetypesreport" location="650,2750" dimension="113,51" />
+  <StrutsActivity path="deptMaster" location="2150,2850" dimension="90,51" />
+  <StrutsActivity path="updatecasedept" location="2450,1050" dimension="114,51" />
+  <StrutsActivity path="casedetailsview" location="1250,2850" dimension="111,51" />
+  <StrutsActivity path="casestatusupdate" location="2450,1250" dimension="121,51" />
+  <StrutsActivity path="AssignedCasesToSectionAction" location="1550,2850" dimension="194,51" />
+  <StrutsActivity path="casedetailspopupview" location="2450,1950" dimension="146,51" />
+  <StrutsActivity path="filecounter" location="50,2350" dimension="87,51" />
+  <StrutsActivity path="highcourtcasesreport" location="2450,2550" dimension="142,51" />
+  <StrutsActivity path="highcourtcauselist" location="950,2850" dimension="127,51" />
+  <StrutsActivity path="hccasestatusabstract" location="1850,2850" dimension="139,51" />
+  <StrutsActivity path="loginstatusreport" location="2450,2950" dimension="120,51" />
+  <StrutsActivity path="caseassignmentstatus" location="50,3550" dimension="145,51" />
+  <StrutsActivity path="officersreport" location="2750,1050" dimension="101,51" />
+  <StrutsActivity path="districtreport" location="2150,2650" dimension="98,51" />
+  <StrutsActivity path="benchreport" location="50,2750" dimension="95,51" />
+  <StrutsActivity path="HomePage;6" location="950,1050" dimension="116,81" />
+  <StrutsActivity path="/login.jsp" location="50,850" dimension="86,53" />
+  <StrutsActivity path="Usermanagement" location="350,850" dimension="135,53" />
+  <StrutsActivity path="FixedAssetsDataEntry" location="650,850" dimension="155,53" />
+  <StrutsActivity path="FixedAssetsReports" location="950,850" dimension="145,53" />
+  <StrutsActivity path="FixedAssetsDataEntryStatusReport" location="1250,750" dimension="209,51" />
+  <StrutsActivity path="FormatsEntry" location="50,1050" dimension="108,53" />
+  <StrutsActivity path="/jsp/AddProvisionsModal.jsp" location="350,1050" dimension="200,53" />
+  <StrutsActivity path="TerritorialUnitsSelection" location="650,1050" dimension="169,53" />
+  <StrutsActivity path="VacantLandDataEntry" location="1250,950" dimension="142,51" />
+  <StrutsActivity path="OrgsConfirmationPage" location="650,1250" dimension="152,51" />
+  <StrutsActivity path="dataEntryStatusPage" location="50,1450" dimension="138,51" />
+  <StrutsActivity path="deptVacantReportPage" location="950,1250" dimension="150,51" />
+  <StrutsActivity path="govtBldngVacantPage" location="1550,650" dimension="146,51" />
+  <StrutsActivity path="UserManual" location="1550,850" dimension="93,51" />
+  <StrutsActivity path="govtbldngVacantPage" location="50,1650" dimension="146,51" />
+  <StrutsActivity path="RDOVacantLandDataEntry" location="1550,1050" dimension="166,51" />
+  <StrutsActivity path="/jsp/registration/AssignCase.jsp" location="50,2150" dimension="198,51" />
+  <StrutsActivity path="closedcasesreport" location="2450,2350" dimension="124,51" />
+  <StrutsActivity path="mlologinstatusreport" location="650,2950" dimension="141,51" />
+  <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1850,595" />
+      <AbsolutePoint location="1235,595" />
+      <AbsolutePoint location="1235,1875" />
+      <AbsolutePoint location="1250,1875" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/CaseRegistration.do,success,caseRegForm,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1993,1246" />
+      <AbsolutePoint location="1993,1316" />
+      <AbsolutePoint location="1082,1316" />
+      <AbsolutePoint location="1082,1975" />
+      <AbsolutePoint location="451,1975" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/ClosedCasesReport.do,success,highcourtcasesreport,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2577,2246" />
+      <AbsolutePoint location="2577,2550" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/AssignedCasesToSection.do,success,AssignedCasesToSectionAction,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1850,2516" />
+      <AbsolutePoint location="1647,2516" />
+      <AbsolutePoint location="1647,2850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/eCourtCasesData.do,success,ecourtscasesdata,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1308,2146" />
+      <AbsolutePoint location="1308,2350" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="Welcome;6,null,/Welcome.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="950,1516" />
+      <AbsolutePoint location="565,1516" />
+      <AbsolutePoint location="565,754" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/RetrieveNicData.do,success,changereqabstract,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="531,346" />
+      <AbsolutePoint location="531,595" />
+      <AbsolutePoint location="894,595" />
+      <AbsolutePoint location="894,1675" />
+      <AbsolutePoint location="778,1675" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/Logout.do,success,page.logout,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1850,72" />
+      <AbsolutePoint location="1115,72" />
+      <AbsolutePoint location="1115,1875" />
+      <AbsolutePoint location="1044,1875" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/MLOAbstract.do,success,mloabstract,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1250,1398" />
+      <AbsolutePoint location="696,1398" />
+      <AbsolutePoint location="696,1450" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/registerMLO.do,registerMLO,registerMLO,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1850,786" />
+      <AbsolutePoint location="1791,786" />
+      <AbsolutePoint location="1791,1875" />
+      <AbsolutePoint location="1850,1875" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/sessionExpired.do,null,/Login.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1481,1198" />
+      <AbsolutePoint location="1504,1198" />
+      <AbsolutePoint location="1504,-100" />
+      <AbsolutePoint location="471,-100" />
+      <AbsolutePoint location="471,50" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/DeptMaster.do,success,deptMaster,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="178,2646" />
+      <AbsolutePoint location="178,2816" />
+      <AbsolutePoint location="2195,2816" />
+      <AbsolutePoint location="2195,2850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/LoginStatusReport.do,success,loginstatusreport,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="342,3016" />
+      <AbsolutePoint location="2510,3016" />
+      <AbsolutePoint location="2510,3001" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/HighCourtCasesListLaw.do,success,highcourtcaseslaw,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2814,1346" />
+      <AbsolutePoint location="2814,1650" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/AssignedCasesToSection.do,caseview,casedetailsview,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2013,2546" />
+      <AbsolutePoint location="2013,2765" />
+      <AbsolutePoint location="1305,2765" />
+      <AbsolutePoint location="1305,2850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/Login.do,LoginPage,/jsp/BaseLayout/Login.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="471,154" />
+      <AbsolutePoint location="471,199" />
+      <AbsolutePoint location="-85,199" />
+      <AbsolutePoint location="-85,1875" />
+      <AbsolutePoint location="650,1875" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/HomePage.do,FrontPage,/FrontPage.jsp,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="50,102" />
+      <AbsolutePoint location="5,102" />
+      <AbsolutePoint location="5,769" />
+      <AbsolutePoint location="708,769" />
+      <AbsolutePoint location="708,703" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/HighCourtCasesList.do,assignCase2EmpPage,assignhighcourtcase,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="352,498" />
+      <AbsolutePoint location="625,498" />
+      <AbsolutePoint location="625,2175" />
+      <AbsolutePoint location="488,2175" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/HighCourtCasesAssignedList.do,success,assignedhccases,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2014,2146" />
+      <AbsolutePoint location="2014,2216" />
+      <AbsolutePoint location="1608,2216" />
+      <AbsolutePoint location="1608,2450" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/Welcome.do,UserWelcomePageNew,UserLayoutNew,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="500,754" />
+      <AbsolutePoint location="500,918" />
+      <AbsolutePoint location="2214,918" />
+      <AbsolutePoint location="2214,401" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/ChangeRequestAbstract.do,success,changereqabstract,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1250,1598" />
+      <AbsolutePoint location="714,1598" />
+      <AbsolutePoint location="714,1650" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/AssignedCasesToSection.do,casestatusupdate,casestatusupdate,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1850,2486" />
+      <AbsolutePoint location="1682,2486" />
+      <AbsolutePoint location="1682,1275" />
+      <AbsolutePoint location="2450,1275" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/NodalOfficerChangeReq.do,success,noChangeReq,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1850,1398" />
+      <AbsolutePoint location="1761,1398" />
+      <AbsolutePoint location="1761,1975" />
+      <AbsolutePoint location="1655,1975" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/OfficersRegistered.do,success,officersreport,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2800,646" />
+      <AbsolutePoint location="2800,1050" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/HighCourtCasesList.do,success,highcourtcases,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="50,498" />
+      <AbsolutePoint location="-25,498" />
+      <AbsolutePoint location="-25,2116" />
+      <AbsolutePoint location="705,2116" />
+      <AbsolutePoint location="705,2350" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/StatesMaster.do,success,statesreport,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1850,2295" />
+      <AbsolutePoint location="1791,2295" />
+      <AbsolutePoint location="1791,2675" />
+      <AbsolutePoint location="1850,2675" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/ActsMaster.do,success,actsreport,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="650,2598" />
+      <AbsolutePoint location="391,2598" />
+      <AbsolutePoint location="391,2750" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/AssignedCasesToSection.do,casepopupview,casedetailspopupview,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2177,2498" />
+      <AbsolutePoint location="2915,2498" />
+      <AbsolutePoint location="2915,1975" />
+      <AbsolutePoint location="2596,1975" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/WPAffidavit.do,DEPT_WP_FORM,wpaffidavitpage,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1731,346" />
+      <AbsolutePoint location="1731,2295" />
+      <AbsolutePoint location="407,2295" />
+      <AbsolutePoint location="407,2350" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="sessionExpired;6,null,/Logout.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1550,1790" />
+      <AbsolutePoint location="1205,1790" />
+      <AbsolutePoint location="1205,102" />
+      <AbsolutePoint location="1850,102" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/CaseTypesMaster.do,success,casetypesreport,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1250,2698" />
+      <AbsolutePoint location="706,2698" />
+      <AbsolutePoint location="706,2750" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/HCCaseStatusAbstractReport.do,success,hccasestatusabstract,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2450,416" />
+      <AbsolutePoint location="1821,416" />
+      <AbsolutePoint location="1821,2875" />
+      <AbsolutePoint location="1850,2875" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/HighCourtCauseList.do,success,highcourtcauselist,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2619,2750" />
+      <AbsolutePoint location="2619,2616" />
+      <AbsolutePoint location="1004,2616" />
+      <AbsolutePoint location="1004,2850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="Login;6,null,/Login.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="442,1790" />
+      <AbsolutePoint location="1175,1790" />
+      <AbsolutePoint location="1175,102" />
+      <AbsolutePoint location="593,102" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="Logout;6,null,/Logout.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="50,693" />
+      <AbsolutePoint location="35,693" />
+      <AbsolutePoint location="35,-25" />
+      <AbsolutePoint location="1968,-25" />
+      <AbsolutePoint location="1968,50" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/Welcome.do,UserWelcomePage,UserLayout,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="598,718" />
+      <AbsolutePoint location="998,718" />
+      <AbsolutePoint location="998,703" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/AllHighCourtCasesReport.do,success,allhighcourtcases,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2450,1516" />
+      <AbsolutePoint location="2368,1516" />
+      <AbsolutePoint location="2368,575" />
+      <AbsolutePoint location="2450,575" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/UpdateCaseDept.do,success,updatecasedept,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2507,946" />
+      <AbsolutePoint location="2507,1050" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/NodalOfficerAbstract.do,success,nodalofcrabstract,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="377,1346" />
+      <AbsolutePoint location="377,1450" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/GPOAck.do,success,gpoack,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="834,546" />
+      <AbsolutePoint location="834,2375" />
+      <AbsolutePoint location="950,2375" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/AssignedCasesToSection.do,filecounter,filecounter,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2013,2450" />
+      <AbsolutePoint location="2013,2416" />
+      <AbsolutePoint location="93,2416" />
+      <AbsolutePoint location="93,2401" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/registerNodal.do,success,regNodalOfficer,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1850,1016" />
+      <AbsolutePoint location="35,1016" />
+      <AbsolutePoint location="35,1975" />
+      <AbsolutePoint location="50,1975" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/NodalOfficerChangeReqDist.do,success,noChangeReqDist,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2034,1646" />
+      <AbsolutePoint location="2034,1916" />
+      <AbsolutePoint location="712,1916" />
+      <AbsolutePoint location="712,2050" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/CaseAssignmentStatus.do,success,caseassignmentstatus,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1107,3146" />
+      <AbsolutePoint location="1107,3575" />
+      <AbsolutePoint location="195,3575" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/UsersCreated.do,success,usersreport,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2299,1846" />
+      <AbsolutePoint location="2299,2175" />
+      <AbsolutePoint location="1639,2175" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="InvalidAccess;6,null,/Logout.do,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1067,1690" />
+      <AbsolutePoint location="1145,1690" />
+      <AbsolutePoint location="1145,132" />
+      <AbsolutePoint location="1850,132" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+</FlowViewLayout>
+

@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+	<data-sources>
+		<data-source key="dbsource" type="org.apache.commons.dbcp.BasicDataSource">
+			<set-property property="driverClassName" value="org.postgresql.Driver" />
+
+			<!-- Live -->
+			<set-property property="url" value="jdbc:postgresql://10.96.54.54:6432/apolcms" /> 
+			<set-property property="username" value="apolcms" /> 
+			<set-property property="password" value="@p0l(m$" />
+
+			<!-- Test -->
+			<!-- <set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" /> 
+			<set-property property="username" value="apolcms" /> 
+			<set-property property="password" value="apolcms" /> --> 
+			
+			<!-- LOCAL -->
+			<!-- <set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" />
+			<set-property property="username" value="apolcms" />
+			<set-property property="password" value="apolcms" /> -->
+
+			<set-property property="minCount" value="5" />
+			<set-property property="maxCount" value="200" />
+
+			<set-property property="maxActive" value="200" />
+
+			<set-property property="maxWait" value="30000" />
+
+			<set-property property="maxIdle" value="30" />
+
+			<set-property property="LogAbandoned" value="true" />
+
+			<set-property property="removeAbandoned" value="true" />
+			<set-property property="removeAbandonedTimeout" value="60" />
+
+			<set-property property="timeBetweenEvictionRunsMillis" value="15000" />
+			<set-property property="minEvictableIdleTimeMillis" value="60000" />
+
+			<set-property property="testWhileIdle" value="true" />
+
+			<set-property property="numTestsPerEvictionRun" value="5" />
+			<set-property property="whenExhaustedAction" value="2" />
+			<set-property property="defaultAutoCommit" value="true" />
+			<set-property property="defaultReadOnly" value="false" />
+
+		</data-source>
+	</data-sources>
+	<form-beans>
+		<form-bean name="LoginForm"
+			type="in.apcfss.struts.Forms.LoginForm"></form-bean>
+		<form-bean name="CommonForm"
+			type="in.apcfss.struts.Forms.CommonForm"></form-bean>
+		<form-bean name="CommonFormBean"
+			type="in.apcfss.struts.Forms.CommonFormBean"></form-bean>
+		<form-bean name="wpaffidavitnewform"
+			type="in.apcfss.struts.entryforms.filing.WPAffidavitNEWFormBean"></form-bean>
+	</form-beans>
+	<global-exceptions />
+	<global-forwards>
+		<forward name="Login" path="/Login.do"></forward>
+		<forward name="Logout" path="/Logout.do"></forward>
+		<forward name="Welcome" path="/Welcome.do?mode=unspecified"></forward>
+		<forward name="InvalidAccess" path="/Logout.do"></forward>
+		<forward name="sessionExpired" path="/Logout.do"></forward>
+	</global-forwards>
+	<action-mappings>
+		<action path="/Welcome"
+			type="in.apcfss.struts.WelcomePageAction" parameter="mode"
+			scope="request">
+			<forward name="UserWelcomePage" path="UserLayout"></forward>
+			<forward name="UserWelcomePageNew" path="UserLayoutNew"></forward>
+		</action>
+
+		<action path="/sessionExpired" forward="/Login.do" />
+		
+		<!-- <action path="/sessionExpired"
+			type="in.apcfss.struts.WelcomePageAction" parameter="mode"
+			scope="request">
+			<forward name="UserWelcomePage" path="UserLayout"></forward>
+		</action> -->
+
+		<action path="/HomePage" type="in.apcfss.struts.HomePageAction"
+			parameter="mode" scope="request">
+			<forward name="FrontPage" path="/FrontPage.jsp"></forward>
+		</action>
+
+		<action path="/Login" name="LoginForm"
+			type="in.apcfss.struts.Actions.LoginAction" parameter="mode"
+			scope="request">
+			<forward name="LoginPage" path="/jsp/BaseLayout/Login.jsp"></forward>
+		</action>
+
+		<action path="/Logout" name="WelcomeForm"
+			type="in.apcfss.struts.Actions.LogoutAction" scope="request"
+			parameter="mode">
+			<forward name="success" path="page.logout" />
+		</action>
+
+		<action path="/AjaxModels"
+			type="in.apcfss.struts.commons.AjaxModels" parameter="mode"
+			scope="request" />
+
+		<action path="/ChangePassword" name="CommonFormBean"
+			type="in.apcfss.struts.Actions.ChangePasswordAction" scope="request"
+			parameter="mode">
+			<forward name="changepswdpage" path="page.changePswd" />
+		</action>
+
+		<action path="/registerMLO" name="CommonForm"
+			type="in.apcfss.struts.Actions.RegisterMLOAction" parameter="mode"
+			scope="request">
+			<forward name="registerMLO" path="registerMLO"></forward>
+		</action>
+
+
+		<action path="/registerNodal" name="CommonForm"
+			type="in.apcfss.struts.Actions.RegisterNodalOfficerAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="regNodalOfficer"></forward>
+		</action>
+
+		<action path="/CaseRegistration" name="CommonForm"
+			type="in.apcfss.struts.Actions.CaseRegistrationAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="caseRegForm"></forward>
+		</action>
+
+		<action path="/NodalOfficerChangeReq" name="CommonForm"
+			type="in.apcfss.struts.Actions.NodalOfficerChangeRequestAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="noChangeReq"></forward>
+		</action>
+		<action path="/NodalOfficerChangeReqDist" name="CommonForm"
+			type="in.apcfss.struts.Actions.NodalOfficerChangeRequestDistAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="noChangeReqDist"></forward>
+		</action>
+
+		<!-- REPORTS START -->
+		<action path="/NodalOfficerAbstract" name="CommonForm"
+			type="in.apcfss.struts.reports.NodalOfficerAbstractReportAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="nodalofcrabstract"></forward>
+		</action>
+
+		<action path="/MLOAbstract" name="CommonForm"
+			type="in.apcfss.struts.reports.MLOabstractReportAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="mloabstract"></forward>
+		</action>
+
+		<action path="/ChangeRequestAbstract" name="CommonForm"
+			type="in.apcfss.struts.reports.ChangeRequestsAbstractReportAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="changereqabstract"></forward>
+		</action>
+
+
+		<action path="/RetrieveNicData" name="CommonForm"
+			type="in.apcfss.struts.reports.ChangeRequestsAbstractReportAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="changereqabstract"></forward>
+		</action>
+
+		<!-- REPORTS END -->
+
+
+
+		<action path="/WPAffidavit" name="wpaffidavitnewform"
+			type="in.apcfss.struts.entryforms.filing.WPAffidavitAction"
+			parameter="mode" scope="request">
+			<forward name="DEPT_WP_FORM" path="wpaffidavitpage"></forward>
+		</action>
+
+
+		<action path="/HighCourtCasesList" name="CommonForm"
+			type="in.apcfss.struts.Actions.HighCourtCasesListAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="highcourtcases"></forward>
+			<forward name="assignCase2EmpPage" path="assignhighcourtcase"></forward>
+		</action>
+		
+		
+		<action path="/HighCourtCasesListLaw" name="CommonForm"
+			type="in.apcfss.struts.Actions.HighCourtCasesListActionLaw"
+			parameter="mode" scope="request">
+			<forward name="success" path="highcourtcaseslaw"></forward>
+		</action>
+
+		<action path="/AllHighCourtCasesReport" name="CommonForm"
+			type="in.apcfss.struts.reports.AllHighCourtCasesReportAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="allhighcourtcases"></forward>
+		</action>
+
+		<action path="/HighCourtCasesAssignedList" name="CommonForm"
+			type="in.apcfss.struts.reports.HighCourtCasesAssignedReport"
+			parameter="mode" scope="request">
+			<forward name="success" path="assignedhccases"></forward>
+		</action>
+
+		<action path="/GPOAck" name="CommonForm"
+			type="in.apcfss.struts.Actions.GPOAcknowledgementAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="gpoack"></forward>
+		</action>
+
+		<action path="/eCourtCasesData" name="CommonForm"
+			type="in.apcfss.struts.reports.EcourtsCasesDataDeptWiseReportAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="ecourtscasesdata"></forward>
+		</action>
+
+		<action path="/UsersCreated" name="CommonForm"
+			type="in.apcfss.struts.reports.UsersCreatedReportAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="usersreport"></forward>
+		</action>
+
+		<!-- MASTER REPORTS -->
+		<action path="/StatesMaster" name="CommonForm"
+			type="in.apcfss.struts.masters.StatesMasterReportAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="statesreport"></forward>
+		</action>
+
+		<action path="/ActsMaster" name="CommonForm"
+			type="in.apcfss.struts.reports.ActsMasterAction" parameter="mode"
+			scope="request">
+			<forward name="success" path="actsreport"></forward>
+		</action>
+
+		<action path="/CaseTypesMaster" name="CommonForm"
+			type="in.apcfss.struts.reports.CaseTypesMasterAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="casetypesreport"></forward>
+		</action>
+
+		<action path="/DeptMaster" name="CommonForm"
+			type="in.apcfss.struts.reports.DeptMasterAction" parameter="mode"
+			scope="request">
+			<forward name="success" path="deptMaster"></forward>
+		</action>
+
+		<action path="/UpdateCaseDept" name="CommonForm"
+			type="in.apcfss.struts.reports.UpdateCaseDeptAction" parameter="mode"
+			scope="request">
+			<forward name="success" path="updatecasedept"></forward>
+		</action>
+
+		<!-- MASTER REPORTS -->
+
+		<action path="/AssignedCasesToSection" name="CommonForm"
+			type="in.apcfss.struts.Actions.AssignedCasesToSectionAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="AssignedCasesToSectionAction"></forward>
+			<forward name="caseview" path="casedetailsview"></forward>
+			<forward name="casepopupview" path="casedetailspopupview"></forward>
+			<forward name="filecounter" path="filecounter"></forward>
+			<forward name="casestatusupdate" path="casestatusupdate"></forward>
+		</action>
+
+
+		<action path="/ClosedCasesReport" name="CommonForm"
+			type="in.apcfss.struts.reports.HighCourtCasesClosedReport"
+			parameter="mode" scope="request">
+			<forward name="success" path="highcourtcasesreport"></forward>
+		</action>
+
+		<action path="/HighCourtCauseList" name="CommonForm"
+			type="in.apcfss.struts.reports.HighCourtCauseListAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="highcourtcauselist"></forward>
+		</action>
+
+		<action path="/HCCaseStatusAbstractReport" name="CommonForm"
+			type="in.apcfss.struts.reports.HCCaseStatusAbstractReport"
+			parameter="mode" scope="request">
+			<forward name="success" path="hccasestatusabstract"></forward>
+		</action>
+
+		<action path="/LoginStatusReport" name="CommonForm"
+			type="in.apcfss.struts.reports.LoginStatusReportAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="loginstatusreport"></forward>
+		</action>
+
+		<action path="/CaseAssignmentStatus" name="CommonForm"
+			type="in.apcfss.struts.reports.CaseAssignmentStatusReport"
+			parameter="mode" scope="request">
+			<forward name="success" path="caseassignmentstatus"></forward>
+		</action>
+
+		<action path="/OfficersRegistered" name="CommonForm"
+			type="in.apcfss.struts.reports.OfficersRegisteredReport"
+			parameter="mode" scope="request">
+			<forward name="success" path="officersreport"></forward>
+		</action>
+
+	</action-mappings>
+
+	<message-resources
+		parameter="in.apcfss.struts.ApplicationResources" />
+	<plug-in className="org.apache.struts.tiles.TilesPlugin">
+		<set-property property="definitions-config"
+			value="/WEB-INF/tiles-defs.xml" />
+		<set-property property="moduleAware" value="true" />
+		<set-property property="definitions-parser-validate"
+			value="false" />
+	</plug-in>
+	<plug-in className="plugins.DatabasePlugin"></plug-in>
+</struts-config>

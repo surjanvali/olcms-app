@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+       "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+	<!-- DEFINITIONS -->
+
+	<definition name="UserLayout"
+		page="/jsp/BaseLayout/UserWelcomePage.jsp">
+		<put name="Menu" value="/jsp/BaseLayout/Menu.jsp" />
+		<put name="Header" value="/jsp/BaseLayout/Header.jsp" />
+		<put name="content" value="/jsp/BaseLayout/Content.jsp" />
+		<put name="footer" value="/jsp/BaseLayout/Footer.jsp" />
+	</definition>
+
+	<definition name="modalLayout"
+		page="/jsp/BaseLayout/ModalLayoutPage.jsp">
+	</definition>
+
+	<definition name="UserLayoutNew"
+		page="/jsp/BaseLayoutNew/UserWelcomePage.jsp">
+		<put name="Menu" value="/jsp/BaseLayoutNew/Menu.jsp" />
+		<put name="Header" value="/jsp/BaseLayoutNew/Header.jsp" />
+		<put name="content" value="/jsp/BaseLayoutNew/Content.jsp" />
+		<put name="footer" value="/jsp/BaseLayoutNew/Footer.jsp" />
+	</definition>
+
+	<definition name="Usermanagement" extends="UserLayout">
+		<put name="content" value="/jsp/UserManagement.jsp" />
+	</definition>
+	<definition name="page.logout" extends="UserLayout">
+		<put name="content" value="/jsp/BaseLayout/employee-logout.jsp" />
+	</definition>
+
+	<definition name="page.changePswd" extends="UserLayoutNew">
+		<put name="content" value="/jsp/BaseLayout/ChangePassword.jsp" />
+	</definition>
+
+	<definition name="registerMLO" extends="UserLayoutNew">
+		<put name="content" value="/jsp/registration/registerMLO.jsp" />
+	</definition>
+
+	<definition name="highcourtcases" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/HighCourtCasesList.jsp" />
+	</definition>
+	
+	<definition name="highcourtcaseslaw" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/HighCourtCasesListLaw.jsp" />
+	</definition>
+
+	<definition name="assignhighcourtcase" extends="modalLayout">
+		<put name="content" value="/jsp/registration/AssignCase.jsp" />
+	</definition>
+
+
+
+	<definition name="assignedhccases" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/HighCourtAssignedCasesList.jsp" />
+	</definition>
+
+
+	<definition name="regNodalOfficer" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/RegisterNodalOfficer.jsp" />
+	</definition>
+	<definition name="caseRegForm" extends="UserLayout">
+		<put name="content"
+			value="/jsp/registration/CaseRegistrationForm.jsp" />
+	</definition>
+
+	<definition name="noChangeReq" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/NodalOfficerChangeRequest.jsp" />
+	</definition>
+	<definition name="noChangeReqDist" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/DistNodalOfficerChangeRequest.jsp" />
+	</definition>
+
+
+	<!-- REPORTS START -->
+
+	<definition name="nodalofcrabstract" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/RegisteredNodalOfficersReport.jsp" />
+	</definition>
+
+	<definition name="mloabstract" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/RegisteredMLOsReport.jsp" />
+	</definition>
+
+	<definition name="changereqabstract" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/ChangeRequestsReport.jsp" />
+	</definition>
+
+	<definition name="ecourtscasesdata" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/EcourtsCasesDataDeptWise.jsp" />
+	</definition>
+	
+	
+	<definition name="caseassignmentstatus" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/CaseAssignmentStatusReport.jsp" />
+	</definition>
+
+	<!-- REPORTS END -->
+
+	<definition name="wpaffidavitpage" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/entryforms/filing/WPAffidavitForm.jsp" />
+	</definition>
+
+	<definition name="gpoack" extends="UserLayoutNew">
+		<put name="content" value="/jsp/registration/GPOAck.jsp" />
+	</definition>
+
+	<definition name="usersreport" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/UsersReport.jsp" />
+	</definition>
+
+	<definition name="statesreport" extends="UserLayoutNew">
+		<put name="content" value="/jsp/masters/StatesMaster.jsp" />
+	</definition>
+
+	<definition name="deptMaster" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/DeptWiseReport.jsp" />
+	</definition>
+
+	<definition name="actsreport" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/ActsMaster.jsp" />
+	</definition>
+
+	<definition name="casetypesreport" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/CaseTypesMaster.jsp" />
+	</definition>
+
+	<definition name="updatecasedept" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/UpdateCaseDept.jsp" />
+	</definition>
+
+	<definition name="AssignedCasesToSectionAction"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/AssignedCasesToSection.jsp" />
+	</definition>
+
+	<definition name="casedetailsview" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/CaseDetailsView.jsp" />
+	</definition>
+
+	<definition name="casedetailspopupview"
+		extends="modalLayout">
+		<put name="content" value="/jsp/reports/CaseDetailsView.jsp" />
+	</definition>
+
+	<definition name="filecounter" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/FileCounter.jsp" />
+	</definition>
+
+	<definition name="casestatusupdate" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/CaseStatusUpdation.jsp" />
+	</definition>
+
+	<definition name="allhighcourtcases" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/AllCasesReport.jsp" />
+	</definition>
+
+	<definition name="highcourtcasesreport"
+		extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/CasesReport.jsp" />
+	</definition>
+
+	<definition name="highcourtcauselist"
+		extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/HighCourtCauseList.jsp" />
+	</definition>
+
+	<definition name="hccasestatusabstract"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/HCCaseStatusAbstractReport.jsp" />
+	</definition>
+
+	<definition name="loginstatusreport"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/LoginStatusReport.jsp" />
+	</definition>
+	
+	<definition name="officersreport"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/OfficersRegisteredReport.jsp" />
+	</definition>
+
+</tiles-definitions>
