@@ -110,7 +110,7 @@ label {
 							</div>
 						</div>
 					</div> --%>
-					<div class="row">
+					<%-- <div class="row">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<div class="form-group">
 								<label> Department <bean:message key="mandatory" />
@@ -127,6 +127,43 @@ label {
 											</html:select>
 											</td>
 									</tr>
+								</table>
+							</div>
+						</div>
+					</div> --%>
+					
+					
+					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<div class="form-group">
+
+								<table id="RESPSTABID" class="table table-bordered"
+									style="width: 100%;">
+									<thead>
+										<tr>
+											<th colspan="2">Respondents <span class="pull-right"><input
+													type="button" value="Add" class="btn btn-sm btn-success"
+													name="add" id="addResp" /> <input type="button"
+													value="Remove" class="btn btn-sm btn-danger" name="remove"
+													id="removeResp" /></span></th>
+										</tr>
+										<tr>
+											<th style="width: 20%;">Sl No.</th>
+											<th style="width: 80%;">Respondent Department</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr id="1">
+											<td>1.</td>
+											<td><html:select styleId="deptId1" property="dynaForm(deptId1)" styleClass="select2Class"
+												style="width: 100%;">
+												<html:option value="0">---SELECT---</html:option>
+												<logic:notEmpty name="CommonForm" property="dynaForm(deptList)">
+													<html:optionsCollection name="CommonForm" property="dynaForm(deptList)" />
+												</logic:notEmpty>
+											</html:select></td>
+										</tr>
+									</tbody>
 								</table>
 							</div>
 						</div>
@@ -377,10 +414,10 @@ label {
 														</button>
 													</logic:notPresent>
 
-													<%-- <button type="button" class="btn btn-sm btn-info"
+													<button type="button" class="btn btn-sm btn-info"
 														onclick="downloadAck('${map.ack_no}')">
 														<i class="fa fa-save"></i> <span>Download 2</span>
-													</button> --%>
+													</button>
 												</td>
 											</tr>
 										</logic:iterate>
@@ -422,12 +459,34 @@ label {
 		});
 		
 		$("#addResp").click(function(){
-			let rowfyable = $("#RESPSTABID").closest('table');
-			  let randomNo = Math.floor(Math.random() * (100 - 2) + 1);
+			
+			
+			  let rowfyable = $("#RESPSTABID").closest('table');
+			  //let randomNo = Math.floor(Math.random() * (100 - 2) + 1);
 			  let rowCount = $("#RESPSTABID tbody tr").length; //$('tbody', rowfyable).rows.length;
-			  $('tbody', rowfyable).append("<tr id='"+randomNo+"'><td>"+(rowCount + 1)+".</td><td><input type='text' id='respondantName_"+randomNo+"' class='form-control' name='dynaForm(respondantName_"+randomNo+")' maxlength='125' /></td>"
-			  +"<td><textarea id='respondantAddr_"+randomNo+"'class='form-control' name='dynaForm(respondantAddr_"+randomNo+")' cols='50' rows='3' /></td></tr>");
-			  $("#respondentIds").val($("#respondentIds").val()+","+randomNo);
+			  let rowCount2 = rowCount+1;
+			  let prevVal=$("#deptId"+rowCount).val();
+			  if(prevVal != null && prevVal != "" && prevVal!="0" )
+			  {
+				  console.log("rowCount:"+rowCount);
+				  console.log("rowCount2:"+rowCount2);
+				  console.log("prevVal:"+prevVal);
+				  // $('tbody', rowfyable).append("<tr id='"+randomNo+"'><td>"+(rowCount + 1)+".</td><td><input type='text' id='respondantName_"+randomNo+"' class='form-control' name='dynaForm(respondantName_"+randomNo+")' maxlength='125' /></td>"
+				  // +"<td><textarea id='respondantAddr_"+randomNo+"'class='form-control' name='dynaForm(respondantAddr_"+randomNo+")' cols='50' rows='3' /></td></tr>");
+				  $('tbody', rowfyable).append("<tr id='"+rowCount2+"'><td>"+rowCount2+".</td><td>"
+				  		+"<select name='dynaForm(deptId"+rowCount2+")' id='deptId"+rowCount2+"' style='width: 100%;' ></select></td></tr>");
+				  $("#deptId"+rowCount+" option").clone().appendTo("#deptId"+rowCount2);
+				  $("#deptId"+rowCount2).select2();
+				  $("#deptId"+rowCount2).select2("val", "0");
+				  
+				  $("#deptId"+rowCount2+" option[value="+prevVal+"]").remove();
+				  
+				  $("#respondentIds").val($("#RESPSTABID tbody tr").length);
+			  }
+			  else{
+			  	alert("Select Respondant Department.");
+			  	$("#deptId"+rowCount).focus();
+			  }
 		});
 		$("#removeResp").click(function(){
 			let rowfyable = $("#RESPSTABID").closest('table');
@@ -435,6 +494,7 @@ label {
 			if(rowCount > 1){
 				$('tbody tr:last', rowfyable).remove();
 			}
+			$("#respondentIds").val($("#RESPSTABID tbody tr").length);
 		});
 		
 		
@@ -476,9 +536,9 @@ label {
 			alert("District Required");
 			$("#distId").focus();
 			return false;
-		} else if ($("#deptId").val() == null || $("#deptId").val() == "" || $("#deptId").val() == "0") {
+		} else if ($("#deptId1").val() == null || $("#deptId1").val() == "" || $("#deptId1").val() == "0") {
 			alert("Department Required");
-			$("#deptId").focus();
+			$("#deptId1").focus();
 			return false;
 		} else if ($("#advocateName").val() == null || $("#advocateName").val() == "" || $("#advocateName").val() == "0") {
 			alert("Advocate Name Required");
@@ -492,7 +552,11 @@ label {
 			alert("Case Type Required");
 			$("#caseType").focus();
 			return false;
-		} else if ($("#serviceType").val() == null || $("#serviceType").val() == "" || $("#serviceType").val() == "0") {
+		} else if ($("#serviceNonService").val() == null || $("#serviceNonService").val() == "" || $("#serviceNonService").val() == "0") {
+			alert("Service / Non-Service Required");
+			$("#serviceNonService").focus();
+			return false;
+		} else if ( $("#serviceNonService").val() == "SERVICES" && ($("#serviceType").val() == null || $("#serviceType").val() == "" || $("#serviceType").val() == "0")) {
 			alert("Service Type Required");
 			$("#serviceType").focus();
 			return false;
@@ -500,11 +564,11 @@ label {
 			alert("Main Case No. Required");
 			$("#mainCaseNo").focus();
 			return false;
-		} */ else if ($("#remarks").val() == null || $("#remarks").val() == "" || $("#remarks").val() == "0") {
+		}  else if ($("#remarks").val() == null || $("#remarks").val() == "" || $("#remarks").val() == "0") {
 			alert("Remarks Required");
 			$("#remarks").focus();
 			return false;
-		} else if (confirm("Do you want to Proceed and save Acknowledgement details?")) {
+		} */ else if (confirm("Do you want to Proceed and save Acknowledgement details?")) {
 			document.forms[0].mode.value = "saveAckDetails";
 			document.forms[0].submit();
 		}

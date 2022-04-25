@@ -235,7 +235,7 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 								+ "inner join (select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en, a.dept_id from nodal_officer_details a "
 								+ "inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id)   "
 								+ "inner join (select distinct designation_id, designation_name_en from nic_data ) c on (a.designation=c.designation_id)   "
-								+ "where user_id='"+userId+"' and coalesce(a.dist_id,0)=0) b on (d.dept_code = b.dept_id) where reporting_dept_code='"+userId+"'  and a.dept_id='" + deptId + "' and d.display= true order by 1"
+								+ "where user_id='"+userId+"' and coalesce(a.dist_id,0)=0) b on (d.dept_code = b.dept_id) where reporting_dept_code='"+userId+"'  and b.dept_id='" + deptId + "' and d.display= true order by 1"
 								+ "";
 						
 					}

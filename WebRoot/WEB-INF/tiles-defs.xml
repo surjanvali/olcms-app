@@ -46,7 +46,7 @@
 		<put name="content"
 			value="/jsp/registration/HighCourtCasesList.jsp" />
 	</definition>
-	
+
 	<definition name="highcourtcaseslaw" extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/registration/HighCourtCasesListLaw.jsp" />
@@ -102,9 +102,10 @@
 		<put name="content"
 			value="/jsp/reports/EcourtsCasesDataDeptWise.jsp" />
 	</definition>
-	
-	
-	<definition name="caseassignmentstatus" extends="UserLayoutNew">
+
+
+	<definition name="caseassignmentstatus"
+		extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/reports/CaseAssignmentStatusReport.jsp" />
 	</definition>
@@ -187,16 +188,17 @@
 			value="/jsp/reports/HCCaseStatusAbstractReport.jsp" />
 	</definition>
 
-	<definition name="loginstatusreport"
-		extends="UserLayoutNew">
-		<put name="content"
-			value="/jsp/reports/LoginStatusReport.jsp" />
+	<definition name="loginstatusreport" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/LoginStatusReport.jsp" />
 	</definition>
-	
-	<definition name="officersreport"
-		extends="UserLayoutNew">
+
+	<definition name="officersreport" extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/reports/OfficersRegisteredReport.jsp" />
+	</definition>
+
+	<definition name="uploadeofficedata" extends="UserLayoutNew">
+		<put name="content" value="/jsp/masters/UploadEofficeData.jsp" />
 	</definition>
 
 </tiles-definitions>

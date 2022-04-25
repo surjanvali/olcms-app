@@ -172,7 +172,7 @@ public class NicDataRetrievalService2 {
 		try {
 			sql = "insert into "
 					+ tableName
-					+ " (employee_code, employee_id, entity, global_org_id, global_org_name, fullname_en, designation_id, designation_name_en, post_name_en, org_unit_name_en, parentou, marking_abbr, mobile1, mobile2, uid, email, address_type, address1, address2, city, post_office, is_primary, is_ou_head, statecode, state, districtcode, district, tehsilcode, tehsil, villagecode, village, panchayatcode, panchayat, habitationcode, habitation, constituencycode, constituency) "
+					+ " (employee_code, employee_id, employee_identity, global_org_id, global_org_name, fullname_en, designation_id, designation_name_en, post_name_en, org_unit_name_en, parentou, marking_abbr, mobile1, mobile2, uid, email, address_type, address1, address2, city, post_office, is_primary, is_ou_head, statecode, state, districtcode, district, tehsilcode, tehsil, villagecode, village, panchayatcode, panchayat, habitationcode, habitation, constituencycode, constituency) "
 					+ ""
 					+ " values "
 					+ "('" + checkStringObject(ndb.getEmployee_code()) + "', '"
@@ -218,7 +218,7 @@ public class NicDataRetrievalService2 {
 		try {
 			String sql = "create table "
 					+ tableName
-					+ " ( employee_code varchar(25), employee_id varchar(25), entity varchar(50), global_org_id varchar(25), global_org_name varchar(500), fullname_en varchar(500),"
+					+ " ( employee_code varchar(25), employee_id varchar(25), employee_identity varchar(50), global_org_id varchar(25), global_org_name varchar(500), fullname_en varchar(500),"
 					+ " designation_id varchar(250), designation_name_en varchar(500), post_name_en varchar(500), org_unit_name_en varchar(500), parentou varchar(250), marking_abbr varchar(250),"
 					+ " mobile1 varchar(15), mobile2 varchar(15), uid varchar(25), email varchar(250), address_type varchar(20), address1 varchar(250), address2 varchar(250), city varchar(150),"
 					+ " post_office varchar(150), is_primary varchar(10), is_ou_head varchar(25), statecode varchar(5), state varchar(100), districtcode varchar(5), district varchar(100),"

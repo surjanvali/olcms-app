@@ -41,7 +41,7 @@ public class UpdateCaseDeptAction extends DispatchAction {
 			}
 			con = DatabasePlugin.connect();
 
-			sql = "select dept_name, dept_code, count(*), trim(regexp_replace(dept_name, '\\W', '', 'g')) as rowid from ecourts_cinos_new "
+			sql = "select dept_name, dept_code, count(*), trim(regexp_replace(dept_name, '\\W', '', 'g')) as rowid from ecourts_cinos_2022 "
 					+ "where inserted_time::date = current_date group by dept_name,dept_code order by 2 desc,3 desc";
 			request.setAttribute("HEADING", "Update Case Department");
 
@@ -99,10 +99,10 @@ public class UpdateCaseDeptAction extends DispatchAction {
 				String deptId=DatabasePlugin.getStringfromQuery("select dept_id from dept_new where dept_code='"+dept_code+"'", con);
 				int a = 0;
 				
-				sql="update ecourts_case_data set dept_id="+deptId+" where cino in (select cino from ecourts_cinos_new where trim(regexp_replace(dept_name, '\\W', '', 'g'))=trim('"+dept_name+"'))";
+				sql="update ecourts_case_data set dept_id="+deptId+" where cino in (select cino from ecourts_cinos_2022 where trim(regexp_replace(dept_name, '\\W', '', 'g'))=trim('"+dept_name+"'))";
 				DatabasePlugin.executeUpdate(sql, con);
 				
-				sql = "update ecourts_cinos_new set dept_code=?,dept_id='"+deptId+"' where trim(regexp_replace(dept_name, '\\W', '', 'g'))=trim(?)";
+				sql = "update ecourts_cinos_2022 set dept_code=?,dept_id='"+deptId+"' where trim(regexp_replace(dept_name, '\\W', '', 'g'))=trim(?)";
 				ps = con.prepareStatement(sql);
 				ps.setString(++i, dept_code);
 				ps.setString(++i, dept_name);
