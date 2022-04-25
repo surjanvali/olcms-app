@@ -1,6 +1,7 @@
 package in.apcfss.struts.Actions;
 
 import in.apcfss.struts.Forms.CommonForm;
+import in.apcfss.struts.commons.AjaxModels;
 import in.apcfss.struts.commons.CommonModels;
 import in.apcfss.struts.commons.FileUploadUtilities;
 
@@ -39,6 +40,7 @@ public class NodalOfficerChangeRequestAction extends DispatchAction{
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			
+			
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			}
@@ -46,33 +48,24 @@ public class NodalOfficerChangeRequestAction extends DispatchAction{
 				request.setAttribute("errorMsg", "Unauthorized to access this service");
 				return mapping.findForward("InvalidAccess");
 			}  else if (roleId.trim().equals("3") || roleId.trim().equals("2")) {
+				String distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+				tableName = AjaxModels.getTableName(distId, con);
 				
-				if(userId!=null && userId.equals("DC-ATP"))
-					tableName="nic_data_atp";
-				else if(userId!=null && userId.equals("DC-CHT"))
-					tableName="nic_data_ctr";
-				else if(userId!=null && userId.equals("DC-EG"))
-					tableName="nic_data_eg";
-				else if(userId!=null && userId.equals("DC-GNT"))
-					tableName="nic_data_gnt";
-				else if(userId!=null && userId.equals("DC-KDP"))
-					tableName="nic_data_kdp";
-				else if(userId!=null && userId.equals("DC-KNL"))
-					tableName="nic_data_knl";
-				else if(userId!=null && userId.equals("DC-KRS"))
-					tableName="nic_data_krishna";
-				else if(userId!=null && userId.equals("DC-NLR"))
-					tableName="nic_data_nlr";
-				else if(userId!=null && userId.equals("DC-PRK"))
-					tableName="nic_data_pksm";
-				else if(userId!=null && userId.equals("DC-SKL"))
-					tableName="nic_data_sklm";
-				else if(userId!=null && userId.equals("DC-VSP"))
-					tableName="nic_data_vspm";
-				else if(userId!=null && userId.equals("DC-VZM"))
-					tableName="nic_data_vznm";
-				else if(userId!=null && userId.equals("DC-WG"))
-					tableName="nic_data_wg";
+				/*
+				 * if(userId!=null && userId.equals("DC-ATP")) tableName="nic_data_atp"; else
+				 * if(userId!=null && userId.equals("DC-CHT")) tableName="nic_data_ctr"; else
+				 * if(userId!=null && userId.equals("DC-EG")) tableName="nic_data_eg"; else
+				 * if(userId!=null && userId.equals("DC-GNT")) tableName="nic_data_gnt"; else
+				 * if(userId!=null && userId.equals("DC-KDP")) tableName="nic_data_kdp"; else
+				 * if(userId!=null && userId.equals("DC-KNL")) tableName="nic_data_knl"; else
+				 * if(userId!=null && userId.equals("DC-KRS")) tableName="nic_data_krishna";
+				 * else if(userId!=null && userId.equals("DC-NLR")) tableName="nic_data_nlr";
+				 * else if(userId!=null && userId.equals("DC-PRK")) tableName="nic_data_pksm";
+				 * else if(userId!=null && userId.equals("DC-SKL")) tableName="nic_data_sklm";
+				 * else if(userId!=null && userId.equals("DC-VSP")) tableName="nic_data_vspm";
+				 * else if(userId!=null && userId.equals("DC-VZM")) tableName="nic_data_vznm";
+				 * else if(userId!=null && userId.equals("DC-WG")) tableName="nic_data_wg";
+				 */
 				
 				con = DatabasePlugin.connect();
 				// cform.setDynaForm("deptsList", DatabasePlugin.getSelectBox( "select sdeptcode||deptcode,description  from dept where sdeptcode='" + userId.substring(0,3) + "' order by sdeptcode", con));

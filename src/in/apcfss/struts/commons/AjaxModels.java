@@ -98,35 +98,28 @@ public class AjaxModels extends DispatchAction {
 				String designationId = request.getParameter("designationId") != null
 						? request.getParameter("designationId").toString()
 						: "-";
-
-				if (userId != null && userId.equals("DC-ATP"))
-					tableName = "nic_data_atp";
-				else if (userId != null && userId.equals("DC-CHT"))
-					tableName = "nic_data_ctr";
-				else if (userId != null && userId.equals("DC-EG"))
-					tableName = "nic_data_eg";
-				else if (userId != null && userId.equals("DC-GNT"))
-					tableName = "nic_data_gnt";
-				else if (userId != null && userId.equals("DC-KDP"))
-					tableName = "nic_data_kdp";
-				else if (userId != null && userId.equals("DC-KNL"))
-					tableName = "nic_data_knl";
-				else if (userId != null && userId.equals("DC-KRS"))
-					tableName = "nic_data_krishna";
-				else if (userId != null && userId.equals("DC-NLR"))
-					tableName = "nic_data_nlr";
-				else if (userId != null && userId.equals("DC-PRK"))
-					tableName = "nic_data_pksm";
-				else if (userId != null && userId.equals("DC-SKL"))
-					tableName = "nic_data_sklm";
-				else if (userId != null && userId.equals("DC-VSP"))
-					tableName = "nic_data_vspm";
-				else if (userId != null && userId.equals("DC-VZM"))
-					tableName = "nic_data_vznm";
-				else if (userId != null && userId.equals("DC-WG"))
-					tableName = "nic_data_wg";
-				else
-					tableName = "nic_data";
+				
+				String distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+				tableName = AjaxModels.getTableName(distId, con);
+				
+				/*
+				 * if (userId != null && userId.equals("DC-ATP")) tableName = "nic_data_atp";
+				 * else if (userId != null && userId.equals("DC-CHT")) tableName =
+				 * "nic_data_ctr"; else if (userId != null && userId.equals("DC-EG")) tableName
+				 * = "nic_data_eg"; else if (userId != null && userId.equals("DC-GNT"))
+				 * tableName = "nic_data_gnt"; else if (userId != null &&
+				 * userId.equals("DC-KDP")) tableName = "nic_data_kdp"; else if (userId != null
+				 * && userId.equals("DC-KNL")) tableName = "nic_data_knl"; else if (userId !=
+				 * null && userId.equals("DC-KRS")) tableName = "nic_data_krishna"; else if
+				 * (userId != null && userId.equals("DC-NLR")) tableName = "nic_data_nlr"; else
+				 * if (userId != null && userId.equals("DC-PRK")) tableName = "nic_data_pksm";
+				 * else if (userId != null && userId.equals("DC-SKL")) tableName =
+				 * "nic_data_sklm"; else if (userId != null && userId.equals("DC-VSP"))
+				 * tableName = "nic_data_vspm"; else if (userId != null &&
+				 * userId.equals("DC-VZM")) tableName = "nic_data_vznm"; else if (userId != null
+				 * && userId.equals("DC-WG")) tableName = "nic_data_wg"; else tableName =
+				 * "nic_data";
+				 */
 				// String serviceType = request.getParameter("serviceType") != null ?
 				// request.getParameter("serviceType").toString() : "-";
 				String userType = request.getParameter("userType") != null ? request.getParameter("userType").toString()
@@ -160,32 +153,27 @@ public class AjaxModels extends DispatchAction {
 					}
 				}
 			} else if (getType.equals("getDesignationsList")) {
-				if (userId != null && userId.equals("DC-ATP"))
-					tableName = "nic_data_atp";
-				else if (userId != null && userId.equals("DC-CHT"))
-					tableName = "nic_data_ctr";
-				else if (userId != null && userId.equals("DC-EG"))
-					tableName = "nic_data_eg";
-				else if (userId != null && userId.equals("DC-GNT"))
-					tableName = "nic_data_gnt";
-				else if (userId != null && userId.equals("DC-KDP"))
-					tableName = "nic_data_kdp";
-				else if (userId != null && userId.equals("DC-KNL"))
-					tableName = "nic_data_knl";
-				else if (userId != null && userId.equals("DC-KRS"))
-					tableName = "nic_data_krishna";
-				else if (userId != null && userId.equals("DC-NLR"))
-					tableName = "nic_data_nlr";
-				else if (userId != null && userId.equals("DC-PRK"))
-					tableName = "nic_data_pksm";
-				else if (userId != null && userId.equals("DC-SKL"))
-					tableName = "nic_data_sklm";
-				else if (userId != null && userId.equals("DC-VSP"))
-					tableName = "nic_data_vspm";
-				else if (userId != null && userId.equals("DC-VZM"))
-					tableName = "nic_data_vznm";
-				else if (userId != null && userId.equals("DC-WG"))
-					tableName = "nic_data_wg";
+				
+				String distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+				tableName = AjaxModels.getTableName(distId, con);
+				
+				/*
+				 * if (userId != null && userId.equals("DC-ATP")) tableName = "nic_data_atp";
+				 * else if (userId != null && userId.equals("DC-CHT")) tableName =
+				 * "nic_data_ctr"; else if (userId != null && userId.equals("DC-EG")) tableName
+				 * = "nic_data_eg"; else if (userId != null && userId.equals("DC-GNT"))
+				 * tableName = "nic_data_gnt"; else if (userId != null &&
+				 * userId.equals("DC-KDP")) tableName = "nic_data_kdp"; else if (userId != null
+				 * && userId.equals("DC-KNL")) tableName = "nic_data_knl"; else if (userId !=
+				 * null && userId.equals("DC-KRS")) tableName = "nic_data_krishna"; else if
+				 * (userId != null && userId.equals("DC-NLR")) tableName = "nic_data_nlr"; else
+				 * if (userId != null && userId.equals("DC-PRK")) tableName = "nic_data_pksm";
+				 * else if (userId != null && userId.equals("DC-SKL")) tableName =
+				 * "nic_data_sklm"; else if (userId != null && userId.equals("DC-VSP"))
+				 * tableName = "nic_data_vspm"; else if (userId != null &&
+				 * userId.equals("DC-VZM")) tableName = "nic_data_vznm"; else if (userId != null
+				 * && userId.equals("DC-WG")) tableName = "nic_data_wg";
+				 */
 
 				String deptId = request.getParameter("deptId") != null ? request.getParameter("deptId").toString()
 						: "-";
@@ -204,32 +192,27 @@ public class AjaxModels extends DispatchAction {
 				}
 			} else if (getType.equals("getEmpDetails")) {
 				System.out.println("getType : getEmpDetails");
-				if (userId != null && userId.equals("DC-ATP"))
-					tableName = "nic_data_atp";
-				else if (userId != null && userId.equals("DC-CHT"))
-					tableName = "nic_data_ctr";
-				else if (userId != null && userId.equals("DC-EG"))
-					tableName = "nic_data_eg";
-				else if (userId != null && userId.equals("DC-GNT"))
-					tableName = "nic_data_gnt";
-				else if (userId != null && userId.equals("DC-KDP"))
-					tableName = "nic_data_kdp";
-				else if (userId != null && userId.equals("DC-KNL"))
-					tableName = "nic_data_knl";
-				else if (userId != null && userId.equals("DC-KRS"))
-					tableName = "nic_data_krishna";
-				else if (userId != null && userId.equals("DC-NLR"))
-					tableName = "nic_data_nlr";
-				else if (userId != null && userId.equals("DC-PRK"))
-					tableName = "nic_data_pksm";
-				else if (userId != null && userId.equals("DC-SKL"))
-					tableName = "nic_data_sklm";
-				else if (userId != null && userId.equals("DC-VSP"))
-					tableName = "nic_data_vspm";
-				else if (userId != null && userId.equals("DC-VZM"))
-					tableName = "nic_data_vznm";
-				else if (userId != null && userId.equals("DC-WG"))
-					tableName = "nic_data_wg";
+				
+				String distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+				tableName = AjaxModels.getTableName(distId, con);
+				
+				/*
+				 * if (userId != null && userId.equals("DC-ATP")) tableName = "nic_data_atp";
+				 * else if (userId != null && userId.equals("DC-CHT")) tableName =
+				 * "nic_data_ctr"; else if (userId != null && userId.equals("DC-EG")) tableName
+				 * = "nic_data_eg"; else if (userId != null && userId.equals("DC-GNT"))
+				 * tableName = "nic_data_gnt"; else if (userId != null &&
+				 * userId.equals("DC-KDP")) tableName = "nic_data_kdp"; else if (userId != null
+				 * && userId.equals("DC-KNL")) tableName = "nic_data_knl"; else if (userId !=
+				 * null && userId.equals("DC-KRS")) tableName = "nic_data_krishna"; else if
+				 * (userId != null && userId.equals("DC-NLR")) tableName = "nic_data_nlr"; else
+				 * if (userId != null && userId.equals("DC-PRK")) tableName = "nic_data_pksm";
+				 * else if (userId != null && userId.equals("DC-SKL")) tableName =
+				 * "nic_data_sklm"; else if (userId != null && userId.equals("DC-VSP"))
+				 * tableName = "nic_data_vspm"; else if (userId != null &&
+				 * userId.equals("DC-VZM")) tableName = "nic_data_vznm"; else if (userId != null
+				 * && userId.equals("DC-WG")) tableName = "nic_data_wg";
+				 */
 				String empId = request.getParameter("empId") != null ? request.getParameter("empId").toString() : null;
 				if (empId != null) {
 					String sql = "select distinct employee_id||'#'||replace(mobile1, 'NULL', '')||'#'||replace(email, 'NULL', '')||'#'||replace(uid, 'NULL', '')  from "
@@ -394,10 +377,11 @@ public class AjaxModels extends DispatchAction {
 		String tableName = "nic_data";
 		if(Integer.parseInt(distId) > 0)
 			tableName = DatabasePlugin.getStringfromQuery("select tablename from district_mst where district_id="+distId, con);
+			// tableName = DatabasePlugin.getStringfromQuery("select tablename from district_mst_new where district_id="+distId, con);
 		return tableName;
 	}
 
-	public static String getTableName2(String distId) {
+	public static String getTableNameOld(String distId) {
 		String tableName = "nic_data";
 		
 		switch (CommonModels.checkIntObject(distId)) {

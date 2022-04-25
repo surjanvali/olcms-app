@@ -31,22 +31,24 @@ public class NicDataRetrievalService2 {
 	
 	public static void main(String[] args) throws Exception {
 		// "Apsecretariat.php", "Krishna", "Guntur", "Chittoor", "Eastgodavari", "Kadapa", "Kurnool", "Nellore", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "Westgodavari", "Ananthapur"
-		String[] nicDataDists = { "Apsecretariat","Alluri","Anakapalli","Ananthapur","Annamayya",
+		String[] nicDataDists = { "Apsecretariat"};
+		/*
+		{,"Alluri","Anakapalli","Ananthapur","Annamayya",
 									"Bapatla","Chittoor","Eastgodavari","Eluru",
 									"Guntur" ,"Kadapa","Kakinada","Konaseema","Krishna",  
 									 "Kurnool", "Nandyal","Nellore","Ntr","Palnadu",
 									 "Pmanyam", "Prakasam", "Srikakulam", "Srisathyasai","Tirupati",
 									 "Visakhapatnam", "Vizianagaram", "Westgodavari"				 
 				};
-
+*/
 		String resp = "";
 
 		// final String dbUrl = "jdbc:postgresql://172.16.98.2:9432/apolcms", dbUserName = "apolcms", dbPassword = "apolcms";
-		final String dbUrl = "jdbc:postgresql://localhost:5432/apolcms", dbUserName = "apolcms", dbPassword = "apolcms";
-		// final String dbUrl = "jdbc:postgresql://10.96.54.54:6432/apolcms", dbUserName = "apolcms", dbPassword = "@p0l(m$";
+		// final String dbUrl = "jdbc:postgresql://localhost:5432/apolcms", dbUserName = "apolcms", dbPassword = "apolcms";
+		final String dbUrl = "jdbc:postgresql://10.96.54.54:6432/apolcms", dbUserName = "apolcms", dbPassword = "@p0l(m$";
 
 		// final String filesPath = "C:\\Users\\Surjan Vali\\Desktop\\nic-emp-data\\";
-		final String filesPath = "C:\\Users\\dell\\Desktop\\APOLCMS\\eofficedata-13042022\\";
+		final String filesPath = "E:\\HighCourtsDumps\\eofficedata-25042022\\";
 		
 		String sql = "";
 		Connection con = null;
@@ -68,7 +70,7 @@ public class NicDataRetrievalService2 {
 					File file = new File(filesPath+nicDataDist+".txt");
 					FileReader readfile = new FileReader(file);
 
-					String tableName = "nic_data_"+ mmyyyy.trim()+ "_"+ (file.getName().substring(0,(file.getName().lastIndexOf(".")))).toLowerCase() + "";
+					String tableName = "nic_data_new";//+ mmyyyy.trim()+ "_"+ (file.getName().substring(0,(file.getName().lastIndexOf(".")))).toLowerCase() + "";
 					
 					// System.out.println("select count(*) from " + tableName);
 					// System.out.println("GO");
@@ -76,10 +78,9 @@ public class NicDataRetrievalService2 {
 					// System.out.println("pg_dump -t "  + tableName+" -U apolcms apolcms  > E:\\HighCourtsDumps\\eofficedata-16042022\\"+tableName+".sql");
 					// System.out.println("apolcms");
 					
-					System.out.println("psql -h 10.96.54.54 -p 6432 -U apolcms apolcms < E:\\HighCourtsDumps\\eofficedata-16042022\\"+tableName+".sql");
-					System.out.println("@p0l(m$");
+					//System.out.println("psql -h 10.96.54.54 -p 6432 -U apolcms apolcms < E:\\HighCourtsDumps\\eofficedata-16042022\\"+tableName+".sql");
+					//System.out.println("@p0l(m$");
 					
-					/*
 					c += createDbScript(tableName, con);
 					
 				    BufferedReader readbuffer = new BufferedReader(readfile);
@@ -110,7 +111,7 @@ public class NicDataRetrievalService2 {
 							}
 						}
 						System.out.println("Data saved for:" + tableName);
-					}*/
+					}
 				}
 			}
 			System.out.println("SQLS executed Count:" + c);

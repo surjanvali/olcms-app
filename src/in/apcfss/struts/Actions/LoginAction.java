@@ -61,7 +61,7 @@ public class LoginAction extends DispatchAction{
 					System.out.println("LOGIN ACTION ROLE: 60 LINE:"+role);
 					//ps = con.prepareStatement("select * from (select sdeptcode||deptcode as userid,description,dept_id from apdrp_dept union all select sdeptcode as userid,description,dept_id from apdrp_corporations)a where userid=?");
 					//SCT DEPT / MLO / NO / SO / Dist NO
-					if(role==3 || role==4 || role==5 || role==9 || role==10) { //3	SECRETARIAT DEPARTMENT
+					if(role==3 || role==4 || role==5 || role==9) { //3	SECRETARIAT DEPARTMENT
 						
 						  /* String sql = "select u.userid,un.description,un.dept_id,u.user_description,to_char(last_login,'dd-mm-yyyy HH12:MI AM') as last_login from users u "
 						  		+ "left join dept un on (u.userid=(un.sdeptcode||''||un.deptcode)) "
@@ -102,9 +102,10 @@ public class LoginAction extends DispatchAction{
 						target="Welcome";
 					}
 					
-					else if(role==8 || role==11 || role==12){ // 8-Section Officers..
+					else if(role==8 || role==10 || role==11 || role==12){ // 8-Section Officers..
 						
 						String tableName = AjaxModels.getTableName(CommonModels.checkStringObject(rs.getString("dist_id")), con);
+						// String tableName = AjaxModels.getTableName2(CommonModels.checkStringObject(rs.getString("dist_id")));
 						
 						  // String sql = "select u.userid,u.user_description,un.description as description,u.dept_id from users u left join dept un on (u.dept_id=un.dept_id) where upper(u.userid)=upper(?) order by 1 ";
 							sql = "select u.userid,u.user_description,un.description as description,un.dept_id,un.sdeptcode||un.deptcode as deptcode, upper(trim(un.description)) as dept_name,"
@@ -118,7 +119,7 @@ public class LoginAction extends DispatchAction{
 									+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)='" + username.toUpperCase() + "' group by user_id) ll on (u.userid=ll.user_id)"
 									+ " where upper(u.userid)=upper(trim(?)) ";
 						  
-						  System.out.println("role==8 || role==11 || role==12 SQL 121:"+sql);
+						  System.out.println("role==8 || role==10 || role==11 || role==12 SQL 121:"+sql);
 							ps = con.prepareStatement(sql);
 							ps.setString(1, username);
 							rs = ps.executeQuery();

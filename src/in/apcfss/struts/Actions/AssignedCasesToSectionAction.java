@@ -837,7 +837,7 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					
 					int a = DatabasePlugin.executeUpdate(sql, con);
 					
-					if(roleId!=null && (roleId.equals("4") || roleId.equals("5"))) {//MLO / NO
+					if(roleId!=null && (roleId.equals("4") || roleId.equals("5") || roleId.equals("10"))) {//MLO / NO / Dist-NO
 						sql="update ecourts_case_data set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"', mlo_no_updated='T' where cino='"+cIno+"'";
 						a += DatabasePlugin.executeUpdate(sql, con);
 					}

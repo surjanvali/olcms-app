@@ -26,7 +26,7 @@ public class HighCourtCasesClosedReport extends DispatchAction {
 		Connection con = null;
 		HttpSession session = null;
 		String userId = null, roleId = null, sql = null, empId = null, empSection = null, empPost = null,
-				condition = "", deptId = "", deptCode = "";
+				condition = "", deptId = "", deptCode = "", distId;
 
 		try {
 			session = request.getSession();
@@ -39,6 +39,8 @@ public class HighCourtCasesClosedReport extends DispatchAction {
 			empId = CommonModels.checkStringObject(session.getAttribute("empId"));
 			empSection = CommonModels.checkStringObject(session.getAttribute("empSection"));
 			empPost = CommonModels.checkStringObject(session.getAttribute("empPost"));
+			
+			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
 
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
@@ -52,13 +54,15 @@ public class HighCourtCasesClosedReport extends DispatchAction {
 			} else if (roleId != null && roleId.equals("8")) { // SECTION OFFICER
 				condition = " and assigned_to='" + userId + "'";
 			}
-
 			else if (roleId != null && roleId.equals("3")) { // SECT DEPT
 				condition = " and dept_code='" + deptCode + "'";
 			} else if (roleId != null && roleId.equals("9")) { // HOD
 				condition = " and dept_code='" + deptCode + "'";
 			} else if (roleId != null && roleId.equals("6")) { // GPO
 				//condition = " and a.case_status=4";
+			}
+			else if (roleId != null && roleId.equals("10")) { // DNO
+				condition = " and dept_code='" + deptCode + "' and dist_id='"+distId+"'";
 			}
 
 			sql = "select a.*, b.orderpaths from ecourts_case_data a left join" + " ("

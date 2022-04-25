@@ -1,6 +1,7 @@
 package in.apcfss.struts.reports;
 
 import in.apcfss.struts.Forms.CommonForm;
+import in.apcfss.struts.commons.AjaxModels;
 import in.apcfss.struts.commons.CommonModels;
 
 import java.sql.Connection;
@@ -45,32 +46,23 @@ public class OfficersRegisteredReport extends DispatchAction {
 					String dist=CommonModels.checkStringObject(cform.getDynaForm("districtId"));
 					String tableName="";
 					
-					if(dist!=null && dist.equals("DC-ATP"))
-						tableName="nic_data_atp";
-					else if(dist!=null && dist.equals("DC-CHT"))
-						tableName="nic_data_ctr";
-					else if(dist!=null && dist.equals("DC-EG"))
-						tableName="nic_data_eg";
-					else if(dist!=null && dist.equals("DC-GNT"))
-						tableName="nic_data_gnt";
-					else if(dist!=null && dist.equals("DC-KDP"))
-						tableName="nic_data_kdp";
-					else if(dist!=null && dist.equals("DC-KNL"))
-						tableName="nic_data_knl";
-					else if(dist!=null && dist.equals("DC-KRS"))
-						tableName="nic_data_krishna";
-					else if(dist!=null && dist.equals("DC-NLR"))
-						tableName="nic_data_nlr";
-					else if(dist!=null && dist.equals("DC-PRK"))
-						tableName="nic_data_pksm";
-					else if(dist!=null && dist.equals("DC-SKL"))
-						tableName="nic_data_sklm";
-					else if(dist!=null && dist.equals("DC-VSP"))
-						tableName="nic_data_vspm";
-					else if(dist!=null && dist.equals("DC-VZM"))
-						tableName="nic_data_vznm";
-					else if(dist!=null && dist.equals("DC-WG"))
-						tableName="nic_data_wg";
+					tableName = AjaxModels.getTableName(CommonModels.checkStringObject(dist), con);
+					
+					/*
+					 * if(dist!=null && dist.equals("DC-ATP")) tableName="nic_data_atp"; else
+					 * if(dist!=null && dist.equals("DC-CHT")) tableName="nic_data_ctr"; else
+					 * if(dist!=null && dist.equals("DC-EG")) tableName="nic_data_eg"; else
+					 * if(dist!=null && dist.equals("DC-GNT")) tableName="nic_data_gnt"; else
+					 * if(dist!=null && dist.equals("DC-KDP")) tableName="nic_data_kdp"; else
+					 * if(dist!=null && dist.equals("DC-KNL")) tableName="nic_data_knl"; else
+					 * if(dist!=null && dist.equals("DC-KRS")) tableName="nic_data_krishna"; else
+					 * if(dist!=null && dist.equals("DC-NLR")) tableName="nic_data_nlr"; else
+					 * if(dist!=null && dist.equals("DC-PRK")) tableName="nic_data_pksm"; else
+					 * if(dist!=null && dist.equals("DC-SKL")) tableName="nic_data_sklm"; else
+					 * if(dist!=null && dist.equals("DC-VSP")) tableName="nic_data_vspm"; else
+					 * if(dist!=null && dist.equals("DC-VZM")) tableName="nic_data_vznm"; else
+					 * if(dist!=null && dist.equals("DC-WG")) tableName="nic_data_wg";
+					 */
 					
 
 					sql = "select m.dept_id,upper(d.description) as description,trim(nd.fullname_en) as fullname_en, trim(nd.designation_name_en) as designation_name_en,m.mobileno,m.emailid from nodal_officer_details m "

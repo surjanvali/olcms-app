@@ -177,11 +177,11 @@ public class WelcomePageAction extends DispatchAction{
 				else  if(roleId.equals("10")) { // District NODAL OFFICER
 					// sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=4 and coalesce(ecourts_case_status,'')!='Closed'";
 					sql="select count(*) as total, "
-							+ "sum(case when (case_status=4) and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as assignment_pending,"
-							+ "sum(case when (case_status=4) and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as approval_pending,"
+							+ "sum(case when (case_status=8) and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as assignment_pending,"
+							+ "sum(case when (case_status=8) and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as approval_pending,"
 							+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases"
 							+ "  from ecourts_case_data where dept_code='"+deptCode+"' and dist_id='"+distId+"'";
-					
+					System.out.println("SQL:"+sql);
 					List<Map<Object, String>> dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("dashboardCounts", dashboardCounts);
 				}
