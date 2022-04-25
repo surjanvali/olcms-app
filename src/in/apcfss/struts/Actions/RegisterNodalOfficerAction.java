@@ -302,7 +302,7 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 
 				con = DatabasePlugin.connect();
 				con.setAutoCommit(false);
-				String distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+				String distId = CommonModels.checkIntObject(session.getAttribute("dist_id"))+"";
 				tableName = AjaxModels.getTableName(distId, con);
 				
 				/*

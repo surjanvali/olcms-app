@@ -102,8 +102,8 @@
   <StrutsActivity path="/jsp/registration/AssignCase.jsp" location="50,2150" dimension="198,51" />
   <StrutsActivity path="closedcasesreport" location="2450,2350" dimension="124,51" />
   <StrutsActivity path="mlologinstatusreport" location="650,2950" dimension="141,51" />
-  <StrutsActivity path="/UploadEofficeData.do" />
-  <StrutsActivity path="uploadeofficedata" />
+  <StrutsActivity path="/UploadEofficeData.do" location="2750,1850" dimension="296,96" />
+  <StrutsActivity path="uploadeofficedata" location="2750,2350" dimension="126,51" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,595" />
@@ -299,8 +299,8 @@
   </StrutsTransition>
   <StrutsTransition id="/UploadEofficeData.do,success,uploadeofficedata,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="0,0" />
-      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="2813,1946" />
+      <AbsolutePoint location="2813,2350" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/StatesMaster.do,success,statesreport,1" routingType="0">

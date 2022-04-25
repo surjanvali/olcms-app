@@ -375,7 +375,7 @@ public class AjaxModels extends DispatchAction {
 	
 	public static String getTableName(String distId, Connection con) {
 		String tableName = "nic_data";
-		if(Integer.parseInt(distId) > 0)
+		if(distId!=null && !distId.equals("") && Integer.parseInt(distId) > 0)
 			tableName = DatabasePlugin.getStringfromQuery("select tablename from district_mst where district_id="+distId, con);
 			// tableName = DatabasePlugin.getStringfromQuery("select tablename from district_mst_new where district_id="+distId, con);
 		return tableName;

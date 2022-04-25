@@ -56,7 +56,7 @@ public class UploadEofficeDataAction extends DispatchAction {
 	public ActionForward saveData(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		CommonForm cForm = (CommonForm) form;
-		String tableName = "";
+		String tableName = "", tableNameNew="", tableNameBkp="";
 		String resp = "";
 		String sql = "";
 		Connection con = null;
@@ -73,25 +73,13 @@ public class UploadEofficeDataAction extends DispatchAction {
 			con = DatabasePlugin.connect();
 			con.setAutoCommit(false);
 			// tableName = "nic_data_" + mmyyyy.trim() + "_"+ (file.getName().substring(0, (file.getName().lastIndexOf(".")))).toLowerCase() + "";
-			tableName = AjaxModels.getTableName(CommonModels.checkIntObject(cForm.getDynaForm("districtId"))+"", con);
-
-			//if able exists rename / backup
-			sql="SELECT count(*) FROM INFORMATION_SCHEMA.TABLES where table_schema='apolcms' and table_name='"+tableName+"'";
-			System.out.println(sql);
 			
-			if(CommonModels.checkIntObject(DatabasePlugin.getStringfromQuery(sql, con)) > 0) {
-				
-				sql="SELECT count(*) FROM INFORMATION_SCHEMA.TABLES where table_schema='apolcms' and table_name='"+tableName+"_bkp_"+ mmyyyy.trim()+"'";
-				
-				/*if(CommonModels.checkIntObject(DatabasePlugin.getStringfromQuery(sql, con)) > 0) {
-					sql="drop table "+tableName+"_bkp_"+ mmyyyy.trim();
-				}*/
-				
-				sql="alter table "+tableName+" rename to "+tableName+"_bkp_"+ mmyyyy.trim();
-				DatabasePlugin.executeUpdate(sql, con);
-			}
+			tableName = AjaxModels.getTableName(CommonModels.checkStringObject(cForm.getDynaForm("districtId")), con);
 			
-			c += NicDataRetrievalService2.createDbScript(tableName, con);
+			tableNameNew = tableName+"_new_"+ mmyyyy.trim();
+			tableNameBkp = tableName+"_bkp_"+ mmyyyy.trim();
+			
+			c += NicDataRetrievalService2.createDbScript(tableNameNew, con);
 
 			FormFile myFile = cForm.getChangeLetter();
 			InputStream is = myFile.getInputStream();
@@ -122,6 +110,22 @@ public class UploadEofficeDataAction extends DispatchAction {
 				}
 				System.out.println("Data saved for:" + tableName);
 			}
+			
+			
+			/*/if able exists rename / backup
+			sql="SELECT count(*) FROM INFORMATION_SCHEMA.TABLES where table_schema='apolcms' and table_name='"+tableName+"'";
+			System.out.println("TABLE CHECK SQL:"+sql);
+			if(CommonModels.checkIntObject(DatabasePlugin.getStringfromQuery(sql, con)) > 0) {
+			}*/
+			
+			sql="alter table "+tableName+" rename to "+tableNameBkp;
+			System.out.println("ALTER TO BKP QUERY:"+sql);
+			DatabasePlugin.executeUpdate(sql, con);
+			
+			sql="alter table "+tableNameNew+" rename to "+tableName;
+			System.out.println("ALTER NEW TABLE:"+sql);
+			DatabasePlugin.executeUpdate(sql, con);
+			
 			request.setAttribute("successMsg", c+" records data saved to table "+tableName);
 			con.commit();
 		} catch (Exception e) {

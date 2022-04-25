@@ -1020,7 +1020,7 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 				System.out.println("deptCode::"+deptCode.substring(3, 5));
 				
 				sql="select emp_user_id from ecourts_case_emp_assigned_dtls ad inner join ecourts_case_activities ea on (ad.cino=ea.cino) "
-						+ "where ea.cino='"+cIno+"' and ea.action_type='CASE ASSSIGNED' and ea.inserted_by='naidu.sasubilli@ao.gov.in'";
+						+ "where ea.cino='"+cIno+"' and ea.action_type ilike 'CASE ASSSIGNED%' and ea.inserted_by='"+userId+"'";
 				
 				String backToSectionUser = DatabasePlugin.getStringfromQuery(sql , con);
 				
