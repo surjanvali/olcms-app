@@ -14,7 +14,7 @@
 			<!-- Test -->
 			<!-- <set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" /> 
 			<set-property property="username" value="apolcms" /> 
-			<set-property property="password" value="apolcms" /> --> 
+			<set-property property="password" value="apolcms" />  -->
 			
 			<!-- LOCAL -->
 			<set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" />
@@ -298,6 +298,13 @@
 			parameter="mode" scope="request">
 			<forward name="success" path="officersreport"></forward>
 		</action>
+
+		<action path="/UploadEofficeData" name="CommonForm"
+			type="in.apcfss.struts.Actions.UploadEofficeDataAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="uploadeofficedata"></forward>
+		</action>
+
 
 	</action-mappings>
 

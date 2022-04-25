@@ -414,10 +414,10 @@ label {
 														</button>
 													</logic:notPresent>
 
-													<%-- <button type="button" class="btn btn-sm btn-info"
+													<button type="button" class="btn btn-sm btn-info"
 														onclick="downloadAck('${map.ack_no}')">
 														<i class="fa fa-save"></i> <span>Download 2</span>
-													</button> --%>
+													</button>
 												</td>
 											</tr>
 										</logic:iterate>
@@ -481,7 +481,7 @@ label {
 				  
 				  $("#deptId"+rowCount2+" option[value="+prevVal+"]").remove();
 				  
-				  $("#respondentIds").val($("#respondentIds").val()+","+rowCount2);
+				  $("#respondentIds").val($("#RESPSTABID tbody tr").length);
 			  }
 			  else{
 			  	alert("Select Respondant Department.");
@@ -494,6 +494,7 @@ label {
 			if(rowCount > 1){
 				$('tbody tr:last', rowfyable).remove();
 			}
+			$("#respondentIds").val($("#RESPSTABID tbody tr").length);
 		});
 		
 		
@@ -535,9 +536,9 @@ label {
 			alert("District Required");
 			$("#distId").focus();
 			return false;
-		} else if ($("#deptId").val() == null || $("#deptId").val() == "" || $("#deptId").val() == "0") {
+		} else if ($("#deptId1").val() == null || $("#deptId1").val() == "" || $("#deptId1").val() == "0") {
 			alert("Department Required");
-			$("#deptId").focus();
+			$("#deptId1").focus();
 			return false;
 		} else if ($("#advocateName").val() == null || $("#advocateName").val() == "" || $("#advocateName").val() == "0") {
 			alert("Advocate Name Required");
@@ -551,7 +552,11 @@ label {
 			alert("Case Type Required");
 			$("#caseType").focus();
 			return false;
-		} else if ($("#serviceType").val() == null || $("#serviceType").val() == "" || $("#serviceType").val() == "0") {
+		} else if ($("#serviceNonService").val() == null || $("#serviceNonService").val() == "" || $("#serviceNonService").val() == "0") {
+			alert("Service / Non-Service Required");
+			$("#serviceNonService").focus();
+			return false;
+		} else if ( $("#serviceNonService").val() == "SERVICES" && ($("#serviceType").val() == null || $("#serviceType").val() == "" || $("#serviceType").val() == "0")) {
 			alert("Service Type Required");
 			$("#serviceType").focus();
 			return false;
@@ -559,11 +564,11 @@ label {
 			alert("Main Case No. Required");
 			$("#mainCaseNo").focus();
 			return false;
-		} */ else if ($("#remarks").val() == null || $("#remarks").val() == "" || $("#remarks").val() == "0") {
+		}  else if ($("#remarks").val() == null || $("#remarks").val() == "" || $("#remarks").val() == "0") {
 			alert("Remarks Required");
 			$("#remarks").focus();
 			return false;
-		} else if (confirm("Do you want to Proceed and save Acknowledgement details?")) {
+		} */ else if (confirm("Do you want to Proceed and save Acknowledgement details?")) {
 			document.forms[0].mode.value = "saveAckDetails";
 			document.forms[0].submit();
 		}

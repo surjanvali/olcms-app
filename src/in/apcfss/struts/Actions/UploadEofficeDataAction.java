@@ -1,0 +1,142 @@
+package in.apcfss.struts.Actions;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.actions.DispatchAction;
+import org.apache.struts.upload.FormFile;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+
+import in.apcfss.struts.Forms.CommonForm;
+import in.apcfss.struts.Utilities.NicDataBean;
+import in.apcfss.struts.Utilities.NicDataRetrievalService2;
+import in.apcfss.struts.commons.AjaxModels;
+import in.apcfss.struts.commons.CommonModels;
+import plugins.DatabasePlugin;
+
+
+public class UploadEofficeDataAction extends DispatchAction {
+	@Override
+	public ActionForward unspecified(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		CommonForm cForm = (CommonForm) form;
+		Connection con = null;
+		try {
+			con = DatabasePlugin.connect();
+			// Districts List
+			cForm.setDynaForm("distList", DatabasePlugin.getSelectBox(
+					"select district_id,upper(trim(district_name)) as district_name from district_mst order by district_id",
+					con));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(con!=null) {
+				con.close();
+			}
+		}
+		return mapping.findForward("success");
+	}
+
+	public ActionForward saveData(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		CommonForm cForm = (CommonForm) form;
+		String tableName = "";
+		String resp = "";
+		String sql = "";
+		Connection con = null;
+		int c = 0;
+		try {
+			
+			/*File file = new File(cForm.getChangeLetter().getInputStream());
+			FileReader readfile =  new FileReader(file);*/
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("MMyyyy");
+			Date d1 = new Date();
+			String mmyyyy = sdf.format(d1);
+			
+			con = DatabasePlugin.connect();
+			con.setAutoCommit(false);
+			// tableName = "nic_data_" + mmyyyy.trim() + "_"+ (file.getName().substring(0, (file.getName().lastIndexOf(".")))).toLowerCase() + "";
+			tableName = AjaxModels.getTableName(CommonModels.checkIntObject(cForm.getDynaForm("districtId"))+"", con);
+
+			//if able exists rename / backup
+			sql="SELECT count(*) FROM INFORMATION_SCHEMA.TABLES where table_schema='apolcms' and table_name='"+tableName+"'";
+			System.out.println(sql);
+			
+			if(CommonModels.checkIntObject(DatabasePlugin.getStringfromQuery(sql, con)) > 0) {
+				
+				sql="SELECT count(*) FROM INFORMATION_SCHEMA.TABLES where table_schema='apolcms' and table_name='"+tableName+"_bkp_"+ mmyyyy.trim()+"'";
+				
+				/*if(CommonModels.checkIntObject(DatabasePlugin.getStringfromQuery(sql, con)) > 0) {
+					sql="drop table "+tableName+"_bkp_"+ mmyyyy.trim();
+				}*/
+				
+				sql="alter table "+tableName+" rename to "+tableName+"_bkp_"+ mmyyyy.trim();
+				DatabasePlugin.executeUpdate(sql, con);
+			}
+			
+			c += NicDataRetrievalService2.createDbScript(tableName, con);
+
+			FormFile myFile = cForm.getChangeLetter();
+			InputStream is = myFile.getInputStream();
+			
+			BufferedReader readbuffer = new BufferedReader(new InputStreamReader(is));
+			
+			resp = readbuffer.readLine();
+
+			if (resp != null && !resp.equals("")) {
+				JSONArray empArray = new JSONArray(resp);
+				NicDataBean ndb = new NicDataBean();
+				if (empArray != null) {
+					JSONObject gsonObj = new JSONObject();
+					for (int i = 0; i < empArray.length(); i++) {
+						gsonObj = (JSONObject) empArray.get(i);
+
+						if (gsonObj != null) {
+							ndb = new Gson().fromJson(gsonObj.toString(), NicDataBean.class);
+							int result = NicDataRetrievalService2.saveResult(tableName, con, ndb);
+							if (result > 0)
+								c++;
+							else {
+								i = empArray.length();
+								System.out.println("EXIT");
+							}
+						}
+					}
+				}
+				System.out.println("Data saved for:" + tableName);
+			}
+			request.setAttribute("successMsg", c+" records data saved to table "+tableName);
+			con.commit();
+		} catch (Exception e) {
+			con.rollback();
+			request.setAttribute("errorMsg", "Failed to save data to table "+tableName);
+			e.printStackTrace();
+		}finally {
+			cForm.setDynaForm("distList", DatabasePlugin.getSelectBox(
+					"select district_id,upper(trim(district_name)) as district_name from district_mst order by district_id",
+					con));
+			if(con!=null) {
+				con.close();
+			}
+		}
+		return mapping.findForward("success");
+	}
+
+}
