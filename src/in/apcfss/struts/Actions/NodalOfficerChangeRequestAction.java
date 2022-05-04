@@ -68,13 +68,13 @@ public class NodalOfficerChangeRequestAction extends DispatchAction{
 				 */
 				
 				con = DatabasePlugin.connect();
-				// cform.setDynaForm("deptsList", DatabasePlugin.getSelectBox( "select sdeptcode||deptcode,description  from dept where sdeptcode='" + userId.substring(0,3) + "' order by sdeptcode", con));
+				// cform.setDynaForm("deptsList", DatabasePlugin.getSelectBox( "select dept_code,description  from dept_new where sdeptcode='" + userId.substring(0,3) + "' order by sdeptcode", con));
 				
 				if(roleId.trim().equals("2"))
 				{
-					cform.setDynaForm("deptsList", DatabasePlugin.getSelectBox( "select sdeptcode||deptcode,description  from dept where sdeptcode||''||deptcode in (select distinct substring(global_org_name,1,5) from "+tableName+") and deptcode!='01' order by sdeptcode", con));
+					cform.setDynaForm("deptsList", DatabasePlugin.getSelectBox( "select dept_code,description  from dept_new where dept_code in (select distinct substring(global_org_name,1,5) from "+tableName+") and deptcode!='01' order by sdeptcode", con));
 				}else
-					cform.setDynaForm("deptsList", DatabasePlugin.getSelectBox( "select sdeptcode||deptcode,description  from dept where sdeptcode='" + userId.substring(0,3) + "' and deptcode!='01' order by sdeptcode", con));
+					cform.setDynaForm("deptsList", DatabasePlugin.getSelectBox( "select dept_code,description  from dept_new where reporting_dept_code='" + userId + "' and deptcode!='01' order by sdeptcode", con));
 				
 				if(cform.getDynaForm("officerType")!=null && !CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("") && !CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("0")){
 					
@@ -83,21 +83,20 @@ public class NodalOfficerChangeRequestAction extends DispatchAction{
 						sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,d.description, change_reasons, change_letter_path, change_req_approved " +
 						"from nodal_officer_change_requests a " +
 						"inner join ( " +
-						"select distinct employee_id,fullname_en from "+tableName+" " +
-						") b on (a.employeeid=b.employee_id) " +
-						"inner join (" +
+						"select distinct employee_id,fullname_en,designation_id, designation_name_en from "+tableName+" " + ") b on (a.employeeid=b.employee_id and a.designation=b.designation_id) " +
+						/*"inner join (" +
 						"select distinct designation_id, designation_name_en from "+tableName+"  " +  //where substring(global_org_name,1,3)='" + userId.substring(0, 3) + "'
-						") c on (a.designation=c.designation_id) " +
-						"inner join dept d on (a.dept_id=d.sdeptcode||d.deptcode) " +
+						") c on (a.designation=c.designation_id) " + */
+						"inner join dept_new d on (a.dept_id=d.dept_code) " +
 						"where a.user_id='" + userId + "' and officer_type='"+cform.getDynaForm("officerType")+"'";
 						
 					}else
 					{
 						sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,d.description, change_reasons, change_letter_path, change_req_approved "
 								+ " from nodal_officer_change_requests a "
-								+ " inner join (select distinct employee_id,fullname_en from "+tableName+") b on (a.employeeid=b.employee_id) "
-								+ " inner join (select distinct designation_id, designation_name_en from "+tableName+" where substring(global_org_name,1,3)='" + userId.substring(0, 3) + "') c on (a.designation=c.designation_id) "
-								+ " inner join dept d on (a.dept_id=d.sdeptcode||d.deptcode) "
+								+ " inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en from "+tableName+") b on (a.employeeid=b.employee_id and a.designation=b.designation_id) "
+								// + " inner join (select distinct  from "+tableName+" where substring(global_org_name,1,5)='" + userId.substring(0, 5) + "') c on () "
+								+ " inner join dept_new d on (a.dept_id=d.dept_code) "
 								+ " " 
 								+ " where a.user_id='" + userId + "' and officer_type='"+cform.getDynaForm("officerType")+"'";
 					}

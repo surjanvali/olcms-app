@@ -25,7 +25,7 @@ public class ApproveOfficerChangeRequest {
 
 			sql = "SELECT user_id, dept_id, designation, employeeid, mobileno, emailid, aadharno, change_reasons, change_letter_path, change_req_approved, "
 					+ " inserted_by, inserted_ip, inserted_time, updated_by, updated_ip, updated_time, officer_type, slno, dist_id "
-					+ " FROM apolcms.nodal_officer_change_requests where change_req_approved is false and officer_type='NO' and dept_id='ICD06'";
+					+ " FROM apolcms.nodal_officer_change_requests where change_req_approved is false and officer_type='MLO' and dept_id='SOW01'";
 			System.out.println("SQL:"+sql);
 			
 			st = con.createStatement();
@@ -54,7 +54,14 @@ public class ApproveOfficerChangeRequest {
 					System.out.println("SQL:" + sql);
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
-					sql="delete from user_roles where userid in (select emailid FROM apolcms.mlo_details where inserted_by='"+deptCode+"')";
+					String existingId = DatabasePlugin.getSingleValue(con, "select emailid FROM apolcms.mlo_details where inserted_by='"+deptCode+"'");
+					System.out.println("existingId:"+existingId);	
+					
+					sql="delete from user_roles where userid='"+existingId+"'";
+					System.out.println("SQL:" + sql);
+					a += DatabasePlugin.executeUpdate(sql, con);
+					
+					sql="delete from users where userid='"+existingId+"'";
 					System.out.println("SQL:" + sql);
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
@@ -97,6 +104,10 @@ public class ApproveOfficerChangeRequest {
 					System.out.println("SQL:" + sql);
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
+					sql="delete from users where userid in (select emailid FROM apolcms.nodal_officer_details where dept_id='"+deptCode+"' and coalesce(dist_id,0)="+distId+")";
+					System.out.println("SQL:" + sql);
+					a += DatabasePlugin.executeUpdate(sql, con);
+										
 					sql="delete from nodal_officer_details where dept_id='"+deptCode+"' and coalesce(dist_id,0)="+distId+"";
 					System.out.println("SQL:" + sql);
 					a += DatabasePlugin.executeUpdate(sql, con);
@@ -133,8 +144,10 @@ public class ApproveOfficerChangeRequest {
 				if(a > 0) {
 					String smsText="Your User Id is "+emailId+" and Password is olcms@2021 to Login to https://apolcms.ap.gov.in/ Portal. Please do not share with anyone. \r\n-APOLCMS";
 					String templateId="1007784197678878760";
+					System.out.println("smsText:"+smsText);
+					System.out.println("mobileNo:"+mobileNo);
 					// mobileNo = "9618048663"; 
-					SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
+					// SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
 				}
 				}
 				else {

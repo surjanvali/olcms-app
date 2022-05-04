@@ -17,6 +17,7 @@ public class ApplicationVariables {
 	/* UPLOAD DOCUMENTS PATHS */
 	
 	public static final String ackPath = "uploads"+filesepartor+"acks"+filesepartor;
+	// public static final String ackBarCodePath = "uploads"+filesepartor+"acksbarcodes"+filesepartor;
 	//public static final String masterPassword = "39c9f399b436881ffabcb89a6c6ec9a4"; //aprcrp@2017
 
 	

@@ -17,9 +17,12 @@
 			<set-property property="password" value="apolcms" />  -->
 			
 			<!-- LOCAL -->
-			<!-- <set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" />
+			
+			<!--
+			<set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" />
 			<set-property property="username" value="apolcms" />
-			<set-property property="password" value="apolcms" /> -->
+			<set-property property="password" value="apolcms" />
+			-->
 
 			<set-property property="minCount" value="5" />
 			<set-property property="maxCount" value="200" />
@@ -304,7 +307,12 @@
 			parameter="mode" scope="request">
 			<forward name="success" path="uploadeofficedata"></forward>
 		</action>
-
+		
+		<action path="/SearchCase" name="CommonForm"
+			type="in.apcfss.struts.Actions.CaseSearchAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="searchcase"></forward>
+		</action>
 
 	</action-mappings>
 

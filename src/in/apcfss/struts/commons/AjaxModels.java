@@ -126,7 +126,7 @@ public class AjaxModels extends DispatchAction {
 						: null;
 
 				String sql = "select distinct employee_id, fullname_en from " + tableName
-						+ " where substring(global_org_name,1,5)='" + deptId
+						+ " where substring(global_org_name,1,5)='" + deptId.substring(0,5)
 						+ "' and designation_id=? order by fullname_en";
 				// System.out.println("sql="+sql);
 				if (userType != null && !userType.equals("0")) {

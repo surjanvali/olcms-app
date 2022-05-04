@@ -25,12 +25,13 @@ public class MLOabstractReportAction extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql = null, deptId = null;
+		String userId = null, roleId = null, sql = null, deptCode = null;
 		String tableName = "nic_data";
 		try {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
@@ -41,11 +42,11 @@ public class MLOabstractReportAction extends DispatchAction {
 			} else if (roleId.trim().equals("3") || roleId.trim().equals("2") || roleId.trim().equals("1")
 					|| roleId.trim().equals("7")) {
 
-				deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"));
 				con = DatabasePlugin.connect();
 				if (roleId.trim().equals("3")) {
 
-					sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(d.description) as description,d.sdeptcode||d.deptcode as dept_code from mlo_details a "
+				/*	
+				 sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(d.description) as description,d.sdeptcode||d.deptcode as dept_code from mlo_details a "
 							+ " inner join (select distinct employee_id,fullname_en from " + tableName
 							+ ") b on (a.employeeid=b.employee_id) "
 							+ " inner join (select distinct designation_id, designation_name_en from " + tableName
@@ -53,30 +54,51 @@ public class MLOabstractReportAction extends DispatchAction {
 							+ "' ) c on (a.designation=c.designation_id)"
 							+ " inner join dept d on (a.user_id=d.sdeptcode||d.deptcode) " + " " + " where a.user_id='"
 							+ userId + "'  order by d.sdeptcode||d.deptcode";
+							*/
+					
+					sql="select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(d.description) as description,d.sdeptcode||d.deptcode as dept_code "
+							+ " from mlo_details a  inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en from "+tableName+") b on (a.employeeid=b.employee_id and a.designation=b.designation_id)  "
+							+ " left join dept d on (a.user_id=d.sdeptcode||d.deptcode) " 
+							+ " where d.reporting_dept_code='" + deptCode + "' or d.dept_code='"+deptCode+"' " 
+							+ " order by d.sdeptcode||d.deptcode";
 
 					request.setAttribute("HEADING", "Middle Level Officer (Legal) Registered Abstract Report ");
 
 				} else if (roleId.trim().equals("2")) {
 
-					sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(d.description) as description,d.sdeptcode||d.deptcode as dept_code from mlo_details a "
+					/* sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(d.description) as description,d.sdeptcode||d.deptcode as dept_code from mlo_details a "
 							+ "inner join ( " + "select distinct employee_id,fullname_en from " + tableName
 							+ ") b on (a.employeeid=b.employee_id) " + "inner join ( "
 							+ "select distinct designation_id, designation_name_en from " + tableName + "  "
 							+ ") c on (a.designation=c.designation_id) "
 							+ "inner join dept d on (a.user_id=d.sdeptcode||d.deptcode) " + "where a.user_id='" + userId
-							+ "'  order by d.sdeptcode||d.deptcode";
+							+ "'  order by d.sdeptcode||d.deptcode"; */
 
+					sql="select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(d.description) as description,d.sdeptcode||d.deptcode as dept_code "
+							+ " from mlo_details a  inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en from "+tableName+") b on (a.employeeid=b.employee_id and a.designation=b.designation_id)  "
+							+ " left join dept d on (a.user_id=d.sdeptcode||d.deptcode) " 
+							+ " where d.dept_code='" + deptCode + "'" 
+							+ " order by d.sdeptcode||d.deptcode";
+					
+					
 					request.setAttribute("HEADING", "Middle Level Officer (Legal) Registered Abstract Report ");
 
 				} else if (roleId.trim().equals("1") || roleId.trim().equals("7")) {
 
-					sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(d.description) as description,d.sdeptcode||d.deptcode as dept_code from mlo_details a "
+				/*	sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(d.description) as description,d.sdeptcode||d.deptcode as dept_code from mlo_details a "
 							+ " inner join (select distinct employee_id,fullname_en from " + tableName
 							+ ") b on (a.employeeid=b.employee_id) "
 							+ " inner join (select distinct designation_id, designation_name_en from " + tableName
 							+ " ) c on (a.designation=c.designation_id)"
 							+ " left join dept d on (a.user_id=d.sdeptcode||d.deptcode) " + " " 
 							+ " order by d.sdeptcode||d.deptcode";
+					*/
+					
+					sql="select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(d.description) as description,d.sdeptcode||d.deptcode as dept_code "
+							+ "from mlo_details a  inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en from "+tableName+") b on (a.employeeid=b.employee_id and a.designation=b.designation_id)  "
+							+ "left join dept d on (a.user_id=d.sdeptcode||d.deptcode)   "
+							+ "order by d.sdeptcode||d.deptcode";
+					
 
 					request.setAttribute("HEADING", "Middle Level Officer (Legal) Registered Abstract Report ");
 				}

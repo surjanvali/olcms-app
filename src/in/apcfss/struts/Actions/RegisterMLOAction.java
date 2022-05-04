@@ -44,22 +44,29 @@ public class RegisterMLOAction extends DispatchAction {
 			return mapping.findForward("Logout");
 		}
 		String sql = null;
+		String deptCode = null;
 		try {
-
+			
+			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			
 			con = DatabasePlugin.connect();
+			
+			sql="select distinct designation_id::int4, designation_name_en from nic_data where substring(global_org_name,1,5)='"
+			+ deptCode.substring(0,5)+ "' and trim(upper(designation_name_en))<>'MINISTER' order by designation_id::int4 desc ";
+			System.out.println("SQL:"+sql);
 			cform.setDynaForm(
 					"designationList",
 					DatabasePlugin
 							.getSelectBox(
-									"select distinct designation_id::int4, designation_name_en from nic_data where substring(global_org_name,1,5)='"+ session.getAttribute("userid")+ "' and trim(upper(designation_name_en))<>'MINISTER' order by designation_id::int4 desc ",
+									sql,
 									con));
 
 			sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en from mlo_details a "
 					+ "inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id) "
 					+ "inner join (select distinct designation_id, designation_name_en from nic_data where substring(global_org_name,1,5)='"
-					+ session.getAttribute("userid") + "' ) c on (a.designation=c.designation_id)" + "" + ""
-					+ "where a.user_id='" + session.getAttribute("userid") + "'";
-			
+					+ deptCode.substring(0,5) + "' ) c on (a.designation=c.designation_id)" + "" + ""
+					+ "where a.user_id='" + deptCode + "'";
+			System.out.println("SQL:"+sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql,con);
 			System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0)
@@ -72,7 +79,7 @@ public class RegisterMLOAction extends DispatchAction {
 			e.printStackTrace();
 		} finally {
 			saveToken(request);
-			cform.setDynaForm("deptId", session.getAttribute("userid").toString());
+			cform.setDynaForm("deptId", deptCode);
 			DatabasePlugin.close(con, ps, null);
 		}
 
@@ -99,13 +106,15 @@ public class RegisterMLOAction extends DispatchAction {
 		String designationId = null, employeeId = null, mobileNo = null, emailId = null, aadharNo = null;
 		int status = 0;
 		CommonForm cform = (CommonForm) form;
-
+		String deptCode = null;
 		try {
 
 			if (!(session.getAttribute("role_id").toString().trim().equals("3") || session.getAttribute("role_id").toString().trim().equals("2"))) {
 				request.setAttribute("errorMsg", "Unauthorized to access this service");
 			} else if (session.getAttribute("role_id").toString().trim().equals("3") || session.getAttribute("role_id").toString().trim().equals("2")) {
 
+				 deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+				
 				designationId = (String) cform.getDynaForm("designationId");
 				employeeId = (String) cform.getDynaForm("employeeId");
 				mobileNo = (String) cform.getDynaForm("mobileNo");
@@ -128,12 +137,12 @@ public class RegisterMLOAction extends DispatchAction {
 					con = DatabasePlugin.connect();
 
 					sql = "insert into mlo_details (user_id, designation, employeeid, mobileno, emailid, aadharno, inserted_by, inserted_ip, inserted_time) values (?,?,?,?,  ?,?,?,?, now())";
-
+					//con.setAutoCommit(false);
 					ps = con.prepareStatement(sql);
 
 					int column = 0;
 
-					ps.setString(++column, (String) session.getAttribute("userid"));
+					ps.setString(++column, deptCode);
 					ps.setString(++column, designationId);
 					ps.setString(++column, employeeId);
 					ps.setString(++column, mobileNo);
@@ -149,21 +158,29 @@ public class RegisterMLOAction extends DispatchAction {
 						
 						sql="insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id , dept_code) "
 								+ "select a.emailid, md5('olcms@2021'), b.fullname_en, '"+(String) session.getAttribute("userid")+"', now(),'"+request.getRemoteAddr()
-								+"', '"+(String) session.getAttribute("dept_id")+"','"+(String) session.getAttribute("userid")
+								+"', '"+ CommonModels.checkIntObject(session.getAttribute("dept_id"))+"','"+deptCode
 								+"'  from mlo_details a inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id) where employeeid='"+employeeId+"'";
-						
-						DatabasePlugin.executeUpdate(sql, con);
+						System.out.println("USER INSERT SQL:"+sql);
+						status=DatabasePlugin.executeUpdate(sql, con);
 						
 						sql="insert into user_roles (userid, role_id) values ('"+emailId+"','4')";
-						DatabasePlugin.executeUpdate(sql, con);
+						System.out.println("USER ROLE INSERT SQL:"+sql);
+						status+=DatabasePlugin.executeUpdate(sql, con);
+						if(status==2) {
+							//con.commit();
+							String smsText="Your User Id is "+emailId+" and Password is olcms@2021 to Login to https://apolcms.ap.gov.in/ Portal. Please do not share with anyone. \r\n-APOLCMS";
+							String templateId="1007784197678878760";
+							mobileNo="9618048663";
+							SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
+							//request.setAttribute("successMsg", "Employee details saved succesfully and User credentials have been created. Login with the Email Id as User Id and olcms@2021 as Password.");
+							request.setAttribute("successMsg", "Mid Level Officer (Legal) details Registered & Login Credentails created successfully. Login details sent to MLO Registered Mobile no.");
+						}
+						else {
+							//con.rollback();
+							request.setAttribute("errorMsg", "Mid Level Officer (Legal) not Registered due to wrong data submitted or Already registered.");
+						}
 						
-						String smsText="Your User Id is "+emailId+" and Password is olcms@2021 to Login to https://apolcms.ap.gov.in/ Portal. Please do not share with anyone. \r\n-APOLCMS";
-						String templateId="1007784197678878760";
-						SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
-						
-						//request.setAttribute("successMsg", "Employee details saved succesfully and User credentials have been created. Login with the Email Id as User Id and olcms@2021 as Password.");
-						request.setAttribute("successMsg", "Mid Level Officer (Legal) details Registered & Login Credentails created successfully. Login details sent to MLO Registered Mobile no.");
-					}
+						}
 					else
 						request.setAttribute("errorMsg", "Mid Level Officer (Legal) not Registered due to wrong data submitted or Already registered");
 
@@ -172,7 +189,7 @@ public class RegisterMLOAction extends DispatchAction {
 				request.setAttribute("errorMsg", "Mid Level Officer (Legal) not Registered due to wrong data submitted or Already registered.");
 			}
 			request.setAttribute("saveAction", "INSERT");
-			cform.setDynaForm("deptId", session.getAttribute("userid").toString());
+			cform.setDynaForm("deptId", deptCode);
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Mid Level Officer (Legal) not Registered due to wrong data submitted or Already registered");
 			e.printStackTrace();

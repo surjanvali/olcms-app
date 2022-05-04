@@ -29,12 +29,13 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql=null;
+		String userId = null, roleId = null, sql=null, deptCode=null;
 		String tableName="nic_data";
 		try {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
@@ -74,8 +75,8 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 							+") and deptcode!='01'  and  dept_code not in (select dept_id from  nodal_officer_details where dist_id='"+CommonModels.checkStringObject(session.getAttribute("dist_id"))+"') order by sdeptcode,deptcode";
 					
 				}else {
-					sql="select dept_code,dept_code||'-'||upper(trim(description)) as description  from dept_new where display=true and reporting_dept_code='" + userId 
-							+ "' and deptcode!='01'  and  dept_code not in (select dept_id from  nodal_officer_details where coalesce(dist_id,0)=0 ) order by sdeptcode,deptcode";
+					sql="select dept_code,dept_code||'-'||upper(trim(description)) as description  from dept_new where display=true and (reporting_dept_code='" + deptCode 
+							+ "' or deptcode='"+deptCode+"') and deptcode!='01'  and  dept_code not in (select dept_id from  nodal_officer_details where coalesce(dist_id,0)=0 ) order by sdeptcode,deptcode";
 				}
 				
 				
@@ -97,12 +98,12 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 						"where a.user_id='"+ userId + "'";
 					
 					
-					
 				}else
 				{
-					sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(trim(d.description)) as description from nodal_officer_details a " +
+					/*
+					 sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(trim(d.description)) as description from nodal_officer_details a " +
 							" inner join (select distinct employee_id,fullname_en from "+tableName+") b on (a.employeeid=b.employee_id) " +
-							" inner join (select distinct designation_id, designation_name_en from "+tableName+" where substring(global_org_name,1,3)='"+ userId.substring(0,3)+ "' ) c on (a.designation=c.designation_id)" +
+							" inner join (select distinct designation_id, designation_name_en from "+tableName+" where substring(global_org_name,1,3)='"+ deptcode.substring(0,3)+ "' ) c on (a.designation=c.designation_id)" +
 							" inner join dept_new d on (a.dept_id=d.dept_code) " +
 							"" +
 							"where d.reporting_dept_code='"
@@ -113,14 +114,17 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 							+ " inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id)"
 							+ " inner join (select distinct designation_id, designation_name_en from nic_data) c on (a.designation=c.designation_id)"
 							+ " left join dept_new d on (a.dept_id=d.dept_code) where d.reporting_dept_code='"+ userId + "' and a.dist_id is null";
+					*/
 					
-					
-					sql="select d.dept_code, upper(trim(d.description)) as description,slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en from dept_new d "
+					sql = "select d.dept_code, upper(trim(d.description)) as description,slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en "
+							+ "from dept_new d "
 							+ "inner join (select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en, a.dept_id from nodal_officer_details a "
-							+ "inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id)   "
-							+ "inner join (select distinct designation_id, designation_name_en from nic_data ) c on (a.designation=c.designation_id)   "
-							+ "where user_id='"+userId+"' and coalesce(a.dist_id,0)=0 ) b on (d.dept_code = b.dept_id) where reporting_dept_code='"+userId+"' and d.display= true   order by 1"
-							+ "";
+							+ "inner join (select distinct employee_id,fullname_en,designation_name_en, designation_id from nic_data) b on (a.employeeid=b.employee_id and a.designation=b.designation_id)"
+							+ " "
+							// + "inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id) "
+							// + "inner join (select distinct designation_id, designation_name_en from nic_data ) c on (a.designation=c.designation_id) "
+							+ "where coalesce(a.dist_id,0)=0 ) b on (d.dept_code = b.dept_id) where (reporting_dept_code='"
+							+ deptCode + "' or dept_code='" + deptCode + "') and substr(dept_code,4,2)!='01' and d.display= true   order by 1" + "";
 					
 				}
 				
@@ -366,24 +370,41 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 
 						if(tableName.equals("nic_data")) {
 						
-							sql = "insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id, dept_code, user_type) select a.emailid, md5('olcms@2021'), b.fullname_en, '"
+							/*sql = "insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id, dept_code, user_type) select a.emailid, md5('olcms@2021'), b.fullname_en, '"
 									+ userId + "', now(),'" + request.getRemoteAddr()
-									+ "',d.dept_id,d.sdeptcode||d.deptcode as deptcode, 5 from nodal_officer_details a inner join (select distinct employee_id,fullname_en from "
-									+ tableName + ") b on (a.employeeid=b.employee_id) " + ""
+									+ "',d.dept_id,d.sdeptcode||d.deptcode as deptcode, 5 from nodal_officer_details a inner join (distinct employee_id,fullname_en,designation_id,designation_name_en, substr(global_org_name,1,5) as dept_code from "
+									+ tableName + ") b on (a.employeeid=b.employee_id and a.dept_id=) " + ""
 									+ "  inner join dept_new d on (d.dept_code='"
 									+ (String) cform.getDynaForm("deptId") + "')" + "" + " where employeeid='" + employeeId
-									+ "'";
+									+ "'";*/
+							
+							sql="insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id, dept_code, user_type) select a.emailid, md5('olcms@2021'), b.fullname_en, '"
+									+ userId + "', now(),'" + request.getRemoteAddr()
+									+ "',d.dept_id,d.sdeptcode||d.deptcode as deptcode, 5 from nodal_officer_details a "
+									+ "inner join (select distinct employee_id,fullname_en,designation_id,designation_name_en, substr(global_org_name,1,5) as dept_code  from nic_data) b on (a.employeeid=b.employee_id and a.dept_id=b.dept_code and a.designation=b.designation_id) "
+									+ "inner join dept_new d on (d.dept_code=b.dept_code) "
+									+ " where employeeid='"+employeeId+"' and a.dept_id='"+(String) cform.getDynaForm("deptId")+"'";
+							
 						}
 						else {
 							sql = "insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id, dept_code, dist_id, user_type) select a.emailid, md5('olcms@2021'), b.fullname_en, '"
 									+ userId + "', now(),'" + request.getRemoteAddr()
-									+ "',d.dept_id,d.sdeptcode||d.deptcode as deptcode,"+CommonModels.checkIntObject(session.getAttribute("dist_id"))+", 10 from nodal_officer_details a inner join (select distinct employee_id,fullname_en from "
-									+ tableName + ") b on (a.employeeid=b.employee_id) " + ""
-									+ " inner join dept_new d on (d.dept_code='"+ (String) cform.getDynaForm("deptId") + "')" 
+									+ "',d.dept_id,d.sdeptcode||d.deptcode as deptcode,"+CommonModels.checkIntObject(session.getAttribute("dist_id"))
+									+", 10 from nodal_officer_details a "
+									
+									// + "inner join (select distinct employee_id,fullname_en from " + tableName + ") b on (a.employeeid=b.employee_id) " + ""
+									+ "inner join (select distinct employee_id,fullname_en,designation_id,designation_name_en, substr(global_org_name,1,5) as dept_code  from " + tableName + ") b on (a.employeeid=b.employee_id and a.dept_id=b.dept_code and a.designation=b.designation_id) "
+									+ "inner join dept_new d on (d.dept_code=b.dept_code) "
+									
+									// + " inner join dept_new d on (d.dept_code='"+ (String) cform.getDynaForm("deptId") + "')" 
 									+ " inner join district_mst dm on (dm.short_name='"+userId+"')" 
-									+ " where employeeid='" + employeeId
-									+ "'";
+									+ " where employeeid='"+employeeId+"' and a.dept_id='"+(String) cform.getDynaForm("deptId")+"'";
+							
+							
+							
 						}
+						
+						System.out.println("SQL::"+sql);
 						
 						status+=DatabasePlugin.executeUpdate(sql, con);
 						if(tableName.equals("nic_data")) {

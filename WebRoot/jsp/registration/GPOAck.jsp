@@ -375,7 +375,7 @@ label {
 											<th>Case Type</th>
 											<th>Main Case No.</th>
 											<th>Remarks</th>
-											<th>Action</th>
+											<th>Download / Print</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -396,28 +396,38 @@ label {
 														onclick="editAck('${map.ack_no}')">
 														<i class="fa fa-edit"></i><span>Edit</span>
 													</button> --%>
-													<button type="button" class="btn btn-sm btn-danger"
+													<%-- <button type="button" class="btn btn-sm btn-danger"
 														title="Delete Acknowledgement"
 														onclick="deleteAck('${map.ack_no}')">
 														<i class="fa fa-trash"></i><span>Delete</span>
-														<!-- <span>Delete</span> -->
-													</button> <logic:present name="map" property="ack_file_path">
+													</button> --%>
+													
+													 <logic:present name="map" property="ack_file_path">
 														<a href="./${map.ack_file_path}" target="_new"
-															title="Download Acknowledgement"
+															title="Print Acknowledgement"
 															class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-															<span>Download</span> <!-- <span>Download</span> -->
+															<span>Acknowledgement</span> <!-- <span>Download</span> -->
 														</a>
-													</logic:present> <logic:notPresent name="map" property="ack_file_path">
+													</logic:present>
+													 <logic:present name="map" property="barcode_file_path">
+														<a href="./${map.barcode_file_path}" target="_new"
+															title="Print Barcode"
+															class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
+															<span>Barcode</span> <!-- <span>Download</span> -->
+														</a>
+													</logic:present> 
+													
+													<%-- <logic:notPresent name="map" property="ack_file_path">
 														<button type="button" class="btn btn-sm btn-info"
 															onclick="downloadAck('${map.ack_no}')">
 															<i class="fa fa-save"></i> <span>Download</span>
 														</button>
-													</logic:notPresent>
+													</logic:notPresent>--%>
 
-													<button type="button" class="btn btn-sm btn-info"
+													<%-- <button type="button" class="btn btn-sm btn-info"
 														onclick="downloadAck('${map.ack_no}')">
 														<i class="fa fa-save"></i> <span>Download 2</span>
-													</button>
+													</button>  --%>
 												</td>
 											</tr>
 										</logic:iterate>

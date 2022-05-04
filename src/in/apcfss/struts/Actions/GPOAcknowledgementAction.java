@@ -94,14 +94,14 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			
 			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id,services_flag,"
-					+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs "
+					+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs, a.barcode_file_path "
 					+ " from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
 					+ "left join case_type_master cm on (a.casetype=cm.sno) "
 					+ "left join (select ack_no,dm.dept_code,dm.description from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code)) gd on (a.ack_no=gd.ack_no)"
 					+ "where a.inserted_by='"+session.getAttribute("userid")
 					+"' and a.delete_status is false "
 					+ "group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name,"
-					+ "case_full_name,a.ack_file_path, services_id, services_flag, inserted_time "
+					+ "case_full_name,a.ack_file_path, services_id, services_flag, inserted_time, a.barcode_file_path "
 					+ "order by district_name, inserted_time";
 			
 			System.out.println("SQL:"+sql);
@@ -259,7 +259,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 				String deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId1"));// != null ? Integer.parseInt(cform.getDynaForm("deptId1").toString()) : 0;
 				
 				if(distId>0 && deptId!=null && !deptId.equals("") && !deptId.equals("0")) {
-					sql="select '"+deptId+"'||lpad('"+distId+"'::text,2,'0')||to_char(now(),'yyyyMMddmmssms')";
+					sql="select '"+deptId+"'||lpad('"+distId+"'::text,2,'0')||to_char(now(),'yyyyMMddhhmiSSms')";
 					ackNo = DatabasePlugin.getStringfromQuery(sql, con);
 				// ackNo = DatabasePlugin.getStringfromQuery("select sdeptcode||deptcode||lpad('"+distId+"'::text,2,'0')||to_char(now(),'yyyyMMddmmssms') from dept where dept_id='"+deptId+"'", con);
 				}
@@ -409,9 +409,12 @@ public class GPOAcknowledgementAction extends DispatchAction {
 						}
 						
 						String ackPath = generateAckPdf(ackNo, cform);
+						String barCodeFilePath = generateAckBarCodePdf(ackNo, cform);
 						System.out.println("ackPath::"+ackPath);
+						System.out.println("barCodeFilePath::"+barCodeFilePath);
+						
 						if(ackPath!=null && !ackPath.equals("")){
-							sql=" update ecourts_gpo_ack_dtls set ack_file_path='"+generateAckPdf(ackNo, cform)+"' where ack_no='"+ackNo+"'";
+							sql=" update ecourts_gpo_ack_dtls set ack_file_path='"+generateAckPdf(ackNo, cform)+"', barcode_file_path='"+barCodeFilePath+"' where ack_no='"+ackNo+"'";
 							DatabasePlugin.executeUpdate(sql, con);
 							
 							request.setAttribute("successMsg",
@@ -544,7 +547,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 	public static String generateNewAckNo() {
 		String ackNoNew = "";
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmssms");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmissms");
 		System.out.println("" + sdf.format(new Date()));
 		ackNoNew = sdf.format(new Date());
 		return ackNoNew;
@@ -661,7 +664,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					cform.setDynaForm("serviceNonService", ackData.get("services_flag").toString());
 				}
 				
-				System.out.println("ACK PATH:"+generateAckPdf(ackNo, cform));
+				System.out.println("ACK BAR CODE PATH:"+generateAckBarCodePdf(ackNo, cform));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -806,11 +809,71 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			//code39Image.scalePercent(60, 50);
 			//code39Image.scaleToFit(100f, 100f);
 			//code39Image.setAbsolutePosition(10, 100);
-			code39Image.scalePercent(100);
+			// code39Image.scalePercent(100);
+			code39Image.scalePercent(50, 100);
 			code39Image.setAlignment(1);
 			
 			document.add(code39Image);
+			System.out.println("pdfFilePath:"+pdfFilePath);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(document!=null)
+				document.close();
+		}
+		return pdfFilePath;
+	}
+	
+	public String generateAckBarCodePdf(String ackNo,CommonForm cform){
+		//uploads/letters/Invoice
+		Document document = null;
+		PdfWriter writer = null;
+		String pdfFilePath ="";
+		try{
+			String fileName = ackNo+"_barCode.pdf";
+			pdfFilePath = ApplicationVariables.ackPath + fileName;
+
+			document = new Document(PageSize.A7 ,5,5,5,5);
+			// document.setMargins(30, 30, 30, 30);
+			document.setPageSize(PageSize.A7);
+			writer = PdfWriter.getInstance(document, new FileOutputStream(ApplicationVariables.contextPath+pdfFilePath));
+			BaseFont bf_courier = BaseFont.createFont(BaseFont.HELVETICA, "Cp1252", false);
+
+			HeaderFooter footer = new HeaderFooter(new Phrase("Page No.:"+document.getPageNumber(), new Font(bf_courier, 8, Font.NORMAL)), true);
+			footer.setBorder(Rectangle.NO_BORDER);
+			footer.setAlignment(Element.ALIGN_RIGHT);
+			document.setFooter(footer);
+
+			document.open();
+			System.out.println("WIDTH A7:"+PageSize.A9.getWidth());
+			System.out.println("HEIGHT A7:"+PageSize.A9.getHeight());
 			
+			PdfContentByte cb = writer.getDirectContent();
+			
+			Barcode39 barcode39 = new Barcode39();
+			barcode39.setCode(ackNo);
+			System.out.println(""+pdfFilePath);
+			// barcode39.setCode(pdfFilePath);
+			//barcode39.setCode("https://apolcms.ap.gov.in/uploads/acks/AGC0114202203070354959.pdf");
+			Image code39Image = barcode39.createImageWithBarcode(cb, null, null);
+			 
+			
+			/*Barcode128 barcode39 = new Barcode128();
+			// barcode39.setCode(ackNo);
+			System.out.println("http://localhost:8080/apolcms/uploads/acks/"+pdfFilePath);
+			// barcode39.setCode("http://localhost:8080/apolcms/uploads/acks/"+pdfFilePath);
+			barcode39.setCode("https://apolcms.ap.gov.in/uploads/acks/AGC0114202203070354959.pdf");
+			Image code39Image = barcode39.createImageWithBarcode(cb, null, null);
+			*/
+			//code39Image.setAbsolutePosition(PageSize.A4.getWidth()/2 + 150, (float) (PageSize.A4.getHeight()/2)+300);
+			code39Image.scalePercent(50, 100);
+			//code39Image.scaleToFit(100f, 100f);
+			//code39Image.setAbsolutePosition(10, 100);
+			//code39Image.scalePercent(100);
+			code39Image.setAlignment(1);
+			
+			document.add(code39Image);
+			System.out.println("BAR CODE pdfFilePath:"+pdfFilePath);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}finally{

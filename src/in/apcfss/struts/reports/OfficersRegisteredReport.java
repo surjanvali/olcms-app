@@ -39,7 +39,8 @@ public class OfficersRegisteredReport extends DispatchAction {
 				con = DatabasePlugin.connect();
 
 				cform.setDynaForm("DCLIST", DatabasePlugin
-						.getSelectBox("select short_name,upper(district_name) from district_mst order by 1", con));
+						.getSelectBox("select district_id,upper(district_name) from district_mst order by district_name", con));
+						//.getSelectBox("select short_name,upper(district_name) from district_mst order by 1", con));
 
 				if (CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("DNO")) {
 					
@@ -66,10 +67,10 @@ public class OfficersRegisteredReport extends DispatchAction {
 					
 
 					sql = "select m.dept_id,upper(d.description) as description,trim(nd.fullname_en) as fullname_en, trim(nd.designation_name_en) as designation_name_en,m.mobileno,m.emailid from nodal_officer_details m "
-							+ "inner join (select distinct employee_id,fullname_en,designation_name_en from "+tableName+") nd on (m.employeeid=nd.employee_id)"
+							+ "inner join (select distinct employee_id,fullname_en,designation_name_en, designation_id from "+tableName+") nd on (m.employeeid=nd.employee_id and m.designation=nd.designation_id)"
 							+ "inner join users u on (m.emailid=u.userid)"
 							+ "inner join dept_new d on (m.dept_id=d.dept_code)"
-							+ "where m.inserted_by='"+dist+"' order by 1";
+							+ "where m.dist_id='"+dist+"' order by 1";
 
 					request.setAttribute("HEADING", "Nodal Officer (Legal - District Level) Details ");
 
@@ -84,8 +85,8 @@ public class OfficersRegisteredReport extends DispatchAction {
 					request.setAttribute("HEADING", "Nodal Officer (Legal) Details ");
 
 				} else {
-					sql = "select d.dept_code as dept_id,upper(d.description) as description,nd.fullname_en, nd.designation_name_en,m.mobileno,m.emailid from mlo_details m "
-							+ "inner join (select distinct employee_id,fullname_en,designation_name_en from nic_data) nd on (m.employeeid=nd.employee_id)"
+					sql = "select d.dept_code as dept_id,upper(d.description) as description,b.fullname_en, b.designation_name_en,m.mobileno,m.emailid from mlo_details m "
+							+ "inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en from nic_data) b on (m.employeeid=b.employee_id and m.designation=b.designation_id)"
 							+ "inner join users u on (m.emailid=u.userid)"
 							+ "inner join dept_new d on (m.user_id=d.dept_code)" + "order by 1";
 

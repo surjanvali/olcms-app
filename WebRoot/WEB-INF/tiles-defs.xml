@@ -200,5 +200,9 @@
 	<definition name="uploadeofficedata" extends="UserLayoutNew">
 		<put name="content" value="/jsp/masters/UploadEofficeData.jsp" />
 	</definition>
-
+	
+	<definition name="searchcase" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/SearchCase.jsp" />
+	</definition>
+	
 </tiles-definitions>

@@ -63,7 +63,43 @@ public class LoginAction extends DispatchAction{
 					System.out.println("LOGIN ACTION ROLE: 60 LINE:"+role);
 					//ps = con.prepareStatement("select * from (select sdeptcode||deptcode as userid,description,dept_id from apdrp_dept union all select sdeptcode as userid,description,dept_id from apdrp_corporations)a where userid=?");
 					//SCT DEPT / MLO / NO / SO / Dist NO
-					if(role==3 || role==4 || role==5 || role==9) { //3	SECRETARIAT DEPARTMENT
+					if(role==3 || role==4) { //3	SECRETARIAT DEPARTMENT
+						  
+						  sql="select u.userid,u.user_description, ur.role_id, upper(trim(rm.role_name)) as role_name, u.dept_id, upper(trim(un.description)) as dept_name,"
+						  		+ "un.dept_code as deptcode , "
+						  		+ "to_char(last_login,'dd-mm-yyyy HH12:MI AM') as last_login, un.reporting_dept_code from users u inner join user_roles ur on (u.userid=ur.userid)"
+						  		+ "left join roles_mst rm on (ur.role_id=rm.role_id) "
+						  		// + "left join dept un on (u.dept_id=un.dept_id) "
+						  		+ "left join dept_new un on (u.dept_code=un.dept_code) "
+						  		+ "left join district_mst dm on (u.dist_id=dm.district_id)"
+						  		+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)='" + username.toUpperCase() + "' group by user_id) ll on (u.userid=ll.user_id)"
+						  		+ "where upper(u.userid)=upper(trim(?))";
+						  
+						  System.out.println("SQL3:"+sql);
+						  
+							ps = con.prepareStatement(sql);
+							ps.setString(1, username);
+							rs = ps.executeQuery();
+							if (rs != null && rs.next()) {
+								
+								session = request.getSession(true);
+								session.setAttribute("userid", rs.getString("userid"));
+								session.setAttribute("userName", rs.getString("user_description"));
+								session.setAttribute("dept_desc", rs.getString("dept_name"));
+								session.setAttribute("dept_id", rs.getString("dept_id"));
+								session.setAttribute("dept_code", rs.getString("deptcode"));
+								session.setAttribute("role_id", rs.getString("role_id"));
+								session.setAttribute("role_desc", rs.getString("role_name"));
+								session.setAttribute("lastLogin", rs.getString("last_login"));
+								session.setAttribute("reporting_dept_code", rs.getString("reporting_dept_code"));
+								
+								sql="insert into users_track_time (user_id, login_time_date) values ('"+rs.getString("userid")+"',now())";
+								DatabasePlugin.executeUpdate(sql, con);
+						  }
+						target="Welcome";
+					}
+					
+					else if(role==5 || role==9) { //3	SECRETARIAT DEPARTMENT
 						
 						  /* String sql = "select u.userid,un.description,un.dept_id,u.user_description,to_char(last_login,'dd-mm-yyyy HH12:MI AM') as last_login from users u "
 						  		+ "left join dept un on (u.userid=(un.sdeptcode||''||un.deptcode)) "
@@ -71,7 +107,7 @@ public class LoginAction extends DispatchAction{
 						  		+ "where upper(u.userid)=upper(?) order by 1 "; */
 						  
 						  sql="select u.userid,u.user_description, ur.role_id, upper(trim(rm.role_name)) as role_name, u.dept_id, upper(trim(un.description)) as dept_name,"
-						  		+ "un.sdeptcode||un.deptcode as deptcode , "
+						  		+ "un.dept_code as deptcode , "
 						  		+ "to_char(last_login,'dd-mm-yyyy HH12:MI AM') as last_login, un.reporting_dept_code from users u inner join user_roles ur on (u.userid=ur.userid)"
 						  		+ "left join roles_mst rm on (ur.role_id=rm.role_id) "
 						  		// + "left join dept un on (u.dept_id=un.dept_id) "
@@ -110,7 +146,7 @@ public class LoginAction extends DispatchAction{
 						// String tableName = AjaxModels.getTableName2(CommonModels.checkStringObject(rs.getString("dist_id")));
 						
 						  // String sql = "select u.userid,u.user_description,un.description as description,u.dept_id from users u left join dept un on (u.dept_id=un.dept_id) where upper(u.userid)=upper(?) order by 1 ";
-							sql = "select u.userid,u.user_description,un.description as description,un.dept_id,un.sdeptcode||un.deptcode as deptcode, upper(trim(un.description)) as dept_name,"
+							sql = "select u.userid,u.user_description,un.description as description,un.dept_id,un.dept_code as deptcode, upper(trim(un.description)) as dept_name,"
 									+ " nd.employee_id, nd.fullname_en, nd.designation_name_en, nd.post_name_en, "
 									+ " nd.employee_identity, upper(trim(rm.role_name)) as role_name, to_char(last_login,'dd-mm-yyyy HH12:MI AM') as last_login, un.reporting_dept_code, u.dist_id from users u "
 									// + " left join dept un on (u.dept_id=un.dept_id) "
@@ -149,7 +185,7 @@ public class LoginAction extends DispatchAction{
 					else if(role==2){ // District Collector
 						
 						  // String sql = "select u.userid,u.user_description,un.description as description,u.dept_id from users u left join dept un on (u.dept_id=un.dept_id) where upper(u.userid)=upper(?) order by 1 ";
-							sql = "select u.userid,u.user_description,un.description as description,un.dept_id,un.sdeptcode||un.deptcode as deptcode, upper(trim(un.description)) as dept_name,"
+							sql = "select u.userid,u.user_description,un.description as description,un.dept_id,un.dept_code as deptcode, upper(trim(un.description)) as dept_name,"
 									+ " nd.employee_id, nd.fullname_en, nd.designation_name_en, nd.post_name_en, "
 									+ " nd.employee_identity, upper(trim(rm.role_name)) as role_name, to_char(last_login,'dd-mm-yyyy HH12:MI AM') as last_login, u.dist_id, un.reporting_dept_code from users u "
 									//+ " left join dept un on (u.dept_id=un.dept_id)"

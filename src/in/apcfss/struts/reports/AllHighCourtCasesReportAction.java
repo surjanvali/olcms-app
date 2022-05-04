@@ -30,7 +30,7 @@ public class AllHighCourtCasesReportAction extends DispatchAction {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-
+String deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			}
@@ -38,13 +38,10 @@ public class AllHighCourtCasesReportAction extends DispatchAction {
 
 				con = DatabasePlugin.connect();
 
-				sql = "select a.dept_id,d.sdeptcode||d.deptcode as deptshortname ,upper(trim(d.description)) as description,count(*) total, sum(case when assigned is true then 1 else 0 end) as assigned "
-						+ "from ecourts_case_data a inner join dept_new d on (a.dept_id=d.dept_id) where d.sdeptcode='"
-						+ userId.substring(0, 3) + "'" + "group by a.dept_id,d.description,d.sdeptcode||d.deptcode "
-						+ "order by d.sdeptcode||d.deptcode";
+				
 				
 				sql="select d.dept_code as deptshortname ,upper(trim(d.description)) as description,count(*) total, sum(case when assigned is true then 1 else 0 end) as assigned "
-						+ " from ecourts_case_data a inner join dept_new d on (a.dept_code=d.dept_code) where (d.dept_code='"+userId+"' or d.reporting_dept_code='"+userId+"') "
+						+ " from ecourts_case_data a inner join dept_new d on (a.dept_code=d.dept_code) where (d.dept_code='"+deptCode+"' or d.reporting_dept_code='"+deptCode+"') "
 						+ " group by d.dept_code,upper(trim(d.description)) order by d.dept_code";
 
 				request.setAttribute("HEADING", "Department wise Highcourt Cases Abstract Report");

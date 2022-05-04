@@ -27,6 +27,7 @@ public class NodalOfficerAbstractReportAction extends DispatchAction {
 		HttpSession session = null;
 		String userId = null, roleId = null, sql=null, deptCode=null, deptId=null, deptName=null;
 		// String tableName="nic_data";
+		CommonForm cform = (CommonForm) form;
 		try {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
@@ -41,7 +42,13 @@ public class NodalOfficerAbstractReportAction extends DispatchAction {
 			else if (!(roleId.trim().equals("1") || roleId.trim().equals("7")||roleId.trim().equals("3")||roleId.trim().equals("4"))) {
 				request.setAttribute("errorMsg", "Unauthorized to access this service");
 				return mapping.findForward("InvalidAccess");
-			} else if (roleId.trim().equals("1") || roleId.trim().equals("7")||roleId.trim().equals("3")||roleId.trim().equals("4")) {
+			} 
+			else if(userId.equals("rajat.bhargava@nic.in") ||  userId.equals("saiprasad@ap.gov.in") ||  userId.equals("anilkumar.singhal@ap.gov.in")) {
+				cform.setDynaForm("deptId", deptCode);
+				return getOfficerWise(mapping, form, request, response);
+			}
+			
+			else if (roleId.trim().equals("1") || roleId.trim().equals("7")||roleId.trim().equals("3")||roleId.trim().equals("4")) {
 				
 				con = DatabasePlugin.connect();
 				String heading ="Nodal Officer (Legal) Registered Abstract Report";
@@ -154,7 +161,7 @@ public class NodalOfficerAbstractReportAction extends DispatchAction {
 							+ "order by 4 desc, d.description";
 				
 					//request.setAttribute("HEADING", "Nodal Officer (Legal) Registered Abstract Report");
-					request.setAttribute("HEADING", "HOD wise Nodal Officer (Legal) Registered Abstract Report,<br /> Department : "+DatabasePlugin.getStringfromQuery("select initcap(d.description) from dept d where d.sdeptcode||d.deptcode='"+sectDept+"'", con));
+					request.setAttribute("HEADING", "HOD wise Nodal Officer (Legal) Registered Abstract Report,<br /> Department : "+DatabasePlugin.getStringfromQuery("select initcap(d.description) from dept_new d where d.dept_code='"+sectDept+"'", con));
 				}
 				System.out.println("SQL:"+sql);
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -252,19 +259,18 @@ public class NodalOfficerAbstractReportAction extends DispatchAction {
 				*/
 					
 				sql = "select d.dept_code, upper(trim(d.description)) as description,slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en "
+						//+ ", slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,d.description "
 						+ "from dept_new d "
-						+ "left join (select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en, a.dept_id from nodal_officer_details a   "
-						+ "inner join (select distinct employee_id,fullname_en from " + tableName
-						+ ") b on (a.employeeid=b.employee_id)   "
-						+ "inner join (select distinct designation_id, designation_name_en from nic_data ) c on (a.designation=c.designation_id)   "
-						+ "where user_id='" + deptId
-						+ "' ) b on (d.dept_code = b.dept_id) where reporting_dept_code='" + deptId
-						+ "' and d.display= true order by 1";
+						+ "left join (select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en, a.dept_id, a.dist_id from nodal_officer_details a  "
+						+ "inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en from "+tableName+") b on (a.employeeid=b.employee_id and a.designation=b.designation_id)"
+								+ "  "
+						+ "  ) b on (d.dept_code = b.dept_id) where (reporting_dept_code='" + deptId
+						+ "' or dept_code='"+deptId+"') and substr(dept_code,4,2)!='01' and coalesce(b.dist_id,0)=0  and d.display= true order by 1";
 					
-					request.setAttribute("HEADING", "Nodal Officer (Legal) Registered Abstract Report,<br /> HOD : "+DatabasePlugin.getStringfromQuery("select initcap(d.description) from dept_new d where d.sdeptcode||d.deptcode='"+deptId+"'", con));
+					request.setAttribute("HEADING", "Nodal Officer (Legal) Registered Abstract Report,<br /> HOD : "+DatabasePlugin.getStringfromQuery("select initcap(d.description) from dept_new d where d.dept_code='"+deptId+"'", con));
 				// }
 				
-				System.out.println("SQL:" + sql);
+				System.out.println("getOfficerWise SQL:" + sql);
 				
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 				
