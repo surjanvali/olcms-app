@@ -14,8 +14,13 @@ label {
 	font-weight: bold;
 }
 </style>
-<!--  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
-<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'> -->
+<link rel='stylesheet'
+	href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+<link rel='stylesheet'
+	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
+<link rel='stylesheet'
+	href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+
 
 <link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet"
 	type="text/css" />
@@ -80,11 +85,15 @@ label {
 		</div>
 		<div class="ibox-body">
 			<html:form method="post" action="/GPOAck"
-				enctype="multipart/form-data">
+				enctype="multipart/form-data" styleId="gpoAckForm">
 				<html:hidden styleId="mode" property="mode" />
 				<html:hidden styleId="ackId" property="dynaForm(ackId)" />
 				<html:hidden styleId="respondentIds"
 					property="dynaForm(respondentIds)" value="1" />
+
+
+				
+
 				<logic:empty name="ACKDATA">
 					<!-- 
 						<div class="page-heading">
@@ -131,8 +140,8 @@ label {
 							</div>
 						</div>
 					</div> --%>
-					
-					
+
+
 					<div class="row">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<div class="form-group">
@@ -155,13 +164,16 @@ label {
 									<tbody>
 										<tr id="1">
 											<td>1.</td>
-											<td><html:select styleId="deptId1" property="dynaForm(deptId1)" styleClass="select2Class"
-												style="width: 100%;">
-												<html:option value="0">---SELECT---</html:option>
-												<logic:notEmpty name="CommonForm" property="dynaForm(deptList)">
-													<html:optionsCollection name="CommonForm" property="dynaForm(deptList)" />
-												</logic:notEmpty>
-											</html:select></td>
+											<td><html:select styleId="deptId1"
+													property="dynaForm(deptId1)" styleClass="select2Class"
+													style="width: 100%;">
+													<html:option value="0">---SELECT---</html:option>
+													<logic:notEmpty name="CommonForm"
+														property="dynaForm(deptList)">
+														<html:optionsCollection name="CommonForm"
+															property="dynaForm(deptList)" />
+													</logic:notEmpty>
+												</html:select></td>
 										</tr>
 									</tbody>
 								</table>
@@ -359,6 +371,27 @@ label {
 					</div>
 				</logic:empty>
 				<logic:notEmpty name="ACKDATA">
+
+<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label class="font-bold">Date of Acknowledgement</label>
+							<div class="input-group date">
+								<span class="input-group-addon bg-white"><i
+									class="fa fa-calendar"></i></span>
+								<html:text styleId="dofFromDate"
+									property="dynaForm(dofFromDate)"
+									styleClass="form-control datepicker" />
+
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<input type="submit" name="submit" value="Show Acknowledgements"
+							class="btn btn-success" onclick="return fnShowCases();" />
+					</div>
+				</div>
+
 					<div class="row">
 						<div class="col-md-12">
 							<div class="table-responsive">
@@ -395,36 +428,27 @@ label {
 														title="Edit Acknowledgement"
 														onclick="editAck('${map.ack_no}')">
 														<i class="fa fa-edit"></i><span>Edit</span>
-													</button> --%>
-													<%-- <button type="button" class="btn btn-sm btn-danger"
+													</button> --%> <%-- <button type="button" class="btn btn-sm btn-danger"
 														title="Delete Acknowledgement"
 														onclick="deleteAck('${map.ack_no}')">
 														<i class="fa fa-trash"></i><span>Delete</span>
-													</button> --%>
-													
-													 <logic:present name="map" property="ack_file_path">
+													</button> --%> <logic:present name="map"
+														property="ack_file_path">
 														<a href="./${map.ack_file_path}" target="_new"
-															title="Print Acknowledgement"
-															class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-															<span>Acknowledgement</span> <!-- <span>Download</span> -->
+															title="Print Acknowledgement" class="btn btn-sm btn-info">
+															<i class="fa fa-save"></i> <span>Acknowledgement</span> <!-- <span>Download</span> -->
 														</a>
-													</logic:present>
-													 <logic:present name="map" property="barcode_file_path">
+													</logic:present> <logic:present name="map" property="barcode_file_path">
 														<a href="./${map.barcode_file_path}" target="_new"
-															title="Print Barcode"
-															class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-															<span>Barcode</span> <!-- <span>Download</span> -->
+															title="Print Barcode" class="btn btn-sm btn-info"> <i
+															class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
 														</a>
-													</logic:present> 
-													
-													<%-- <logic:notPresent name="map" property="ack_file_path">
+													</logic:present> <%-- <logic:notPresent name="map" property="ack_file_path">
 														<button type="button" class="btn btn-sm btn-info"
 															onclick="downloadAck('${map.ack_no}')">
 															<i class="fa fa-save"></i> <span>Download</span>
 														</button>
-													</logic:notPresent>--%>
-
-													<%-- <button type="button" class="btn btn-sm btn-info"
+													</logic:notPresent>--%> <%-- <button type="button" class="btn btn-sm btn-info"
 														onclick="downloadAck('${map.ack_no}')">
 														<i class="fa fa-save"></i> <span>Download 2</span>
 													</button>  --%>
@@ -446,6 +470,18 @@ label {
 		</div>
 	</div>
 </div>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script
+	src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
+<script
+	src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js'></script>
+
+<script>
+        $('.datepicker').datepicker({
+            uiLibrary: 'bootstrap4'
+        });
+    </script>
 
 <script src="https://apbudget.apcfss.in/js/select2.js"></script>
 
@@ -457,6 +493,9 @@ label {
 	}
 	
 	$(document).ready(function() {
+		$('.input-group.date').datepicker({
+			format : "dd-mm-yyyy"
+		});
 		$(".servicesDiv").hide();
 		$("#serviceNonService").change(function(){
 			if($("#serviceNonService").val()=="SERVICES"){
@@ -821,13 +860,16 @@ label {
 
 
 
-	function verifyAadhaar() {
-		var aadharNo = $("#aadharNo").val();
-		if (validate(aadharNo)) {
-
-		} else {
-			alert("Invalid aadhar no.");
-			$("#aadharNo").val("");
+function fnShowCases() {
+		
+		if (($("#dofFromDate").val() == null || $("#dofFromDate").val() == "" || $("#dofFromDate").val() == "0"))
+		{
+			alert("Select a Date");
+			$("#dofFromDate").focus();
+			return false;
 		}
+		
+		$("#mode").val("getAcknowledementsList");
+		$("#gpoAckForm").submit();
 	}
 </script>

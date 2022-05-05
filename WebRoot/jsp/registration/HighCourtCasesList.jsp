@@ -107,7 +107,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 							<div class="form-group">
-								<label class="font-bold">Date of Filing From Date</label>
+								<label class="font-bold">Date of Filing To Date</label>
 								<div class="input-group date">
 									<span class="input-group-addon bg-white"><i
 										class="fa fa-calendar"></i></span>

@@ -63,6 +63,9 @@ public class GPOAcknowledgementAction extends DispatchAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+			System.out.println("" + sdf.format(new Date()));
+			cform.setDynaForm("ackDate", sdf.format(new Date()));
 			DatabasePlugin.close(con, ps, null);
 		}
 		return getAcknowledementsList(mapping, cform, request, response);
@@ -75,6 +78,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		HttpSession session = request.getSession();
 		String sql = null;
+		String ackDate="";
 		try {
 			if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 				return mapping.findForward("Logout");
@@ -99,7 +103,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					+ "left join case_type_master cm on (a.casetype=cm.sno) "
 					+ "left join (select ack_no,dm.dept_code,dm.description from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code)) gd on (a.ack_no=gd.ack_no)"
 					+ "where a.inserted_by='"+session.getAttribute("userid")
-					+"' and a.delete_status is false "
+					+"' and a.delete_status is false and inserted_time::date=to_date('"+ackDate+"','dd/mm/yyyy') "
 					+ "group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name,"
 					+ "case_full_name,a.ack_file_path, services_id, services_flag, inserted_time, a.barcode_file_path "
 					+ "order by district_name, inserted_time";
