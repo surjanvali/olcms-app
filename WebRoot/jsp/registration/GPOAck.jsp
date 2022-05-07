@@ -64,7 +64,7 @@ label {
 		<div class="ibox-head">
 			<div class="ibox-title" style="width: 100%;">
 				<logic:notEmpty name="ACKDATA">
-					<b>Acknowledgements Generated</b>
+					<b>Acknowledgements Generated Today</b>
 					<span class="pull-right"><input type="button" name="Submit"
 						value="Submit Acknowledgement" class="btn btn-primary pull-right"
 						onclick="showAckEntry();" /> </span>
@@ -88,6 +88,7 @@ label {
 				enctype="multipart/form-data" styleId="gpoAckForm">
 				<html:hidden styleId="mode" property="mode" />
 				<html:hidden styleId="ackId" property="dynaForm(ackId)" />
+				<html:hidden styleId="ackType" property="dynaForm(ackType)" />
 				<html:hidden styleId="respondentIds"
 					property="dynaForm(respondentIds)" value="1" />
 
@@ -249,6 +250,49 @@ label {
 							</div>
 						</div>
 					</div>
+					
+					<div class="row" id="OLDCASEDIV" >
+						<%-- <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label for="sel1"><bean:message key="wpaffd.casetype" />
+									<bean:message key="mandatory" /> </label>
+								<html:select property="dynaForm(caseType)"
+									styleClass="select2Class" style="width: 100%;"
+									styleId="caseType">
+									<html:option value="0">---SELECT---</html:option>
+									<logic:notEmpty property="dynaForm(caseTypesList)"
+										name="CommonForm">
+										<html:optionsCollection property="dynaForm(caseTypesList)"
+											name="CommonForm" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
+						</div> --%>
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Case Registration Year <bean:message key="mandatory" /></label>
+								<html:select styleId="regYear" property="dynaForm(regYear)"
+									styleClass="select2Class" style="width:100%;">
+									<html:option value="0">---SELECT---</html:option>
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(yearsList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(yearsList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Case Reg. No <bean:message key="mandatory" /></label>
+
+								<html:text styleId="regNo" property="dynaForm(regNo)"
+									styleClass="form-control" maxlength="6" />
+
+							</div>
+						</div>
+					</div>
+					
 					<%-- 	
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -355,7 +399,9 @@ label {
 					<div class="row">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<logic:present name="saveAction">
-								<input type="button" name="Submit" value="show Ack List"
+								<!-- <input type="button" name="Submit" value="show Ack List"
+									class="btn btn-primary pull-right" onclick="showAckListAll();" /> &nbsp;&nbsp; -->
+								<input type="button" name="Submit" value="show Acks List"
 									class="btn btn-primary pull-right" onclick="showAckList();" /> &nbsp;&nbsp;
 												<logic:equal value="INSERT" name="saveAction">
 									<input type="button" name="Submit" value="Submit"
@@ -497,6 +543,13 @@ label {
 			format : "dd-mm-yyyy"
 		});
 		$(".servicesDiv").hide();
+		$("#OLDCASEDIV").hide();
+
+		
+		if($("#ackType").val()=="OLD"){
+			$("#OLDCASEDIV").show();			
+		}
+		
 		$("#serviceNonService").change(function(){
 			if($("#serviceNonService").val()=="SERVICES"){
 				$(".servicesDiv").show();
@@ -668,7 +721,11 @@ label {
 		document.forms[0].mode.value = "displayAckForm";
 		document.forms[0].submit();
 	}
-
+	function showAckListAll() {
+		document.forms[0].mode.value = "getAcknowledementsListAll";
+		document.forms[0].submit();
+	}
+	
 	function showAckList() {
 		document.forms[0].mode.value = "getAcknowledementsList";
 		document.forms[0].submit();

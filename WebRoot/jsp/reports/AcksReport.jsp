@@ -33,7 +33,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 </div>
 <div class="page-content fade-in-up">
-	<html:form method="post" action="/SearchCase"
+	<html:form method="post" action="/AcksReport"
 		styleId="HighCourtCasesListForm">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden styleId="selectedCaseIds"
@@ -65,95 +65,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 			</div>
 
-			<div class="ibox">
-				<div class="ibox-head">
-					<div class="ibox-title">Search Case</div>
-				</div>
-				<div class="ibox-body">
-					<!-- <h4 class="m-t-0 header-title">
-						<b>High Court Cases List</b>
-					</h4>
-					<hr /> -->
 
-					<div class="row">
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label for="sel1"><bean:message key="wpaffd.casetype" />
-									<bean:message key="mandatory" /> </label>
-								<html:select property="dynaForm(caseType)"
-									styleClass="select2Class" style="width: 100%;"
-									styleId="caseType">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty property="dynaForm(caseTypesList)"
-										name="CommonForm">
-										<html:optionsCollection property="dynaForm(caseTypesList)"
-											name="CommonForm" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>Case Registration Year</label>
-								<html:select styleId="regYear" property="dynaForm(regYear)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty name="CommonForm"
-										property="dynaForm(yearsList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(yearsList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label class="font-bold">Case Reg. No</label>
-
-								<html:text styleId="regNo" property="dynaForm(regNo)"
-									styleClass="form-control" maxlength="6" />
-
-							</div>
-						</div>
-					</div>
-					<hr />
-					<div class="row">
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label class="font-bold">CIN No</label>
-
-								<html:text styleId="cinNo" property="dynaForm(cinNo)"
-									styleClass="form-control" maxlength="25" />
-
-							</div>
-						</div>
-
-					</div>
-
-					<div class="row">
-						<div class="col-md-12 col-xs-12">
-							<input type="submit" name="Submit2" value="show Entered List"
-									class="btn btn-primary pull-right" onclick="showAckList();" />
-							
-							<input type="submit" name="submit" value="Get Case"
-								class="btn btn-success pull-right" onclick="return fnShowCases();" />
-							 	
-						</div>
-					</div>
-
-
-				</div>
-			</div>
-
-			<logic:notEmpty name="CASESLIST">
+			<logic:notEmpty name="ACKDATA">
 				<div class="ibox">
-					<%-- <div class="ibox-head">
-				<div class="ibox-title">
-					<logic:notEmpty name="HEADING">
-									${HEADING }
-								</logic:notEmpty>
-				</div>
-			</div> --%>
+					<div class="ibox-head">
+						<div class="ibox-title">Generated Acknowledgements Report</div>
+					</div>
+
 					<div class="ibox-body">
 						<div class="table-responsive">
 
@@ -162,174 +80,36 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<thead>
 									<tr>
 										<th>Sl.No</th>
-										<th></th>
-										<th>CINo</th>
-										<th>Date of Filing</th>
-										<th>Case Type</th>
-										<th>Reg.No.</th>
-										<th>Reg. Year</th>
-										<!-- <th>Filing No.</th>
-										<th>Filing Year</th>
-										<th>Date of Next List</th>
-										<th>Bench</th>
-										<th>Judge Name</th> -->
-										<th>Petitioner</th>
-
-										<th>District</th>
-										<th>Purpose</th>
-										<th>Respondents</th>
-
-										<th>Petitioner Advocate</th>
-										<th>Respondent Advocate</th>
-
-										<th>Orders</th>
-										<!-- <th>Assign To</th> -->
+										<th>Date</th>
+										<th>Total</th>
+										<th>New Cases</th>
+										<th>Existing Cases</th>
 									</tr>
 								</thead>
 								<tbody>
 
-									<logic:iterate id="map" name="CASESLIST" indexId="i">
+									<logic:iterate id="map" name="ACKDATA" indexId="i">
 										<tr>
 											<td>${i+1 }.</td>
-											<td><logic:present name="map"
-													property="barcode_file_path">
-													<a href="./${map.barcode_file_path}" target="_new"
-														title="Print Barcode" class="btn btn-sm btn-info"> <i
-														class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
-													</a>
-												</logic:present></td>
-											<td><input type="button" id="btnShowPopup"
-												value="${map.cino}"
-												class="btn btn-sm btn-info waves-effect waves-light"
-												onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
-
-											</td>
-											<td><logic:notEmpty name="map" property="date_of_filing">
-													<logic:notEqual value="0001-01-01" name="map"
-														property="date_of_filing">
-																	${map.date_of_filing }
-																</logic:notEqual>
-												</logic:notEmpty></td>
-											<td>${map.type_name_fil }</td>
-											<td>${map.reg_no}</td>
-											<td>${map.reg_year }</td>
-											<%-- <td>${map.fil_no}</td>
-											<td>${map.fil_year }</td>
-											<td><logic:notEmpty name="map" property="date_next_list">
-													<logic:notEqual value="0001-01-01" name="map"
-														property="date_next_list">
-																	${map.date_of_filing }
-																</logic:notEqual>
-												</logic:notEmpty></td>
-											<td>${map.bench_name }</td>
-											<td>Hon'ble Judge : ${map.coram }</td> --%>
-											<td>${map.pet_name }</td>
-											<td>${map.dist_name }</td>
-											<td>${map.purpose_name }</td>
-											<td>${map.res_name }</td>
-
-											<td>${map.pet_adv }</td>
-											<td>${map.res_adv }</td>
-
-											<td style="text-align: center;">${map.orderpaths }</td>
+											<td><a
+												href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}">${map.ack_date }</a></td>
+											<td style="text-align: right;">${map.total}</td>
+											<td style="text-align: right;"><a
+												href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=NEW">${map.new_acks }</a></td>
+											<td style="text-align: right;"><a
+												href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=OLD">${map.existing_acks }</a></td>
 									</logic:iterate>
 								</tbody>
 								<tfoot>
 									<tR>
-										<td colspan="14">&nbsp;</td>
+										<td colspan="5">&nbsp;</td>
 									</tR>
 								</tfoot>
 							</table>
 						</div>
 					</div>
 				</div>
-
 			</logic:notEmpty>
-			
-			<logic:notEmpty name="ACKDATA">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="table-responsive">
-								<table class="table table-striped table-bordered table-hover"
-									id="example">
-									<thead>
-										<tr>
-											<th>Sl.No</th>
-											<th>Ack No.</th>
-											<th>District</th>
-											<th>Department</th>
-											<th>Advocate Name</th>
-											<th>Advocate CC No.</th>
-											<th>Case Type</th>
-											<th>Main Case No.</th>
-											<th>Remarks</th>
-											<th>Download / Print</th>
-										</tr>
-									</thead>
-									<tbody>
-										<logic:iterate id="map" name="ACKDATA" indexId="i">
-											<tr>
-												<td>${i+1 }</td>
-												<td>${map.ack_no }</td>
-												<td>${map.district_name }</td>
-												<td>${map.dept_descs }</td>
-												<td>${map.advocatename }</td>
-												<td>${map.advocateccno }</td>
-												<td>${map.case_full_name }</td>
-												<td>${map.maincaseno }</td>
-												<td>${map.remarks }</td>
-												<td style="text-align: center;" nowrap="nowrap">
-													<%-- <button type="button" class="btn btn-sm btn-warning"
-														title="Edit Acknowledgement"
-														onclick="editAck('${map.ack_no}')">
-														<i class="fa fa-edit"></i><span>Edit</span>
-													</button> --%>
-													<%-- <button type="button" class="btn btn-sm btn-danger"
-														title="Delete Acknowledgement"
-														onclick="deleteAck('${map.ack_no}')">
-														<i class="fa fa-trash"></i><span>Delete</span>
-													</button> --%>
-													
-													 <logic:present name="map" property="ack_file_path">
-														<a href="./${map.ack_file_path}" target="_new"
-															title="Print Acknowledgement"
-															class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-															<span>Acknowledgement</span> <!-- <span>Download</span> -->
-														</a>
-													</logic:present>
-													 <logic:present name="map" property="barcode_file_path">
-														<a href="./${map.barcode_file_path}" target="_new"
-															title="Print Barcode"
-															class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-															<span>Barcode</span> <!-- <span>Download</span> -->
-														</a>
-													</logic:present> 
-													
-													<%-- <logic:notPresent name="map" property="ack_file_path">
-														<button type="button" class="btn btn-sm btn-info"
-															onclick="downloadAck('${map.ack_no}')">
-															<i class="fa fa-save"></i> <span>Download</span>
-														</button>
-													</logic:notPresent>--%>
-
-													<%-- <button type="button" class="btn btn-sm btn-info"
-														onclick="downloadAck('${map.ack_no}')">
-														<i class="fa fa-save"></i> <span>Download 2</span>
-													</button>  --%>
-												</td>
-											</tr>
-										</logic:iterate>
-									</tbody>
-									<tfoot>
-										<tR>
-											<td colspan="10">&nbsp;</td>
-										</tR>
-									</tfoot>
-								</table>
-							</div>
-						</div>
-					</div>
-				</logic:notEmpty>
 		</div>
 	</html:form>
 </div>

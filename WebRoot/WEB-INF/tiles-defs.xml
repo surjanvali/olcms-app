@@ -205,4 +205,8 @@
 		<put name="content" value="/jsp/reports/SearchCase.jsp" />
 	</definition>
 	
+	<definition name="acksreport" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/AcksReport.jsp" />
+	</definition>
+	
 </tiles-definitions>

@@ -13,6 +13,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden property="dynaForm(deptId)" styleId="deptId" />
 		<html:hidden property="dynaForm(deptName)" styleId="deptName" />
+		<html:hidden property="dynaForm(caseStatus)" styleId="caseStatus" />
 		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="dashboard-cat-title">
@@ -96,20 +97,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${i+1 }</td>
 										<td>${map.deptcode }</td>
 										<td><a href="javascript:ShowHODWise('${map.deptcode}','${map.description }');">${map.description }</a></td>
-										<td  style="text-align: right;">${map.total_cases }</td>
-										<td  style="text-align: right;">${map.withsectdept }</td>
-										<td  style="text-align: right;">${map.withmlo }</td>
-										<td  style="text-align: right;">${map.withhod }</td>
-										<td  style="text-align: right;">${map.withnodal }</td>
-										<td  style="text-align: right;">${map.withsection }</td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','ALL');">${map.total_cases }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSD');">${map.withsectdept }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withMLO');">${map.withmlo }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHOD');">${map.withhod }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withNO');">${map.withnodal }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSDSec');">${map.withsection }</a></td>
 										
-										<td  style="text-align: right;">${map.withsectionhod }</td>
-										<td  style="text-align: right;">${map.withdc }</td>
-										<td  style="text-align: right;">${map.withdistno }</td>
-										<td  style="text-align: right;">${map.withsectiondist }</td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHODSec');">${map.withsectionhod }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDC');">${map.withdc }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistNO');">${map.withdistno }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistSec');">${map.withsectiondist }</a></td>
 										
-										<td  style="text-align: right;">${map.withgpo }</td>
-										<td  style="text-align: right;">${map.closedcases }</td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withGP');">${map.withgpo }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','closed');">${map.closedcases }</a></td>
 
 									</tr>
 									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
@@ -205,7 +206,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${i+1 }</td>
 										<td>${map.deptcode }</td>
 										<td>${map.description }</td>
-										<td  style="text-align: right;">${map.total_cases }</td>
+										<%-- <td  style="text-align: right;">${map.total_cases }</td>
 										<td  style="text-align: right;">${map.withsectdept }</td>
 										<td  style="text-align: right;">${map.withmlo }</td>
 										<td  style="text-align: right;">${map.withhod }</td>
@@ -218,7 +219,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td  style="text-align: right;">${map.withsectiondist }</td>
 										
 										<td  style="text-align: right;">${map.withgpo }</td>
-										<td  style="text-align: right;">${map.closedcases }</td>
+										<td  style="text-align: right;">${map.closedcases }</td> --%>
+										
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','ALL');">${map.total_cases }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSD');">${map.withsectdept }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withMLO');">${map.withmlo }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHOD');">${map.withhod }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withNO');">${map.withnodal }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSDSec');">${map.withsection }</a></td>
+										
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHODSec');">${map.withsectionhod }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDC');">${map.withdc }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistNO');">${map.withdistno }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistSec');">${map.withsectiondist }</a></td>
+										
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','withGP');">${map.withgpo }</a></td>
+										<td  style="text-align: right;"><a href="javascript:showCasesWise('${map.deptcode}','${map.description }','closed');">${map.closedcases }</a></td>
 
 									</tr>
 									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
@@ -267,82 +283,112 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 						</table>
 						
-						<%-- <table class="table table-striped table-bordered table-hover"
-							id="example" cellspacing="0" width="100%">
+						
+					</logic:present>
+				
+					<logic:present name="CASESLIST">
+
+						<table id="example" class="table table-striped table-bordered"
+							style="width:100%">
 							<thead>
 								<tr>
 									<th>Sl.No</th>
-									<th>Sect.Department Code</th>
-									<th>Description</th>
-									<th>Total Cases</th>
-									<th>Pending With Sect.Dept</th>
-									<th>Pending With MLO</th>
-									<th>Pending With HOD</th>
-									<th>Pending With Nodal</th>
-									<th>Pending With Section</th>
-									<th>Pending With GPO</th>
-									<th>Closed Cases</th>
-
+									<th>CINo</th>
+									<th>Date of Filing</th>
+									<th>Case Type</th>
+									<th>Reg.No.</th>
+									<th>Reg. Year</th>
+									<th>Filing No.</th>
+									<th>Filing Year</th>
+									<th>Date of Next List</th>
+									<th>Bench</th>
+									<th>Judge Name</th>
+									<th>Petitioner</th>
+									<th>District</th>
+									<th>Purpose</th>
+									<th>Respondents</th>
+									<th>Petitioner Advocate</th>
+									<th>Respondent Advocate</th>
+									<th>Orders</th>
 								</tr>
 							</thead>
 							<tbody>
-								<bean:define id="Totals" value="0"></bean:define>
-								<bean:define id="sdeptTotals" value="0"></bean:define>
-								<bean:define id="Mlototals" value="0"></bean:define>
-								<bean:define id="hodsTotals" value="0"></bean:define>
-								<bean:define id="nodalTotals" value="0"></bean:define>
-								<bean:define id="sectionTotals" value="0"></bean:define>
-								<bean:define id="gpoTotals" value="0"></bean:define>
-								<bean:define id="closedcases" value="0"></bean:define>
-								<logic:iterate id="map" name="deptwise" indexId="i">
-									<tr>
-										<td>${i+1 }</td>
-										<td>${map.sdeptcode }${map.deptcode }</td>
-										<td>${map.description }</td>
-										<td  style="text-align: right;">${map.total_cases }</td>
-										<td  style="text-align: right;">${map.withsectdept }</td>
-										<td  style="text-align: right;">${map.withmlo }</td>
-										<td  style="text-align: right;">${map.withhod }</td>
-										<td  style="text-align: right;">${map.withnodal }</td>
-										<td  style="text-align: right;">${map.withsection }</td>
-										<td  style="text-align: right;">${map.withgpo }</td>
-										<td  style="text-align: right;">${map.closedcases }</td>
-									</tr>
-									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
-									<bean:define id="sdeptTotals"
-										value="${sdeptTotals + map.withsectdept }"></bean:define>
-									<bean:define id="Mlototals" value="${Mlototals + map.withmlo }"></bean:define>
-									<bean:define id="hodsTotals"
-										value="${hodsTotals + map.withhod }"></bean:define>
-									<bean:define id="nodalTotals"
-										value="${nodalTotals + map.withnodal }"></bean:define>
-									<bean:define id="sectionTotals"
-										value="${sectionTotals + map.withsection }"></bean:define>
-									<bean:define id="gpoTotals" value="${gpoTotals + map.withgpo }"></bean:define>
 
-									<bean:define id="closedcases"
-										value="${closedcases + map.closedcases }"></bean:define>
+								<logic:iterate id="map" name="CASESLIST" indexId="i">
+									<tr>
+										<td>${i+1 }.</td>
+										<td><input type="button" id="btnShowPopup"
+											value="${map.cino}"
+											class="btn btn-sm btn-info waves-effect waves-light"
+											onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
+
+										</td>
+										<td><logic:notEmpty name="map" property="date_of_filing">
+												<logic:notEqual value="0001-01-01" name="map"
+													property="date_of_filing">
+																	${map.date_of_filing }
+																</logic:notEqual>
+											</logic:notEmpty></td>
+										<td>${map.type_name_fil }</td>
+										<td>${map.reg_no}</td>
+										<td>${map.reg_year }</td>
+										<td>${map.fil_no}</td>
+										<td>${map.fil_year }</td>
+										<td><logic:notEmpty name="map" property="date_next_list">
+												<logic:notEqual value="0001-01-01" name="map"
+													property="date_next_list">
+																	${map.date_of_filing }
+																</logic:notEqual>
+											</logic:notEmpty></td>
+										<td>${map.bench_name }</td>
+										<td>Hon'ble Judge : ${map.coram }</td>
+										<td>${map.pet_name }</td>
+										<td>${map.dist_name }</td>
+										<td>${map.purpose_name }</td>
+										<td>${map.res_name }</td>
+
+										<td>${map.pet_adv }</td>
+										<td>${map.res_adv }</td>
+										<td style="text-align: center;">${map.orderpaths }</td>
+									</tr>
+
 								</logic:iterate>
 							</tbody>
 							<tfoot>
 								<tR>
-									<td colspan="3">Totals</td>
-									<td colspan="1"  style="text-align: right;">${Totals }</td>
-									<td colspan="1"  style="text-align: right;">${sdeptTotals }</td>
-									<td colspan="1"  style="text-align: right;">${Mlototals }</td>
-									<td colspan="1"  style="text-align: right;">${hodsTotals }</td>
-									<td colspan="1"  style="text-align: right;">${nodalTotals }</td>
-									<td colspan="1"  style="text-align: right;">${sectionTotals }</td>
-									<td colspan="1"  style="text-align: right;">${gpoTotals }</td>
-									<td colspan="1"  style="text-align: right;">${closedcases }</td>
+									<td colspan="20">&nbsp;</td>
 								</tR>
 							</tfoot>
-						</table> --%>
+						</table>
 					</logic:present>
+				
 				</div>
 			</div>
 		</div>
 	</html:form>
+</div>
+<div id="MyPopup" class="modal fade" role="dialog"
+	style="padding-top:200px;">
+	<div class="modal-dialog modal-lg">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header"
+				style="background-color: #3498db;color: #fff;">
+				<button type="button" class="close" data-dismiss="modal">
+					&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					<iframe src="" id="page" name="model_window"
+						style="width:100%;min-height:600px;;border:0px;"> </iframe>
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -352,20 +398,27 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#mode").val("HODwisedetails");
 		$("#HCCaseStatusAbstract").submit();
 	}
+	function showCasesWise(deptId, deptDesc, status) {
+		$("#deptId").val(deptId);
+		$("#deptName").val(deptDesc);
+		$("#caseStatus").val(status);
+		$("#mode").val("getCasesList");
+		$("#HCCaseStatusAbstract").submit();
+	}
+	
+	function viewCaseDetailsPopup(cino) {
+		var heading = "View Case Details for CINO : "+cino;
+		var srclink = "";
+		if (cino != null && cino != "" && cino != "0") {
+			srclink = "./AssignedCasesToSection.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino=" + cino;
+			// alert("LINK:"+srclink);
+			if (srclink != "") {
+				$("#MyPopup .modal-title").html(heading);
+				$("#page").prop("src", srclink)
+				//$("#MyPopup .modal-body").html(body);
+				$("#MyPopup").modal("show");
+			};
+		};
+	};
+	
 </script>
-
-<!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
- <script type="text/javascript" src="//cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js"></script> 
-<script>
-$('#example').DataTable({
-  dom: 'Blfrtip',
-  buttons: [ 'excel']
-});
-</script> -->
