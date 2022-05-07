@@ -23,7 +23,8 @@
 					<div class="font-strong">District Collector</div>
 					<small>${sessionScope.userName }</small>
 				</c:if>
-				<c:if test="${sessionScope.role_id eq 3 || sessionScope.role_id eq 4 || sessionScope.role_id eq 5 || sessionScope.role_id eq 8  || sessionScope.role_id eq 9 || sessionScope.role_id eq 10 || sessionScope.role_id eq 11 || sessionScope.role_id eq 12}">
+				<c:if test="${sessionScope.role_id eq 3 || sessionScope.role_id eq 4 || sessionScope.role_id eq 5 || sessionScope.role_id eq 8  
+				|| sessionScope.role_id eq 9 || sessionScope.role_id eq 10 || sessionScope.role_id eq 11 || sessionScope.role_id eq 12  || sessionScope.role_id eq 13}">
 
 					<div class="font-strong">${sessionScope.userName }</div>
 					<small>${sessionScope.role_desc }</small><br />

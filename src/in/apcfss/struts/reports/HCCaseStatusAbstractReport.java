@@ -4,6 +4,7 @@ import in.apcfss.struts.Forms.CommonForm;
 import in.apcfss.struts.commons.CommonModels;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Map;
 
@@ -181,4 +182,115 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 		}
 		return mapping.findForward("success");
 	}
+	
+	public ActionForward getCasesList(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		System.out.println(
+				"HCCaseStatusAbstractReport..............................................................................getCasesList()");
+		Connection con = null;
+		PreparedStatement ps = null;
+		CommonForm cform = (CommonForm) form;
+		HttpSession session = request.getSession();
+		if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
+			return mapping.findForward("Logout");
+		}
+		String sql = null, sqlCondition = "", actionType = "", deptId = "", deptName = "", heading = "", roleId=null,deptCode=null, caseStatus=null;
+		try {
+
+			con = DatabasePlugin.connect();
+
+			session = request.getSession();
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			deptCode = CommonModels.checkStringObject(cform.getDynaForm("deptId"));
+			caseStatus = CommonModels.checkStringObject(cform.getDynaForm("caseStatus"));
+			actionType = CommonModels.checkStringObject(cform.getDynaForm("actionType"));
+			deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
+			
+			heading="Cases List for "+deptName;
+			
+			if(!caseStatus.equals("")) {
+				if(caseStatus.equals("withSD")){
+						sqlCondition= " and case_status=1 and coalesce(ecourts_case_status,'')!='Closed' ";
+						heading+=" Pending at Sect Dept. Login";
+					}
+				if(caseStatus.equals("withMLO")) {
+					sqlCondition=" and (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading+=" Pending at MLO Login";
+				}
+				if(caseStatus.equals("withHOD")) {
+					sqlCondition=" and case_status=3  and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading+=" Pending at HOD Login";
+				}
+				if(caseStatus.equals("withNO")) {
+					sqlCondition= " and case_status=4  and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading+=" Pending at Nodal Officer(HOD) Login";
+				}
+				if(caseStatus.equals("withSDSec")) {
+					sqlCondition=" and case_status=5 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading+=" Pending at Section Officers Login (Sect Dept.)";
+				}
+				if(caseStatus.equals("withDC")) {
+					sqlCondition= " and case_status=7  and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading+=" Pending at District Collector Login";
+				}
+				if(caseStatus.equals("withDistNO")) {
+					sqlCondition=" and case_status=8  and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading+=" Pending at Nodal Officer(District) Login";
+				}
+				if(caseStatus.equals("withHODSec")) {
+					sqlCondition=" and case_status=9 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading+=" Pending at Section Officer(HOD) Login";
+				}
+				if(caseStatus.equals("withDistSec")) {
+					sqlCondition=" and case_status=10 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading+=" Pending at Sction Officer(District) Login";
+				}
+				if(caseStatus.equals("withGP")) {
+					sqlCondition= " and case_status=6 and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading+=" Pending at GP Login";
+				}
+				if(caseStatus.equals("closed")) {
+					sqlCondition= " and case_status=99 or coalesce(ecourts_case_status,'')='Closed' ";
+					heading+=" All Closed Cases ";
+				}
+			}
+			
+			
+			if(actionType.equals("SDWISE")) {
+			}
+			else if(actionType.equals("HODWISE")) {
+			}
+			
+			sql="select a.*, b.orderpaths from ecourts_case_data a left join" + " ("
+					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
+					+ " from "
+					+ " ((select cino, order_document_path,order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 order by sr_no)" + " union"
+					+ " (select cino, order_document_path,order_details from ecourts_case_finalorder where order_document_path is not null"
+					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 order by sr_no)) c group by cino ) b"
+					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) where d.display = true ";
+			
+			sql+=" and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') "+sqlCondition;
+			
+			System.out.println("ecourts SQL:" + sql);
+			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+			// System.out.println("data=" + data);
+			request.setAttribute("HEADING", heading);
+			if (data != null && !data.isEmpty() && data.size() > 0) {
+				request.setAttribute("CASESLIST", data);
+			} else {
+				request.setAttribute("errorMsg", "No Records Found");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			saveToken(request);
+			DatabasePlugin.close(con, ps, null);
+		}
+
+		return mapping.findForward("success");
+	}
+	
 }

@@ -29,9 +29,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<div class="page-content fade-in-up">
 
 
-		<logic:equal value="7" name="role_id" scope="session">
-
-		</logic:equal>
+		<logic:notEqual value="13" name="role_id" scope="session">
 
 		<div class="row">
 
@@ -128,6 +126,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</logic:iterate>
 
 			</logic:notEmpty>
+			
 			<div class="col-lg-3 col-md-6">
 				<a href="./HighCourtCauseList.do">
 					<div class="ibox bg-warning color-white widget-stat">
@@ -781,6 +780,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 }
 </style>
 -->
+	
+	</logic:notEqual>
 	</div>
 </body>
 </html>

@@ -70,6 +70,8 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 	public ActionForward getAcknowledementsList(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		System.out.println(
+				"GPOAcknowledgementAction..............................................................................getAcknowledementsList()");
 		Connection con = null;
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
@@ -80,18 +82,9 @@ public class GPOAcknowledgementAction extends DispatchAction {
 				return mapping.findForward("Logout");
 			}
 			con = DatabasePlugin.connect();
+			String ackType = "NEW";
+					//cform.getDynaForm("ackType") !=null && !cform.getDynaForm("ackType").equals("0") ? cform.getDynaForm("ackType").toString() : "NEW";
 
-			sql = "select slno , ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip,"
-					+ " upper(trim(district_name)) as district_name," 
-					// + "depm.description as dept_name,"
-					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id "
-					+ "from ecourts_gpo_ack_dtls a "
-					+ "left join district_mst dm on (a.distid=dm.district_id)"
-					// + "left join dept_new depm on (a.deptid=depm.dept_id)"
-					+ "left join case_type_master cm on (a.casetype=cm.sno) where a.inserted_by='"
-					+ session.getAttribute("userid")
-					+ "' and a.delete_status is false order by district_name, inserted_time";
-			
 			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id,services_flag,"
 					+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs, a.barcode_file_path "
@@ -99,10 +92,56 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					+ "left join case_type_master cm on (a.casetype=cm.sno) "
 					+ "left join (select ack_no,dm.dept_code,dm.description from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code)) gd on (a.ack_no=gd.ack_no)"
 					+ "where a.inserted_by='"+session.getAttribute("userid")
-					+"' and a.delete_status is false "
+					+"' and a.delete_status is false and ack_type='"+ackType+"' and inserted_time::date=current_date "
 					+ "group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name,"
 					+ "case_full_name,a.ack_file_path, services_id, services_flag, inserted_time, a.barcode_file_path "
-					+ "order by district_name, inserted_time";
+					+ "order by inserted_time desc";
+			
+			System.out.println("SQL:"+sql);
+			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+			System.out.println("data=" + data);
+			if (data != null && !data.isEmpty() && data.size() > 0) {
+				request.setAttribute("ACKDATA", data);
+			} else {
+				return displayAckForm(mapping, cform, request, response);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DatabasePlugin.close(con, ps, null);
+		}
+		return mapping.findForward("success");
+	}
+	
+	public ActionForward getAcknowledementsListAll(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		System.out.println(
+				"GPOAcknowledgementAction..............................................................................getAcknowledementsListAll()");
+		Connection con = null;
+		PreparedStatement ps = null;
+		CommonForm cform = (CommonForm) form;
+		HttpSession session = request.getSession();
+		String sql = null;
+		try {
+			if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
+				return mapping.findForward("Logout");
+			}
+			con = DatabasePlugin.connect();
+			String ackType = request.getParameter("ackType").toString();
+			String ackDate=request.getParameter("ackDate").toString();
+					//cform.getDynaForm("ackType") !=null && !cform.getDynaForm("ackType").equals("0") ? cform.getDynaForm("ackType").toString() : "NEW";
+
+			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
+					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id,services_flag,"
+					+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs, a.barcode_file_path "
+					+ " from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
+					+ "left join case_type_master cm on (a.casetype=cm.sno) "
+					+ "left join (select ack_no,dm.dept_code,dm.description from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code)) gd on (a.ack_no=gd.ack_no)"
+					+ "where a.inserted_by='"+session.getAttribute("userid")
+					+"' and a.delete_status is false and ack_type='"+ackType+"' and to_char(inserted_time::date,'dd-mm-yyyy')='"+ackDate+"'"
+					+ "group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name,"
+					+ "case_full_name,a.ack_file_path, services_id, services_flag, inserted_time, a.barcode_file_path "
+					+ "order by inserted_time desc";
 			
 			System.out.println("SQL:"+sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -122,6 +161,8 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 	public ActionForward displayAckForm(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		System.out.println(
+				"GPOAcknowledgementAction..............................................................................displayAckForm()");
 		Connection con = null;
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
@@ -147,6 +188,10 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			cform.setDynaForm("gpsList", DatabasePlugin.getSelectBox(
 					"select emailid,first_name||' '||last_name||' - '||designation from ecourts_mst_gps",
 					con));
+			if(CommonModels.checkStringObject(cform.getDynaForm("ackType")).equals("") || CommonModels.checkStringObject(cform.getDynaForm("ackType")).equals("0")) {
+				cform.setDynaForm("ackType", "NEW");
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -268,8 +313,8 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 					int i = 1;
 					sql = "insert into ecourts_gpo_ack_dtls (ack_no , distid , petitioner_name, advocatename ,advocateccno , casetype , maincaseno , remarks ,  "
-							+ "inserted_by , inserted_ip , services_id, services_flag)"
-							+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+							+ "inserted_by , inserted_ip , services_id, services_flag, ack_type, reg_year, reg_no)"
+							+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 					ps = con.prepareStatement(sql);
 					ps.setString(i, ackNo);
@@ -284,25 +329,11 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					ps.setString(++i, request.getRemoteAddr());
 					ps.setString(++i, cform.getDynaForm("serviceType") != null ? cform.getDynaForm("serviceType").toString() : "");
 					ps.setString(++i, cform.getDynaForm("serviceNonService") != null ? cform.getDynaForm("serviceNonService").toString() : "");
+					ps.setString(++i, CommonModels.checkStringObject(cform.getDynaForm("ackType")));
+					ps.setInt(++i, CommonModels.checkIntObject(cform.getDynaForm("regYear")));
+					ps.setString(++i, CommonModels.checkStringObject(cform.getDynaForm("regNo")));
 					
-					/*
-					FormFile myDoc=null; String filePath="",newFileName="", ackDocument="" ;
-					FileUploadUtilities fuu = new FileUploadUtilities();
-					if(cform.getChangeLetter()!=null && !cform.getChangeLetter().toString().equals("")) {
-						myDoc = (FormFile)cform.getChangeLetter();
-						filePath="uploads/ackdocuments/";
-						newFileName="petition_"+CommonModels.randomTransactionNo();
-						ackDocument = fuu.saveFile(myDoc, filePath, newFileName);
-						ps.setString(++i, ackDocument);
-						
-					}
-					else {
-						ps.setString(++i, ackDocument);
-					}
-					ps.setString(++i, cform.getDynaForm("gpCode") != null ? cform.getDynaForm("gpCode").toString() : "");
-					*/
 					int a = ps.executeUpdate();
-					
 					
 					int respondentIds = CommonModels.checkIntObject(cform.getDynaForm("respondentIds"));
 					if(respondentIds > 0) {
@@ -323,55 +354,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 						ps.executeBatch();
 					}
 					
-					/*/ INSERT DEPARTMENTS
-					if(deptCodes != null && deptCodes.length > 0) {
-						ps.close();
-						sql="insert into ecourts_gpo_ack_depts (ack_no, dept_code) values (?,?)";
-						ps = con.prepareStatement(sql);
-						
-						for(String deptCode : deptCodes) {
-							System.out.println("depCode::"+deptCode);
-							if(deptCode != null && !deptCode.equals("")) {
-								i=1;
-								ps.setString(i, ackNo);
-								ps.setString(++i, deptCode);
-								ps.addBatch();
-							}
-						}
-						ps.executeBatch();
-					}*/
-					
-					/*/ INSERT RESPONDENTS
-					String respondentIds[] = cform.getDynaForm("respondentIds") != null ? cform.getDynaForm("respondentIds").toString().split(",") : null;
-					if(respondentIds !=null && respondentIds.length > 0) {
-						
-						ps.close();
-						sql="insert into ecourts_gpo_ack_respondents (ack_no, respondent_name, respondent_address) values (?,?,?)";
-						ps = con.prepareStatement(sql);
-						
-						for(String respondentId : respondentIds) {
-							i=1;
-							if(respondentId !=null && !respondentId.equals("")) {
-								ps.setString(i, ackNo);
-								ps.setString(++i, cform.getDynaForm("respondantName_"+respondentId).toString());
-								ps.setString(++i, cform.getDynaForm("respondantAddr_"+respondentId).toString());
-								ps.addBatch();
-							}
-						}
-						ps.executeBatch();
-					}*/
-					
 					if (a > 0) {
-						
-						
-						sql = "select slno , ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , " +
-								"inserted_ip, upper(trim(district_name)) as district_name,"
-								//+ "depm.description as dept_name,"
-								+ "upper(trim(case_full_name)) as  case_full_name, services_id   from ecourts_gpo_ack_dtls a "
-								+ "left join district_mst dm on (a.distid=dm.district_id)"
-								//+ "left join dept depm on (a.deptid=depm.dept_id)"
-								+ "left join case_type_master cm on (a.casetype=cm.sno) where a.inserted_by='"
-								+ session.getAttribute("userid") + "' and ack_no='"+ackNo+"'";
 						
 						sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 								+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id,services_flag,"
@@ -436,6 +419,11 @@ public class GPOAcknowledgementAction extends DispatchAction {
 				request.setAttribute("errorMsg",
 						"Error: Submitting duplicate Acknowledgement details. Kindly try again with valid data.");
 			}
+			
+			if(CommonModels.checkStringObject(cform.getDynaForm("ackType")).equals("OLD")) {
+				return mapping.findForward("showOldAckList");
+			}
+			
 		} catch (Exception e) {
 			con.rollback();
 			request.setAttribute("errorMsg",
@@ -873,6 +861,9 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			code39Image.setAlignment(1);
 			
 			document.add(code39Image);
+			
+			document.add(code39Image);
+			
 			System.out.println("BAR CODE pdfFilePath:"+pdfFilePath);
 		}catch (Exception e) {
 			e.printStackTrace();

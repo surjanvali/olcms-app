@@ -115,6 +115,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 							</div>
 						</div>
+					</div>
+					<hr />
+					<div class="row">
 						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 							<div class="form-group">
 								<label class="font-bold">CIN No</label>
@@ -124,13 +127,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 							</div>
 						</div>
-						
+
 					</div>
-					
+
 					<div class="row">
 						<div class="col-md-12 col-xs-12">
+							<input type="submit" name="Submit2" value="show Entered List"
+									class="btn btn-primary pull-right" onclick="showAckList();" />
+							
 							<input type="submit" name="submit" value="Get Case"
-								class="btn btn-success" onclick="return fnShowCases();" />
+								class="btn btn-success pull-right" onclick="return fnShowCases();" />
+							 	
 						</div>
 					</div>
 
@@ -184,7 +191,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<logic:iterate id="map" name="CASESLIST" indexId="i">
 										<tr>
 											<td>${i+1 }.</td>
-											<td></td>
+											<td><logic:present name="map"
+													property="barcode_file_path">
+													<a href="./${map.barcode_file_path}" target="_new"
+														title="Print Barcode" class="btn btn-sm btn-info"> <i
+														class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
+													</a>
+												</logic:present></td>
 											<td><input type="button" id="btnShowPopup"
 												value="${map.cino}"
 												class="btn btn-sm btn-info waves-effect waves-light"
@@ -232,6 +245,91 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 
 			</logic:notEmpty>
+			
+			<logic:notEmpty name="ACKDATA">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="table-responsive">
+								<table class="table table-striped table-bordered table-hover"
+									id="example">
+									<thead>
+										<tr>
+											<th>Sl.No</th>
+											<th>Ack No.</th>
+											<th>District</th>
+											<th>Department</th>
+											<th>Advocate Name</th>
+											<th>Advocate CC No.</th>
+											<th>Case Type</th>
+											<th>Main Case No.</th>
+											<th>Remarks</th>
+											<th>Download / Print</th>
+										</tr>
+									</thead>
+									<tbody>
+										<logic:iterate id="map" name="ACKDATA" indexId="i">
+											<tr>
+												<td>${i+1 }</td>
+												<td>${map.ack_no }</td>
+												<td>${map.district_name }</td>
+												<td>${map.dept_descs }</td>
+												<td>${map.advocatename }</td>
+												<td>${map.advocateccno }</td>
+												<td>${map.case_full_name }</td>
+												<td>${map.maincaseno }</td>
+												<td>${map.remarks }</td>
+												<td style="text-align: center;" nowrap="nowrap">
+													<%-- <button type="button" class="btn btn-sm btn-warning"
+														title="Edit Acknowledgement"
+														onclick="editAck('${map.ack_no}')">
+														<i class="fa fa-edit"></i><span>Edit</span>
+													</button> --%>
+													<%-- <button type="button" class="btn btn-sm btn-danger"
+														title="Delete Acknowledgement"
+														onclick="deleteAck('${map.ack_no}')">
+														<i class="fa fa-trash"></i><span>Delete</span>
+													</button> --%>
+													
+													 <logic:present name="map" property="ack_file_path">
+														<a href="./${map.ack_file_path}" target="_new"
+															title="Print Acknowledgement"
+															class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
+															<span>Acknowledgement</span> <!-- <span>Download</span> -->
+														</a>
+													</logic:present>
+													 <logic:present name="map" property="barcode_file_path">
+														<a href="./${map.barcode_file_path}" target="_new"
+															title="Print Barcode"
+															class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
+															<span>Barcode</span> <!-- <span>Download</span> -->
+														</a>
+													</logic:present> 
+													
+													<%-- <logic:notPresent name="map" property="ack_file_path">
+														<button type="button" class="btn btn-sm btn-info"
+															onclick="downloadAck('${map.ack_no}')">
+															<i class="fa fa-save"></i> <span>Download</span>
+														</button>
+													</logic:notPresent>--%>
+
+													<%-- <button type="button" class="btn btn-sm btn-info"
+														onclick="downloadAck('${map.ack_no}')">
+														<i class="fa fa-save"></i> <span>Download 2</span>
+													</button>  --%>
+												</td>
+											</tr>
+										</logic:iterate>
+									</tbody>
+									<tfoot>
+										<tR>
+											<td colspan="10">&nbsp;</td>
+										</tR>
+									</tfoot>
+								</table>
+							</div>
+						</div>
+					</div>
+				</logic:notEmpty>
 		</div>
 	</html:form>
 </div>
@@ -278,6 +376,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
         });
     </script>
 <script type="text/javascript">
+function showAckList() {
+	$("#mode").val("getAcknowledementsList");
+	// alert($("#mode").val());
+	$("#HighCourtCasesListForm").submit();
+}
 
 function reloadParent(){
 	location.reload(true);
