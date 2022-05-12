@@ -27,835 +27,835 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <div class="page-heading">
 	<h1 class="page-title">
 		<logic:notEmpty name="HEADING">
-									High Court Cases List
-								</logic:notEmpty>
+					High Court Cases List
+				</logic:notEmpty>
 	</h1>
 
 </div>
 <div class="page-content fade-in-up">
 	<html:form method="post" action="/HighCourtCasesList"
-		styleId="HighCourtCasesListForm">
-		<html:hidden styleId="mode" property="mode" />
-		<html:hidden styleId="selectedCaseIds"
-			property="dynaForm(selectedCaseIds)" />
+styleId="HighCourtCasesListForm">
+<html:hidden styleId="mode" property="mode" />
+<html:hidden styleId="selectedCaseIds"
+	property="dynaForm(selectedCaseIds)" />
 
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-					<div class="dashboard-cat-title">
-						<logic:notEmpty name="successMsg">
-							<div class="alert alert-success" role="alert">
-								<button type="button" class="close" data-dismiss="alert"
-									aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-								<i class="mdi mdi-check-all"></i> <strong>${successMsg}</strong>
-							</div>
-						</logic:notEmpty>
-						<logic:notEmpty name="errorMsg">
-							<div class="alert alert-danger" role="alert">
-								<button type="button" class="close" data-dismiss="alert"
-									aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-								<i class="mdi mdi-block-helper"></i> <strong>${errorMsg}</strong>
-							</div>
-						</logic:notEmpty>
-					</div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="dashboard-cat-title">
+				<logic:notEmpty name="successMsg">
+			<div class="alert alert-success" role="alert">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<i class="mdi mdi-check-all"></i> <strong>${successMsg}</strong>
+			</div>
+		</logic:notEmpty>
+		<logic:notEmpty name="errorMsg">
+			<div class="alert alert-danger" role="alert">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<i class="mdi mdi-block-helper"></i> <strong>${errorMsg}</strong>
+			</div>
+		</logic:notEmpty>
+		</div>
+	</div>
+</div>
+
+<div class="ibox">
+	<div class="ibox-head">
+		<div class="ibox-title">List of High Court Cases to be
+			Assigned to Section Officer</div>
+	</div>
+	<div class="ibox-body">
+		<!-- <h4 class="m-t-0 header-title">
+		<b>High Court Cases List</b>
+	</h4>
+	<hr /> -->
+
+	<div class="row">
+		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="form-group">
+				<label>Case Registration Year</label>
+				<html:select styleId="regYear" property="dynaForm(regYear)"
+					styleClass="form-control select2Class">
+					<html:option value="0">---SELECT---</html:option>
+					<html:option value="ALL">ALL</html:option>
+					<logic:notEmpty name="CommonForm"
+						property="dynaForm(yearsList)">
+						<html:optionsCollection name="CommonForm"
+							property="dynaForm(yearsList)" />
+					</logic:notEmpty>
+				</html:select>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="form-group">
+				<label class="font-bold">Date of Filing From Date</label>
+				<div class="input-group date">
+					<span class="input-group-addon bg-white"><i
+						class="fa fa-calendar"></i></span>
+					<html:text styleId="dofFromDate"
+						property="dynaForm(dofFromDate)"
+						styleClass="form-control datepicker" />
+
 				</div>
 			</div>
+		</div>
+		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="form-group">
+				<label class="font-bold">Date of Filing From Date</label>
+				<div class="input-group date">
+					<span class="input-group-addon bg-white"><i
+						class="fa fa-calendar"></i></span>
+					<html:text styleId="dofToDate" property="dynaForm(dofToDate)"
+						styleClass="form-control datepicker" />
 
-			<div class="ibox">
-				<div class="ibox-head">
-					<div class="ibox-title">List of High Court Cases to be
-						Assigned to Section Officer</div>
 				</div>
-				<div class="ibox-body">
-					<!-- <h4 class="m-t-0 header-title">
-						<b>High Court Cases List</b>
-					</h4>
-					<hr /> -->
-
-					<div class="row">
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>Case Registration Year</label>
-								<html:select styleId="regYear" property="dynaForm(regYear)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---SELECT---</html:option>
-									<html:option value="ALL">ALL</html:option>
-									<logic:notEmpty name="CommonForm"
-										property="dynaForm(yearsList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(yearsList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label class="font-bold">Date of Filing From Date</label>
-								<div class="input-group date">
-									<span class="input-group-addon bg-white"><i
-										class="fa fa-calendar"></i></span>
-									<html:text styleId="dofFromDate"
-										property="dynaForm(dofFromDate)"
-										styleClass="form-control datepicker" />
-
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label class="font-bold">Date of Filing From Date</label>
-								<div class="input-group date">
-									<span class="input-group-addon bg-white"><i
-										class="fa fa-calendar"></i></span>
-									<html:text styleId="dofToDate" property="dynaForm(dofToDate)"
-										styleClass="form-control datepicker" />
-
-								</div>
 
 
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>Purpose</label>
-								<html:select styleId="purpose" property="dynaForm(purpose)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty name="CommonForm"
-										property="dynaForm(purposeList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(purposeList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>District</label>
-								<html:select styleId="districtId"
-									property="dynaForm(districtId)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty name="CommonForm" property="dynaForm(distList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(distList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-					</div>
-					<!-- <div class="row">
-						<div class="col-md-12 col-xs-12">
-							<small>Cases filed in the year 2021 and 2022 were listed below. To view
-								and process other cases please use the Year filter or select
-								From and To dates. Press the "Get Cases" button for the Cases
-								List. </small>
-						</div>
-					</div> -->
-					<div class="row">
-						<div class="col-md-12 col-xs-12">
-							<input type="submit" name="submit" value="Get Cases"
-								class="btn btn-success" onclick="return fnShowCases();" />
-						</div>
-					</div>
-
-					<%-- <div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>Case Registration Year</label>
-								<html:select styleId="regYear" property="dynaForm(regYear)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---SELECT---</html:option>
-									<html:option value="ALL">ALL</html:option>
-									<logic:notEmpty name="CommonForm"
-										property="dynaForm(yearsList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(yearsList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>Filing Year</label>
-								<html:select styleId="filingYear"
-									property="dynaForm(filingYear)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty name="CommonForm"
-										property="dynaForm(yearsList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(yearsList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label class="font-bold">Date of Filing From Date</label>
-								<div class="input-group date">
-									<span class="input-group-addon bg-white"><i
-										class="fa fa-calendar"></i></span>
-									<html:text styleId="dofFromDate"
-										property="dynaForm(dofFromDate)"
-										styleClass="form-control datepicker" />
-
-								</div>
-
-								<label>Date of Filing From Date</label>
-								<div class="input-group date" data-date-format="dd-mm-yyyy">
-									<html:text styleId="dofFromDate"
-										property="dynaForm(dofFromDate)" styleClass="form-control" />
-									<!-- <input type="text" class="form-control" placeholder="dd.mm.yyyy"> -->
-									<div class="input-group-addon">
-										<span class="glyphicon glyphicon-th"></span>
-									</div>
-								</div>
-
-							</div>
-						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label class="font-bold">Date of Filing From Date</label>
-								<div class="input-group date">
-									<span class="input-group-addon bg-white"><i
-										class="fa fa-calendar"></i></span>
-									<html:text styleId="dofToDate" property="dynaForm(dofToDate)"
-										styleClass="form-control datepicker" />
-
-								</div>
-
-								<label>To Date</label>
-								<div class="input-group date" data-date-format="dd-mm-yyyy">
-									<html:text styleId="dofToDate" property="dynaForm(dofToDate)"
-										styleClass="form-control" />
-									<!-- <input type="text" class="form-control" placeholder="dd.mm.yyyy"> -->
-									<div class="input-group-addon">
-										<span class="glyphicon glyphicon-th"></span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>Purpose</label>
-								<html:select styleId="purpose" property="dynaForm(purpose)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty name="CommonForm"
-										property="dynaForm(purposeList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(purposeList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>District</label>
-								<html:select styleId="districtId"
-									property="dynaForm(districtId)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty name="CommonForm" property="dynaForm(distList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(distList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-12 col-xs-12">
-							<small>Cases filed in the year 2021 listed below. To view
-								and process other cases please use the Year filter or select
-								From and To dates. Press the "Get Cases" button for the Cases
-								List. </small>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-12 col-xs-12">
-							<input type="submit" name="submit" value="Get Cases"
-								class="btn btn-success" onclick="return fnShowCases();" />
-						</div>
-					</div>
- --%>
-				</div>
 			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="form-group">
+				<label>Purpose</label>
+				<html:select styleId="purpose" property="dynaForm(purpose)"
+					styleClass="form-control select2Class">
+					<html:option value="0">---SELECT---</html:option>
+					<logic:notEmpty name="CommonForm"
+						property="dynaForm(purposeList)">
+						<html:optionsCollection name="CommonForm"
+							property="dynaForm(purposeList)" />
+					</logic:notEmpty>
+				</html:select>
+			</div>
+		</div>
 
-			<logic:notEmpty name="CASESLIST">
-				<div class="ibox">
-					<%-- <div class="ibox-head">
-				<div class="ibox-title">
-					<logic:notEmpty name="HEADING">
-									${HEADING }
+		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="form-group">
+				<label>District</label>
+				<html:select styleId="districtId"
+					property="dynaForm(districtId)"
+					styleClass="form-control select2Class">
+					<html:option value="0">---SELECT---</html:option>
+					<logic:notEmpty name="CommonForm" property="dynaForm(distList)">
+						<html:optionsCollection name="CommonForm"
+							property="dynaForm(distList)" />
+					</logic:notEmpty>
+				</html:select>
+			</div>
+		</div>
+	</div>
+	<!-- <div class="row">
+		<div class="col-md-12 col-xs-12">
+			<small>Cases filed in the year 2021 and 2022 were listed below. To view
+				and process other cases please use the Year filter or select
+				From and To dates. Press the "Get Cases" button for the Cases
+				List. </small>
+		</div>
+	</div> -->
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+			<input type="submit" name="submit" value="Get Cases"
+				class="btn btn-success" onclick="return fnShowCases();" />
+		</div>
+	</div>
+
+	<%-- <div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label>Case Registration Year</label>
+							<html:select styleId="regYear" property="dynaForm(regYear)"
+								styleClass="form-control select2Class">
+								<html:option value="0">---SELECT---</html:option>
+								<html:option value="ALL">ALL</html:option>
+								<logic:notEmpty name="CommonForm"
+									property="dynaForm(yearsList)">
+									<html:optionsCollection name="CommonForm"
+										property="dynaForm(yearsList)" />
 								</logic:notEmpty>
-				</div>
-			</div> --%>
-					<div class="ibox-body">
-						<div class="table-responsive">
-
-							<table id="example" class="table table-striped table-bordered"
-								style="width:100%">
-								<thead>
-									<tr>
-										<th>Sl.No</th>
-										<th></th>
-										<th>CINo</th>
-										<th>Date of Filing</th>
-										<th>Case Type</th>
-										<th>Reg.No.</th>
-										<th>Reg. Year</th>
-										<!-- <th>Filing No.</th>
-										<th>Filing Year</th>
-										<th>Date of Next List</th>
-										<th>Bench</th>
-										<th>Judge Name</th> -->
-										<th>Petitioner</th>
-
-										<th>District</th>
-										<th>Purpose</th>
-										<th>Respondents</th>
-
-										<th>Petitioner Advocate</th>
-										<th>Respondent Advocate</th>
-
-										<th>Orders</th>
-										<!-- <th>Assign To</th> -->
-									</tr>
-								</thead>
-								<tbody>
-
-									<logic:iterate id="map" name="CASESLIST" indexId="i">
-										<tr>
-											<td>${i+1 }.</td>
-											<td>
-												<%-- <input type="checkbox" name="caseIds" value="${map.cino}" id="caseIds" class="form-control"/> --%>
-												<!-- <label class="ui-checkbox ui-checkbox-gray">
-                                                <input type="checkbox">
-                                                <span class="input-span"></span></label> -->
-
-												<div class="form-group">
-													<label class="ui-checkbox"> <input type="checkbox"
-														name="caseIds" value="${map.cino}" id="caseIds" /> <span
-														class="input-span"></span></label>
-												</div>
-
-											</td>
-											<td><input type="button" id="btnShowPopup"
-												value="${map.cino}"
-												class="btn btn-sm btn-info waves-effect waves-light"
-												onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
-
-											</td>
-											<td><logic:notEmpty name="map" property="date_of_filing">
-													<logic:notEqual value="0001-01-01" name="map"
-														property="date_of_filing">
-																	${map.date_of_filing }
-																</logic:notEqual>
-												</logic:notEmpty></td>
-											<td>${map.type_name_fil }</td>
-											<td>${map.reg_no}</td>
-											<td>${map.reg_year }</td>
-											<%-- <td>${map.fil_no}</td>
-											<td>${map.fil_year }</td>
-											<td><logic:notEmpty name="map" property="date_next_list">
-													<logic:notEqual value="0001-01-01" name="map"
-														property="date_next_list">
-																	${map.date_of_filing }
-																</logic:notEqual>
-												</logic:notEmpty></td>
-											<td>${map.bench_name }</td>
-											<td>Hon'ble Judge : ${map.coram }</td> --%>
-											<td>${map.pet_name }</td>
-											<td>${map.dist_name }</td>
-											<td>${map.purpose_name }</td>
-											<td>${map.res_name }</td>
-
-											<td>${map.pet_adv }</td>
-											<td>${map.res_adv }</td>
-
-											<td style="text-align: center;">${map.orderpaths }</td>
-
-											<%-- <td><input type="button" id="btnShowPopup"
-												value="Assign Case"
-												class="btn btn-sm btn-primary waves-effect waves-light"
-												onclick="javascript:assignCaseToEmployee('${map.cino}');" /></td> --%>
-
-											<%-- <a href="javascript:assignCaseToEmployee('${map.cino}');"
-																class="btn btn-primary waves-effect waves-light"
-																 aria-hidden="true"
-																data-toggle="modal" data-target="#myModal" title=""
-																data-original-title="Assign Case">Assign Case</a>
-																			
-															<button class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#myModal">Responsive Modal</button> --%>
-
-											<!-- <button class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#con-close-modal">Responsive Modal</button> -->
-
-											<%-- <div id="MSG${map.cino}"></div>
-															<div id="ASSIGN${map.cino}">
-																<label>Department</label>
-																<html:select styleId="empDept${map.cino }"
-																	property="dynaForm(empDept${map.cino })"
-																	styleClass="select2Class"
-																	onchange="populateDeptSecs('${map.cino }');"
-																	style="width:150px;" value="${deptCode}">
-																	<html:option value="0">---SELECT---</html:option>
-																	<logic:notEmpty name="CommonForm" property="dynaForm(deptList)">
-																		<html:optionsCollection name="CommonForm" property="dynaForm(deptList)" />
-																	</logic:notEmpty>
-																</html:select>
-
-																<label>Section</label>
-																<html:select styleId="empSection${map.cino }"
-																	property="dynaForm(empSection${map.cino })"
-																	styleClass="select2Class"
-																	onchange="populatePostDetails('${map.cino }');"
-																	style="width:150px;">
-																	<html:option value="0">---SELECT---</html:option>
-																	<logic:notEmpty name="CommonForm"
-																		property="dynaForm(empSectionList)">
-																		<html:optionsCollection name="CommonForm"
-																			property="dynaForm(empSectionList)" />
-																	</logic:notEmpty>
-																</html:select>
-																<label>Post</label>
-																<html:select styleId="empPost${map.cino }"
-																	property="dynaForm(empPost${map.cino })"
-																	styleClass="select2Class"
-																	onchange="populateEmpDetails('${map.cino }');"
-																	style="width:150px;">
-																	<html:option value="0">---SELECT---</html:option>
-																</html:select>
-																<label>Name</label>
-																<html:select styleId="employeeId${map.cino }"
-																	property="dynaForm(employeeId${map.cino })"
-																	styleClass="select2Class" style="width:150px;">
-																	<html:option value="0">---SELECT---</html:option>
-																</html:select>
-
-																<button type="button" name="assign" class="btn btn-sm btn-info"
-																	onclick="assignCourtCase('${map.cino}');">
-																	<i class="glyphicon glyphicon-edit"></i> <span>Assign
-																		Case</span>
-																</button>
-															</div> </td>--%>
-										</tr>
-										<!-- <script>
-													$("#employeeId'${map.cino}'").select2();
-													$("#employeeId'${map.cino}'").select2("val", "0");
-													$("#empPost'${map.cino}'").select2();
-													$("#empPost'${map.cino}'").select2("val", "0");
-													$("empSection'${map.cino}'").select2();
-													$("empSection'${map.cino}'").select2("val", "0");</script> -->
-									</logic:iterate>
-								</tbody>
-								<tfoot>
-									<tR>
-										<td colspan="14">&nbsp;</td>
-									</tR>
-								</tfoot>
-							</table>
+							</html:select>
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label>Filing Year</label>
+							<html:select styleId="filingYear"
+								property="dynaForm(filingYear)"
+								styleClass="form-control select2Class">
+								<html:option value="0">---SELECT---</html:option>
+								<logic:notEmpty name="CommonForm"
+									property="dynaForm(yearsList)">
+									<html:optionsCollection name="CommonForm"
+										property="dynaForm(yearsList)" />
+								</logic:notEmpty>
+							</html:select>
 						</div>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label class="font-bold">Date of Filing From Date</label>
+							<div class="input-group date">
+								<span class="input-group-addon bg-white"><i
+									class="fa fa-calendar"></i></span>
+								<html:text styleId="dofFromDate"
+									property="dynaForm(dofFromDate)"
+									styleClass="form-control datepicker" />
 
+							</div>
+
+							<label>Date of Filing From Date</label>
+							<div class="input-group date" data-date-format="dd-mm-yyyy">
+								<html:text styleId="dofFromDate"
+									property="dynaForm(dofFromDate)" styleClass="form-control" />
+								<!-- <input type="text" class="form-control" placeholder="dd.mm.yyyy"> -->
+								<div class="input-group-addon">
+									<span class="glyphicon glyphicon-th"></span>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label class="font-bold">Date of Filing From Date</label>
+							<div class="input-group date">
+								<span class="input-group-addon bg-white"><i
+									class="fa fa-calendar"></i></span>
+								<html:text styleId="dofToDate" property="dynaForm(dofToDate)"
+									styleClass="form-control datepicker" />
+
+							</div>
+
+							<label>To Date</label>
+							<div class="input-group date" data-date-format="dd-mm-yyyy">
+								<html:text styleId="dofToDate" property="dynaForm(dofToDate)"
+									styleClass="form-control" />
+								<!-- <input type="text" class="form-control" placeholder="dd.mm.yyyy"> -->
+								<div class="input-group-addon">
+									<span class="glyphicon glyphicon-th"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label>Purpose</label>
+							<html:select styleId="purpose" property="dynaForm(purpose)"
+								styleClass="form-control select2Class">
+								<html:option value="0">---SELECT---</html:option>
+								<logic:notEmpty name="CommonForm"
+									property="dynaForm(purposeList)">
+									<html:optionsCollection name="CommonForm"
+										property="dynaForm(purposeList)" />
+								</logic:notEmpty>
+							</html:select>
+						</div>
+					</div>
+
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label>District</label>
+							<html:select styleId="districtId"
+								property="dynaForm(districtId)"
+								styleClass="form-control select2Class">
+								<html:option value="0">---SELECT---</html:option>
+								<logic:notEmpty name="CommonForm" property="dynaForm(distList)">
+									<html:optionsCollection name="CommonForm"
+										property="dynaForm(distList)" />
+								</logic:notEmpty>
+							</html:select>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12 col-xs-12">
+						<small>Cases filed in the year 2021 listed below. To view
+							and process other cases please use the Year filter or select
+							From and To dates. Press the "Get Cases" button for the Cases
+							List. </small>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12 col-xs-12">
+						<input type="submit" name="submit" value="Get Cases"
+							class="btn btn-success" onclick="return fnShowCases();" />
+					</div>
+				</div>
+--%>
+	</div>
+</div>
+
+<logic:notEmpty name="CASESLIST">
+<div class="ibox">
+	<%-- <div class="ibox-head">
+	<div class="ibox-title">
+		<logic:notEmpty name="HEADING">
+						${HEADING }
+					</logic:notEmpty>
+	</div>
+</div> --%>
+	<div class="ibox-body">
+		<div class="table-responsive">
+
+			<table id="example" class="table table-striped table-bordered"
+				style="width:100%">
+				<thead>
+					<tr>
+						<th>Sl.No</th>
+						<th></th>
+						<th>CINo</th>
+						<th>Date of Filing</th>
+						<th>Case Type</th>
+						<th>Reg.No.</th>
+						<th>Reg. Year</th>
+						<!-- <th>Filing No.</th>
+						<th>Filing Year</th>
+						<th>Date of Next List</th>
+						<th>Bench</th>
+						<th>Judge Name</th> -->
+						<th>Petitioner</th>
+
+						<th>District</th>
+						<th>Purpose</th>
+						<th>Respondents</th>
+
+						<th>Petitioner Advocate</th>
+						<th>Respondent Advocate</th>
+
+						<th>Orders</th>
+						<!-- <th>Assign To</th> -->
+					</tr>
+				</thead>
+				<tbody>
+
+					<logic:iterate id="map" name="CASESLIST" indexId="i">
+						<tr>
+							<td>${i+1 }.</td>
+							<td>
+								<%-- <input type="checkbox" name="caseIds" value="${map.cino}" id="caseIds" class="form-control"/> --%>
+								<!-- <label class="ui-checkbox ui-checkbox-gray">
+                                            <input type="checkbox">
+                                            <span class="input-span"></span></label> -->
+
+								<div class="form-group">
+									<label class="ui-checkbox"> <input type="checkbox"
+										name="caseIds" value="${map.cino}" id="caseIds" /> <span
+										class="input-span"></span></label>
+								</div>
+
+							</td>
+							<td><input type="button" id="btnShowPopup"
+								value="${map.cino}"
+								class="btn btn-sm btn-info waves-effect waves-light"
+								onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
+
+							</td>
+							<td><logic:notEmpty name="map" property="date_of_filing">
+									<logic:notEqual value="0001-01-01" name="map"
+										property="date_of_filing">
+													${map.date_of_filing }
+												</logic:notEqual>
+								</logic:notEmpty></td>
+							<td>${map.type_name_fil }</td>
+							<td>${map.reg_no}</td>
+							<td>${map.reg_year }</td>
+							<%-- <td>${map.fil_no}</td>
+							<td>${map.fil_year }</td>
+							<td><logic:notEmpty name="map" property="date_next_list">
+									<logic:notEqual value="0001-01-01" name="map"
+										property="date_next_list">
+													${map.date_of_filing }
+												</logic:notEqual>
+								</logic:notEmpty></td>
+							<td>${map.bench_name }</td>
+							<td>Hon'ble Judge : ${map.coram }</td> --%>
+							<td>${map.pet_name }</td>
+							<td>${map.dist_name }</td>
+							<td>${map.purpose_name }</td>
+							<td>${map.res_name }</td>
+
+							<td>${map.pet_adv }</td>
+							<td>${map.res_adv }</td>
+
+							<td style="text-align: center;">${map.orderpaths }</td>
+
+							<%-- <td><input type="button" id="btnShowPopup"
+								value="Assign Case"
+								class="btn btn-sm btn-primary waves-effect waves-light"
+								onclick="javascript:assignCaseToEmployee('${map.cino}');" /></td> --%>
+
+							<%-- <a href="javascript:assignCaseToEmployee('${map.cino}');"
+												class="btn btn-primary waves-effect waves-light"
+												 aria-hidden="true"
+												data-toggle="modal" data-target="#myModal" title=""
+												data-original-title="Assign Case">Assign Case</a>
+															
+											<button class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#myModal">Responsive Modal</button> --%>
+
+							<!-- <button class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#con-close-modal">Responsive Modal</button> -->
+
+							<%-- <div id="MSG${map.cino}"></div>
+											<div id="ASSIGN${map.cino}">
+												<label>Department</label>
+												<html:select styleId="empDept${map.cino }"
+													property="dynaForm(empDept${map.cino })"
+													styleClass="select2Class"
+													onchange="populateDeptSecs('${map.cino }');"
+													style="width:150px;" value="${deptCode}">
+													<html:option value="0">---SELECT---</html:option>
+													<logic:notEmpty name="CommonForm" property="dynaForm(deptList)">
+														<html:optionsCollection name="CommonForm" property="dynaForm(deptList)" />
+													</logic:notEmpty>
+												</html:select>
+
+												<label>Section</label>
+												<html:select styleId="empSection${map.cino }"
+													property="dynaForm(empSection${map.cino })"
+													styleClass="select2Class"
+													onchange="populatePostDetails('${map.cino }');"
+													style="width:150px;">
+													<html:option value="0">---SELECT---</html:option>
+													<logic:notEmpty name="CommonForm"
+														property="dynaForm(empSectionList)">
+														<html:optionsCollection name="CommonForm"
+															property="dynaForm(empSectionList)" />
+													</logic:notEmpty>
+												</html:select>
+												<label>Post</label>
+												<html:select styleId="empPost${map.cino }"
+													property="dynaForm(empPost${map.cino })"
+													styleClass="select2Class"
+													onchange="populateEmpDetails('${map.cino }');"
+													style="width:150px;">
+													<html:option value="0">---SELECT---</html:option>
+												</html:select>
+												<label>Name</label>
+												<html:select styleId="employeeId${map.cino }"
+													property="dynaForm(employeeId${map.cino })"
+													styleClass="select2Class" style="width:150px;">
+													<html:option value="0">---SELECT---</html:option>
+												</html:select>
+
+												<button type="button" name="assign" class="btn btn-sm btn-info"
+													onclick="assignCourtCase('${map.cino}');">
+													<i class="glyphicon glyphicon-edit"></i> <span>Assign
+														Case</span>
+												</button>
+											</div> </td>--%>
+						</tr>
+						<!-- <script>
+									$("#employeeId'${map.cino}'").select2();
+									$("#employeeId'${map.cino}'").select2("val", "0");
+									$("#empPost'${map.cino}'").select2();
+									$("#empPost'${map.cino}'").select2("val", "0");
+									$("empSection'${map.cino}'").select2();
+									$("empSection'${map.cino}'").select2("val", "0");</script> -->
+					</logic:iterate>
+				</tbody>
+				<tfoot>
+					<tR>
+						<td colspan="14">&nbsp;</td>
+					</tR>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="ibox">
+			<div class="ibox-head">
+				<div class="ibox-title">Assign Cases</div>
+				<div class="ibox-tools">
+					<a class="ibox-collapse"><i class="fa fa-minus"></i></a>
+				</div>
+			</div>
+			<div class="ibox-body">
 
 				<div class="row">
-					<div class="col-md-12">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label>Remarks</label>
+							<html:textarea styleId="caseRemarks"
+								property="dynaForm(caseRemarks)" styleClass="form-control"
+								cols="50" rows="5">
+
+							</html:textarea>
+						</div>
+					</div>
+				</div>
+				<hr />
+
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label class="ui-radio ui-radio-inline"> <html:radio
+									property="dynaForm(officerType)" styleId="officerType"
+									value="S-HOD" onclick="changeReport();">
+									<span class="input-span"></span>
+									<b>Assign Cases to Department HOD</b>
+								</html:radio>
+							</label> <label class="ui-radio ui-radio-inline"> <html:radio
+									property="dynaForm(officerType)" styleId="officerType"
+									value="D-HOD" onclick="changeReport();">
+									<span class="input-span"></span>
+									<b>Assign Cases to Other Department HOD</b>
+								</html:radio>
+							</label> <label class="ui-radio ui-radio-inline"> <html:radio
+									property="dynaForm(officerType)" styleId="officerType"
+									value="SD-SO" onclick="changeReport();">
+									<span class="input-span"></span>
+									<b>Assign Cases to Section Officer(Dept.)</b>
+								</html:radio>
+							</label> <label class="ui-radio ui-radio-inline"> <html:radio
+									property="dynaForm(officerType)" styleId="officerType"
+									value="OD-SO" onclick="changeReport();">
+									<span class="input-span"></span>
+									<b>Assign Cases to Section Officer(Other Dept.)</b>
+								</html:radio>
+							</label> <label class="ui-radio ui-radio-inline"> <html:radio
+									property="dynaForm(officerType)" styleId="officerType"
+									value="DC" onclick="changeReport();">
+									<span class="input-span"></span>
+									<b>Assign Cases to District Collector</b>
+								</html:radio>
+							</label> <label class="ui-radio ui-radio-inline"> <html:radio
+									property="dynaForm(officerType)" styleId="officerType"
+									value="DC-NO" onclick="changeReport();">
+									<span class="input-span"></span>
+									<b>Assign Cases to District Nodal Officer</b>
+								</html:radio>
+							</label> <label class="ui-radio ui-radio-inline"> <html:radio
+									property="dynaForm(officerType)" styleId="officerType"
+									value="DC-SO" onclick="changeReport();">
+									<span class="input-span"></span>
+									<b>Assign Cases to District Section Officer</b>
+								</html:radio>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+						<%-- <div style="display: none;">
+						
+							<html:hidden styleId="currentDeptId" property="dynaForm(currentDeptId)" />
+						
+							<html:select styleId="allCaseDepts"
+								property="dynaForm(allCaseDepts)">
+								<html:option value="0">---SELECT---</html:option>
+								<logic:notEmpty name="CommonForm"
+									property="dynaForm(deptList)">
+									<html:optionsCollection name="CommonForm"
+										property="dynaForm(deptList)" />
+								</logic:notEmpty>
+							</html:select>
+
+						</div> --%>
+						<div class="distDiv" style="display: none;">
+							<div class="form-group">
+								<label>Select District <bean:message key="mandatory" /></label>
+								<html:select styleId="caseDist"
+									property="dynaForm(caseDist)" styleClass="select2Class"
+									style="width:100%;">
+									<html:option value="0">---SELECT---</html:option>
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(DCLIST)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(DCLIST)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
+							<div class="disthodDiv" style="display: none;">
+								<div class="form-group">
+									<label>Select Department / HOD <bean:message
+											key="mandatory" /></label>
+									<html:select styleId="distDept"
+										property="dynaForm(distDept)" styleClass="select2Class"
+										style="width:100%;">
+										<html:option value="0">---SELECT---</html:option>
+										<logic:notEmpty name="CommonForm"
+											property="dynaForm(deptList)">
+											<html:optionsCollection name="CommonForm"
+												property="dynaForm(deptList)" />
+										</logic:notEmpty>
+									</html:select>
+								</div>
+							</div>
+							<div class="form-group">
+								<input type="submit" name="submit" value="Assign Cases"
+									class="btn btn-sm btn-primary"
+									onclick="return fnAssign2DistHOD();" />
+							</div>
+						</div>
+
+
+						<div class="depthodDiv" style="display: none;">
+							<div class="form-group">
+								<label>Select Department / HOD <bean:message
+										key="mandatory" /></label>
+								<html:select styleId="caseDept"
+									property="dynaForm(caseDept)" styleClass="select2Class"
+									style="width:100%;">
+									<html:option value="0">---SELECT---</html:option>
+									<%-- <logic:notEmpty name="CommonForm"
+										property="dynaForm(deptList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(deptList)" />
+									</logic:notEmpty> --%>
+								</html:select>
+							</div>
+							<div class="form-group">
+								<input type="submit" name="submit"
+									value="Assign Cases to Dept/HOD"
+									class="btn btn-sm btn-primary"
+									onclick="return fnAssign2DeptHOD();" />
+							</div>
+						</div>
+						<div class="depthodSectionDiv" style="display: none;">
+
+							<div class="form-group distdepthodSectionDiv"
+								style="display: none;">
+								<label>Select District <bean:message key="mandatory" /></label>
+								<html:select styleId="caseDist1"
+									property="dynaForm(caseDist1)" styleClass="select2Class"
+									style="width:100%;">
+									<html:option value="0">---SELECT---</html:option>
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(DCLIST)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(DCLIST)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
+
+							<div class="form-group">
+								<label>Department <bean:message key="mandatory" /></label>
+								<html:select styleId="empDept" property="dynaForm(empDept)"
+									styleClass="select2Class" onchange="populateDeptSecs();"
+									style="width:100%;">
+									<html:option value="0">---SELECT---</html:option>
+									<%-- <logic:notEmpty name="CommonForm"
+										property="dynaForm(deptList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(deptList)" />
+									</logic:notEmpty> --%>
+								</html:select>
+							</div>
+							<div class="form-group">
+								<label>Section <bean:message key="mandatory" /></label>
+								<html:select styleId="empSection"
+									property="dynaForm(empSection)" styleClass="select2Class"
+									onchange="populatePostDetails();" style="width:100%;">
+									<html:option value="0">---SELECT---</html:option>
+									<%-- <logic:notEmpty name="CommonForm"
+										property="dynaForm(empSectionList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(empSectionList)" />
+									</logic:notEmpty> --%>
+								</html:select>
+							</div>
+							<div class="form-group">
+								<label>Post <bean:message key="mandatory" /></label>
+								<html:select styleId="empPost" property="dynaForm(empPost)"
+									styleClass="select2Class" onchange="populateEmpDetails();"
+									style="width:100%;">
+									<html:option value="0">---SELECT---</html:option>
+								</html:select>
+							</div>
+							<div class="form-group">
+								<label>Employee Name <bean:message key="mandatory" /></label>
+								<html:select styleId="employeeId"
+									property="dynaForm(employeeId)" styleClass="select2Class"
+									style="width:100%;">
+									<html:option value="0">---SELECT---</html:option>
+								</html:select>
+							</div>
+							<div class="form-group">
+
+								<input type="submit" name="submit"
+									value="Assign Cases to Section"
+									class="btn btn-sm btn-primary"
+									onclick="return fnAssign2DeptHOD2();" />
+							</div>
+
+						</div>
+
+
+
+					</div>
+				</div>
+			</div>
+
+			<!-- 
+				<div class="row">
+					<div class="col-md-6">
 						<div class="ibox">
 							<div class="ibox-head">
-								<div class="ibox-title">Assign Cases</div>
+								<div class="ibox-title">Assign Cases to Department /
+									HOD</div>
 								<div class="ibox-tools">
 									<a class="ibox-collapse"><i class="fa fa-minus"></i></a>
 								</div>
 							</div>
 							<div class="ibox-body">
-
-								<div class="row">
-									<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-										<div class="form-group">
-											<label>Remarks</label>
-											<html:textarea styleId="caseRemarks"
-												property="dynaForm(caseRemarks)" styleClass="form-control"
-												cols="50" rows="5">
-
-											</html:textarea>
-										</div>
-									</div>
+								<div class="form-group">
+									<label>Select Department / HOD <bean:message
+											key="mandatory" /></label>
+									<html:select styleId="caseDept"
+										property="dynaForm(caseDept)" styleClass="select2Class">
+										<html:option value="0">---SELECT---</html:option>
+										<logic:notEmpty name="CommonForm"
+											property="dynaForm(deptList)">
+											<html:optionsCollection name="CommonForm"
+												property="dynaForm(deptList)" />
+										</logic:notEmpty>
+									</html:select>
 								</div>
-								<hr />
-
-								<div class="row">
-									<div class="col-md-12 col-sm-12 col-xs-12">
-										<div class="form-group">
-											<label class="ui-radio ui-radio-inline"> <html:radio
-													property="dynaForm(officerType)" styleId="officerType"
-													value="S-HOD" onclick="changeReport();">
-													<span class="input-span"></span>
-													<b>Assign Cases to Department HOD</b>
-												</html:radio>
-											</label> <label class="ui-radio ui-radio-inline"> <html:radio
-													property="dynaForm(officerType)" styleId="officerType"
-													value="D-HOD" onclick="changeReport();">
-													<span class="input-span"></span>
-													<b>Assign Cases to Other Department HOD</b>
-												</html:radio>
-											</label> <label class="ui-radio ui-radio-inline"> <html:radio
-													property="dynaForm(officerType)" styleId="officerType"
-													value="SD-SO" onclick="changeReport();">
-													<span class="input-span"></span>
-													<b>Assign Cases to Section Officer(Dept.)</b>
-												</html:radio>
-											</label> <label class="ui-radio ui-radio-inline"> <html:radio
-													property="dynaForm(officerType)" styleId="officerType"
-													value="OD-SO" onclick="changeReport();">
-													<span class="input-span"></span>
-													<b>Assign Cases to Section Officer(Other Dept.)</b>
-												</html:radio>
-											</label> <label class="ui-radio ui-radio-inline"> <html:radio
-													property="dynaForm(officerType)" styleId="officerType"
-													value="DC" onclick="changeReport();">
-													<span class="input-span"></span>
-													<b>Assign Cases to District Collector</b>
-												</html:radio>
-											</label> <label class="ui-radio ui-radio-inline"> <html:radio
-													property="dynaForm(officerType)" styleId="officerType"
-													value="DC-NO" onclick="changeReport();">
-													<span class="input-span"></span>
-													<b>Assign Cases to District Nodal Officer</b>
-												</html:radio>
-											</label> <label class="ui-radio ui-radio-inline"> <html:radio
-													property="dynaForm(officerType)" styleId="officerType"
-													value="DC-SO" onclick="changeReport();">
-													<span class="input-span"></span>
-													<b>Assign Cases to District Section Officer</b>
-												</html:radio>
-											</label>
-										</div>
-									</div>
-								</div>
-
-								<div class="row">
-									<div class="col-md-6">
-										<%-- <div style="display: none;">
-										
-											<html:hidden styleId="currentDeptId" property="dynaForm(currentDeptId)" />
-										
-											<html:select styleId="allCaseDepts"
-												property="dynaForm(allCaseDepts)">
-												<html:option value="0">---SELECT---</html:option>
-												<logic:notEmpty name="CommonForm"
-													property="dynaForm(deptList)">
-													<html:optionsCollection name="CommonForm"
-														property="dynaForm(deptList)" />
-												</logic:notEmpty>
-											</html:select>
-
-										</div> --%>
-										<div class="distDiv" style="display: none;">
-											<div class="form-group">
-												<label>Select District <bean:message key="mandatory" /></label>
-												<html:select styleId="caseDist"
-													property="dynaForm(caseDist)" styleClass="select2Class"
-													style="width:100%;">
-													<html:option value="0">---SELECT---</html:option>
-													<logic:notEmpty name="CommonForm"
-														property="dynaForm(DCLIST)">
-														<html:optionsCollection name="CommonForm"
-															property="dynaForm(DCLIST)" />
-													</logic:notEmpty>
-												</html:select>
-											</div>
-											<div class="disthodDiv" style="display: none;">
-												<div class="form-group">
-													<label>Select Department / HOD <bean:message
-															key="mandatory" /></label>
-													<html:select styleId="distDept"
-														property="dynaForm(distDept)" styleClass="select2Class"
-														style="width:100%;">
-														<html:option value="0">---SELECT---</html:option>
-														<logic:notEmpty name="CommonForm"
-															property="dynaForm(deptList)">
-															<html:optionsCollection name="CommonForm"
-																property="dynaForm(deptList)" />
-														</logic:notEmpty>
-													</html:select>
-												</div>
-											</div>
-											<div class="form-group">
-												<input type="submit" name="submit" value="Assign Cases"
-													class="btn btn-sm btn-primary"
-													onclick="return fnAssign2DistHOD();" />
-											</div>
-										</div>
-
-
-										<div class="depthodDiv" style="display: none;">
-											<div class="form-group">
-												<label>Select Department / HOD <bean:message
-														key="mandatory" /></label>
-												<html:select styleId="caseDept"
-													property="dynaForm(caseDept)" styleClass="select2Class"
-													style="width:100%;">
-													<html:option value="0">---SELECT---</html:option>
-													<%-- <logic:notEmpty name="CommonForm"
-														property="dynaForm(deptList)">
-														<html:optionsCollection name="CommonForm"
-															property="dynaForm(deptList)" />
-													</logic:notEmpty> --%>
-												</html:select>
-											</div>
-											<div class="form-group">
-												<input type="submit" name="submit"
-													value="Assign Cases to Dept/HOD"
-													class="btn btn-sm btn-primary"
-													onclick="return fnAssign2DeptHOD();" />
-											</div>
-										</div>
-										<div class="depthodSectionDiv" style="display: none;">
-
-											<div class="form-group distdepthodSectionDiv"
-												style="display: none;">
-												<label>Select District <bean:message key="mandatory" /></label>
-												<html:select styleId="caseDist1"
-													property="dynaForm(caseDist1)" styleClass="select2Class"
-													style="width:100%;">
-													<html:option value="0">---SELECT---</html:option>
-													<logic:notEmpty name="CommonForm"
-														property="dynaForm(DCLIST)">
-														<html:optionsCollection name="CommonForm"
-															property="dynaForm(DCLIST)" />
-													</logic:notEmpty>
-												</html:select>
-											</div>
-
-											<div class="form-group">
-												<label>Department <bean:message key="mandatory" /></label>
-												<html:select styleId="empDept" property="dynaForm(empDept)"
-													styleClass="select2Class" onchange="populateDeptSecs();"
-													style="width:100%;">
-													<html:option value="0">---SELECT---</html:option>
-													<%-- <logic:notEmpty name="CommonForm"
-														property="dynaForm(deptList)">
-														<html:optionsCollection name="CommonForm"
-															property="dynaForm(deptList)" />
-													</logic:notEmpty> --%>
-												</html:select>
-											</div>
-											<div class="form-group">
-												<label>Section <bean:message key="mandatory" /></label>
-												<html:select styleId="empSection"
-													property="dynaForm(empSection)" styleClass="select2Class"
-													onchange="populatePostDetails();" style="width:100%;">
-													<html:option value="0">---SELECT---</html:option>
-													<%-- <logic:notEmpty name="CommonForm"
-														property="dynaForm(empSectionList)">
-														<html:optionsCollection name="CommonForm"
-															property="dynaForm(empSectionList)" />
-													</logic:notEmpty> --%>
-												</html:select>
-											</div>
-											<div class="form-group">
-												<label>Post <bean:message key="mandatory" /></label>
-												<html:select styleId="empPost" property="dynaForm(empPost)"
-													styleClass="select2Class" onchange="populateEmpDetails();"
-													style="width:100%;">
-													<html:option value="0">---SELECT---</html:option>
-												</html:select>
-											</div>
-											<div class="form-group">
-												<label>Employee Name <bean:message key="mandatory" /></label>
-												<html:select styleId="employeeId"
-													property="dynaForm(employeeId)" styleClass="select2Class"
-													style="width:100%;">
-													<html:option value="0">---SELECT---</html:option>
-												</html:select>
-											</div>
-											<div class="form-group">
-
-												<input type="submit" name="submit"
-													value="Assign Cases to Section"
-													class="btn btn-sm btn-primary"
-													onclick="return fnAssign2DeptHOD2();" />
-											</div>
-
-										</div>
-
-
-
-									</div>
+								<div class="form-group">
+									<input type="submit" name="submit"
+										value="Assign Cases to Dept/HOD"
+										class="btn btn-sm btn-primary"
+										onclick="return fnAssign2DeptHOD();" />
 								</div>
 							</div>
-
-							<!-- 
-								<div class="row">
-									<div class="col-md-6">
-										<div class="ibox">
-											<div class="ibox-head">
-												<div class="ibox-title">Assign Cases to Department /
-													HOD</div>
-												<div class="ibox-tools">
-													<a class="ibox-collapse"><i class="fa fa-minus"></i></a>
-												</div>
-											</div>
-											<div class="ibox-body">
-												<div class="form-group">
-													<label>Select Department / HOD <bean:message
-															key="mandatory" /></label>
-													<html:select styleId="caseDept"
-														property="dynaForm(caseDept)" styleClass="select2Class">
-														<html:option value="0">---SELECT---</html:option>
-														<logic:notEmpty name="CommonForm"
-															property="dynaForm(deptList)">
-															<html:optionsCollection name="CommonForm"
-																property="dynaForm(deptList)" />
-														</logic:notEmpty>
-													</html:select>
-												</div>
-												<div class="form-group">
-													<input type="submit" name="submit"
-														value="Assign Cases to Dept/HOD"
-														class="btn btn-sm btn-primary"
-														onclick="return fnAssign2DeptHOD();" />
-												</div>
-											</div>
-										</div>
-
-									</div>
-									<div class="col-md-6">
-										<div class="ibox">
-											<div class="ibox-head">
-												<div class="ibox-title">Assign Cases to Section
-													Officer</div>
-												<div class="ibox-tools">
-													<a class="ibox-collapse"><i class="fa fa-minus"></i></a>
-												</div>
-											</div>
-											<div class="ibox-body">
-												<div class="form-group">
-													<label>Department <bean:message key="mandatory" /></label>
-													<html:select styleId="empDept" property="dynaForm(empDept)"
-														styleClass="select2Class" onchange="populateDeptSecs();"
-														style="width:100%;">
-														<html:option value="0">---SELECT---</html:option>
-														<logic:notEmpty name="CommonForm"
-															property="dynaForm(deptList)">
-															<html:optionsCollection name="CommonForm"
-																property="dynaForm(deptList)" />
-														</logic:notEmpty>
-													</html:select>
-												</div>
-												<div class="form-group">
-													<label>Section <bean:message key="mandatory" /></label>
-													<html:select styleId="empSection"
-														property="dynaForm(empSection)" styleClass="select2Class"
-														onchange="populatePostDetails();" style="width:100%;">
-														<html:option value="0">---SELECT---</html:option>
-														<logic:notEmpty name="CommonForm"
-															property="dynaForm(empSectionList)">
-															<html:optionsCollection name="CommonForm"
-																property="dynaForm(empSectionList)" />
-														</logic:notEmpty>
-													</html:select>
-												</div>
-												<div class="form-group">
-													<label>Post <bean:message key="mandatory" /></label>
-													<html:select styleId="empPost" property="dynaForm(empPost)"
-														styleClass="select2Class" onchange="populateEmpDetails();"
-														style="width:100%;">
-														<html:option value="0">---SELECT---</html:option>
-													</html:select>
-												</div>
-												<div class="form-group">
-													<label>Employee Name <bean:message key="mandatory" /></label>
-													<html:select styleId="employeeId"
-														property="dynaForm(employeeId)" styleClass="select2Class"
-														style="width:100%;">
-														<html:option value="0">---SELECT---</html:option>
-													</html:select>
-												</div>
-												<div class="form-group">
-
-													<input type="submit" name="submit"
-														value="Assign Cases to Section"
-														class="btn btn-sm btn-primary"
-														onclick="return fnAssign2DeptHOD2();" />
-												</div>
-											</div>
-										</div>
-
-									</div>
-								</div> 
-								-->
 						</div>
+
 					</div>
-				</div>
-			</logic:notEmpty>
+					<div class="col-md-6">
+						<div class="ibox">
+							<div class="ibox-head">
+								<div class="ibox-title">Assign Cases to Section
+									Officer</div>
+								<div class="ibox-tools">
+									<a class="ibox-collapse"><i class="fa fa-minus"></i></a>
+								</div>
+							</div>
+							<div class="ibox-body">
+								<div class="form-group">
+									<label>Department <bean:message key="mandatory" /></label>
+									<html:select styleId="empDept" property="dynaForm(empDept)"
+										styleClass="select2Class" onchange="populateDeptSecs();"
+										style="width:100%;">
+										<html:option value="0">---SELECT---</html:option>
+										<logic:notEmpty name="CommonForm"
+											property="dynaForm(deptList)">
+											<html:optionsCollection name="CommonForm"
+												property="dynaForm(deptList)" />
+										</logic:notEmpty>
+									</html:select>
+								</div>
+								<div class="form-group">
+									<label>Section <bean:message key="mandatory" /></label>
+									<html:select styleId="empSection"
+										property="dynaForm(empSection)" styleClass="select2Class"
+										onchange="populatePostDetails();" style="width:100%;">
+										<html:option value="0">---SELECT---</html:option>
+										<logic:notEmpty name="CommonForm"
+											property="dynaForm(empSectionList)">
+											<html:optionsCollection name="CommonForm"
+												property="dynaForm(empSectionList)" />
+										</logic:notEmpty>
+									</html:select>
+								</div>
+								<div class="form-group">
+									<label>Post <bean:message key="mandatory" /></label>
+									<html:select styleId="empPost" property="dynaForm(empPost)"
+										styleClass="select2Class" onchange="populateEmpDetails();"
+										style="width:100%;">
+										<html:option value="0">---SELECT---</html:option>
+									</html:select>
+								</div>
+								<div class="form-group">
+									<label>Employee Name <bean:message key="mandatory" /></label>
+									<html:select styleId="employeeId"
+										property="dynaForm(employeeId)" styleClass="select2Class"
+										style="width:100%;">
+										<html:option value="0">---SELECT---</html:option>
+									</html:select>
+								</div>
+								<div class="form-group">
+
+									<input type="submit" name="submit"
+										value="Assign Cases to Section"
+										class="btn btn-sm btn-primary"
+										onclick="return fnAssign2DeptHOD2();" />
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div> 
+				-->
 		</div>
-	</html:form>
+	</div>
+</div>
+</logic:notEmpty>
+</div>
+</html:form>
 </div>
 
 <!-- Modal  Start-->
 <logic:notEmpty name="SHOWMESG">
-	<div id="panel-modal" class="modal fade" role="dialog"
-		style="padding-top:200px;">
-		<div class="modal-dialog modal-md modal-primary">
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header"
-					style="background-color: #374f65;color: #fff;">
-					<h4 class="modal-title">Important Notes</h4>
-				</div>
-				<div class="modal-body">
-					<ul>
-						<li>Cases filed in the year 2021 & 2022 are listed below.</li>
-						<li>To view and process remaining year's cases please use the
-							Year filter or select From and To dates.</li>
-						<!-- <li>To view and process other cases please use the Year
-							filter or select From and To dates and press the 'Get Cases'
-							button for the Cases List.</li> -->
-						<li>To View the full Case Details click on CINo.</li>
-						<li>To Assign a Case/Cases please check the checkbox and
-							assign to either HOD/Section Officer (provided at the bottom).</li>
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<button type="button"
-						class="btn btn-sm btn-primary btnClosePopup pull-right"
-						data-dismiss="modal" aria-hidden="true">Close</button>
-				</div>
+<div id="panel-modal" class="modal fade" role="dialog"
+	style="padding-top:200px;">
+<div class="modal-dialog modal-md modal-primary">
+	<!-- Modal content-->
+<div class="modal-content">
+	<div class="modal-header"
+		style="background-color: #374f65;color: #fff;">
+	<h4 class="modal-title">Important Notes</h4>
+</div>
+<div class="modal-body">
+	<ul>
+		<li>Cases filed in the year 2021 & 2022 are listed below.</li>
+		<li>To view and process remaining year's cases please use the
+			Year filter or select From and To dates.</li>
+		<!-- <li>To view and process other cases please use the Year
+			filter or select From and To dates and press the 'Get Cases'
+			button for the Cases List.</li> -->
+					<li>To View the full Case Details click on CINo.</li>
+					<li>To Assign a Case/Cases please check the checkbox and
+						assign to either HOD/Section Officer (provided at the bottom).</li>
+				</ul>
+			</div>
+			<div class="modal-footer">
+				<button type="button"
+					class="btn btn-sm btn-primary btnClosePopup pull-right"
+					data-dismiss="modal" aria-hidden="true">Close</button>
 			</div>
 		</div>
 	</div>
+</div>
 </logic:notEmpty>
 <div id="MyPopup" class="modal fade" role="dialog"
 	style="padding-top:200px;">
-	<div class="modal-dialog modal-lg">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header"
-				style="background-color: #3498db;color: #fff;">
-				<button type="button" class="close" data-dismiss="modal">
-					&times;</button>
-				<h4 class="modal-title"></h4>
-			</div>
-			<div class="modal-body">
-				<p>
-					<iframe src="" id="page" name="model_window"
-						style="width:100%;min-height:600px;;border:0px;"> </iframe>
+<div class="modal-dialog modal-lg">
+	<!-- Modal content-->
+<div class="modal-content">
+	<div class="modal-header"
+		style="background-color: #3498db;color: #fff;">
+	<button type="button" class="close" data-dismiss="modal">
+		&times;</button>
+	<h4 class="modal-title"></h4>
+</div>
+<div class="modal-body">
+	<p>
+		<iframe src="" id="page" name="model_window"
+			style="width:100%;min-height:600px;;border:0px;"> </iframe>
 				</p>
 			</div>
 			<div class="modal-footer">
@@ -877,10 +877,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	type="text/javascript"></script>
 <!-- <script src="https://apbudget.apcfss.in/js/select2.js"></script> -->
 <script>
-        $('.datepicker').datepicker({
-            uiLibrary: 'bootstrap4'
-        });
-    </script>
+    $('.datepicker').datepicker({
+        uiLibrary: 'bootstrap4'
+    });
+</script>
 <script type="text/javascript">
 
 function reloadParent(){
@@ -1249,129 +1249,129 @@ function fnAssign2DistHOD(){
 			//document.forms[0].mode.value = "assignCourtCaseToEmp";
 			//document.forms[0].submit();
 			$("#LOADINGPAGEGIF").html('<img src="<%=basePath%>images/gears.gif" /> <br /> Saving your data. Please wait...');
-			$("#ASSIGN" + cINO).hide();
-			var data = {
-				mode : "assignCase2Employee",
-				cino : cINO,
-				emp_dept : $("#empDept" + cINO).val(),
-				emp_section : $("#empSection" + cINO).val(),
-				emp_post : $("#empPost" + cINO).val(),
-				emp_id : $("#employeeId" + cINO).val()
-			}
-			$.post("HighCourtCasesList.do", data).done(function(res) {
-				$("#MSG" + cINO).html(res);
-
-			}).fail(function(exc) {
-				// $("#ASSIGN"+cINO).html(res);
-				$("#ASSIGN" + cINO).show();
-				$("#MSG" + cINO).html(res);
-			// alert("Error Occured.Please Try Again.");
-			});
-			$("#MSG" + cINO).focus();
-			setTimeout(function() {
-				$("#LOADINGPAGEGIF").html("");
-			}, 900);
-		}
-	}
-
-	/*$(document).ready(function() {
-		$(".select2Class").select2();
-		
-		$('.input-group.date').datepicker({
-			format : "dd-mm-yyyy"
-		});
-		
-		//$(".select2_demo_1").select2();
-		if ($('#example2')) {
-			$('#example2').DataTable();
-			var table = $('#example2').DataTable({
-				dom : 'Bfrtip',
-				buttons : [ {
-					extend : 'pdfHtml5',
-					orientation : 'landscape',
-					title : 'Issue type wise pendency Report',
-					pageSize : 'LEGAL'
-				}, {
-					extend : 'excelHtml5',
-					title : 'Issue type wise pendency Report'
-				}, {
-					extend : 'print',
-					title : 'Issue type wise pendency Report'
-				} ],
-				responsive : true,
-				"lengthMenu" : [ [ 10, 25, 50, -1 ], [ 10, 25, 50, "All" ] ],
-				"pageLength" : -1,
-			});
-			
-			new $.fn.dataTable.FixedHeader( table );*/
-
-			/* $('#example2').dataTable({
-				"pageLength" : 10,
-				"buttons" : [ 'copy', 'excel', 'pdf', 'colvis' ]
-			}); */
-
-		/* $(document).ready(function() {
-			var table = $('#example').DataTable({
-				lengthChange : false,
-				buttons : [ 'copy', 'excel', 'pdf', 'colvis' ]
-			});
-
-			table.buttons().container()
-				.appendTo('#example_wrapper .col-sm-6:eq(0)');
-		}); 
-		}
-
-	// $("#purpose").select2();
-	});*/
-
-	/*
-	function populateDeptSecs(cino) {
-		$("#LOADINGPAGEGIF").html('<img src="< %=basePath%>images/gears.gif" /> <br /> Retrieving your data. Please wait...');
-		$("#empSection" + cino).select2('destroy');
+		$("#ASSIGN" + cINO).hide();
 		var data = {
-			mode : "AjaxAction",
-			empDept : $("#empDept" + cino).val(),
-			getType : "getEmpDeptSectionsList"
+			mode : "assignCase2Employee",
+			cino : cINO,
+			emp_dept : $("#empDept" + cINO).val(),
+			emp_section : $("#empSection" + cINO).val(),
+			emp_post : $("#empPost" + cINO).val(),
+			emp_id : $("#employeeId" + cINO).val()
 		}
-		$.post("AjaxModels.do", data).done(function(res) {
-			if (res != '') {
-				$("#empSection" + cino).html(res);
-			}
+		$.post("HighCourtCasesList.do", data).done(function(res) {
+			$("#MSG" + cINO).html(res);
+
 		}).fail(function(exc) {
-			alert("Error Occured.Please Try Again");
+			// $("#ASSIGN"+cINO).html(res);
+			$("#ASSIGN" + cINO).show();
+			$("#MSG" + cINO).html(res);
+		// alert("Error Occured.Please Try Again.");
 		});
-		$("#empSection" + cino).select2();
-		$("#empSection" + cino).select2("val", "0");
+		$("#MSG" + cINO).focus();
 		setTimeout(function() {
 			$("#LOADINGPAGEGIF").html("");
 		}, 900);
 	}
+}
 
-	function populatePostDetails(cino) {
-		$("#LOADINGPAGEGIF").html('<img src="<%=basePath%>images/gears.gif" /> <br /> Retrieving your data. Please wait...');
-		$("#empPost" + cino).select2('destroy');
-		var data = {
-			mode : "AjaxAction",
-			empSec : $("#empSection" + cino).val(),
-			empDept : $("#empDept" + cino).val(),
-			getType : "getEmpPostsList"
-		}
-		$.post("AjaxModels.do", data).done(function(res) {
-			if (res != '') {
-				$("#empPost" + cino).html(res);
-			}
-		}).fail(function(exc) {
-			alert("Error Occured.Please Try Again");
+/*$(document).ready(function() {
+	$(".select2Class").select2();
+	
+	$('.input-group.date').datepicker({
+		format : "dd-mm-yyyy"
+	});
+	
+	//$(".select2_demo_1").select2();
+	if ($('#example2')) {
+		$('#example2').DataTable();
+		var table = $('#example2').DataTable({
+			dom : 'Bfrtip',
+			buttons : [ {
+				extend : 'pdfHtml5',
+				orientation : 'landscape',
+				title : 'Issue type wise pendency Report',
+				pageSize : 'LEGAL'
+			}, {
+				extend : 'excelHtml5',
+				title : 'Issue type wise pendency Report'
+			}, {
+				extend : 'print',
+				title : 'Issue type wise pendency Report'
+			} ],
+			responsive : true,
+			"lengthMenu" : [ [ 10, 25, 50, -1 ], [ 10, 25, 50, "All" ] ],
+			"pageLength" : -1,
 		});
-		$("#empPost" + cino).select2();
-		$("#empPost" + cino).select2("val", "0");
-		setTimeout(function() {
-			$("#LOADINGPAGEGIF").html("");
-		}, 900);
+		
+		new $.fn.dataTable.FixedHeader( table );*/
+
+		/* $('#example2').dataTable({
+			"pageLength" : 10,
+			"buttons" : [ 'copy', 'excel', 'pdf', 'colvis' ]
+		}); */
+
+	/* $(document).ready(function() {
+		var table = $('#example').DataTable({
+			lengthChange : false,
+			buttons : [ 'copy', 'excel', 'pdf', 'colvis' ]
+		});
+
+		table.buttons().container()
+			.appendTo('#example_wrapper .col-sm-6:eq(0)');
+	}); 
 	}
 
-	function populateEmpDetails(cino) {
-		$("#LOADINGPAGEGIF").html('<img src="<%=basePath%>images/gears.gif" /> <br /> Retrieving your data. Please wait...');
+// $("#purpose").select2();
+});*/
+
+/*
+function populateDeptSecs(cino) {
+	$("#LOADINGPAGEGIF").html('<img src="< %=basePath%>images/gears.gif" /> <br /> Retrieving your data. Please wait...');
+	$("#empSection" + cino).select2('destroy');
+	var data = {
+		mode : "AjaxAction",
+		empDept : $("#empDept" + cino).val(),
+		getType : "getEmpDeptSectionsList"
+	}
+	$.post("AjaxModels.do", data).done(function(res) {
+		if (res != '') {
+			$("#empSection" + cino).html(res);
+		}
+	}).fail(function(exc) {
+		alert("Error Occured.Please Try Again");
+	});
+	$("#empSection" + cino).select2();
+	$("#empSection" + cino).select2("val", "0");
+	setTimeout(function() {
+		$("#LOADINGPAGEGIF").html("");
+	}, 900);
+}
+
+function populatePostDetails(cino) {
+	$("#LOADINGPAGEGIF").html('<img src="<%=basePath%>images/gears.gif" /> <br /> Retrieving your data. Please wait...');
+	$("#empPost" + cino).select2('destroy');
+	var data = {
+		mode : "AjaxAction",
+		empSec : $("#empSection" + cino).val(),
+		empDept : $("#empDept" + cino).val(),
+		getType : "getEmpPostsList"
+	}
+	$.post("AjaxModels.do", data).done(function(res) {
+		if (res != '') {
+			$("#empPost" + cino).html(res);
+		}
+	}).fail(function(exc) {
+		alert("Error Occured.Please Try Again");
+	});
+	$("#empPost" + cino).select2();
+	$("#empPost" + cino).select2("val", "0");
+	setTimeout(function() {
+		$("#LOADINGPAGEGIF").html("");
+	}, 900);
+}
+
+function populateEmpDetails(cino) {
+	$("#LOADINGPAGEGIF").html('<img src="<%=basePath%>images/gears.gif" /> <br /> Retrieving your data. Please wait...');
 		$("#employeeId" + cino).select2('destroy');
 		var data = {
 			mode : "AjaxAction",

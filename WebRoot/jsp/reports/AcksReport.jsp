@@ -80,14 +80,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<thead>
 									<tr>
 										<th>Sl.No</th>
-										<th>Date</th>
+										<th>Ack Date</th>
 										<th>Total</th>
 										<th>New Cases</th>
 										<th>Existing Cases</th>
 									</tr>
 								</thead>
 								<tbody>
-
+									<bean:define id="totTot" value="0"></bean:define>
+									<bean:define id="newTot" value="0"></bean:define>
+									<bean:define id="oldTot" value="0"></bean:define>
 									<logic:iterate id="map" name="ACKDATA" indexId="i">
 										<tr>
 											<td>${i+1 }.</td>
@@ -98,11 +100,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=NEW">${map.new_acks }</a></td>
 											<td style="text-align: right;"><a
 												href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=OLD">${map.existing_acks }</a></td>
+									
+									<bean:define id="totTot" value="${totTot + map.total }"></bean:define>
+									<bean:define id="newTot" value="${newTot + map.new_acks }"></bean:define>
+									<bean:define id="oldTot" value="${oldTot + map.existing_acks }"></bean:define>
+												
 									</logic:iterate>
 								</tbody>
 								<tfoot>
 									<tR>
-										<td colspan="5">&nbsp;</td>
+										<td colspan="2" style="text-align: center;">Totals</td><td style="text-align: right;">${totTot }</td><td style="text-align: right;">${newTot }</td><td style="text-align: right;">${oldTot }</td>
 									</tR>
 								</tfoot>
 							</table>
@@ -110,6 +117,62 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 			</logic:notEmpty>
+			
+			
+			<logic:notEmpty name="ACKSABSTRACTDATA">
+				<div class="ibox">
+					<div class="ibox-head">
+						<div class="ibox-title">Acknowledgements Abstract Report</div>
+					</div>
+
+					<div class="ibox-body">
+						<div class="table-responsive">
+
+							<table id="example" class="table table-striped table-bordered"
+								style="width:100%">
+								<thead>
+									<tr>
+										<th>Sl.No</th>
+										<th>Ack Date</th>
+										<th>Total</th>
+										<th>New Cases</th>
+										<th>Existing Cases</th>
+									</tr>
+								</thead>
+								<tbody>
+									<bean:define id="totTot" value="0"></bean:define>
+									<bean:define id="newTot" value="0"></bean:define>
+									<bean:define id="oldTot" value="0"></bean:define>
+									<logic:iterate id="map" name="ACKSABSTRACTDATA" indexId="i">
+										<tr>
+											<td>${i+1 }.</td>
+											<td><a
+												href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}">${map.ack_date }</a></td>
+											<td style="text-align: right;">${map.total}</td>
+											<td style="text-align: right;"><a
+												href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=NEW">${map.new_acks }</a></td>
+											<td style="text-align: right;"><a
+												href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=OLD">${map.existing_acks }</a></td>
+									
+									<bean:define id="totTot" value="${totTot + map.total }"></bean:define>
+									<bean:define id="newTot" value="${newTot + map.new_acks }"></bean:define>
+									<bean:define id="oldTot" value="${oldTot + map.existing_acks }"></bean:define>
+												
+									</logic:iterate>
+								</tbody>
+								<tfoot>
+									<tR>
+										<td colspan="2" style="text-align: center;">Totals</td><td style="text-align: right;">${totTot }</td><td style="text-align: right;">${newTot }</td><td style="text-align: right;">${oldTot }</td>
+									</tR>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+			</logic:notEmpty>
+			
+			
+			
 		</div>
 	</html:form>
 </div>

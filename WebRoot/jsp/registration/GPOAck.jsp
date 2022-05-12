@@ -58,14 +58,20 @@ label {
 	<div class="ibox">
 		<div class="ibox-head">
 			<div class="ibox-title" style="width: 100%;">
-				<logic:notEmpty name="ACKDATA">
-					<b>Acknowledgements Generated Today</b>
-					<span class="pull-right"><input type="button" name="Submit"
-						value="Submit Acknowledgement" class="btn btn-primary pull-right"
-						onclick="showAckEntry();" /> </span>
-				</logic:notEmpty>
+				<logic:empty name="HEADING">
+					<logic:notEmpty name="ACKDATA">
+						<b>Acknowledgements Generated Today</b>
+						<span class="pull-right"><input type="button" name="Submit"
+							value="Submit Acknowledgement" class="btn btn-primary pull-right"
+							onclick="showAckEntry();" /> </span>
+					</logic:notEmpty>
 
-				<logic:empty name="ACKDATA">Acknowledgement Generation</logic:empty>
+					<logic:empty name="ACKDATA">Acknowledgement Generation</logic:empty>
+				</logic:empty>
+
+				<logic:notEmpty name="HEADING">
+					${HEADING}
+				</logic:notEmpty>
 
 			</div>
 			<div class="ibox-tools">
@@ -87,7 +93,8 @@ label {
 				<html:hidden styleId="respondentIds"
 					property="dynaForm(respondentIds)" value="1" />
 				<logic:empty name="ACKDATA">
-					<!-- 
+					<logic:empty name="DEPTACKDATA">
+						<!-- 
 						<div class="page-heading">
 							<h4 class="m-t-0 header-title">
 								<b>Acknowledgement Generation</b>
@@ -95,7 +102,7 @@ label {
 						</div>
 						<hr> 
 					-->
-					<%-- <div class="row">
+						<%-- <div class="row">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<div class="form-group">
 								<label> Department <bean:message key="mandatory" />
@@ -111,7 +118,7 @@ label {
 							</div>
 						</div>
 					</div> --%>
-					<%-- <div class="row">
+						<%-- <div class="row">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<div class="form-group">
 								<label> Department <bean:message key="mandatory" />
@@ -132,115 +139,119 @@ label {
 							</div>
 						</div>
 					</div> --%>
-					
-					
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<div class="form-group">
 
-								<table id="RESPSTABID" class="table table-bordered"
-									style="width: 100%;">
-									<thead>
-										<tr>
-											<th colspan="2">Respondents <span class="pull-right"><input
-													type="button" value="Add" class="btn btn-sm btn-success"
-													name="add" id="addResp" /> <input type="button"
-													value="Remove" class="btn btn-sm btn-danger" name="remove"
-													id="removeResp" /></span></th>
-										</tr>
-										<tr>
-											<th style="width: 20%;">Sl No.</th>
-											<th style="width: 80%;">Respondent Department</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr id="1">
-											<td>1.</td>
-											<td><html:select styleId="deptId1" property="dynaForm(deptId1)" styleClass="select2Class"
-												style="width: 100%;">
-												<html:option value="0">---SELECT---</html:option>
-												<logic:notEmpty name="CommonForm" property="dynaForm(deptList)">
-													<html:optionsCollection name="CommonForm" property="dynaForm(deptList)" />
-												</logic:notEmpty>
-											</html:select></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
 
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> District <bean:message key="mandatory" />
-								</label>
-								<html:select styleId="distId" property="dynaForm(distId)"
-									styleClass="select2Class" style="width: 100%;">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty name="CommonForm" property="dynaForm(distList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(distList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> Petitioner Name <bean:message key="mandatory" />
-								</label>
-								<html:text styleId="petitionerName" styleClass="form-control"
-									property="dynaForm(petitionerName)" maxlength="150" />
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> Advocate CC No. <bean:message key="mandatory" />
-								</label>
-								<html:text styleId="advocateCCno" styleClass="form-control"
-									property="dynaForm(advocateCCno)" maxlength="25" />
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+
+									<table id="RESPSTABID" class="table table-bordered"
+										style="width: 100%;">
+										<thead>
+											<tr>
+												<th colspan="2">Respondents <span class="pull-right"><input
+														type="button" value="Add" class="btn btn-sm btn-success"
+														name="add" id="addResp" /> <input type="button"
+														value="Remove" class="btn btn-sm btn-danger" name="remove"
+														id="removeResp" /></span></th>
+											</tr>
+											<tr>
+												<th style="width: 20%;">Sl No.</th>
+												<th style="width: 80%;">Respondent Department</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr id="1">
+												<td>1.</td>
+												<td><html:select styleId="deptId1"
+														property="dynaForm(deptId1)" styleClass="select2Class"
+														style="width: 100%;">
+														<html:option value="0">---SELECT---</html:option>
+														<logic:notEmpty name="CommonForm"
+															property="dynaForm(deptList)">
+															<html:optionsCollection name="CommonForm"
+																property="dynaForm(deptList)" />
+														</logic:notEmpty>
+													</html:select></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
 
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> Advocate Name <bean:message key="mandatory" />
-								</label>
-								<html:text styleId="advocateName" styleClass="form-control"
-									property="dynaForm(advocateName)" maxlength="150" />
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label> District <bean:message key="mandatory" />
+									</label>
+									<html:select styleId="distId" property="dynaForm(distId)"
+										styleClass="select2Class" style="width: 100%;">
+										<html:option value="0">---SELECT---</html:option>
+										<logic:notEmpty name="CommonForm"
+											property="dynaForm(distList)">
+											<html:optionsCollection name="CommonForm"
+												property="dynaForm(distList)" />
+										</logic:notEmpty>
+									</html:select>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label> Petitioner Name <bean:message key="mandatory" />
+									</label>
+									<html:text styleId="petitionerName" styleClass="form-control"
+										property="dynaForm(petitionerName)" maxlength="150" />
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label for="sel1"><bean:message key="wpaffd.casetype" />
-									<bean:message key="mandatory" /> </label>
-								<html:select property="dynaForm(caseType)"
-									styleClass="select2Class" style="width: 100%;"
-									styleId="caseType">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty property="dynaForm(caseTypesList)"
-										name="CommonForm">
-										<html:optionsCollection property="dynaForm(caseTypesList)"
-											name="CommonForm" />
-									</logic:notEmpty>
-								</html:select>
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label> Advocate CC No. <bean:message key="mandatory" />
+									</label>
+									<html:text styleId="advocateCCno" styleClass="form-control"
+										property="dynaForm(advocateCCno)" maxlength="25" />
+								</div>
+							</div>
+
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label> Advocate Name <bean:message key="mandatory" />
+									</label>
+									<html:text styleId="advocateName" styleClass="form-control"
+										property="dynaForm(advocateName)" maxlength="150" />
+								</div>
 							</div>
 						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> Main Case No. (WP/WA/AS/CRP Nos.) </label>
-								<html:text styleId="mainCaseNo" styleClass="form-control"
-									property="dynaForm(mainCaseNo)" maxlength="25" />
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label for="sel1"><bean:message key="wpaffd.casetype" />
+										<bean:message key="mandatory" /> </label>
+									<html:select property="dynaForm(caseType)"
+										styleClass="select2Class" style="width: 100%;"
+										styleId="caseType">
+										<html:option value="0">---SELECT---</html:option>
+										<logic:notEmpty property="dynaForm(caseTypesList)"
+											name="CommonForm">
+											<html:optionsCollection property="dynaForm(caseTypesList)"
+												name="CommonForm" />
+										</logic:notEmpty>
+									</html:select>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label> Main Case No. (WP/WA/AS/CRP Nos.) </label>
+									<html:text styleId="mainCaseNo" styleClass="form-control"
+										property="dynaForm(mainCaseNo)" maxlength="25" />
+								</div>
 							</div>
 						</div>
-					</div>
-					
-					<div class="row" id="OLDCASEDIV" >
-						<%-- <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+
+						<div class="row" id="OLDCASEDIV">
+							<%-- <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 							<div class="form-group">
 								<label for="sel1"><bean:message key="wpaffd.casetype" />
 									<bean:message key="mandatory" /> </label>
@@ -256,32 +267,34 @@ label {
 								</html:select>
 							</div>
 						</div> --%>
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>Case Registration Year <bean:message key="mandatory" /></label>
-								<html:select styleId="regYear" property="dynaForm(regYear)"
-									styleClass="select2Class" style="width:100%;">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty name="CommonForm"
-										property="dynaForm(yearsList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(yearsList)" />
-									</logic:notEmpty>
-								</html:select>
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label>Case Registration Year <bean:message
+											key="mandatory" /></label>
+									<html:select styleId="regYear" property="dynaForm(regYear)"
+										styleClass="select2Class" style="width:100%;">
+										<html:option value="0">---SELECT---</html:option>
+										<logic:notEmpty name="CommonForm"
+											property="dynaForm(yearsList)">
+											<html:optionsCollection name="CommonForm"
+												property="dynaForm(yearsList)" />
+										</logic:notEmpty>
+									</html:select>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label class="font-bold">Case Reg. No <bean:message
+											key="mandatory" /></label>
+
+									<html:text styleId="regNo" property="dynaForm(regNo)"
+										styleClass="form-control" maxlength="6" />
+
+								</div>
 							</div>
 						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label class="font-bold">Case Reg. No <bean:message key="mandatory" /></label>
 
-								<html:text styleId="regNo" property="dynaForm(regNo)"
-									styleClass="form-control" maxlength="6" />
-
-							</div>
-						</div>
-					</div>
-					
-					<%-- 	
+						<%-- 	
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 							<div class="form-group">
@@ -342,67 +355,68 @@ label {
 						</div>
 					</div> --%>
 
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> Services / Non-Services <bean:message
-										key="mandatory" />
-								</label>
-								<html:select property="dynaForm(serviceNonService)"
-									styleClass="select2Class" style="width: 100%;"
-									styleId="serviceNonService">
-									<html:option value="0">---SELECT---</html:option>
-									<html:option value="SERVICES">SERVICES</html:option>
-									<html:option value="NON-SERVICES">NON-SERVICES</html:option>
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label> Services / Non-Services <bean:message
+											key="mandatory" />
+									</label>
+									<html:select property="dynaForm(serviceNonService)"
+										styleClass="select2Class" style="width: 100%;"
+										styleId="serviceNonService">
+										<html:option value="0">---SELECT---</html:option>
+										<html:option value="SERVICES">SERVICES</html:option>
+										<html:option value="NON-SERVICES">NON-SERVICES</html:option>
 
-								</html:select>
+									</html:select>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group servicesDiv">
+									<label> Services <bean:message key="mandatory" />
+									</label>
+									<html:select property="dynaForm(serviceType)"
+										styleClass="select2Class" style="width: 100%;"
+										styleId="serviceType">
+										<html:option value="0">---SELECT---</html:option>
+										<logic:notEmpty property="dynaForm(serviceTypesList)"
+											name="CommonForm">
+											<html:optionsCollection property="dynaForm(serviceTypesList)"
+												name="CommonForm" />
+										</logic:notEmpty>
+									</html:select>
+								</div>
 							</div>
 						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group servicesDiv">
-								<label> Services <bean:message key="mandatory" />
-								</label>
-								<html:select property="dynaForm(serviceType)"
-									styleClass="select2Class" style="width: 100%;"
-									styleId="serviceType">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty property="dynaForm(serviceTypesList)"
-										name="CommonForm">
-										<html:optionsCollection property="dynaForm(serviceTypesList)"
-											name="CommonForm" />
-									</logic:notEmpty>
-								</html:select>
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label> Remarks </label>
+									<html:textarea styleId="remarks" styleClass="form-control"
+										property="dynaForm(remarks)" rows="5" cols="50" />
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> Remarks </label>
-								<html:textarea styleId="remarks" styleClass="form-control"
-									property="dynaForm(remarks)" rows="5" cols="50" />
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<logic:present name="saveAction">
-								<!-- <input type="button" name="Submit" value="show Ack List"
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<logic:present name="saveAction">
+									<!-- <input type="button" name="Submit" value="show Ack List"
 									class="btn btn-primary pull-right" onclick="showAckListAll();" /> &nbsp;&nbsp; -->
-								<input type="button" name="Submit" value="show Acks List"
-									class="btn btn-primary pull-right" onclick="showAckList();" /> &nbsp;&nbsp;
+									<input type="button" name="Submit" value="show Acks List"
+										class="btn btn-primary pull-right" onclick="showAckList();" /> &nbsp;&nbsp;
 												<logic:equal value="INSERT" name="saveAction">
-									<input type="button" name="Submit" value="Submit"
-										class="btn btn-success pull-right" onclick="saveAck();" />
-								</logic:equal>
-								<logic:equal value="UPDATE" name="saveAction">
+										<input type="button" name="Submit" value="Submit"
+											class="btn btn-success pull-right" onclick="saveAck();" />
+									</logic:equal>
+									<logic:equal value="UPDATE" name="saveAction">
 
-									<input type="button" name="Submit" value="Update"
-										class="btn btn-success pull-right" onclick="updateAck();" />
-								</logic:equal>
-							</logic:present>
+										<input type="button" name="Submit" value="Update"
+											class="btn btn-success pull-right" onclick="updateAck();" />
+									</logic:equal>
+								</logic:present>
+							</div>
 						</div>
-					</div>
+					</logic:empty>
 				</logic:empty>
 				<logic:notEmpty name="ACKDATA">
 					<div class="row">
@@ -414,12 +428,18 @@ label {
 										<tr>
 											<th>Sl.No</th>
 											<th>Ack No.</th>
+											<th>Date</th>
 											<th>District</th>
 											<th>Department</th>
-											<th>Advocate Name</th>
-											<th>Advocate CC No.</th>
 											<th>Case Type</th>
+											<logic:present name="DISPLAYOLD">
+												<th>Case Year</th>
+												<th>Case Reg No.</th>
+											</logic:present>
 											<th>Main Case No.</th>
+											<th>Advocate CC No.</th>
+											<th>Advocate Name</th>
+
 											<th>Remarks</th>
 											<th>Download / Print</th>
 										</tr>
@@ -429,48 +449,53 @@ label {
 											<tr>
 												<td>${i+1 }</td>
 												<td>${map.ack_no }</td>
+												<td nowrap="nowrap">${map.generated_date }</td>
 												<td>${map.district_name }</td>
 												<td>${map.dept_descs }</td>
-												<td>${map.advocatename }</td>
-												<td>${map.advocateccno }</td>
 												<td>${map.case_full_name }</td>
+
+												<logic:present name="DISPLAYOLD">
+													<td>${map.reg_year }</td>
+													<td>${map.reg_no }</td>
+												</logic:present>
+
 												<td>${map.maincaseno }</td>
+												<td>${map.advocateccno }</td>
+												<td>${map.advocatename }</td>
+
+
 												<td>${map.remarks }</td>
 												<td style="text-align: center;" nowrap="nowrap">
 													<%-- <button type="button" class="btn btn-sm btn-warning"
 														title="Edit Acknowledgement"
 														onclick="editAck('${map.ack_no}')">
 														<i class="fa fa-edit"></i><span>Edit</span>
-													</button> --%>
-													<%-- <button type="button" class="btn btn-sm btn-danger"
+													</button> --%> <%-- <button type="button" class="btn btn-sm btn-danger"
 														title="Delete Acknowledgement"
 														onclick="deleteAck('${map.ack_no}')">
 														<i class="fa fa-trash"></i><span>Delete</span>
-													</button> --%>
-													
-													 <logic:present name="map" property="ack_file_path">
+													</button> --%> <logic:present name="map"
+														property="ack_file_path">
 														<a href="./${map.ack_file_path}" target="_new"
-															title="Print Acknowledgement"
-															class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-															<span>Acknowledgement</span> <!-- <span>Download</span> -->
+															title="Print Acknowledgement" class="btn btn-sm btn-info">
+															<i class="fa fa-save"></i> <span>Acknowledgement</span> <!-- <span>Download</span> -->
 														</a>
-													</logic:present>
-													 <logic:present name="map" property="barcode_file_path">
+													</logic:present> <logic:present name="map" property="barcode_file_path">
 														<a href="./${map.barcode_file_path}" target="_new"
-															title="Print Barcode"
-															class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-															<span>Barcode</span> <!-- <span>Download</span> -->
+															title="Print Barcode" class="btn btn-sm btn-info"> <i
+															class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
 														</a>
-													</logic:present> 
-													
-													<%-- <logic:notPresent name="map" property="ack_file_path">
+													</logic:present> <a
+													href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
+													target="_new" title="Print Barcode"
+													class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
+														<span>Scanned Doc</span> <!-- <span>Download</span> -->
+												</a> <%-- <logic:notPresent name="map" property="ack_file_path">
 														<button type="button" class="btn btn-sm btn-info"
 															onclick="downloadAck('${map.ack_no}')">
 															<i class="fa fa-save"></i> <span>Download</span>
 														</button>
-													</logic:notPresent>--%>
-
-													<%-- <button type="button" class="btn btn-sm btn-info"
+													</logic:notPresent>--%> <%-- <button type="button" class="btn btn-sm btn-info"
 														onclick="downloadAck('${map.ack_no}')">
 														<i class="fa fa-save"></i> <span>Download 2</span>
 													</button>  --%>
@@ -480,7 +505,92 @@ label {
 									</tbody>
 									<tfoot>
 										<tR>
-											<td colspan="10">&nbsp;</td>
+											<logic:present name="DISPLAYOLD">
+												<td colspan="13">
+											</logic:present>
+											<logic:notPresent name="DISPLAYOLD">
+												<td colspan="11">
+											</logic:notPresent>
+
+
+											&nbsp;
+											</td>
+										</tR>
+									</tfoot>
+								</table>
+							</div>
+						</div>
+					</div>
+				</logic:notEmpty>
+
+
+				<logic:notEmpty name="DEPTACKDATA">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="table-responsive">
+								<table class="table table-striped table-bordered table-hover"
+									id="example">
+									<thead>
+										<tr>
+											<th>Sl.No</th>
+											<th>Ack No.</th>
+											<th>Date</th>
+											<th>District</th>
+											<th>Case Type</th>
+											<th>Main Case No.</th>
+											<th>Advocate CC No.</th>
+											<th>Advocate Name</th>
+
+											<th>Remarks</th>
+											<th>Download / Print</th>
+										</tr>
+									</thead>
+									<tbody>
+										<logic:iterate id="map" name="DEPTACKDATA" indexId="i">
+											<tr>
+												<td>${i+1 }</td>
+												<td>${map.ack_no }</td>
+												<td nowrap="nowrap">${map.generated_date }</td>
+												<td>${map.district_name }</td>
+												<td>${map.case_full_name }</td>
+												<td>${map.maincaseno }</td>
+												<td>${map.advocateccno }</td>
+												<td>${map.advocatename }</td>
+
+
+												<td>${map.remarks }</td>
+												<td style="text-align: center;" nowrap="nowrap"><logic:present
+														name="map" property="ack_file_path">
+														<a href="./${map.ack_file_path}" target="_new"
+															title="Print Acknowledgement" class="btn btn-sm btn-info">
+															<i class="fa fa-save"></i> <span>Acknowledgement</span> <!-- <span>Download</span> -->
+														</a>
+													</logic:present> <logic:present name="map" property="barcode_file_path">
+														<a href="./${map.barcode_file_path}" target="_new"
+															title="Print Barcode" class="btn btn-sm btn-info"> <i
+															class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
+														</a>
+													</logic:present> <a
+													href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
+													target="_new" title="Print Barcode"
+													class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
+														<span>Scanned Doc</span> <!-- <span>Download</span> -->
+												</a></td>
+											</tr>
+										</logic:iterate>
+									</tbody>
+									<tfoot>
+										<tR>
+											<logic:present name="DISPLAYOLD">
+												<td colspan="13">
+											</logic:present>
+											<logic:notPresent name="DISPLAYOLD">
+												<td colspan="11">
+											</logic:notPresent>
+
+
+											&nbsp;
+											</td>
 										</tR>
 									</tfoot>
 								</table>

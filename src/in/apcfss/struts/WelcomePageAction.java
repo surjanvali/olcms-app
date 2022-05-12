@@ -119,6 +119,11 @@ public class WelcomePageAction extends DispatchAction{
 					if (data != null && !data.isEmpty() && data.size() > 0)
 						request.setAttribute("deptwise", data);
 					request.setAttribute("showReport1", "showReport1");
+					
+					
+					sql="select count(*)  from ecourts_gpo_ack_depts ad where dept_code='"+deptCode+"'";
+					request.setAttribute("NEWCASES", DatabasePlugin.getStringfromQuery(sql, con));
+					
 				}
 				
 				//District Collector

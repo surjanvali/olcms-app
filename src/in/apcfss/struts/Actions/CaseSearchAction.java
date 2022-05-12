@@ -71,20 +71,23 @@ public class CaseSearchAction extends DispatchAction {
 			if (!CommonModels.checkStringObject(cform.getDynaForm("regNo")).equals("")) {
 				sqlCondition += " and a.reg_no='" + CommonModels.checkStringObject(cform.getDynaForm("regNo")) + "' ";
 			}
-			if (!CommonModels.checkStringObject(cform.getDynaForm("caseType")).equals("")
+			/*if (!CommonModels.checkStringObject(cform.getDynaForm("caseType")).equals("")
 					&& !CommonModels.checkStringObject(cform.getDynaForm("caseType")).equals("0")) {
 				sqlCondition += " and a.type_name_reg='" + CommonModels.checkStringObject(cform.getDynaForm("caseType"))
 						+ "' ";
-			}
+			}*/
 			if (!CommonModels.checkStringObject(cform.getDynaForm("cinNo")).equals("")) {
 				sqlCondition += " and a.cino='" + CommonModels.checkStringObject(cform.getDynaForm("cinNo")) + "' ";
 			}
 
 			sql = "select cino from ecourts_case_data a where 1=1 " + sqlCondition;
+			System.out.println("SQL:"+sql);
 			String cinNo = CommonModels.checkStringObject(DatabasePlugin.getStringfromQuery(sql, con));
 			System.out.println("CINNO:"+cinNo);
 			GPOAcknowledgementAction gpoAct = new GPOAcknowledgementAction();
 			if (cinNo!=null && !cinNo.equals("") && !cinNo.equals("0")) {
+				
+				/*
 				String barCodeFilePath = gpoAct.generateAckBarCodePdf(cinNo, cform);
 				int a=0;
 				if (barCodeFilePath != null) {
@@ -92,7 +95,8 @@ public class CaseSearchAction extends DispatchAction {
 							+ cinNo + "'";
 					a = DatabasePlugin.executeUpdate(sql, con);
 				}
-				if(a > 0) {
+				if(a > 0) { */
+					
 				sql = "select a.*, b.orderpaths from ecourts_case_data a left join" + " ("
 						+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 						+ " from "
@@ -111,10 +115,10 @@ public class CaseSearchAction extends DispatchAction {
 				}else {
 					request.setAttribute("errorMsg", "Records Found but failed to fetch data.");
 				}
-				}
+				/*}
 				else {
 					request.setAttribute("errorMsg", "Records Found but failed to generate Bar code.");
-				}
+				}*/
 			} else {
 				request.setAttribute("errorMsg", "No Records Found in APOLCMS. Enter the below details to generate case details.");
 				

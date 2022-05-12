@@ -3,8 +3,8 @@ var APP = function() {
 
     // PATHS
     // ======================
-    //this.ASSETS_PATH = '../../assets/';
-    this.ASSETS_PATH = './assets/';
+    //this.ASSETS_PATH = '../../assetsnew/';
+    this.ASSETS_PATH = './assetsnew/';
     this.SERVER_PATH = this.ASSETS_PATH + 'demo/server/';
 
     // GLOBAL HELPERS

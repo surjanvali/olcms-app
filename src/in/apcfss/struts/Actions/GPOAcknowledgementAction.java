@@ -87,14 +87,14 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id,services_flag,"
-					+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs, a.barcode_file_path "
+					+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs, a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date, reg_year, reg_no, ack_type "
 					+ " from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
 					+ "left join case_type_master cm on (a.casetype=cm.sno) "
 					+ "left join (select ack_no,dm.dept_code,dm.description from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code)) gd on (a.ack_no=gd.ack_no)"
 					+ "where a.inserted_by='"+session.getAttribute("userid")
 					+"' and a.delete_status is false and ack_type='"+ackType+"' and inserted_time::date=current_date "
 					+ "group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name,"
-					+ "case_full_name,a.ack_file_path, services_id, services_flag, inserted_time, a.barcode_file_path "
+					+ "case_full_name,a.ack_file_path, services_id, services_flag, inserted_time, a.barcode_file_path, reg_year, reg_no, ack_type "
 					+ "order by inserted_time desc";
 			
 			System.out.println("SQL:"+sql);
@@ -127,26 +127,36 @@ public class GPOAcknowledgementAction extends DispatchAction {
 				return mapping.findForward("Logout");
 			}
 			con = DatabasePlugin.connect();
-			String ackType = request.getParameter("ackType").toString();
+			String ackType = CommonModels.checkStringObject(request.getParameter("ackType"));
 			String ackDate=request.getParameter("ackDate").toString();
 					//cform.getDynaForm("ackType") !=null && !cform.getDynaForm("ackType").equals("0") ? cform.getDynaForm("ackType").toString() : "NEW";
 
 			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id,services_flag,"
-					+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs, a.barcode_file_path "
+					+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs, a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date, reg_year, reg_no, ack_type "
 					+ " from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
 					+ "left join case_type_master cm on (a.casetype=cm.sno) "
 					+ "left join (select ack_no,dm.dept_code,dm.description from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code)) gd on (a.ack_no=gd.ack_no)"
 					+ "where a.inserted_by='"+session.getAttribute("userid")
-					+"' and a.delete_status is false and ack_type='"+ackType+"' and to_char(inserted_time::date,'dd-mm-yyyy')='"+ackDate+"'"
+					+"' and a.delete_status is false";
+			
+			if(!CommonModels.checkStringObject(ackType).equals(""))
+				sql+=" and ack_type='"+ackType+"'";
+			
+			sql+=" and to_char(inserted_time::date,'dd-mm-yyyy')='"+ackDate+"'"
 					+ "group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name,"
-					+ "case_full_name,a.ack_file_path, services_id, services_flag, inserted_time, a.barcode_file_path "
+					+ "case_full_name,a.ack_file_path, services_id, services_flag, inserted_time, a.barcode_file_path, reg_year, reg_no, ack_type "
 					+ "order by inserted_time desc";
 			
 			System.out.println("SQL:"+sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
+				
+				if(ackType.equals("OLD")) {
+					request.setAttribute("DISPLAYOLD", "DISPLAYOLD");
+				}
+				
 				request.setAttribute("ACKDATA", data);
 			} else {
 				return displayAckForm(mapping, cform, request, response);
@@ -357,8 +367,8 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					if (a > 0) {
 						
 						sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
-								+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id,services_flag,"
-								+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs "
+								+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id=0 then null else services_id end as services_id,services_flag,"
+								+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs, to_char(inserted_time,'dd-mm-yyyy') as generated_date "
 								+ " from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
 								+ "left join case_type_master cm on (a.casetype=cm.sno) "
 								+ "left join (select ack_no,dm.dept_code,dm.description, respondent_slno from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code) order by ack_no, respondent_slno) gd on (a.ack_no=gd.ack_no)"
@@ -388,6 +398,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 							cform.setDynaForm("district_name", ackData.get("district_name").toString());
 							cform.setDynaForm("serviceType", ackData.get("services_id").toString());
 							cform.setDynaForm("serviceNonService", ackData.get("services_flag").toString());
+							cform.setDynaForm("generatedDate", ackData.get("generated_date").toString());
 							
 						}
 						
@@ -397,7 +408,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 						System.out.println("barCodeFilePath::"+barCodeFilePath);
 						
 						if(ackPath!=null && !ackPath.equals("")){
-							sql=" update ecourts_gpo_ack_dtls set ack_file_path='"+generateAckPdf(ackNo, cform)+"', barcode_file_path='"+barCodeFilePath+"' where ack_no='"+ackNo+"'";
+							sql=" update ecourts_gpo_ack_dtls set ack_file_path='"+ackPath+"', barcode_file_path='"+barCodeFilePath+"' where ack_no='"+ackNo+"'";
 							DatabasePlugin.executeUpdate(sql, con);
 							
 							request.setAttribute("successMsg",
@@ -741,6 +752,9 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			table.addCell(pdfsetting.cell("Acknowledgement No. : ",1,Element.ALIGN_RIGHT,para,Font.BOLD));
 			table.addCell(pdfsetting.cell(""+ackNo+"",2,Element.ALIGN_LEFT,para,Font.NORMAL)); // CLIENT ORG ADDRESS
 			// table.addCell(pdfsetting.cell(" ",1,Element.ALIGN_RIGHT,para,Font.NORMAL));
+			table.addCell(pdfsetting.cell("Date :",1,Element.ALIGN_RIGHT,para,Font.BOLD));
+			table.addCell(pdfsetting.cell(""+cform.getDynaForm("generatedDate"),1,Element.ALIGN_LEFT,para,Font.NORMAL));
+			
 			table.addCell(pdfsetting.cell("District :",1,Element.ALIGN_RIGHT,para,Font.BOLD));
 			table.addCell(pdfsetting.cell(""+cform.getDynaForm("district_name"),1,Element.ALIGN_LEFT,para,Font.NORMAL));
 			
@@ -798,7 +812,8 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			//code39Image.scaleToFit(100f, 100f);
 			//code39Image.setAbsolutePosition(10, 100);
 			// code39Image.scalePercent(100);
-			code39Image.scalePercent(50, 100);
+			
+			code39Image.scalePercent(100, 100);
 			code39Image.setAlignment(1);
 			
 			document.add(code39Image);
@@ -821,20 +836,22 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			String fileName = ackNo+"_barCode.pdf";
 			pdfFilePath = ApplicationVariables.ackPath + fileName;
 
-			document = new Document(PageSize.A7 ,5,5,5,5);
+			document = new Document(PageSize.A6.rotate());
 			// document.setMargins(30, 30, 30, 30);
-			document.setPageSize(PageSize.A7);
+			document.setPageSize(PageSize.A6);
 			writer = PdfWriter.getInstance(document, new FileOutputStream(ApplicationVariables.contextPath+pdfFilePath));
-			BaseFont bf_courier = BaseFont.createFont(BaseFont.HELVETICA, "Cp1252", false);
+			//BaseFont bf_courier = BaseFont.createFont(BaseFont.HELVETICA, "Cp1252", false);
 
+			/*
 			HeaderFooter footer = new HeaderFooter(new Phrase("Page No.:"+document.getPageNumber(), new Font(bf_courier, 8, Font.NORMAL)), true);
 			footer.setBorder(Rectangle.NO_BORDER);
 			footer.setAlignment(Element.ALIGN_RIGHT);
 			document.setFooter(footer);
+			*/
 
 			document.open();
-			System.out.println("WIDTH A7:"+PageSize.A9.getWidth());
-			System.out.println("HEIGHT A7:"+PageSize.A9.getHeight());
+			 System.out.println("WIDTH A7:"+PageSize.A6.getWidth());
+			 System.out.println("HEIGHT A7:"+PageSize.A6.getHeight());
 			
 			PdfContentByte cb = writer.getDirectContent();
 			
@@ -853,16 +870,17 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			barcode39.setCode("https://apolcms.ap.gov.in/uploads/acks/AGC0114202203070354959.pdf");
 			Image code39Image = barcode39.createImageWithBarcode(cb, null, null);
 			*/
-			//code39Image.setAbsolutePosition(PageSize.A4.getWidth()/2 + 150, (float) (PageSize.A4.getHeight()/2)+300);
-			code39Image.scalePercent(50, 100);
+			//code39Image.setAbsolutePosition( ( PageSize.A9.getWidth()/2  - 100) , (float) (PageSize.A9.getHeight()/2)+50);
+			code39Image.scalePercent(100, 100);
 			//code39Image.scaleToFit(100f, 100f);
 			//code39Image.setAbsolutePosition(10, 100);
 			//code39Image.scalePercent(100);
 			code39Image.setAlignment(1);
 			
-			document.add(code39Image);
 			
 			document.add(code39Image);
+			
+			// document.add(code39Image);
 			
 			System.out.println("BAR CODE pdfFilePath:"+pdfFilePath);
 		}catch (Exception e) {
@@ -872,5 +890,50 @@ public class GPOAcknowledgementAction extends DispatchAction {
 				document.close();
 		}
 		return pdfFilePath;
+	}
+
+	public ActionForward deptWiseCases(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		System.out.println(
+				"GPOAcknowledgementAction..............................................................................getAcknowledementsListAll()");
+		Connection con = null;
+		PreparedStatement ps = null;
+		CommonForm cform = (CommonForm) form;
+		HttpSession session = request.getSession();
+		String sql = null;
+		try {
+			if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
+				return mapping.findForward("Logout");
+			}
+			con = DatabasePlugin.connect();
+			String deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			
+					//cform.getDynaForm("ackType") !=null && !cform.getDynaForm("ackType").equals("0") ? cform.getDynaForm("ackType").toString() : "NEW";
+
+			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
+					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
+					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date "
+					+ "from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
+					+ "left join district_mst dm on (a.distid=dm.district_id) "
+					+ "left join case_type_master cm on (a.casetype=cm.sno) "
+					+ "where a.delete_status is false and ack_type='NEW' and ad.dept_code='"+deptCode+"' "
+					+ "order by inserted_time";
+			
+			System.out.println("SQL:"+sql);
+			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+			System.out.println("data=" + data);
+			if (data != null && !data.isEmpty() && data.size() > 0) {
+				
+				request.setAttribute("DEPTACKDATA", data);
+			} 
+			else {
+				request.setAttribute("errorMsg", "No details found.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DatabasePlugin.close(con, ps, null);
+		}
+		return mapping.findForward("success");
 	}
 }
