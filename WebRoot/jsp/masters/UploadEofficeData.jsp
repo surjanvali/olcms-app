@@ -95,6 +95,10 @@ label {
 
 						<input type="button" name="Submit" value="Submit"
 							class="btn btn-success pull-right" onclick="saveAck();" />
+							
+						<input type="button" name="Submit" value="Save NIC Data table"
+							class="btn btn-success pull-right" onclick="saveNicData();" />
+								
 					</div>
 				</div>
 			</html:form>
@@ -108,26 +112,14 @@ label {
 		document.forms[0].mode.value = "saveData";
 		document.forms[0].submit();
 	}
+	function saveNicData() {
+		document.forms[0].mode.value = "saveDataIntoSectDept";
+		document.forms[0].submit();
+	}
+	
 
 	$(document).ready(function() {
 		$('.select2Class').select2();
 	});
 
-	function showAckEntry() {
-		document.forms[0].mode.value = "displayAckForm";
-		document.forms[0].submit();
-	}
-
-	function showAckList() {
-		document.forms[0].mode.value = "getAcknowledementsList";
-		document.forms[0].submit();
-	}
-
-	function editAck(ackId) {
-		if (ackId != null && ackId != "") {
-			$("#ackId").val(ackId);
-			document.forms[0].mode.value = "displayAckEditForm";
-			document.forms[0].submit();
-		}
-	}
 </script>

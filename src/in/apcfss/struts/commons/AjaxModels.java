@@ -378,6 +378,7 @@ public class AjaxModels extends DispatchAction {
 		if(distId!=null && !distId.equals("") && Integer.parseInt(distId) > 0)
 			tableName = DatabasePlugin.getStringfromQuery("select tablename from district_mst where district_id="+distId, con);
 			// tableName = DatabasePlugin.getStringfromQuery("select tablename from district_mst_new where district_id="+distId, con);
+		System.out.println("dist::Id"+distId+"-tableName::"+tableName);
 		return tableName;
 	}
 

@@ -162,7 +162,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<thead>
 									<tr>
 										<th>Sl.No</th>
-										<th></th>
+										<!-- <th></th> -->
 										<th>CINo</th>
 										<th>Date of Filing</th>
 										<th>Case Type</th>
@@ -191,13 +191,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<logic:iterate id="map" name="CASESLIST" indexId="i">
 										<tr>
 											<td>${i+1 }.</td>
-											<td><logic:present name="map"
+											<%-- <td><logic:present name="map"
 													property="barcode_file_path">
 													<a href="./${map.barcode_file_path}" target="_new"
 														title="Print Barcode" class="btn btn-sm btn-info"> <i
 														class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
 													</a>
-												</logic:present></td>
+												</logic:present></td> --%>
 											<td><input type="button" id="btnShowPopup"
 												value="${map.cino}"
 												class="btn btn-sm btn-info waves-effect waves-light"
@@ -236,7 +236,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</tbody>
 								<tfoot>
 									<tR>
-										<td colspan="14">&nbsp;</td>
+										<td colspan="13">&nbsp;</td>
 									</tR>
 								</tfoot>
 							</table>
