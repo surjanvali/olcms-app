@@ -9,6 +9,7 @@ import in.apcfss.struts.eCourt.apis.EHighCourtAPI;
 import in.apcfss.struts.eCourt.apis.HASHHMACJava;
 import in.apcfss.struts.eCourt.apis.HighCourtCauseListAPI;
 import in.apcfss.struts.eCourt.apis.HighCourtCauseListBenchAPI;
+import in.apcfss.struts.eCourt.apis.HighCourtCauseListPDFAPI;
 
 import java.math.BigInteger;
 import java.net.URLEncoder;
@@ -123,9 +124,6 @@ public class HighCourtCauseListAction extends DispatchAction {
 		String inputStr = "", targetURL = "";
 		String authToken = "";
 		Connection con = null;
-		ResultSet rs = null;
-		Statement st = null;
-		String sql = "";
 		int totalCount = 0, successCount = 0, failCount = 0;
 		try {
 			con = DatabasePlugin.connect();
@@ -160,6 +158,8 @@ public class HighCourtCauseListAction extends DispatchAction {
 					HighCourtCauseListBenchAPI.processApiResponse(resp, estCode, causelistDate, con);
 					
 					getBenchesCauselist(con, causelistDate);
+					
+					getHighCourtCauseListPDFs(con, causelistDate);
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -227,11 +227,72 @@ public class HighCourtCauseListAction extends DispatchAction {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (con != null)
-				con.close();
-		}
+		} 
+	}
 	
+	
+	public static void getHighCourtCauseListPDFs(Connection con, String causelistDate) {
+		String request_token = "", requeststring = "";
+		String inputStr = "", targetURL = "";
+		String authToken = "";
+		ResultSet rs = null;
+		Statement st = null;
+		String sql = "";
+		int totalCount = 0, successCount = 0, failCount = 0;
+		try {
+			String opVal = ECourtAPIs.getSelectParam(13);
+			
+			String estCode="APHC01", bench_id="",causelist_id="" ;
+			
+			sql="SELECT slno, est_code, causelist_date, bench_id, inserted_time,causelist_id, cause_list_type FROM apolcms.ecourts_causelist_bench_data where "
+					//+ "slno=36";
+					+ "causelist_document is null and causelist_id is not null order by causelist_date";
+			System.out.println("SQL:"+sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			
+			while(rs.next()) {
+				causelistDate = rs.getString("causelist_date"); 
+				bench_id = rs.getString("bench_id"); 
+				causelist_id = rs.getString("causelist_id"); 
+				
+				if(causelistDate!=null && bench_id!=null && causelist_id!=null && !causelistDate.equals("") && !bench_id.equals("") && !causelist_id.equals(""))
+				{
+					inputStr = "est_code="+estCode+"|causelist_date="+causelistDate+"|bench_id="+bench_id+"|causelist_id="+causelist_id;//ECourtAPIs.getInputStringValue(opVal);
+					System.out.println("inputStr:"+inputStr);
+					// 1. Encoding Request Token
+					byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"), inputStr.getBytes("UTF-8"));
+					request_token = String.format("%032x", new BigInteger(1, hmacSha256));
+					// 2. Encoding Request String
+					requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
+		
+					targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
+		
+					System.out.println(totalCount + ":URL : " + targetURL);
+					System.out.println("Input String : " + inputStr);
+		
+					authToken = EHighCourtAPI.getAuthToken();
+					String resp = "";
+					 if (opVal != null && !opVal.equals("")) {
+						try {
+							resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+		
+					if (resp != null && !resp.equals("")) {
+						try {
+						 HighCourtCauseListPDFAPI.processPDForderResponse(resp, estCode, causelistDate, bench_id,causelist_id, con);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 	}
 	
 }
