@@ -18,8 +18,13 @@ public class HighCourtCauseListBenchAPI {
 	static final String apolcmsUserName = "apolcms";
 	static final String apolcmsPassword = "apolcms";
 
+	/*
+	//Live DB
+	static final String apolcmsDataBase = "jdbc:postgresql://10.96.54.54:6432/apolcms";
+	static final String apolcmsUserName = "apolcms";
+	static final String apolcmsPassword = "@p0l(m$";
+	*/
 	public static void main(String[] args) throws Exception {
-		
 		
 		String request_token = "", requeststring = "";
 		String inputStr = "", targetURL = "";
@@ -34,7 +39,7 @@ public class HighCourtCauseListBenchAPI {
 			con = DriverManager.getConnection(apolcmsDataBase, apolcmsUserName, apolcmsPassword);
 			String opVal = ECourtAPIs.getSelectParam(11);
 			
-			 String estCode="APHC01", causelistDate="2022-01-20";
+			 String estCode="APHC01", causelistDate="2022-04-25";//2022-04-06
 			
 			inputStr = "est_code="+estCode+"|causelist_date="+causelistDate;//ECourtAPIs.getInputStringValue(opVal);
 			// 1. Encoding Request Token
@@ -65,6 +70,7 @@ public class HighCourtCauseListBenchAPI {
 					e.printStackTrace();
 				}
 			}
+			System.out.println("CAUSE LIST BENCH END");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

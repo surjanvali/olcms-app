@@ -27,6 +27,10 @@ public class HighCourtCauseListAPI {
 		Connection con = null;
 		ResultSet rs = null;
 		Statement st = null;
+		
+		ResultSet rs1 = null;
+		Statement st1 = null;
+		
 		String sql = "";
 		int totalCount = 0, successCount = 0, failCount = 0;
 		try {
@@ -36,43 +40,52 @@ public class HighCourtCauseListAPI {
 			
 			String estCode="APHC01", causelistDate="";
 			
-			sql="SELECT slno, est_code, causelist_date, bench_id, judge_name, inserted_time FROM apolcms.ecourts_causelist_data where  causelist_date=to_date('20/1/2022','dd/mm/yyyy') order by causelist_date";
+			sql="select distinct to_char(causelist_date,'dd/mm/yyyy') as causelist_date1, causelist_date from ecourts_causelist_data where causelist_date not in (select distinct causelist_date from ecourts_causelist_bench_data) order by causelist_date";
 			
-			st = con.createStatement();
-			rs = st.executeQuery(sql);
+			st1 = con.createStatement();
+			rs1 = st1.executeQuery(sql);
 			
-			while(rs.next()) {
-				causelistDate = rs.getString("causelist_date");
-				inputStr = "est_code="+estCode+"|causelist_date="+causelistDate+"|bench_id="+rs.getString("bench_id");//ECourtAPIs.getInputStringValue(opVal);
-				// 1. Encoding Request Token
-				byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"), inputStr.getBytes("UTF-8"));
-				request_token = String.format("%032x", new BigInteger(1, hmacSha256));
-				// 2. Encoding Request String
-				requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
-	
-				targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
-	
-				System.out.println(totalCount + ":URL : " + targetURL);
-				System.out.println("Input String : " + inputStr);
-	
-				authToken = EHighCourtAPI.getAuthToken();
-				String resp = "";
-				 if (opVal != null && !opVal.equals("")) {
-					try {
-						resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
-					} catch (Exception e) {
-						e.printStackTrace();
+			while (rs1.next()){
+				sql = "SELECT slno, est_code, causelist_date, bench_id, judge_name, inserted_time FROM apolcms.ecourts_causelist_data where causelist_date=to_date('"+rs1.getString("causelist_date1")
+					+"','dd/mm/yyyy') order by causelist_date ";
+				
+				st = con.createStatement();
+				rs = st.executeQuery(sql);
+				
+				while(rs.next()) {
+					causelistDate = rs.getString("causelist_date");
+					inputStr = "est_code="+estCode+"|causelist_date="+causelistDate+"|bench_id="+rs.getString("bench_id");//ECourtAPIs.getInputStringValue(opVal);
+					// 1. Encoding Request Token
+					byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"), inputStr.getBytes("UTF-8"));
+					request_token = String.format("%032x", new BigInteger(1, hmacSha256));
+					// 2. Encoding Request String
+					requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
+		
+					targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
+		
+					System.out.println(totalCount + ":URL : " + targetURL);
+					System.out.println("Input String : " + inputStr);
+		
+					authToken = EHighCourtAPI.getAuthToken();
+					String resp = "";
+					 if (opVal != null && !opVal.equals("")) {
+						try {
+							resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
-				}
-	
-				if (resp != null && !resp.equals("")) {
-					try {
-						processApiResponse(resp, estCode, causelistDate, con);
-					} catch (Exception e) {
-						e.printStackTrace();
+		
+					if (resp != null && !resp.equals("")) {
+						try {
+							processApiResponse(resp, estCode, causelistDate, con);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
+			System.out.println("CAUSE LIST END");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

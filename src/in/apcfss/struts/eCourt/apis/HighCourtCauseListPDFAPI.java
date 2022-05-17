@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Base64;
 
 import org.json.JSONObject;
@@ -85,6 +84,7 @@ public class HighCourtCauseListPDFAPI {
 					}
 				}
 			}
+			System.out.println("END");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -108,15 +108,23 @@ public class HighCourtCauseListPDFAPI {
 			
 			System.out.println("decryptedRespStr:"+decryptedRespStr);
 			
-			File pdfFile = new File("E:\\HighCourtsCauseList\\" + estCode+causelistDate+bench_id+causelist_id + ".pdf");
-			FileOutputStream fos = new FileOutputStream(pdfFile);
-			byte[] decoder = Base64.getDecoder().decode(decryptedRespStr.replace("\"", "").replace("\\", ""));
-			fos.write(decoder);
-			System.out.println("PDF File Saved");
+			String filesUploadPath="E:\\HighCourtsCauseList\\"+causelistDate+"\\";
 			
-			sql = "update ecourts_causelist_bench_data set causelist_document='HighCourtsCauseList/"+estCode+causelistDate+bench_id+causelist_id+".pdf' where est_code='"+estCode+"' and causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd') and bench_id='"+bench_id+"' and causelist_id='"+causelist_id+"'";
-			System.out.println("UPDATE SQL:"+sql);
-			DatabasePlugin.executeUpdate(sql, con);
+			File upload_folder = new File(filesUploadPath);
+			if (!upload_folder.exists()) {
+				upload_folder.mkdirs();
+			}
+			if (upload_folder.exists()) {
+				File pdfFile = new File( filesUploadPath+ estCode+causelistDate+bench_id+causelist_id + ".pdf");
+				FileOutputStream fos = new FileOutputStream(pdfFile);
+				byte[] decoder = Base64.getDecoder().decode(decryptedRespStr.replace("\"", "").replace("\\", ""));
+				fos.write(decoder);
+				System.out.println("PDF File Saved");
+				
+				sql = "update ecourts_causelist_bench_data set causelist_document='uploads/HighCourtsCauseList/"+causelistDate+"/"+estCode+causelistDate+bench_id+causelist_id+".pdf' where est_code='"+estCode+"' and causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd') and bench_id='"+bench_id+"' and causelist_id='"+causelist_id+"'";
+				System.out.println("UPDATE SQL:"+sql);
+				DatabasePlugin.executeUpdate(sql, con);
+			}
 		}
 	    else
 		{
@@ -124,67 +132,6 @@ public class HighCourtCauseListPDFAPI {
 			 System.out.println("UPDATE SQL:"+sql);
 			 DatabasePlugin.executeUpdate(sql, con);
 			System.out.println("Invalid/Empty Response");
-		}
-	}
-	
-	
-	public static void processApiResponse(String resp, String estCode, String causelistDate, Connection con)
-			throws Exception {
-		String response_str = "";
-		String response_token = "";
-		String version = "";
-		String decryptedRespStr = "";
-		String sql = "";
-		resp = resp.trim();
-
-		System.out.println("processMastersResponse"+resp);
-		if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_TOKEN"))) {
-			JSONObject jObj = new JSONObject(resp);
-			if ((jObj.has("response_str")) && (jObj.getString("response_str") != null)) {
-				response_str = jObj.getString("response_str").toString();
-			}
-			if ((jObj.has("response_token")) && (jObj.getString("response_token") != null)) {
-				response_token = jObj.getString("response_token").toString();
-			}
-			if ((jObj.has("version")) && (jObj.getString("version") != null)) {
-				version = jObj.getString("version").toString();
-			}
-			if ((response_str != null) && (!response_str.equals(""))) {
-				decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
-			}
-			System.out.println("decryptedRespStr:"+decryptedRespStr);
-			JSONObject jObjCaseData = new JSONObject(decryptedRespStr);
-			ArrayList<String> sqls = new ArrayList();
-
-			JSONObject jObjActsInnerData = new JSONObject();
-			if ((jObjCaseData != null)) {
-				for (int i = 1; i <= jObjCaseData.length(); i++) {//jObjActsData.length()
-					
-					if(jObjCaseData.has("case" + i))
-					{
-						jObjActsInnerData = new JSONObject(jObjCaseData.get("case" + i).toString());
-	
-						sql = "update ecourts_causelist_data set causelist_id='"+ImportECourtsData.checkStringJSONObj(jObjActsInnerData, "causelist_id")
-								+"', cause_list_type='"+ImportECourtsData.checkStringJSONObj(jObjActsInnerData, "cause_list_type").trim()+"' where est_code='"+estCode+"' and causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd') and bench_id='"
-								+ ImportECourtsData.checkStringJSONObj(jObjActsInnerData, "bench_id") + "'";
-						System.out.println("SQL:"+sql);
-						sqls.add(sql);
-					}
-				}
-			}
-
-			int executedSqls = 0;
-			if (sqls.size() > 0) {
-				//System.out.println("SQLS:"+sqls);
-				executedSqls = DatabasePlugin.executeBatchSQLs(sqls, con);
-			}
-
-			System.out.println("Successfully saved..executedSqls:" + executedSqls);
-
-			System.out.println("END");
-		} else {
-			
-			System.out.println("Invalid/Empty Response::" + "SQL:" + sql);
 		}
 	}
 }
