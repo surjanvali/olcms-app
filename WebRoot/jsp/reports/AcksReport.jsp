@@ -69,7 +69,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<logic:notEmpty name="ACKDATA">
 				<div class="ibox">
 					<div class="ibox-head">
-						<div class="ibox-title">Generated Acknowledgements Report</div>
+						<div class="ibox-title">Generated Cases Report</div>
 					</div>
 
 					<div class="ibox-body">
@@ -122,7 +122,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<logic:notEmpty name="ACKSABSTRACTDATA">
 				<div class="ibox">
 					<div class="ibox-head">
-						<div class="ibox-title">Acknowledgements Abstract Report</div>
+						<div class="ibox-title">New Cases Abstract Report</div>
 					</div>
 
 					<div class="ibox-body">
