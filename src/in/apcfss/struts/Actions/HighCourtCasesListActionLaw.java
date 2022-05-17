@@ -103,11 +103,12 @@ public class HighCourtCasesListActionLaw extends DispatchAction {
 			sql = "select a.*, b.orderpaths from ecourts_case_data a left join" + " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from "
-					+ " ((select cino, order_document_path,order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 order by sr_no)" + " union"
-					+ " (select cino, order_document_path,order_details from ecourts_case_finalorder where order_document_path is not null"
+					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1"
+					+ " union"
+					+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
 					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 order by sr_no)) c group by cino ) b"
+					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
 					+ " on (a.cino=b.cino) where dept_code='" + session.getAttribute("dept_code")
 					+ "' and assigned is false and assigned_to='"+session.getAttribute("userid")+"'" + sqlCondition + " and coalesce(ecourts_case_status,'')!='Closed'";
 

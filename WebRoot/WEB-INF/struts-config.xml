@@ -12,14 +12,14 @@
 			<set-property property="password" value="@p0l(m$" /> -->
 
 			<!-- Test -->
-			<set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" /> 
+			<!-- <set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" /> 
 			<set-property property="username" value="apolcms" /> 
-			<set-property property="password" value="apolcms" /> 
+			<set-property property="password" value="apolcms" />  -->
 			
 			<!-- LOCAL -->
-			<!-- <set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" />
+			<set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" />
 			<set-property property="username" value="apolcms" />
-			<set-property property="password" value="apolcms" /> -->
+			<set-property property="password" value="apolcms" />
 			
 
 			<set-property property="minCount" value="5" />
@@ -320,6 +320,31 @@
 			<forward name="success" path="acksreport"></forward>
 		</action>
 
+		<action path="/AcksAbstractReport" name="CommonForm"
+			type="in.apcfss.struts.reports.AcknowledgementAbstractReport"
+			parameter="mode" scope="request">
+			<forward name="success" path="acksabstract"></forward>
+		</action>
+		
+		<action path="/HCCaseDocsUploadAbstract" name="CommonForm"
+			type="in.apcfss.struts.reports.HCCaseDocsUploadStatusAbstractReport"
+			parameter="mode" scope="request">
+			<forward name="success" path="hccasedocsupload"></forward>
+		</action>
+		
+		<action path="/HCOrdersIssuedReport" name="CommonForm"
+			type="in.apcfss.struts.reports.HCOrdersIssuedReport"
+			parameter="mode" scope="request">
+			<forward name="success" path="hcordersissuedreport"></forward>
+		</action>
+		
+		<action path="/ContemptCasesAbstract" name="CommonForm"
+			type="in.apcfss.struts.reports.ContemptCasesAbstractReport"
+			parameter="mode" scope="request">
+			<forward name="success" path="contemptcasesreport"></forward>
+		</action>
+		
+		
 	</action-mappings>
 
 	<message-resources

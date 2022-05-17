@@ -209,4 +209,20 @@
 		<put name="content" value="/jsp/reports/AcksReport.jsp" />
 	</definition>
 	
+	<definition name="acksabstract" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/AcksAbstractReport.jsp" />
+	</definition>
+	
+	
+	<definition name="hccasedocsupload" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/HCCaseDocsUploadAbstractReport.jsp" />
+	</definition>
+	<definition name="hcordersissuedreport" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/HCOrdersIssuedReport.jsp" />
+	</definition>
+	<definition name="contemptcasesreport" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/ContemptCasesAbstractReport.jsp" />
+	</definition>
+	
+	
 </tiles-definitions>

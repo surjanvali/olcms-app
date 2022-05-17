@@ -93,7 +93,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id,services_flag,"
 					+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs, a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date, reg_year, reg_no, ack_type "
 					+ " from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
-					+ "left join case_type_master cm on (a.casetype=cm.sno) "
+					+ "left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
 					+ "left join (select ack_no,dm.dept_code,dm.description from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code)) gd on (a.ack_no=gd.ack_no)"
 					+ "where a.inserted_by='"+session.getAttribute("userid")
 					+"' and a.delete_status is false and ack_type='"+ackType+"' and inserted_time::date=current_date "
@@ -139,7 +139,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id,services_flag,"
 					+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs, a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date, reg_year, reg_no, ack_type "
 					+ " from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
-					+ "left join case_type_master cm on (a.casetype=cm.sno) "
+					+ "left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
 					+ "left join (select ack_no,dm.dept_code,dm.description from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code)) gd on (a.ack_no=gd.ack_no)"
 					+ "where a.inserted_by='"+session.getAttribute("userid")
 					+"' and a.delete_status is false";
@@ -236,7 +236,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 						+ "upper(trim(case_full_name)) as  case_full_name   from ecourts_gpo_ack_dtls a "
 						+ "left join district_mst dm on (a.distid=dm.district_id)"
 						//+ "left join dept depm on (a.deptid=depm.dept_id)"
-						+ "left join case_type_master cm on (a.casetype=cm.sno) where a.inserted_by='"
+						+ "left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) where a.inserted_by='"
 						+ session.getAttribute("userid") + "' and ack_no='"+ackNo+"'";
 				
 				/*
@@ -371,10 +371,10 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					if (a > 0) {
 						
 						sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
-								+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id=0 then null else services_id end as services_id,services_flag,"
+								+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag,"
 								+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs, to_char(inserted_time,'dd-mm-yyyy') as generated_date "
 								+ " from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
-								+ "left join case_type_master cm on (a.casetype=cm.sno) "
+								+ "left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
 								+ "left join (select ack_no,dm.dept_code,dm.description, respondent_slno from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code) order by ack_no, respondent_slno) gd on (a.ack_no=gd.ack_no)"
 								+ "where a.inserted_by='"+session.getAttribute("userid")
 								+"' and a.delete_status is false and a.ack_no='"+ackNo+"'"
@@ -413,12 +413,18 @@ public class GPOAcknowledgementAction extends DispatchAction {
 						
 						if(ackPath!=null && !ackPath.equals("")){
 							sql=" update ecourts_gpo_ack_dtls set ack_file_path='"+ackPath+"', barcode_file_path='"+barCodeFilePath+"' where ack_no='"+ackNo+"'";
-							DatabasePlugin.executeUpdate(sql, con);
+							System.out.println("---SQL::"+sql);
 							
+							int b =DatabasePlugin.executeUpdate(sql, con);
+							if(b > 0) {
 							request.setAttribute("successMsg",
 									"Acknowledgement details saved successfully with Ack No.:" + ackNo);
 							
 							con.commit();
+							}
+							else {
+								request.setAttribute("errorMsg", "Failed to save Data. Kindly try again.");
+							}
 						}else {
 							request.setAttribute("errorMsg", "Invalid Acknowledgement No. Kindly try again.");
 						}
@@ -637,7 +643,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 						+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id,services_flag,"
 						+ "STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description,', ') as dept_descs "
 						+ " from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
-						+ "left join case_type_master cm on (a.casetype=cm.sno) "
+						+ "left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
 						+ "left join (select ack_no,dm.dept_code,dm.description, respondent_slno from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code) order by ack_no, respondent_slno) gd on (a.ack_no=gd.ack_no)"
 						+ "where a.inserted_by='"+session.getAttribute("userid")
 						+"' and a.delete_status is false and a.ack_no='"+ackNo+"'"
@@ -916,10 +922,10 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
-					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date "
+					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_desc(a.ack_no) as dept_descs "
 					+ "from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
 					+ "left join district_mst dm on (a.distid=dm.district_id) "
-					+ "left join case_type_master cm on (a.casetype=cm.sno) "
+					+ "left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
 					+ "where a.delete_status is false and ack_type='NEW' and ad.dept_code='"+deptCode+"' "
 					+ "order by inserted_time";
 			

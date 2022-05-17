@@ -62,9 +62,9 @@ public class RegisterMLOAction extends DispatchAction {
 									con));
 
 			sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en from mlo_details a "
-					+ "inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id) "
-					+ "inner join (select distinct designation_id, designation_name_en from nic_data where substring(global_org_name,1,5)='"
-					+ deptCode.substring(0,5) + "' ) c on (a.designation=c.designation_id)" + "" + ""
+					+ " inner join (select distinct employee_id,designation_id,designation_name_en,fullname_en from nic_data) b on (a.employeeid=b.employee_id and a.designation=b.designation_id) "
+					//+ "inner join (select distinct designation_id, designation_name_en from nic_data where substring(global_org_name,1,5)='"
+					//+ deptCode.substring(0,5) + "' ) c on (a.designation=c.designation_id)" + "" + ""
 					+ "where a.user_id='" + deptCode + "'";
 			System.out.println("SQL:"+sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql,con);

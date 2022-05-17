@@ -489,7 +489,7 @@ label {
 													href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 													target="_new" title="Print Barcode"
 													class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-														<span>Scanned Doc</span> <!-- <span>Download</span> -->
+														<span>Scanned Affidavit</span> <!-- <span>Download</span> -->
 												</a> <%-- <logic:notPresent name="map" property="ack_file_path">
 														<button type="button" class="btn btn-sm btn-info"
 															onclick="downloadAck('${map.ack_no}')">
@@ -537,11 +537,12 @@ label {
 											<th>Date</th>
 											<th>District</th>
 											<th>Case Type</th>
-											<th>Main Case No.</th>
+											<!-- <th>Main Case No.</th> -->
+											<th>Departments / Respondents </th>
 											<th>Advocate CC No.</th>
 											<th>Advocate Name</th>
 
-											<th>Remarks</th>
+											<!-- <th>Remarks</th> -->
 											<th>Download / Print</th>
 										</tr>
 									</thead>
@@ -553,12 +554,12 @@ label {
 												<td nowrap="nowrap">${map.generated_date }</td>
 												<td>${map.district_name }</td>
 												<td>${map.case_full_name }</td>
-												<td>${map.maincaseno }</td>
+												<td nowrap="nowrap">${map.dept_descs }</td>
 												<td>${map.advocateccno }</td>
 												<td>${map.advocatename }</td>
 
 
-												<td>${map.remarks }</td>
+												<%-- <td>${map.remarks }</td> --%>
 												<td style="text-align: center;" nowrap="nowrap"><logic:present
 														name="map" property="ack_file_path">
 														<a href="./${map.ack_file_path}" target="_new"
@@ -574,7 +575,7 @@ label {
 													href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 													target="_new" title="Print Barcode"
 													class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-														<span>Scanned Doc</span> <!-- <span>Download</span> -->
+														<span>Scanned Affidavit</span> <!-- <span>Download</span> -->
 												</a></td>
 											</tr>
 										</logic:iterate>
@@ -587,8 +588,6 @@ label {
 											<logic:notPresent name="DISPLAYOLD">
 												<td colspan="11">
 											</logic:notPresent>
-
-
 											&nbsp;
 											</td>
 										</tR>

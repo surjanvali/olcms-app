@@ -111,16 +111,20 @@ public class NodalOfficerChangeRequestAction extends DispatchAction{
 						request.setAttribute("List_data", data);
 				
 					if(CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("MLO")){
+						
+						sql="select distinct designation_id::int4, designation_name_en from "+tableName+" where substring(global_org_name,1,5)='"
+								+ deptCode.substring(0,5)
+								+ "' order by designation_id::int4";
+						System.out.println("SQL:"+sql);
 						cform.setDynaForm(
 								"designationList",
 								DatabasePlugin
 										.getSelectBox(
-												"select distinct designation_id::int4, designation_name_en from "+tableName+" where substring(global_org_name,1,5)='"
-														+ session.getAttribute("userid")
-														+ "' order by designation_id::int4",
+												sql,
 												con));
 						
-						cform.setDynaForm("deptId", userId);
+						// cform.setDynaForm("deptId", userId);
+						cform.setDynaForm("deptId", deptCode);
 						request.setAttribute("saveAction", "INSERT");
 					}
 					else if(CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("NO")){
@@ -200,7 +204,7 @@ public class NodalOfficerChangeRequestAction extends DispatchAction{
 					int column = 0;
 
 					ps.setString(++column, (String) cform.getDynaForm("deptId"));
-					ps.setString(++column, userId);
+					ps.setString(++column, deptCode);
 					ps.setString(++column, designationId);
 					ps.setString(++column, employeeId);
 					ps.setString(++column, mobileNo);

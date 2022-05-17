@@ -162,7 +162,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases "
 					+ "from ecourts_case_data a "
 					+ "inner join dept_new d on (a.dept_code=d.dept_code) "
-					+ "where d.display = true and (reporting_dept_code='"+deptId+"' or a.dept_code='"+deptId+"') "
+					+ "where d.display = true and (d.reporting_dept_code='"+deptId+"' or a.dept_code='"+deptId+"') "
 					+ "group by a.dept_code , d.description order by 1";
 			
 
@@ -264,11 +264,12 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			sql="select a.*, b.orderpaths from ecourts_case_data a left join" + " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from "
-					+ " ((select cino, order_document_path,order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 order by sr_no)" + " union"
-					+ " (select cino, order_document_path,order_details from ecourts_case_finalorder where order_document_path is not null"
+					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1"
+					+ " union"
+					+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
 					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 order by sr_no)) c group by cino ) b"
+					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
 					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) where d.display = true ";
 			
 			sql+=" and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') "+sqlCondition;

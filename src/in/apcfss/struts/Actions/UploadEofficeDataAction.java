@@ -66,7 +66,7 @@ public class UploadEofficeDataAction extends DispatchAction {
 			/*File file = new File(cForm.getChangeLetter().getInputStream());
 			FileReader readfile =  new FileReader(file);*/
 			
-			SimpleDateFormat sdf = new SimpleDateFormat("MMyyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 			Date d1 = new Date();
 			String mmyyyy = sdf.format(d1);
 			
@@ -120,11 +120,11 @@ public class UploadEofficeDataAction extends DispatchAction {
 			
 			sql="alter table "+tableName+" rename to "+tableNameBkp;
 			System.out.println("ALTER TO BKP QUERY:"+sql);
-			//DatabasePlugin.executeUpdate(sql, con);
+			DatabasePlugin.executeUpdate(sql, con);
 			
 			sql="alter table "+tableNameNew+" rename to "+tableName;
 			System.out.println("ALTER NEW TABLE:"+sql);
-			//DatabasePlugin.executeUpdate(sql, con);
+			DatabasePlugin.executeUpdate(sql, con);
 			
 			request.setAttribute("successMsg", c+" records data saved to table "+tableName);
 			con.commit();
