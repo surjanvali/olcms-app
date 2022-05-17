@@ -25,7 +25,8 @@ public class ApproveOfficerChangeRequest {
 
 			sql = "SELECT user_id, dept_id, designation, employeeid, mobileno, emailid, aadharno, change_reasons, change_letter_path, change_req_approved, "
 					+ " inserted_by, inserted_ip, inserted_time, updated_by, updated_ip, updated_time, officer_type, slno, dist_id "
-					+ " FROM apolcms.nodal_officer_change_requests where change_req_approved is false and officer_type='NO' and dept_id='REV02'";
+					+ " FROM apolcms.nodal_officer_change_requests where change_req_approved is false and officer_type='NO' and inserted_by='SOW01'";//and officer_type='NO' and dept_id='REV02'";
+			
 			System.out.println("SQL:"+sql);
 			
 			st = con.createStatement();
@@ -77,7 +78,7 @@ public class ApproveOfficerChangeRequest {
 					sql = "insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id , dept_code, user_type) "
 							+ "select a.emailid, md5('olcms@2021'), b.fullname_en, '" + deptCode
 							+ "', now(), null, dm.dept_id,'" + deptCode
-							+ "', '4'  from mlo_details a inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id)"
+							+ "', '4'  from mlo_details a inner join (select distinct employee_id,fullname_en,designation_id from nic_data) b on (a.employeeid=b.employee_id and a.designation=b.designation_id)"
 							+ " left join dept_new dm on (dm.dept_code='"+deptCode+"') "
 							+ "where employeeid='" + rs.getString("employeeid") + "'";
 					
@@ -125,7 +126,7 @@ public class ApproveOfficerChangeRequest {
 					sql = "insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id , dept_code, user_type, dist_id) "
 							+ "select a.emailid, md5('olcms@2021'), b.fullname_en, '" + deptCode
 							+ "', now(), null, dm.dept_id,'" + deptCode
-							+ "', '"+userRole+"', dist_id from nodal_officer_details a inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id)"
+							+ "', '"+userRole+"', dist_id from nodal_officer_details a inner join (select distinct employee_id,fullname_en,designation_id from nic_data) b on (a.employeeid=b.employee_id and a.designation=b.designation_id)"
 							+ " left join dept_new dm on (dm.dept_code='"+deptCode+"') "
 							+ "where employeeid='" + rs.getString("employeeid") + "'";
 					
