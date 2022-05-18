@@ -58,28 +58,30 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<thead>
 								<tr>
 									<th>Sl.No</th>
-									<th>Sect. Department Code</th>
+									<!-- <th>Sect. Department Code</th> -->
 									<th>Sect. Department Name</th>
-									<th>Total Cases</th> </tr>
+									<th>Total Cases</th>
+								</tr>
 							</thead>
 							<tbody>
 								<bean:define id="Totals" value="0"></bean:define>
 								<logic:iterate id="map" name="secdeptwise" indexId="i">
 									<tr>
 										<td>${i+1 }</td>
-										<td>${map.deptcode }</td>
-										<td><a
-											href="javascript:ShowHODWise('${map.deptcode}','${map.description }');">${map.description }</a></td>
-										<td style="text-align: right;"><a
+										<%-- <td>${map.deptcode }</td> --%>
+										<td>${map.description } <%-- <a
+											href="javascript:ShowHODWise('${map.deptcode}','${map.description }');">${map.description }</a> --%></td>
+										<%-- <td style="text-align: right;"><a
 											href="javascript:showCasesWise('${map.deptcode}','${map.description }','ALL');">${map.total_cases }</a></td>
-
+ --%>
+										<td style="text-align: right;">${map.total_cases }</td>
 									</tr>
 									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
 								</logic:iterate>
 							</tbody>
 							<tfoot>
 								<tR>
-									<td colspan="3">Totals</td>
+									<td colspan="2">Totals</td>
 									<td colspan="1" style="text-align: right;">${Totals }</td>
 								</tR>
 							</tfoot>
@@ -96,7 +98,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Department Code</th>
 									<th>Department Name</th>
 									<th>Total Cases</th>
-
 									<th>Petition Uploaded</th>
 									<th>Closed</th>
 									<th>Counter filed</th>

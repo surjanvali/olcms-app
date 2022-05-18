@@ -5,6 +5,7 @@ import in.apcfss.struts.commons.CommonModels;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.apache.struts.util.LabelValueBean;
 
 import plugins.DatabasePlugin;
 
@@ -25,7 +27,8 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql = null;
+		String userId = null, roleId = null, sql = null, sqlCondition="";
+		CommonForm cform = (CommonForm) form;
 		try {
 			System.out.println("heiii");
 			session = request.getSession();
@@ -43,6 +46,33 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			else //if(roleId.equals("3") || roleId.equals("4"))
 			{
 			con = DatabasePlugin.connect();
+			
+			if (cform.getDynaForm("dofFromDate") != null
+					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
+				sqlCondition += " and a.date_of_filing >= to_date('" + cform.getDynaForm("dofFromDate")
+						+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("dofToDate") != null
+					&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
+				sqlCondition += " and a.date_of_filing <= to_date('" + cform.getDynaForm("dofToDate")
+						+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
+					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
+				sqlCondition += " and trim(a.type_name_reg)='" + cform.getDynaForm("caseTypeId").toString().trim() + "' ";
+			}
+			if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
+					&& !cform.getDynaForm("districtId").toString().contentEquals("0")) {
+				sqlCondition += " and a.dist_id='" + cform.getDynaForm("districtId").toString().trim() + "' ";
+			}
+			if (!CommonModels.checkStringObject(cform.getDynaForm("regYear")).equals("ALL") && CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
+				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
+			}
+			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
+					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
+				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+			}
+			
 
 			sql="select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases  from ("
 					+ "select a.dept_code , case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,count(*) as total_cases, "
@@ -59,7 +89,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases "
 					+ "from ecourts_case_data a "
 					+ "inner join dept_new d on (a.dept_code=d.dept_code) "
-					+ "where d.display = true ";
+					+ "where d.display = true "+sqlCondition;
 				
 			
 			if(roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
@@ -83,6 +113,30 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
 			e.printStackTrace();
 		} finally {
+			cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+					"select district_id,upper(district_name) from district_mst order by 1",
+					con));
+			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+					con));
+			cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox(
+					"select case_short_name,case_full_name from case_type_master order by sno",
+					con));
+			ArrayList selectData = new ArrayList();
+			for(int i=2022; i > 1980; i--) {
+				selectData.add(new LabelValueBean(i+"",i+""));
+			}
+			cform.setDynaForm("yearsList", selectData);
+			
+			cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate"));
+			cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate"));
+			cform.setDynaForm("caseTypeId", cform.getDynaForm("caseTypeId"));
+			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
+			cform.setDynaForm("regYear", cform.getDynaForm("regYear"));
+			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
+			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
+			
 			DatabasePlugin.closeConnection(con);
 		}
 		return mapping.findForward("success");
@@ -93,7 +147,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 		Connection con = null;
 		HttpSession session = null;
 		CommonForm cform = (CommonForm) form;
-		String userId = null, roleId = null, sql = null, deptId = null, deptName="";
+		String userId = null, roleId = null, sql = null, deptId = null, deptName="",sqlCondition="";
 		try {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
@@ -113,40 +167,31 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 				deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"));
 				deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
 			}
-			String dept = deptId.substring(0, 3);
-
-			sql = "select sdeptcode,deptcode,description,count(*) as total_cases"
-					+ ", sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept"
-					+ ", sum(case when (case_status is null or case_status=2) and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withmlo"
-					+ ", sum(case when case_status=3 and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withhod"
-					+ ", sum(case when case_status=4 and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withnodal"
-					+ ", sum(case when case_status=5 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsection"
-					+ ", sum(case when case_status=7 and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdc"
-					+ ", sum(case when case_status=8 and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdistno"
-					+ ", sum(case when case_status=9 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectionhod"
-					+ ", sum(case when case_status=10 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectiondist"
-					+ ", sum(case when case_status=6 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withgpo"
-					+ ", sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases"
-					+ " from ecourts_case_data"
-					+ " inner join dept on (sdeptcode||deptcode=dept_code) where substr(dept_code,1,3)='" + dept + "' "
-					+ " group by sdeptcode,deptcode,dept_code,description" + " order by sdeptcode,deptcode";
-			
-			sql="select a.dept_code as deptcode , upper(d.description) as description,count(*) as total_cases, "
-					+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
-					+ "sum(case when (case_status is null or case_status=2) and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withmlo, "
-					+ "sum(case when case_status=3 and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withhod, "
-					+ "sum(case when case_status=4 and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withnodal, "
-					+ "sum(case when case_status=5 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsection, "
-					+ "sum(case when case_status=7 and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdc, "
-					+ "sum(case when case_status=8 and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdistno, "
-					+ "sum(case when case_status=9 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectionhod, "
-					+ "sum(case when case_status=10 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectiondist, "
-					+ "sum(case when case_status=6 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withgpo, "
-					+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases "
-					+ "from ecourts_case_data a "
-					+ "inner join dept_new d on (a.dept_code=d.dept_code) "
-					+ "where d.display = true and (reporting_dept_code='"+deptId+"' or a.dept_code='"+deptId+"') "
-					+ "group by a.dept_code , d.description order by 1";
+			if (cform.getDynaForm("dofFromDate") != null
+					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
+				sqlCondition += " and a.date_of_filing >= to_date('" + cform.getDynaForm("dofFromDate")
+						+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("dofToDate") != null
+					&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
+				sqlCondition += " and a.date_of_filing <= to_date('" + cform.getDynaForm("dofToDate")
+						+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
+					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
+				sqlCondition += " and trim(a.type_name_reg)='" + cform.getDynaForm("caseTypeId").toString().trim() + "' ";
+			}
+			if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
+					&& !cform.getDynaForm("districtId").toString().contentEquals("0")) {
+				sqlCondition += " and a.dist_id='" + cform.getDynaForm("districtId").toString().trim() + "' ";
+			}
+			if (!CommonModels.checkStringObject(cform.getDynaForm("regYear")).equals("ALL") && CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
+				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
+			}
+			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
+					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
+				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+			}
 			
 			sql="select a.dept_code as deptcode , upper(d.description) as description,count(*) as total_cases, "
 					+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
@@ -162,7 +207,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases "
 					+ "from ecourts_case_data a "
 					+ "inner join dept_new d on (a.dept_code=d.dept_code) "
-					+ "where d.display = true and (d.reporting_dept_code='"+deptId+"' or a.dept_code='"+deptId+"') "
+					+ "where d.display = true and (d.reporting_dept_code='"+deptId+"' or a.dept_code='"+deptId+"') "+sqlCondition
 					+ "group by a.dept_code , d.description order by 1";
 			
 
@@ -178,6 +223,30 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
 			e.printStackTrace();
 		} finally {
+			cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+					"select district_id,upper(district_name) from district_mst order by 1",
+					con));
+			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+					con));
+			cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox(
+					"select case_short_name,case_full_name from case_type_master order by sno",
+					con));
+			ArrayList selectData = new ArrayList();
+			for(int i=2022; i > 1980; i--) {
+				selectData.add(new LabelValueBean(i+"",i+""));
+			}
+			cform.setDynaForm("yearsList", selectData);
+			
+			cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate"));
+			cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate"));
+			cform.setDynaForm("caseTypeId", cform.getDynaForm("caseTypeId"));
+			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
+			cform.setDynaForm("regYear", cform.getDynaForm("regYear"));
+			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
+			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
+			
 			DatabasePlugin.closeConnection(con);
 		}
 		return mapping.findForward("success");
@@ -255,6 +324,33 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 				}
 			}
 			
+			if (cform.getDynaForm("dofFromDate") != null
+					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
+				sqlCondition += " and a.date_of_filing >= to_date('" + cform.getDynaForm("dofFromDate")
+						+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("dofToDate") != null
+					&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
+				sqlCondition += " and a.date_of_filing <= to_date('" + cform.getDynaForm("dofToDate")
+						+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
+					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
+				sqlCondition += " and trim(a.type_name_reg)='" + cform.getDynaForm("caseTypeId").toString().trim() + "' ";
+			}
+			if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
+					&& !cform.getDynaForm("districtId").toString().contentEquals("0")) {
+				sqlCondition += " and a.dist_id='" + cform.getDynaForm("districtId").toString().trim() + "' ";
+			}
+			if (!CommonModels.checkStringObject(cform.getDynaForm("regYear")).equals("ALL") && CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
+				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
+			}
+			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
+					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
+				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+			}
+			
+			
 			
 			if(actionType.equals("SDWISE")) {
 			}
@@ -287,11 +383,33 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			saveToken(request);
-			DatabasePlugin.close(con, ps, null);
+			cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+					"select district_id,upper(district_name) from district_mst order by 1",
+					con));
+			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+					con));
+			cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox(
+					"select case_short_name,case_full_name from case_type_master order by sno",
+					con));
+			ArrayList selectData = new ArrayList();
+			for(int i=2022; i > 1980; i--) {
+				selectData.add(new LabelValueBean(i+"",i+""));
+			}
+			cform.setDynaForm("yearsList", selectData);
+			
+			cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate"));
+			cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate"));
+			cform.setDynaForm("caseTypeId", cform.getDynaForm("caseTypeId"));
+			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
+			cform.setDynaForm("regYear", cform.getDynaForm("regYear"));
+			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
+			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
+			
+			DatabasePlugin.closeConnection(con);
 		}
 
 		return mapping.findForward("success");
 	}
-	
 }

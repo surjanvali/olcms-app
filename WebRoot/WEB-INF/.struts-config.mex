@@ -39,6 +39,9 @@
   <StrutsActivity path="/UploadEofficeData.do" location="2750,1850" dimension="296,96" />
   <StrutsActivity path="/SearchCase.do" location="2750,2550" dimension="258,96" />
   <StrutsActivity path="/AcksReport.do" location="1550,3050" dimension="300,96" />
+  <StrutsActivity path="/AcksAbstractReport.do" location="50,3150" dimension="339,96" />
+  <StrutsActivity path="/HCCaseDocsUploadAbstract.do" location="2450,3150" dimension="377,96" />
+  <StrutsActivity path="/HCOrdersIssuedReport.do" location="950,3250" dimension="280,96" />
   <StrutsActivity path="Login;6" location="350,1750" dimension="92,81" />
   <StrutsActivity path="Logout;6" location="50,650" dimension="203,87" />
   <StrutsActivity path="Welcome;6" location="950,1450" dimension="107,81" />
@@ -86,6 +89,9 @@
   <StrutsActivity path="uploadeofficedata" location="2750,2350" dimension="126,51" />
   <StrutsActivity path="searchcase" location="2750,2950" dimension="87,51" />
   <StrutsActivity path="acksreport" location="650,3550" dimension="85,51" />
+  <StrutsActivity path="acksabstract" location="2150,3050" dimension="95,51" />
+  <StrutsActivity path="hccasedocsupload" location="650,3150" dimension="128,51" />
+  <StrutsActivity path="hcordersissuedreport" location="950,3750" dimension="141,51" />
   <StrutsActivity path="districtreport" location="2150,2650" dimension="98,51" />
   <StrutsActivity path="benchreport" location="50,2750" dimension="95,51" />
   <StrutsActivity path="HomePage;6" location="950,1050" dimension="116,81" />
@@ -108,14 +114,8 @@
   <StrutsActivity path="/jsp/registration/AssignCase.jsp" location="50,2150" dimension="198,51" />
   <StrutsActivity path="closedcasesreport" location="2450,2350" dimension="124,51" />
   <StrutsActivity path="mlologinstatusreport" location="650,2950" dimension="141,51" />
-  <StrutsActivity path="/AcksAbstractReport.do" location="50,3150" dimension="339,96" />
-  <StrutsActivity path="/HCCaseDocsUploadAbstract.do" location="2150,3150" dimension="377,96" />
-  <StrutsActivity path="/HCOrdersIssuedReport.do" location="2750,3150" dimension="280,96" />
-  <StrutsActivity path="/ContemptCasesAbstract.do" location="650,3250" dimension="323,96" />
-  <StrutsActivity path="acksabstract" location="1250,3250" dimension="95,51" />
-  <StrutsActivity path="hccasedocsupload" location="1550,3250" dimension="128,51" />
-  <StrutsActivity path="hcordersissuedreport" location="1850,3250" dimension="141,51" />
-  <StrutsActivity path="contemptcasesreport" location="50,3350" dimension="142,51" />
+  <StrutsActivity path="/ContemptCasesAbstract.do" location="1550,3250" dimension="279,96" />
+  <StrutsActivity path="contemptcasesreport" location="2150,3250" dimension="142,51" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,595" />
@@ -156,9 +156,8 @@
   </StrutsTransition>
   <StrutsTransition id="/HCCaseDocsUploadAbstract.do,success,hccasedocsupload,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="2150,3198" />
-      <AbsolutePoint location="1614,3198" />
-      <AbsolutePoint location="1614,3250" />
+      <AbsolutePoint location="2450,3175" />
+      <AbsolutePoint location="778,3175" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/DeptMaster.do,success,deptMaster,1" routingType="0">
@@ -177,9 +176,8 @@
   </StrutsTransition>
   <StrutsTransition id="/HCOrdersIssuedReport.do,success,hcordersissuedreport,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="2890,3246" />
-      <AbsolutePoint location="2890,3275" />
-      <AbsolutePoint location="1991,3275" />
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="0,0" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/HighCourtCasesAssignedList.do,success,assignedhccases,1" routingType="0">
@@ -302,6 +300,14 @@
       <AbsolutePoint location="93,2401" />
     </AutomaticBendpoints>
   </StrutsTransition>
+  <StrutsTransition id="/HCContemptCasesAbstract.do,success,hccasedocsupload,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1738,3346" />
+      <AbsolutePoint location="1738,3451" />
+      <AbsolutePoint location="714,3451" />
+      <AbsolutePoint location="714,3201" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
   <StrutsTransition id="/CaseRegistration.do,success,caseRegForm,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1993,1246" />
@@ -319,9 +325,8 @@
   </StrutsTransition>
   <StrutsTransition id="/ContemptCasesAbstract.do,success,contemptcasesreport,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="650,3298" />
-      <AbsolutePoint location="121,3298" />
-      <AbsolutePoint location="121,3350" />
+      <AbsolutePoint location="1829,3275" />
+      <AbsolutePoint location="2150,3275" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/SearchCase.do,success,searchcase,1" routingType="0">
@@ -515,19 +520,19 @@
       <AbsolutePoint location="1639,2175" />
     </AutomaticBendpoints>
   </StrutsTransition>
+  <StrutsTransition id="/AcksAbstractReport.do,success,acksabstract,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="389,3216" />
+      <AbsolutePoint location="2197,3216" />
+      <AbsolutePoint location="2197,3101" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
   <StrutsTransition id="InvalidAccess;6,null,/Logout.do,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1067,1690" />
       <AbsolutePoint location="1145,1690" />
       <AbsolutePoint location="1145,132" />
       <AbsolutePoint location="1850,132" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
-  <StrutsTransition id="/AcksAbstractReport.do,success,acksabstract,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="389,3198" />
-      <AbsolutePoint location="1297,3198" />
-      <AbsolutePoint location="1297,3250" />
     </AutomaticBendpoints>
   </StrutsTransition>
 </FlowViewLayout>

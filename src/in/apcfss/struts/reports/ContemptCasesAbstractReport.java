@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 
+import in.apcfss.struts.Forms.CommonForm;
 import in.apcfss.struts.commons.CommonModels;
 import plugins.DatabasePlugin;
 
@@ -34,7 +35,7 @@ public class ContemptCasesAbstractReport extends DispatchAction{
 			else //if(roleId.equals("3") || roleId.equals("4"))
 			{
 			con = DatabasePlugin.connect();
-				
+				/*
 				sql="select a1.reporting_dept_code as deptcode,dn1.description,sum(total_cases) as  total_cases, sum(petition_uploaded) as petition_uploaded,sum(closed_cases) as closed_cases, "
 						+ " sum(counter_uploaded) as counter_uploaded, sum(pwrcounter_uploaded) as pwrcounter_uploaded,sum(counter_approved_gp) as counter_approved_gp "
 						+ " from ( "
@@ -43,7 +44,6 @@ public class ContemptCasesAbstractReport extends DispatchAction{
 						+ " , sum(case when a.ecourts_case_status='Pending' and pwr_uploaded_copy is not null then 1 else 0 end) as pwrcounter_uploaded "
 						+ " , sum(case when counter_approved_gp='Yes' then 1 else 0 end) as counter_approved_gp from ecourts_case_data a "
 						+ " left join apolcms.ecourts_olcms_case_details b using (cino)inner join dept_new dn on (a.dept_code=dn.dept_code) ";
-						
 
 						if(roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
 							sql+=" and (dn.reporting_dept_code='"+session.getAttribute("dept_code")+"' or dn.dept_code='"+session.getAttribute("dept_code")+"')";
@@ -53,11 +53,11 @@ public class ContemptCasesAbstractReport extends DispatchAction{
 						
 						+ " inner join dept_new dn1 on (a1.reporting_dept_code=dn1.dept_code) "
 						+ " group by a1.reporting_dept_code,dn1.description"
-						+ " order by 1";
+						+ " order by 1"; */
 						
-						sql="select c.dept_code as deptcode,d.description,count(distinct cino) as total_cases from ecourts_contempt_cinos c left join dept_new d on (c.dept_code=d.dept_code) group by c.dept_code,d.description order by 1";
+				 sql="select c.dept_code as deptcode,d.description,count(distinct cino) as total_cases from ecourts_contempt_cinos c left join dept_new d on (c.dept_code=d.dept_code) group by c.dept_code,d.description order by 1";
 
-			request.setAttribute("HEADING", "Sect. Dept. Wise Documents Uploads Abstract Report");
+			request.setAttribute("HEADING", "Dept. Wise Contempt Cases Report");
 
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -75,4 +75,5 @@ public class ContemptCasesAbstractReport extends DispatchAction{
 		}
 		return mapping.findForward("success");
 	}
+	
 }

@@ -64,7 +64,7 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 						+ " group by a1.reporting_dept_code,dn1.description"
 						+ " order by 1";
 
-			request.setAttribute("HEADING", "Sect. Dept. Wise Documents Uploads Abstract Report");
+			request.setAttribute("HEADING", "Sect. Dept. Wise Case processing Abstract Report");
 
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -124,7 +124,7 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 					// + "where dn.reporting_dept_code='AGC01' or a.dept_code='AGC01' "
 					+ "group by a.dept_code,dn.description order by 1";
 
-			request.setAttribute("HEADING", "HOD Wise Documents Uploads Abstract for " + deptName);
+			request.setAttribute("HEADING", "HOD Wise Case processing Abstract for " + deptName);
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			System.out.println("data=" + data);
@@ -189,7 +189,6 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 				}
 			}
 			
-			
 			if(actionType.equals("SDWISE")) {
 			}
 			else if(actionType.equals("HODWISE")) {
@@ -230,5 +229,4 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 
 		return mapping.findForward("success");
 	}
-	
 }
