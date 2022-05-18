@@ -25,7 +25,9 @@ public class ApproveOfficerChangeRequest {
 
 			sql = "SELECT user_id, dept_id, designation, employeeid, mobileno, emailid, aadharno, change_reasons, change_letter_path, change_req_approved, "
 					+ " inserted_by, inserted_ip, inserted_time, updated_by, updated_ip, updated_time, officer_type, slno, dist_id "
-					+ " FROM apolcms.nodal_officer_change_requests where change_req_approved is false and officer_type='MLO' and dept_id='REV01'";//and officer_type='NO' and dept_id='REV02'";
+					+ " FROM apolcms.nodal_officer_change_requests where "
+					+ " change_req_approved is false and "
+					+ " officer_type='MLO' and dept_id='REV01'";//and officer_type='NO' and dept_id='REV02'";
 			
 			System.out.println("SQL:"+sql);
 			
@@ -51,11 +53,11 @@ public class ApproveOfficerChangeRequest {
 					
 					sql="insert into mlo_details_deleted(deleted_by, deleted_ip, deleted_time, slno, user_id, designation, employeeid, mobileno, emailid, aadharno, inserted_by, inserted_ip, inserted_time, updated_by, updated_ip, updated_time)"
 							+ " SELECT '"+deptCode+"','"+rs.getString("inserted_ip")+"', now(),slno, user_id, designation, employeeid, mobileno, emailid, aadharno, inserted_by, inserted_ip, inserted_time, updated_by, updated_ip, updated_time "
-							+ " FROM apolcms.mlo_details where inserted_by='"+deptCode+"'";
+							+ " FROM apolcms.mlo_details where user_id='"+deptCode+"'";
 					System.out.println("SQL:" + sql);
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
-					String existingId = DatabasePlugin.getSingleValue(con, "select emailid FROM apolcms.mlo_details where inserted_by='"+deptCode+"'");
+					String existingId = DatabasePlugin.getSingleValue(con, "select emailid FROM apolcms.mlo_details where user_id='"+deptCode+"'");
 					System.out.println("existingId:"+existingId);	
 					
 					sql="delete from user_roles where userid='"+existingId+"'";
@@ -66,12 +68,12 @@ public class ApproveOfficerChangeRequest {
 					System.out.println("SQL:" + sql);
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
-					sql="delete from mlo_details where inserted_by='"+deptCode+"'";
+					sql="delete from mlo_details where user_id='"+deptCode+"'";
 					System.out.println("SQL:" + sql);
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
 					sql="insert into mlo_details(user_id, designation, employeeid, mobileno, emailid, aadharno, inserted_by, inserted_ip) "
-							+ " select user_id, designation, employeeid, mobileno, emailid, aadharno, inserted_by, inserted_ip from nodal_officer_change_requests where inserted_by='"+deptCode+"' and change_req_approved is false and officer_type='MLO'";
+							+ " select user_id, designation, employeeid, mobileno, emailid, aadharno, inserted_by, inserted_ip from nodal_officer_change_requests where user_id='"+deptCode+"' and change_req_approved is false and officer_type='MLO'";
 					System.out.println("SQL:" + sql);
 					a += DatabasePlugin.executeUpdate(sql, con);
 					

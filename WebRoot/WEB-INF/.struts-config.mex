@@ -42,6 +42,7 @@
   <StrutsActivity path="/AcksAbstractReport.do" location="50,3150" dimension="339,96" />
   <StrutsActivity path="/HCCaseDocsUploadAbstract.do" location="2450,3150" dimension="377,96" />
   <StrutsActivity path="/HCOrdersIssuedReport.do" location="950,3250" dimension="280,96" />
+  <StrutsActivity path="/ContemptCasesAbstract.do" location="650,3250" dimension="323,96" />
   <StrutsActivity path="Login;6" location="350,1750" dimension="92,81" />
   <StrutsActivity path="Logout;6" location="50,650" dimension="203,87" />
   <StrutsActivity path="Welcome;6" location="950,1450" dimension="107,81" />
@@ -92,6 +93,7 @@
   <StrutsActivity path="acksabstract" location="2150,3050" dimension="95,51" />
   <StrutsActivity path="hccasedocsupload" location="650,3150" dimension="128,51" />
   <StrutsActivity path="hcordersissuedreport" location="950,3750" dimension="141,51" />
+    <StrutsActivity path="contemptcasesreport" location="50,3350" dimension="142,51" />
   <StrutsActivity path="districtreport" location="2150,2650" dimension="98,51" />
   <StrutsActivity path="benchreport" location="50,2750" dimension="95,51" />
   <StrutsActivity path="HomePage;6" location="950,1050" dimension="116,81" />
