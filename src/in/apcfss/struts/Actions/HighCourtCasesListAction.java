@@ -343,7 +343,7 @@ public class HighCourtCasesListAction extends DispatchAction {
 						sql = "insert into section_officer_details (emailid, dept_id,designation,employeeid,mobileno,aadharno,inserted_by,inserted_ip) "
 								+ "select distinct b.email,d.sdeptcode||d.deptcode,b.designation_id,b.employee_id,b.mobile1,uid, '"
 								+ (String) session.getAttribute("userid") + "', '" + request.getRemoteAddr()
-								+ "'::inet from nic_data b inner join dept d on (d.sdeptcode||d.deptcode='"
+								+ "'::inet from nic_data b inner join dept_new d on (d.dept_code='"
 								+ cform.getDynaForm("empDept") + "') where b.employee_id='"+ cform.getDynaForm("employeeId") + "'";
 						
 						b+=DatabasePlugin.executeUpdate(sql, con);
@@ -351,7 +351,7 @@ public class HighCourtCasesListAction extends DispatchAction {
 						
 						sql="insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id, dept_code) " +
 								"select distinct b.email, md5('olcms@2021'), b.fullname_en, '"+(String) session.getAttribute("userid")
-								+"', now(),'"+request.getRemoteAddr() +"'::inet, d.dept_id,d.sdeptcode||d.deptcode from nic_data b inner join dept d on (d.sdeptcode||d.deptcode='"+cform.getDynaForm("empDept")
+								+"', now(),'"+request.getRemoteAddr() +"'::inet, d.dept_id,d.dept_code from nic_data b inner join dept_new d on (d.dept_code='"+cform.getDynaForm("empDept")
 								+"') where b.employee_id='"+cform.getDynaForm("employeeId")+"' ";
 						
 						System.out.println("SQL:"+sql);
@@ -572,9 +572,9 @@ public class HighCourtCasesListAction extends DispatchAction {
 					sql = "insert into section_officer_details (emailid, dept_id,designation,employeeid,mobileno,aadharno,inserted_by,inserted_ip, dist_id) "
 							+ "select distinct b.email,d.sdeptcode||d.deptcode,b.designation_id,b.employee_id,b.mobile1,uid, '"
 							+ (String) session.getAttribute("userid") + "', '" + request.getRemoteAddr()
-							+ "'::inet,"+distCode+" from "+tableName+" b inner join dept d on (d.sdeptcode||d.deptcode='"
+							+ "'::inet,"+distCode+" from "+tableName+" b inner join dept_new d on (d.dept_code='"
 							+ cform.getDynaForm("empDept") + "') where b.employee_id='"+ cform.getDynaForm("employeeId") + "'";
-					
+					System.out.println("NEW SECTION OFFICER CREATION SQL:"+sql);
 					b += DatabasePlugin.executeUpdate(sql, con);
 					
 					sql="insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id, dept_code, user_type, dist_id) " +
@@ -677,11 +677,11 @@ public class HighCourtCasesListAction extends DispatchAction {
 					selectedCaseIds = selectedCaseIds.substring(0,selectedCaseIds.length()-1);
 				}
 				String successMsg="";
-				String assign2deptId = DatabasePlugin.getStringfromQuery("select dept_id from dept where sdeptcode||deptcode='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))+"'", con);
+				String assign2deptId = DatabasePlugin.getStringfromQuery("select dept_id from dept_new where dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))+"'", con);
 				
 				if(officerType.equals("DC")) {
 					
-					sql = "update ecourts_case_data set dept_id='"+assign2deptId+"', dist_id='"+CommonModels.checkIntObject(cform.getDynaForm("caseDist"))
+					sql = "update ecourts_case_data set dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))+"', dept_id='"+assign2deptId+"', dist_id='"+CommonModels.checkIntObject(cform.getDynaForm("caseDist"))
 					// +"',dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))
 					+"',case_status=7  where cino in (" + selectedCaseIds + ") ";
 					successMsg = "Case/Cases successfully moved to selected District Collector Login";

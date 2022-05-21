@@ -5,7 +5,6 @@
 	<data-sources>
 		<data-source key="dbsource" type="org.apache.commons.dbcp.BasicDataSource">
 			<set-property property="driverClassName" value="org.postgresql.Driver" />
-
 			<!-- Live -->
 			<!-- <set-property property="url" value="jdbc:postgresql://10.96.54.54:6432/apolcms" /> 
 			<set-property property="username" value="apolcms" /> 

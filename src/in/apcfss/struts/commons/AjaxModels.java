@@ -359,8 +359,22 @@ public class AjaxModels extends DispatchAction {
 						} else {
 							// out.println("Error occurred. Pls Login and try again.");
 						}
+					}else if(CommonModels.checkStringObject(request.getSession().getAttribute("role_id")).equals("2")) {
+						sql = "select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code";
+						System.out.println(deptCode + ":getEmpsList :sql" + sql);
+						ps = con.prepareStatement(sql);
+						rs = ps.executeQuery();
+						if (rs != null) {
+							out.println("<option value='0'>---SELECT---</option>");
+							while (rs.next()) {
+								out.println("<option value='" + rs.getString(1) + "'>" + rs.getString(2) + "</option>");
+							}
+						} else {
+							// out.println("Error occurred. Pls Login and try again.");
+						}
 					}
 				}
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

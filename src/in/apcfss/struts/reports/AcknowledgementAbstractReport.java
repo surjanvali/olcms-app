@@ -28,19 +28,25 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
 		HttpSession session = request.getSession();
-		String sql = null, roleId = null, deptCode = null;
+		String sql = null, roleId = null, deptCode = null, distCode="0";
 		try {
 			if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 				return mapping.findForward("Logout");
 			}
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			
 			con = DatabasePlugin.connect();
 
-			cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+			if (roleId.equals("2"))
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+						"select district_id,upper(district_name) from district_mst where district_id='"+distCode+"' order by district_name", con));
+			else 
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 					"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7"))
+			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
@@ -56,7 +62,8 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			saveToken(request);
 			DatabasePlugin.close(con, ps, null);
 		}
-		return mapping.findForward("success");
+		// return mapping.findForward("success");
+		return showDeptWise(mapping, cform, request, response);
 	}
 
 	public ActionForward showDistWise(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -67,13 +74,15 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
 		HttpSession session = request.getSession();
-		String sql = null, roleId = null, deptCode = null;
+		String sql = null, roleId = null, deptCode = null, distCode="0";
 		try {
 			if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 				return mapping.findForward("Logout");
 			}
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			
 			String sqlCondition = "";
 			con = DatabasePlugin.connect();
 
@@ -96,8 +105,13 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 						+ "','dd-mm-yyyy') ";
 			}
 
-			if (!(roleId.equals("1") || roleId.equals("7"))) {
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2"))) {
 					sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='"+deptCode+"') ";
+			}
+			
+			if (roleId.equals("2")) {
+				sqlCondition += " and ad.distid='" + distCode + "' ";
+				cform.setDynaForm("districtId", distCode);
 			}
 				
 			sql = "select distid,district_name,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad "
@@ -116,10 +130,14 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				request.setAttribute("errorMsg", "No details found.");
 			}
 
-			cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+			if (roleId.equals("2"))
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+						"select district_id,upper(district_name) from district_mst where district_id='"+distCode+"' order by district_name", con));
+			else 
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 					"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7"))
+			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
@@ -148,13 +166,15 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
 		HttpSession session = request.getSession();
-		String sql = null, roleId = null, deptCode = null;
+		String sql = null, roleId = null, deptCode = null, distCode="0";
 		try {
 			if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 				return mapping.findForward("Logout");
 			}
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			
 			String sqlCondition = "";
 			con = DatabasePlugin.connect();
 
@@ -177,11 +197,16 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 						+ "','dd-mm-yyyy') ";
 			}
 			
-			if (!(roleId.equals("1") || roleId.equals("7"))) {
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2"))) {
 					sqlCondition += " and (dm.dept_code='" + deptCode + "' or dm.reporting_dept_code='"+deptCode+"') ";
 			}
+			
+			if (roleId.equals("2")) {
+				sqlCondition += " and ad.distid='" + distCode + "' ";
+				cform.setDynaForm("districtId", distCode);
+			}
 
-			sql = "select d.dept_code,description,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad  inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) "
+			sql = "select d.dept_code,upper(description) as description,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad  inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) "
 					+ "inner join dept_new dm on (d.dept_code=dm.dept_code)"
 					+ " where ack_type='NEW' and respondent_slno=1 " + sqlCondition
 					+ " group by d.dept_code,description " + " order by d.dept_code,description";
@@ -196,10 +221,14 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				request.setAttribute("errorMsg", "No details found.");
 			}
 
-			cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+			if (roleId.equals("2"))
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+						"select district_id,upper(district_name) from district_mst where district_id='"+distCode+"' order by district_name", con));
+			else 
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 					"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7"))
+			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
@@ -227,13 +256,15 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
 		HttpSession session = request.getSession();
-		String sql = null, roleId = null, deptCode = null;
+		String sql = null, roleId = null, deptCode = null, distCode="0";
 		try {
 			if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 				return mapping.findForward("Logout");
 			}
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			
 			String sqlCondition = "";
 			con = DatabasePlugin.connect();
 
@@ -282,9 +313,15 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("toDate", request.getParameter("toDate"));
 			}
 
-			if (!(roleId.equals("1") || roleId.equals("7"))) {
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2"))) {
 					sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='"+deptCode+"') ";
 			}
+			
+			if (roleId.equals("2")) {
+				sqlCondition += " and a.distid='" + distCode + "' ";
+				cform.setDynaForm("districtId", distCode);
+			}
+			
 			
 			sql = "select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
@@ -305,11 +342,16 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			} else {
 				request.setAttribute("errorMsg", "No details found.");
 			}
-
-			cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+			
+			
+			if (roleId.equals("2"))
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+						"select district_id,upper(district_name) from district_mst where district_id='"+distCode+"' order by district_name", con));
+			else 
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 					"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7"))
+			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));

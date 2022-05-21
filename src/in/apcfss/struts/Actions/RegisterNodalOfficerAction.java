@@ -71,7 +71,7 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 					 * else if(userId!=null && userId.equals("DC-WG")) tableName="nic_data_wg";
 					 */
 					
-					sql="select dept_code,dept_code||'-'||upper(trim(description)) as description from dept_new where display=true and dept_code in (select distinct substring(global_org_name,1,5) from "+tableName
+					sql="select dept_code,dept_code||'-'||upper(trim(description)) as description from dept_new where dept_code in (select distinct substring(global_org_name,1,5) from "+tableName
 							+") and deptcode!='01'  and  dept_code not in (select dept_id from  nodal_officer_details where dist_id='"+CommonModels.checkStringObject(session.getAttribute("dist_id"))+"') order by sdeptcode,deptcode";
 					
 				}else {
@@ -197,7 +197,7 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 				}else
 					cform.setDynaForm("deptsList", DatabasePlugin.getSelectBox( "select dept_code,dept_code||'-'||upper(trim(description)) as description  from dept_new where sdeptcode='" + userId.substring(0,3) + "' and deptcode!='01' order by sdeptcode,deptcode", con));
 				*/
-					sql="select dept_code,dept_code||'-'||upper(trim(description)) as description from dept_new where display=true and dept_code in (select distinct substring(global_org_name,1,5) from "+tableName
+					sql="select dept_code,dept_code||'-'||upper(trim(description)) as description from dept_new where dept_code in (select distinct substring(global_org_name,1,5) from "+tableName
 							+") and deptcode!='01'  and  dept_code not in (select dept_id from  nodal_officer_details where dist_id='"+CommonModels.checkStringObject(session.getAttribute("dist_id"))+"') order by sdeptcode,deptcode";
 					
 				}else {
@@ -389,7 +389,7 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 						else {
 							sql = "insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id, dept_code, dist_id, user_type) select a.emailid, md5('olcms@2021'), b.fullname_en, '"
 									+ userId + "', now(),'" + request.getRemoteAddr()
-									+ "',d.dept_id,d.sdeptcode||d.deptcode as deptcode,"+CommonModels.checkIntObject(session.getAttribute("dist_id"))
+									+ "',d.dept_id,d.dept_code as deptcode,"+CommonModels.checkIntObject(session.getAttribute("dist_id"))
 									+", 10 from nodal_officer_details a "
 									
 									// + "inner join (select distinct employee_id,fullname_en from " + tableName + ") b on (a.employeeid=b.employee_id) " + ""

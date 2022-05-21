@@ -95,6 +95,11 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			if(roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
 				sql+=" and (reporting_dept_code='"+session.getAttribute("dept_code")+"' or a.dept_code='"+session.getAttribute("dept_code")+"')";
 			
+			if (roleId.equals("2")) {
+				sql += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
+				cform.setDynaForm("districtId" , session.getAttribute("dist_id"));
+			}
+			
 				sql+= "group by a.dept_code,d.dept_code ,reporting_dept_code ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code)"
 					+ "group by x.reporting_dept_code, d1.description order by 1";
 			
@@ -113,9 +118,15 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
 			e.printStackTrace();
 		} finally {
-			cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
-					"select district_id,upper(district_name) from district_mst order by 1",
-					con));
+			if (roleId.equals("2"))
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+						"select district_id,upper(district_name) from district_mst where district_id='"+session.getAttribute("dist_id")+"' order by district_name", con));
+			else 
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+						"select district_id,upper(district_name) from district_mst order by 1",
+						con));
+
+			
 			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 					con));
@@ -136,6 +147,8 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
 			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
+			
+			request.setAttribute("SHOWFILTERS", "SHOWFILTERS");
 			
 			DatabasePlugin.closeConnection(con);
 		}
@@ -188,9 +201,14 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			if (!CommonModels.checkStringObject(cform.getDynaForm("regYear")).equals("ALL") && CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
 				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
 			}
-			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
+			/*if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
 					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
 				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+			}*/
+			
+			if (roleId.equals("2")) {
+				sqlCondition += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
+				cform.setDynaForm("districtId" , session.getAttribute("dist_id"));
 			}
 			
 			sql="select a.dept_code as deptcode , upper(d.description) as description,count(*) as total_cases, "
@@ -223,9 +241,14 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
 			e.printStackTrace();
 		} finally {
-			cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
-					"select district_id,upper(district_name) from district_mst order by 1",
-					con));
+			if (roleId.equals("2"))
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+						"select district_id,upper(district_name) from district_mst where district_id='"+session.getAttribute("dist_id")+"' order by district_name", con));
+			else 
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+						"select district_id,upper(district_name) from district_mst order by 1",
+						con));
+			
 			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 					con));
@@ -246,7 +269,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
 			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
-			
+			request.setAttribute("SHOWFILTERS", "SHOWFILTERS");
 			DatabasePlugin.closeConnection(con);
 		}
 		return mapping.findForward("success");
@@ -350,7 +373,10 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 			}
 			
-			
+			if (roleId.equals("2")) {
+				sqlCondition += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
+				cform.setDynaForm("districtId" , session.getAttribute("dist_id"));
+			}
 			
 			if(actionType.equals("SDWISE")) {
 			}
@@ -383,9 +409,14 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
-					"select district_id,upper(district_name) from district_mst order by 1",
-					con));
+			if (roleId.equals("2"))
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+						"select district_id,upper(district_name) from district_mst where district_id='"+session.getAttribute("dist_id")+"' order by district_name", con));
+			else 
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+						"select district_id,upper(district_name) from district_mst order by 1",
+						con));
+			
 			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 					con));
@@ -406,7 +437,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
 			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
-			
+			request.setAttribute("SHOWFILTERS", "SHOWFILTERS");
 			DatabasePlugin.closeConnection(con);
 		}
 

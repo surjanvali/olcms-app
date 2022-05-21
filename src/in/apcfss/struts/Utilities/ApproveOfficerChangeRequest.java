@@ -27,7 +27,7 @@ public class ApproveOfficerChangeRequest {
 					+ " inserted_by, inserted_ip, inserted_time, updated_by, updated_ip, updated_time, officer_type, slno, dist_id "
 					+ " FROM apolcms.nodal_officer_change_requests where "
 					+ " change_req_approved is false and "
-					+ " officer_type='MLO' and dept_id='REV01'";//and officer_type='NO' and dept_id='REV02'";
+					+ " officer_type='NO' and dept_id='HOU02'";//and officer_type='NO' and dept_id='REV02'";
 			
 			System.out.println("SQL:"+sql);
 			

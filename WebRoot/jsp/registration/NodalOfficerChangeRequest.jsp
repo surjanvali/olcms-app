@@ -55,8 +55,8 @@
 
 				<html:hidden styleId="mode" styleClass="form-control"
 					property="mode" />
-				<html:hidden property="dynaForm(mloId)" styleClass="form-control"
-					styleId="mloId" />
+				<html:hidden property="dynaForm(mloId)" styleClass="form-control" styleId="mloId" />
+				<html:hidden property="dynaForm(distId)" styleClass="form-control" styleId="distId" />
 
 				<div class="row">
 					<div class="col-md-12 col-sm-12 col-xs-12">
@@ -67,7 +67,11 @@
 								property="dynaForm(officerType)" styleClass="select2Class"
 								style="width : 100%;">
 								<html:option value="0">---SELECT---</html:option>
-								<html:option value="MLO">Middle Level Officer (Legal)</html:option>
+								<logic:notEmpty name="role_id" scope="session">
+									<logic:notEqual value="2" name="role_id" scope="session">
+										<html:option value="MLO">Middle Level Officer (Legal)</html:option>
+									</logic:notEqual>
+								</logic:notEmpty>
 								<html:option value="NO">Nodal Officer (Legal)</html:option>
 							</html:select>
 						</div>
@@ -80,7 +84,7 @@
 
 							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 								<div class="form-group" style="display: inline;">
-									<label> Head of the Department (HoD) <bean:message
+									<label> Registered Head of the Department (HoD) <bean:message
 											key="mandatory" />
 									</label>
 									<html:select styleId="deptId" property="dynaForm(deptId)"

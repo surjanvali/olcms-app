@@ -39,7 +39,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 		</div>
 
+<logic:notPresent name="SHOWFILTERS">
+	<html:hidden styleId="deptId" property="dynaForm(deptId)" />
+</logic:notPresent>
 
+<logic:present name="SHOWFILTERS">
 		<div class="ibox">
 			<div class="ibox-head">
 				<div class="ibox-title">High Court Cases Abstract Report</div>
@@ -156,7 +160,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 		</div>
 
-
+</logic:present>
 
 		<div class="ibox">
 			<div class="ibox-head">
@@ -446,6 +450,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<tr>
 									<th>Sl.No</th>
 									<th>CINo</th>
+									<th>Scanned Affidavit</th>
 									<th>Date of Filing</th>
 									<th>Case Type</th>
 									<th>Reg.No.</th>
@@ -475,7 +480,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
 
 										</td>
-										<td><logic:notEmpty name="map" property="date_of_filing">
+										<td>
+											<logic:notEmpty name="map" property="scanned_document_path">
+												<%-- ./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf --%>
+												<a href="./${map.scanned_document_path}" target="_new" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-save"></i><span>Scanned Affidavit</span></a>
+											</logic:notEmpty>
+										</td>
+										<td>
+										<logic:notEmpty name="map" property="date_of_filing">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_of_filing">
 																	${map.date_of_filing }
@@ -508,7 +520,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</tbody>
 							<tfoot>
 								<tR>
-									<td colspan="20">&nbsp;</td>
+									<td colspan="21">&nbsp;</td>
 								</tR>
 							</tfoot>
 						</table>
