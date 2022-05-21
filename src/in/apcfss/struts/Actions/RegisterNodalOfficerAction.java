@@ -95,7 +95,7 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 						"select distinct designation_id, designation_name_en from "+tableName+" " +
 						") c on (a.designation=c.designation_id) " +
 						"inner join dept_new d on (a.dept_id=d.dept_code) " +
-						"where a.user_id='"+ userId + "'";
+						"where a.user_id='"+ userId + "' order by d.dept_code";
 					
 					
 				}else
@@ -124,7 +124,7 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 							// + "inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id) "
 							// + "inner join (select distinct designation_id, designation_name_en from nic_data ) c on (a.designation=c.designation_id) "
 							+ "where coalesce(a.dist_id,0)=0 ) b on (d.dept_code = b.dept_id) where (reporting_dept_code='"
-							+ deptCode + "' or dept_code='" + deptCode + "') and substr(dept_code,4,2)!='01' and d.display= true   order by 1" + "";
+							+ deptCode + "' or dept_code='" + deptCode + "') and substr(dept_code,4,2)!='01' and d.display= true   order by d.dept_code";
 					
 				}
 				
