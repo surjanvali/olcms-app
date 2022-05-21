@@ -69,11 +69,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<tr>
 										<td>${i+1 }</td>
 										<%-- <td>${map.deptcode }</td> --%>
-										<td>${map.description } <%-- <a
-											href="javascript:ShowHODWise('${map.deptcode}','${map.description }');">${map.description }</a> --%></td>
-										<%-- <td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','ALL');">${map.total_cases }</a></td>
- --%>
+										<td>${map.description }<%-- <td><a href="./ContemptCasesAbstract.do?mode=getCasesList&deptId=${map.deptcode}&deptName=${map.description }">${map.description }</a> --%>
+										</td>
 										<td style="text-align: right;">${map.total_cases }</td>
 									</tr>
 									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>

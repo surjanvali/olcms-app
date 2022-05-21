@@ -55,6 +55,11 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true and reporting_dept_code='"
 								+ deptCode + "' or dept_code='" + deptCode + "' order by dept_code",
 						con));
+			
+			cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox(
+					"select sno,case_full_name from case_type_master order by sno",
+					con));
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,6 +118,12 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and ad.distid='" + distCode + "' ";
 				cform.setDynaForm("districtId", distCode);
 			}
+			
+			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
+					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
+				sqlCondition += " and ad.casetype='" + cform.getDynaForm("caseTypeId").toString().trim() + "' ";
+			}
+			
 				
 			sql = "select distid,district_name,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad "
 					+ " inner join district_mst dm on (ad.distid=dm.district_id) "
@@ -146,6 +157,10 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true and reporting_dept_code='"
 								+ deptCode + "' or dept_code='" + deptCode + "' order by dept_code",
 						con));
+			
+			cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox(
+					"select sno,case_full_name from case_type_master order by sno",
+					con));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -205,7 +220,12 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and ad.distid='" + distCode + "' ";
 				cform.setDynaForm("districtId", distCode);
 			}
-
+			
+			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
+					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
+				sqlCondition += " and ad.casetype='" + cform.getDynaForm("caseTypeId").toString().trim() + "' ";
+			}
+			
 			sql = "select d.dept_code,upper(description) as description,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad  inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) "
 					+ "inner join dept_new dm on (d.dept_code=dm.dept_code)"
 					+ " where ack_type='NEW' and respondent_slno=1 " + sqlCondition
@@ -237,6 +257,10 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true and reporting_dept_code='"
 								+ deptCode + "' or dept_code='" + deptCode + "' order by dept_code",
 						con));
+			
+			cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox(
+					"select sno,case_full_name from case_type_master order by sno",
+					con));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -322,6 +346,10 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("districtId", distCode);
 			}
 			
+			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
+					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
+				sqlCondition += " and a.casetype='" + cform.getDynaForm("caseTypeId").toString().trim() + "' ";
+			}
 			
 			sql = "select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
@@ -360,6 +388,10 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true and reporting_dept_code='"
 								+ deptCode + "' or dept_code='" + deptCode + "' order by dept_code",
 						con));
+			
+			cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox(
+					"select sno,case_full_name from case_type_master order by sno",
+					con));
 
 		} catch (Exception e) {
 			e.printStackTrace();

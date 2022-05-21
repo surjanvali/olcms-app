@@ -56,6 +56,9 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 
 						if(roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
 							sql+=" and (dn.reporting_dept_code='"+session.getAttribute("dept_code")+"' or dn.dept_code='"+session.getAttribute("dept_code")+"')";
+						else if(roleId.equals("2")){
+							sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
+						}
 						
 						
 						sql+= " group by reporting_dept_code,a.dept_code) a1"
@@ -112,6 +115,9 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 				deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
 			}
 
+			
+			
+			
 			sql = "select a.dept_code as deptcode,dn.description,count(*) as total_cases, sum(case when petition_document is not null then 1 else 0 end) as petition_uploaded  "
 					+ " , sum(case when a.ecourts_case_status='Closed' then 1 else 0 end) as closed_cases "
 					+ " ,sum(case when a.ecourts_case_status='Pending' and counter_filed_document is not null then 1 else 0 end) as counter_uploaded ,"
@@ -120,9 +126,15 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 					+ " left join apolcms.ecourts_olcms_case_details b using (cino) "
 					+ " inner join dept_new dn on (a.dept_code=dn.dept_code) "
 					+ " where dn.display = true and (dn.reporting_dept_code='" + deptId + "' or a.dept_code='" + deptId
-					+ "') "
+					+ "') ";
+			
+					if(roleId.equals("2")){
+						sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
+					}
+					
+					
 					// + "where dn.reporting_dept_code='AGC01' or a.dept_code='AGC01' "
-					+ "group by a.dept_code,dn.description order by 1";
+					sql+= "group by a.dept_code,dn.description order by 1";
 
 			request.setAttribute("HEADING", "HOD Wise Case processing Abstract for " + deptName);
 			System.out.println("SQL:" + sql);
@@ -208,6 +220,10 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 					+ " left join apolcms.ecourts_olcms_case_details cd on (a.cino=cd.cino) "
 					+ "	inner join dept_new d on (a.dept_code=d.dept_code) where d.display = true "
 					+ "";
+			if(roleId.equals("2")){
+				sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
+			}
+			
 			sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') " + sqlCondition;
 			
 			System.out.println("ecourts SQL:" + sql);

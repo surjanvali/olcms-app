@@ -63,6 +63,9 @@ public class HCOrdersIssuedReport extends DispatchAction {
 				if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
 					sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or a.dept_code='"
 							+ session.getAttribute("dept_code") + "')";
+				else if(roleId.equals("2")){
+					sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
+				}
 
 				sql += "group by a.dept_code,d.dept_code ,reporting_dept_code ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code)"
 						+ "group by x.reporting_dept_code, d1.description order by 1";
@@ -138,9 +141,11 @@ public class HCOrdersIssuedReport extends DispatchAction {
 					+ "left join (select distinct cino from ecourts_case_finalorder  where 1=1 "+sqlCondition+") fo on (a.cino=fo.cino) "
 					+ "where d.display = true ";
 
-				sql += " and (reporting_dept_code='" + deptId + "' or a.dept_code='"
-						+ deptId + "')";
-
+				sql += " and (reporting_dept_code='" + deptId + "' or a.dept_code='" + deptId + "')";
+				if(roleId.equals("2")){
+					sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
+				}
+				
 			sql += "group by a.dept_code,d.description order by 1";
 
 			request.setAttribute("HEADING", "HOD Wise High Court Orders Issued Report for "+deptName);
@@ -245,6 +250,11 @@ public class HCOrdersIssuedReport extends DispatchAction {
 				sql += " and (a.dept_code='" + deptCode + "') ";
 			else 
 				sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
+			
+			
+			if(roleId.equals("2")){
+				sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
+			}
 			
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

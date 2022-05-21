@@ -37,8 +37,14 @@
 	</div>
 	<div class="ibox">
 		<div class="ibox-head">
-			<div class="ibox-title">MLO / Nodal Officer (Legal)
-				Registration</div>
+			<div class="ibox-title">
+				<logic:notEmpty name="role_id" scope="session">
+					<logic:notEqual value="2" name="role_id" scope="session">
+			
+			MLO / </logic:notEqual>
+				</logic:notEmpty>
+				Nodal Officer (Legal) Change Request
+			</div>
 			<div class="ibox-tools">
 				<a class="ibox-collapse"><i class="fa fa-minus"></i> </a>
 				<!-- <a
@@ -55,8 +61,10 @@
 
 				<html:hidden styleId="mode" styleClass="form-control"
 					property="mode" />
-				<html:hidden property="dynaForm(mloId)" styleClass="form-control" styleId="mloId" />
-				<html:hidden property="dynaForm(distId)" styleClass="form-control" styleId="distId" />
+				<html:hidden property="dynaForm(mloId)" styleClass="form-control"
+					styleId="mloId" />
+				<html:hidden property="dynaForm(distId)" styleClass="form-control"
+					styleId="distId" />
 
 				<div class="row">
 					<div class="col-md-12 col-sm-12 col-xs-12">

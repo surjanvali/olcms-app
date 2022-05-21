@@ -98,7 +98,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 					<div class="row">
-
 						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 							<div class="form-group">
 								<label class="font-bold">From Date</label>
@@ -125,12 +124,29 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Case Type</label>
+								<html:select styleId="caseTypeId"
+									property="dynaForm(caseTypeId)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---ALL---</html:option>
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(caseTypesList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(caseTypesList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
 						<div class="col-md-12 col-xs-12">
-							<input type="submit" name="submit" value="Show Cases"
+							<input type="button" name="showcases" value="Show Cases"
 								class="btn btn-success" onclick="return fnShowCases();" /> <input
-								type="submit" name="submit2" value="Show Department Wise"
+								type="button" name="showcases2" value="Show Department Wise"
 								class="btn btn-success" onclick="return fnShowDeptWise();" /> <input
-								type="submit" name="submit3" value="Show District Wise"
+								type="button" name="showcases3" value="Show District Wise"
 								class="btn btn-success" onclick="return fnShowDistWise();" />
 						</div>
 					</div>
@@ -229,7 +245,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Date</th>
 										<th>District</th>
 										<th>Case Type</th>
-										<!-- <th>Main Case No.</th> -->
+										<th>Main Case No.</th>
 										<th>Departments / Respondents</th>
 										<th>Advocate CC No.</th>
 										<th>Advocate Name</th>
@@ -245,9 +261,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td nowrap="nowrap">${map.generated_date }</td>
 											<td>${map.district_name }</td>
 											<td>${map.case_full_name }</td>
+											<td>${map.maincaseno }</td>
 											<td nowrap="nowrap">${map.dept_descs }</td>
 											<td>${map.advocateccno }</td>
 											<td>${map.advocatename }</td>
+											
 
 
 											<%-- <td>${map.remarks }</td> --%>
@@ -274,10 +292,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<tfoot>
 									<tR>
 										<logic:present name="DISPLAYOLD">
-											<td colspan="13">
+											<td colspan="14">
 										</logic:present>
 										<logic:notPresent name="DISPLAYOLD">
-											<td colspan="11">
+											<td colspan="12">
 										</logic:notPresent>
 										&nbsp;
 										</td>
@@ -319,39 +337,42 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	function fnShowDistWise() {
 		$("#mode").val("showDistWise");
-		return true;
+		$("#acksAbstractFormId").submit();
+		//return true;
 	}
 	function fnShowDeptWise() {
 		$("#mode").val("showDeptWise");
-		return true;
+		$("#acksAbstractFormId").submit();
+		//return true;
 	}
 	function fnShowCases() {
 		$("#mode").val("showCaseWise");
-		return true;
+		$("#acksAbstractFormId").submit();
+		//return true;
 	}
 
 	function showDeptCases(deptid) {
-		/*$("#districtId").val($("#districtId").val());
+		$("#districtId").val($("#districtId").val());
 		$("#deptId").val(deptid);
 		$("#mode").val("showCaseWise");
-		alert("mode:" + $("#mode").val());
-		alert("districtId:" + $("#districtId").val());
-		alert("deptId:" + $("#deptId").val());
+		//alert("mode:" + $("#mode").val());
+		//alert("districtId:" + $("#districtId").val());
+		//alert("deptId:" + $("#deptId").val());
 		// $("#acksAbstractForm").submit();
-		//$("#acksAbstractFormId").submit();*/
-		$(location).attr("href", "./AcksAbstractReport.do?mode=showCaseWise&districtId="+$("#districtId").val()+"&deptId="+deptid+"&fromDate="+$("#fromDate").val()+"&toDate="+$("#toDate").val());
+		$("#acksAbstractFormId").submit();
+		//$(location).attr( "href", "./AcksAbstractReport.do?mode=showCaseWise&districtId=" + $("#districtId").val() + "&deptId=" + deptid + "&fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val());
 	}
 
 	function showDistCases(distid) {
-		/*$("#districtId").val(distid);
+		$("#districtId").val(distid);
 		$("#deptId").val($("#deptId").val());
 		$("#mode").val("showCaseWise");
-		alert("mode:" + $("#mode").val());
-		alert("districtId:" + $("#districtId").val());
-		alert("deptId:" + $("#deptId").val());
+		//alert("mode:" + $("#mode").val());
+		//alert("districtId:" + $("#districtId").val());
+		//alert("deptId:" + $("#deptId").val());
 		$("#acksAbstractFormId").submit();
 		// document.forms[0].submit(); */
-		$(location).attr("href", "./AcksAbstractReport.do?mode=showCaseWise&districtId="+distid+"&deptId="+$("#deptId").val()+"&fromDate="+$("#fromDate").val()+"&toDate="+$("#toDate").val());
-		
+		// $(location).attr( "href", "./AcksAbstractReport.do?mode=showCaseWise&districtId=" + distid + "&deptId=" + $("#deptId").val() + "&fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val());
+
 	}
 </script>
