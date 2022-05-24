@@ -369,6 +369,18 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 					status = ps.executeUpdate();
 
 					if (status == 1){
+						
+						
+						if(Integer.parseInt(DatabasePlugin.selectString("select count(*) from users where userid='"+emailId+"'", con)) > 0) {
+							sql="insert into users_log select * from users where userid='"+emailId+"'";
+							DatabasePlugin.executeUpdate(sql, con);
+							
+							sql="delete from user_roles where userid='"+emailId+"'";
+							DatabasePlugin.executeUpdate(sql, con);
+							
+							sql="delete from users where userid='"+emailId+"'";
+							DatabasePlugin.executeUpdate(sql, con);
+						}
 
 						if(tableName.equals("nic_data")) {
 						
