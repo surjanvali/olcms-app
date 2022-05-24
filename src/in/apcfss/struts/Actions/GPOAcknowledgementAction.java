@@ -917,6 +917,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			}
 			con = DatabasePlugin.connect();
 			String deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			String dist_id = CommonModels.checkStringObject(session.getAttribute("dist_id"));
 			
 					//cform.getDynaForm("ackType") !=null && !cform.getDynaForm("ackType").equals("0") ? cform.getDynaForm("ackType").toString() : "NEW";
 
@@ -926,8 +927,15 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					+ "from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
 					+ "left join district_mst dm on (a.distid=dm.district_id) "
 					+ "left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
-					+ "where a.delete_status is false and ack_type='NEW' and ad.dept_code='"+deptCode+"' "
-					+ "order by inserted_time";
+					+ "where a.delete_status is false and ack_type='NEW' ";
+					
+			if(!deptCode.equals(""))
+					sql+= "and ad.dept_code='"+deptCode+"' ";
+			if(!dist_id.equals(""))
+				sql+= "and a.distid='"+dist_id+"' ";
+					
+			
+					sql+="order by inserted_time";
 			
 			System.out.println("SQL:"+sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

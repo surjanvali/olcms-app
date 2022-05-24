@@ -263,14 +263,16 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-
+			
+			sql="select distinct designation_id::int4, designation_name_en from "+tableName+" where substring(global_org_name,1,5)='"
+					+ cform.getDynaForm("deptId")
+					+ "'  and trim(upper(designation_name_en))<>'MINISTER' order by designation_id::int4 desc";
+			System.out.println("sQL::"+sql);
 			cform.setDynaForm(
 					"designationList",
 					DatabasePlugin
 					.getSelectBox(
-							"select distinct designation_id::int4, designation_name_en from "+tableName+" where substring(global_org_name,1,5)='"
-									+ cform.getDynaForm("deptId")
-									+ "'  and trim(upper(designation_name_en))<>'MINISTER' order by designation_id::int4 desc",
+							sql,
 									con));
 			cform.setDynaForm("deptId" , cform.getDynaForm("deptId"));
 			DatabasePlugin.closeConnection(con);

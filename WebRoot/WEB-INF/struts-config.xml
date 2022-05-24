@@ -3,23 +3,27 @@
 
 <struts-config>
 	<data-sources>
-		<data-source key="dbsource" type="org.apache.commons.dbcp.BasicDataSource">
-			<set-property property="driverClassName" value="org.postgresql.Driver" />
+		<data-source key="dbsource"
+			type="org.apache.commons.dbcp.BasicDataSource">
+			<set-property property="driverClassName"
+				value="org.postgresql.Driver" />
 			<!-- Live -->
-			<!-- <set-property property="url" value="jdbc:postgresql://10.96.54.54:6432/apolcms" /> 
-			<set-property property="username" value="apolcms" /> 
-			<set-property property="password" value="@p0l(m$" /> -->
+			<set-property property="url"
+				value="jdbc:postgresql://10.96.54.54:6432/apolcms" />
+				<set-property property="username" value="apolcms" />
+				<set-property property="password" value="@p0l(m$" />
 
 			<!-- Test -->
-			<!-- <set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" /> 
-			<set-property property="username" value="apolcms" /> 
-			<set-property property="password" value="apolcms" />  -->
-			
+			<!-- <set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" 
+				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
+				value="apolcms" /> -->
+
 			<!-- LOCAL -->
-			<set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" />
+			<!-- <set-property property="url"
+				value="jdbc:postgresql://localhost:5432/apolcms" />
 			<set-property property="username" value="apolcms" />
-			<set-property property="password" value="apolcms" />
-			
+			<set-property property="password" value="apolcms" /> -->
+
 
 			<set-property property="minCount" value="5" />
 			<set-property property="maxCount" value="200" />
@@ -33,14 +37,18 @@
 			<set-property property="LogAbandoned" value="true" />
 
 			<set-property property="removeAbandoned" value="true" />
-			<set-property property="removeAbandonedTimeout" value="60" />
+			<set-property property="removeAbandonedTimeout"
+				value="60" />
 
-			<set-property property="timeBetweenEvictionRunsMillis" value="15000" />
-			<set-property property="minEvictableIdleTimeMillis" value="60000" />
+			<set-property property="timeBetweenEvictionRunsMillis"
+				value="15000" />
+			<set-property property="minEvictableIdleTimeMillis"
+				value="60000" />
 
 			<set-property property="testWhileIdle" value="true" />
 
-			<set-property property="numTestsPerEvictionRun" value="5" />
+			<set-property property="numTestsPerEvictionRun"
+				value="5" />
 			<set-property property="whenExhaustedAction" value="2" />
 			<set-property property="defaultAutoCommit" value="true" />
 			<set-property property="defaultReadOnly" value="false" />
@@ -74,12 +82,10 @@
 		</action>
 
 		<action path="/sessionExpired" forward="/Login.do" />
-		
-		<!-- <action path="/sessionExpired"
-			type="in.apcfss.struts.WelcomePageAction" parameter="mode"
-			scope="request">
-			<forward name="UserWelcomePage" path="UserLayout"></forward>
-		</action> -->
+
+		<!-- <action path="/sessionExpired" type="in.apcfss.struts.WelcomePageAction" 
+			parameter="mode" scope="request"> <forward name="UserWelcomePage" path="UserLayout"></forward> 
+			</action> -->
 
 		<action path="/HomePage" type="in.apcfss.struts.HomePageAction"
 			parameter="mode" scope="request">
@@ -181,8 +187,8 @@
 			<forward name="success" path="highcourtcases"></forward>
 			<forward name="assignCase2EmpPage" path="assignhighcourtcase"></forward>
 		</action>
-		
-		
+
+
 		<action path="/HighCourtCasesListLaw" name="CommonForm"
 			type="in.apcfss.struts.Actions.HighCourtCasesListActionLaw"
 			parameter="mode" scope="request">
@@ -205,7 +211,8 @@
 			type="in.apcfss.struts.Actions.GPOAcknowledgementAction"
 			parameter="mode" scope="request">
 			<forward name="success" path="gpoack"></forward>
-			<forward name="showOldAckList" path="/SearchCase.do?mode=getAcknowledementsList"></forward>
+			<forward name="showOldAckList"
+				path="/SearchCase.do?mode=getAcknowledementsList"></forward>
 		</action>
 
 		<action path="/eCourtCasesData" name="CommonForm"
@@ -305,14 +312,15 @@
 			parameter="mode" scope="request">
 			<forward name="success" path="uploadeofficedata"></forward>
 		</action>
-		
+
 		<action path="/SearchCase" name="CommonForm"
-			type="in.apcfss.struts.Actions.CaseSearchAction"
-			parameter="mode" scope="request">
+			type="in.apcfss.struts.Actions.CaseSearchAction" parameter="mode"
+			scope="request">
 			<forward name="success" path="searchcase"></forward>
-			<forward name="displayAckForm" path="/GPOAck.do?mode=displayAckForm"></forward>
+			<forward name="displayAckForm"
+				path="/GPOAck.do?mode=displayAckForm"></forward>
 		</action>
-		
+
 		<action path="/AcksReport" name="CommonForm"
 			type="in.apcfss.struts.reports.AcknowledgementsReport"
 			parameter="mode" scope="request">
@@ -324,26 +332,41 @@
 			parameter="mode" scope="request">
 			<forward name="success" path="acksabstract"></forward>
 		</action>
-		
+
 		<action path="/HCCaseDocsUploadAbstract" name="CommonForm"
 			type="in.apcfss.struts.reports.HCCaseDocsUploadStatusAbstractReport"
 			parameter="mode" scope="request">
 			<forward name="success" path="hccasedocsupload"></forward>
 		</action>
-		
+
 		<action path="/HCOrdersIssuedReport" name="CommonForm"
-			type="in.apcfss.struts.reports.HCOrdersIssuedReport"
-			parameter="mode" scope="request">
+			type="in.apcfss.struts.reports.HCOrdersIssuedReport" parameter="mode"
+			scope="request">
 			<forward name="success" path="hcordersissuedreport"></forward>
 		</action>
-		
+
 		<action path="/ContemptCasesAbstract" name="CommonForm"
 			type="in.apcfss.struts.reports.ContemptCasesAbstractReport"
 			parameter="mode" scope="request">
 			<forward name="success" path="contemptcasesreport"></forward>
 		</action>
-		
-		
+
+		<action attribute="CommonForm" input="eofficeEmployeeReport"
+			name="CommonForm" path="/eofficeEmployeeReport" scope="request"
+			parameter="mode"
+			type="in.apcfss.struts.reports.EofficeEmployeeReportAction">
+			<set-property property="cancellable" value="true" />
+			<forward name="success" path="eofficeEmployeeReport" />
+		</action>
+
+		<action path="/DistrictNodalOfficerAbstactReport"
+			name="CommonForm"
+			type="in.apcfss.struts.reports.DistrictNodalOfficerAbstactReportAction"
+			parameter="mode" scope="request">
+			<forward name="success"
+				path="DistrictNodalOfficerAbstactReport"></forward>
+		</action>
+
 	</action-mappings>
 
 	<message-resources

@@ -132,7 +132,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<logic:notEmpty name="NEWCASES">
 					<logic:greaterThan value="0" name="NEWCASES">
 						<div class="col-lg-3 col-md-6">
-							<a href="./GPOAck.do?mode=deptWiseCases">
+							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
+							
+							<a href="./AcksAbstractReport.do">
 								<div class="ibox bg-warning color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${NEWCASES }</h2>

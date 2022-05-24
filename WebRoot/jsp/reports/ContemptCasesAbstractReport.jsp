@@ -69,7 +69,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<tr>
 										<td>${i+1 }</td>
 										<%-- <td>${map.deptcode }</td> --%>
-										<td>${map.description }<%-- <td><a href="./ContemptCasesAbstract.do?mode=getCasesList&deptId=${map.deptcode}&deptName=${map.description }">${map.description }</a> --%>
+										<%-- <td>${map.description } --%>
+										<td><a href="./ContemptCasesAbstract.do?mode=getCasesList&deptId=${map.deptcode}&deptName=${map.description }">${map.description }</a>
 										</td>
 										<td style="text-align: right;">${map.total_cases }</td>
 									</tr>

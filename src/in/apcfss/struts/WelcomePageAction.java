@@ -92,6 +92,19 @@ public class WelcomePageAction extends DispatchAction{
 					if (data != null && !data.isEmpty() && data.size() > 0)
 						request.setAttribute("secdeptwise", data);
 					request.setAttribute("showReport1", "showReport1");
+					
+					sql="select count(*) as total, "
+							+ " sum(case when (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as assignment_pending,"
+							//+ " sum(case when (case_status=7) and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as approval_pending,"
+							+ " sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases"
+							+ "  from ecourts_case_data ";
+					
+					List<Map<Object, String>> dashboardCounts = DatabasePlugin.executeQuery(con, sql);
+					request.setAttribute("dashboardCounts", dashboardCounts);
+					
+					sql="select count(*)  from ecourts_gpo_ack_dtls where ack_type='NEW'";
+					request.setAttribute("NEWCASES", DatabasePlugin.getStringfromQuery(sql, con));
+					
 				}
 				else if(roleId.equals("3") || roleId.equals("4")  || roleId.equals("5") || roleId.equals("9")) {
 					
@@ -121,13 +134,14 @@ public class WelcomePageAction extends DispatchAction{
 					request.setAttribute("showReport1", "showReport1");
 					
 					
-					sql="select count(*)  from ecourts_gpo_ack_depts ad where dept_code='"+deptCode+"'";
+					sql="select count(*)  from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls ad1 on (ad.ack_no=ad1.ack_no) where ack_type='NEW' and dept_code='"+deptCode+"'";
+					System.out.println("ACK SQL:"+sql);
 					request.setAttribute("NEWCASES", DatabasePlugin.getStringfromQuery(sql, con));
 					
 				}
 				
 				//District Collector
-				if(roleId.equals("2")) { // Sect. Dept.
+				if(roleId.equals("2")) {
 					// sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=2 and coalesce(ecourts_case_status,'')!='Closed'";
 					sql="select count(*) as total, "
 							+ "sum(case when (case_status=7) and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as assignment_pending,"
@@ -137,6 +151,36 @@ public class WelcomePageAction extends DispatchAction{
 					
 					List<Map<Object, String>> dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("dashboardCounts", dashboardCounts);
+					
+					sql="select a.dept_code as deptcode , upper(d.description) as description,count(*) as total_cases, "
+							+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
+							+ "sum(case when (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withmlo, "
+							+ "sum(case when case_status=3  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withhod, "
+							+ "sum(case when case_status=4  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withnodal, "
+							+ "sum(case when case_status=5 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsection, "
+							+ "sum(case when case_status=7  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdc, "
+							+ "sum(case when case_status=8  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdistno, "
+							+ "sum(case when case_status=9 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectionhod, "
+							+ "sum(case when case_status=10 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectiondist, "
+							+ "sum(case when case_status=6 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withgpo, "
+							+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases "
+							+ "from ecourts_case_data a "
+							+ "inner join dept_new d on (a.dept_code=d.dept_code) "
+							+ "where d.display = true and a.dist_id='"+distId+"' "
+							+ "group by a.dept_code , d.description order by 1";
+
+					System.out.println("SQL:" + sql);
+					request.setAttribute("HEADING", "Abstract Report");
+					List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+					System.out.println("data=" + data);
+					if (data != null && !data.isEmpty() && data.size() > 0)
+						request.setAttribute("deptwise", data);
+					request.setAttribute("showReport1", "showReport1");
+					
+					
+					sql="select count(*) from ecourts_gpo_ack_dtls ad  where ack_type='NEW' and distid='"+distId+"'";
+					request.setAttribute("NEWCASES", DatabasePlugin.getStringfromQuery(sql, con));
+					
 				}else if(roleId.equals("3")) { // Sect. Dept.
 					// sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=2 and coalesce(ecourts_case_status,'')!='Closed'";
 					sql="select count(*) as total, "
