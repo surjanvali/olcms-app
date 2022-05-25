@@ -43,6 +43,8 @@
   <StrutsActivity path="/HCCaseDocsUploadAbstract.do" location="2150,3150" dimension="377,96" />
   <StrutsActivity path="/HCOrdersIssuedReport.do" location="2750,3150" dimension="280,96" />
   <StrutsActivity path="/ContemptCasesAbstract.do" location="650,3250" dimension="323,96" />
+  <StrutsActivity path="/eofficeEmployeeReport.do" location="2150,3350" dimension="369,96" />
+  <StrutsActivity path="/DistrictNodalOfficerAbstactReport.do" location="3050,1050" dimension="375,96" />
   <StrutsActivity path="Login;6" location="350,1750" dimension="92,81" />
   <StrutsActivity path="Logout;6" location="50,650" dimension="203,87" />
   <StrutsActivity path="Welcome;6" location="950,1450" dimension="107,81" />
@@ -94,6 +96,8 @@
   <StrutsActivity path="hccasedocsupload" location="1550,3250" dimension="128,51" />
   <StrutsActivity path="hcordersissuedreport" location="1850,3250" dimension="141,51" />
   <StrutsActivity path="contemptcasesreport" location="50,3350" dimension="142,51" />
+  <StrutsActivity path="eofficeEmployeeReport" location="2750,3350" dimension="153,51" />
+  <StrutsActivity path="DistrictNodalOfficerAbstactReport" location="3050,1450" dimension="210,51" />
   <StrutsActivity path="districtreport" location="2150,2650" dimension="98,51" />
   <StrutsActivity path="benchreport" location="50,2750" dimension="95,51" />
   <StrutsActivity path="HomePage;6" location="950,1050" dimension="116,81" />
@@ -116,11 +120,7 @@
   <StrutsActivity path="/jsp/registration/AssignCase.jsp" location="50,2150" dimension="198,51" />
   <StrutsActivity path="closedcasesreport" location="2450,2350" dimension="124,51" />
   <StrutsActivity path="mlologinstatusreport" location="650,2950" dimension="141,51" />
-  <StrutsActivity path="/eofficeEmployeeReport.do" location="2150,3350" dimension="369,96" />
-  <StrutsActivity path="eofficeEmployeeReport" location="2750,3350" dimension="153,51" />
   <StrutsActivity path="/form/eofficeEmployeeReport.jsp" location="350,3450" dimension="207,51" />
-  <StrutsActivity path="/DistrictNodalOfficerAbstactReport.do" location="3050,1050" dimension="375,96" />
-  <StrutsActivity path="DistrictNodalOfficerAbstactReport" location="3050,1450" dimension="210,51" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,595" />
@@ -434,13 +434,6 @@
       <AbsolutePoint location="3500,498" />
       <AbsolutePoint location="3500,2628" />
       <AbsolutePoint location="3008,2628" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
-  <StrutsTransition id="/form/eofficeEmployeeReport.jsp,null,/eofficeEmployeeReport.do,2" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="557,3475" />
-      <AbsolutePoint location="2334,3475" />
-      <AbsolutePoint location="2334,3446" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/StatesMaster.do,success,statesreport,1" routingType="0">

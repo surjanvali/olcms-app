@@ -85,6 +85,7 @@ public class HighCourtCasesListAction extends DispatchAction {
 		try {
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
 			con = DatabasePlugin.connect();
 			// cform.setDynaForm("designationList", DatabasePlugin.getSelectBox("select
 			// distinct designation_id::int4, designation_name_en from nic_data where
@@ -137,11 +138,11 @@ public class HighCourtCasesListAction extends DispatchAction {
 			}
 			
 			if(roleId.equals("2")) { //District Collector
-				distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+				
 				sqlCondition +=" and case_status=7 and dist_id='"+distId+"'";
 			}
 			else if(roleId.equals("10")) { //District Nodal Officer
-				sqlCondition +=" and case_status=8";
+				sqlCondition +=" and case_status=8 and dist_id='"+distId+"'";
 			}
 			else if(roleId.equals("5") || roleId.equals("9")) {//NO & HOD
 				sqlCondition +=" and case_status in (3,4)";
