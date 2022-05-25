@@ -36,7 +36,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<html:form method="post" action="/AcksAbstractReport"
 		styleId="acksAbstractFormId">
 		<html:hidden styleId="mode" property="mode" />
-
+		<html:hidden property="dynaForm(inserted_by)" styleId="inserted_by" />
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -143,11 +143,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="row">
 						<div class="col-md-12 col-xs-12">
 							<input type="button" name="showcases" value="Show Cases"
-								class="btn btn-success" onclick="return fnShowCases();" /> <input
+								class="btn btn-success" onclick="return fnShowCases();" /> 
+								<input
 								type="button" name="showcases2" value="Show Department Wise"
-								class="btn btn-success" onclick="return fnShowDeptWise();" /> <input
+								class="btn btn-success" onclick="return fnShowDeptWise();" /> 
+								<input
 								type="button" name="showcases3" value="Show District Wise"
 								class="btn btn-success" onclick="return fnShowDistWise();" />
+								<input
+								type="button" name="showcases4" value="Show User Wise"
+								class="btn btn-success" onclick="return fnShowUserWise();" />
 						</div>
 					</div>
 				</div>
@@ -231,6 +236,45 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 			</logic:present>
+			<logic:present name="USERWISEACKS">
+				<div class="ibox">
+					<!-- <div class="ibox-head">
+					<div class="ibox-title">New Cases Abstract</div>
+				</div> -->
+					<div class="ibox-body">
+						<div class="table-responsive">
+							<table id="example" class="table table-striped table-bordered"
+								style="width:100%">
+								<thead>
+									<tr>
+										<th>Sl.No</th>
+										<th>User</th>
+										<th>New Cases Registered</th>
+									</tr>
+								</thead>
+								<tbody>
+									<bean:define id="totTot" value="0"></bean:define>
+									<logic:iterate id="map" name="USERWISEACKS" indexId="i">
+										<tr>
+											<td>${i+1 }.</td>
+											<td><a href="javascript:showUserWise('${map.inserted_by}');">
+													${map.inserted_by } </a></td>
+											<td style="text-align: right;">${map.acks }</td>
+										</tr>
+										<bean:define id="totTot" value="${totTot + map.acks }"></bean:define>
+									</logic:iterate>
+								</tbody>
+								<tfoot>
+									<tR>
+										<td colspan="2" style="text-align: center;">Totals</td>
+										<td style="text-align: right;">${totTot }</td>
+									</tR>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+			</logic:present>
 
 			<logic:notEmpty name="CASEWISEACKS">
 				<div class="ibox">
@@ -269,13 +313,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 
 											<%-- <td>${map.remarks }</td> --%>
-											<td style="text-align: center;" nowrap="nowrap"><logic:present
+											<td style="text-align: center;" nowrap="nowrap">
+											<logic:present
 													name="map" property="ack_file_path">
 													<a href="./${map.ack_file_path}" target="_new"
 														title="Print Acknowledgement" class="btn btn-sm btn-info">
 														<i class="fa fa-save"></i> <span>Acknowledgement</span> <!-- <span>Download</span> -->
 													</a>
-												</logic:present> <logic:present name="map" property="barcode_file_path">
+												</logic:present>
+												 <logic:present name="map" property="barcode_file_path">
 													<a href="./${map.barcode_file_path}" target="_new"
 														title="Print Barcode" class="btn btn-sm btn-info"> <i
 														class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
@@ -340,6 +386,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#acksAbstractFormId").submit();
 		//return true;
 	}
+	function fnShowUserWise() {
+		$("#mode").val("showUserWise");
+		$("#acksAbstractFormId").submit();
+		//return true;
+	}
 	function fnShowDeptWise() {
 		$("#mode").val("showDeptWise");
 		$("#acksAbstractFormId").submit();
@@ -369,6 +420,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#mode").val("showCaseWise");
 		//alert("mode:" + $("#mode").val());
 		//alert("districtId:" + $("#districtId").val());
+		//alert("deptId:" + $("#deptId").val());
+		$("#acksAbstractFormId").submit();
+		// document.forms[0].submit(); */
+		// $(location).attr( "href", "./AcksAbstractReport.do?mode=showCaseWise&districtId=" + distid + "&deptId=" + $("#deptId").val() + "&fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val());
+
+	}
+	function showUserWise(inserted_by) {
+		$("#inserted_by").val(inserted_by);
+		$("#inserted_by").val($("#inserted_by").val());
+		$("#mode").val("showCaseWise");
+		//alert("mode:" + $("#mode").val());
+		// alert("inserted_by:" + $("#inserted_by").val());
 		//alert("deptId:" + $("#deptId").val());
 		$("#acksAbstractFormId").submit();
 		// document.forms[0].submit(); */

@@ -383,7 +383,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			else if(actionType.equals("HODWISE")) {
 			}
 			
-			sql="select a.*, b.orderpaths from ecourts_case_data a left join" + " ("
+			sql="select a.*,coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths from ecourts_case_data a left join" + " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from "
 					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"

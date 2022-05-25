@@ -46,7 +46,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 					"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2"))
+			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2") || roleId.equals("14"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
@@ -92,7 +92,8 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			con = DatabasePlugin.connect();
 
 			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
-					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
+					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) 
+			{
 				sqlCondition += " and d.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 			}
 
@@ -110,7 +111,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 						+ "','dd-mm-yyyy') ";
 			}
 
-			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2"))) {
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))) {
 					sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='"+deptCode+"') ";
 			}
 			
@@ -131,7 +132,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 					+ "inner join dept_new dmt on (d.dept_code=dmt.dept_code)" + " where ack_type='NEW' "
 					+ sqlCondition + " group by distid,dm.district_name order by district_name";
 
-			System.out.println("SQL:" + sql);
+			System.out.println("SQL:showDistWise" + sql);
 
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			System.out.println("data=" + data);
@@ -148,7 +149,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 					"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2"))
+			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2") || roleId.equals("14"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
@@ -212,7 +213,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 						+ "','dd-mm-yyyy') ";
 			}
 			
-			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2"))) {
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))) {
 					sqlCondition += " and (dm.dept_code='" + deptCode + "' or dm.reporting_dept_code='"+deptCode+"') ";
 			}
 			
@@ -231,7 +232,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 					+ " where ack_type='NEW' and respondent_slno=1 " + sqlCondition
 					+ " group by d.dept_code,description " + " order by d.dept_code,description";
 
-			System.out.println("SQL:" + sql);
+			System.out.println("SQL:showDeptWise" + sql);
 
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			System.out.println("data=" + data);
@@ -248,7 +249,107 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 					"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2"))
+			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2") || roleId.equals("14"))
+				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+						con));
+			else
+				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true and reporting_dept_code='"
+								+ deptCode + "' or dept_code='" + deptCode + "' order by dept_code",
+						con));
+			
+			cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox(
+					"select sno,case_full_name from case_type_master order by sno",
+					con));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
+			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
+			cform.setDynaForm("fromDate", cform.getDynaForm("fromDate"));
+			cform.setDynaForm("toDate", cform.getDynaForm("toDate"));
+			DatabasePlugin.close(con, ps, null);
+		}
+		return mapping.findForward("success");
+	}
+	public ActionForward showUserWise(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Connection con = null;
+		PreparedStatement ps = null;
+		CommonForm cform = (CommonForm) form;
+		HttpSession session = request.getSession();
+		String sql = null, roleId = null, deptCode = null, distCode="0";
+		try {
+			if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
+				return mapping.findForward("Logout");
+			}
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			
+			String sqlCondition = "";
+			con = DatabasePlugin.connect();
+
+			if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
+					&& !cform.getDynaForm("districtId").toString().contentEquals("0")) {
+				sqlCondition += " and ad.distid='" + cform.getDynaForm("districtId").toString().trim() + "' ";
+			}
+
+			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
+					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
+				sqlCondition += " and ad.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+			}
+
+			if (cform.getDynaForm("fromDate") != null && !cform.getDynaForm("fromDate").toString().contentEquals("")) {
+				sqlCondition += " and ad.inserted_time::date >= to_date('" + cform.getDynaForm("fromDate")
+						+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("toDate") != null && !cform.getDynaForm("toDate").toString().contentEquals("")) {
+				sqlCondition += " and ad.inserted_time::date <= to_date('" + cform.getDynaForm("toDate")
+						+ "','dd-mm-yyyy') ";
+			}
+			
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2")  || roleId.equals("14"))) {
+					sqlCondition += " and (dm.dept_code='" + deptCode + "' or dm.reporting_dept_code='"+deptCode+"') ";
+			}
+			
+			if (roleId.equals("2")) {
+				sqlCondition += " and ad.distid='" + distCode + "' ";
+				cform.setDynaForm("districtId", distCode);
+			}
+			
+			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
+					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
+				sqlCondition += " and ad.casetype='" + cform.getDynaForm("caseTypeId").toString().trim() + "' ";
+			}
+		
+			sql = "select inserted_by,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad "
+					+ " inner join district_mst dm on (ad.distid=dm.district_id) "
+					+ " inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) "
+					+ "inner join dept_new dmt on (d.dept_code=dmt.dept_code)" + " where ack_type='NEW' "
+					+ sqlCondition + " group by inserted_by";
+			
+
+			System.out.println("SQL:showUserWise" + sql);
+
+			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+			System.out.println("data=" + data);
+			if (data != null && !data.isEmpty() && data.size() > 0) {
+				request.setAttribute("USERWISEACKS", data);
+			} else {
+				request.setAttribute("errorMsg", "No details found.");
+			}
+
+			if (roleId.equals("2"))
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+						"select district_id,upper(district_name) from district_mst where district_id='"+distCode+"' order by district_name", con));
+			else 
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
+					"select district_id,upper(district_name) from district_mst order by district_name", con));
+
+			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2") || roleId.equals("14"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
@@ -288,6 +389,10 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			
+			String inserted_by = CommonModels.checkStringObject(cform.getDynaForm("inserted_by"));
+			
+			System.out.println("inserted_by--"+inserted_by);
 			
 			String sqlCondition = "";
 			con = DatabasePlugin.connect();
@@ -337,7 +442,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("toDate", request.getParameter("toDate"));
 			}
 
-			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2"))) {
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))) {
 					sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='"+deptCode+"') ";
 			}
 			
@@ -349,6 +454,10 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
 					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
 				sqlCondition += " and a.casetype='" + cform.getDynaForm("caseTypeId").toString().trim() + "' ";
+			}
+			if (cform.getDynaForm("inserted_by") != null && !cform.getDynaForm("inserted_by").toString().contentEquals("")
+					&& !cform.getDynaForm("inserted_by").toString().contentEquals("0")) {
+				sqlCondition += " and a.inserted_by='" + inserted_by+ "' ";
 			}
 			
 			sql = "select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
@@ -379,7 +488,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 					"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2"))
+			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2") || roleId.equals("14"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));

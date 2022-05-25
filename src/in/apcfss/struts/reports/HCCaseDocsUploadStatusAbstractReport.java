@@ -47,10 +47,12 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 				sql="select a1.reporting_dept_code as deptcode,dn1.description,sum(total_cases) as  total_cases, sum(petition_uploaded) as petition_uploaded,sum(closed_cases) as closed_cases, "
 						+ " sum(counter_uploaded) as counter_uploaded, sum(pwrcounter_uploaded) as pwrcounter_uploaded,sum(counter_approved_gp) as counter_approved_gp "
 						+ " from ( "
-						+ " select case when reporting_dept_code='CAB01' then a.dept_code else reporting_dept_code end as reporting_dept_code,a.dept_code,count(*) as total_cases, sum(case when petition_document is not null then 1 else 0 end) as petition_uploaded "
-						+ " , sum(case when a.ecourts_case_status='Closed' then 1 else 0 end) as closed_cases ,sum(case when a.ecourts_case_status='Pending' and counter_filed_document is not null and length(counter_filed_document)>10  then 1 else 0 end) as counter_uploaded"
-						+ " , sum(case when a.ecourts_case_status='Pending' and pwr_uploaded_copy is not null and length(pwr_uploaded_copy)>10  then 1 else 0 end) as pwrcounter_uploaded "
-						+ " , sum(case when counter_approved_gp='Yes' then 1 else 0 end) as counter_approved_gp from ecourts_case_data a "
+						+ " select case when reporting_dept_code='CAB01' then a.dept_code else reporting_dept_code end as reporting_dept_code,a.dept_code,count(*) as total_cases"
+						+ ", sum(case when petition_document is not null and length(petition_document)>10 then 1 else 0 end) as petition_uploaded "
+						+ ", sum(case when a.ecourts_case_status='Closed' then 1 else 0 end) as closed_cases "
+						+ ", sum(case when a.ecourts_case_status='Pending' and counter_filed_document is not null and length(counter_filed_document)>10  then 1 else 0 end) as counter_uploaded"
+						+ ", sum(case when a.ecourts_case_status='Pending' and pwr_uploaded_copy is not null and length(pwr_uploaded_copy)>10  then 1 else 0 end) as pwrcounter_uploaded "
+						+ ", sum(case when counter_approved_gp='Yes' then 1 else 0 end) as counter_approved_gp from ecourts_case_data a "
 						+ " left join apolcms.ecourts_olcms_case_details b using (cino)inner join dept_new dn on (a.dept_code=dn.dept_code) ";
 						
 
@@ -118,10 +120,11 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 			
 			
 			
-			sql = "select a.dept_code as deptcode,dn.description,count(*) as total_cases, sum(case when petition_document is not null then 1 else 0 end) as petition_uploaded  "
-					+ " , sum(case when a.ecourts_case_status='Closed' then 1 else 0 end) as closed_cases "
-					+ " ,sum(case when a.ecourts_case_status='Pending' and counter_filed_document is not null then 1 else 0 end) as counter_uploaded ,"
-					+ " sum(case when a.ecourts_case_status='Pending' and pwr_uploaded_copy is not null then 1 else 0 end) as pwrcounter_uploaded  ,"
+			sql = "select a.dept_code as deptcode,dn.description,count(*) as total_cases, "
+					+ "sum(case when petition_document is not null and length(petition_document)>10  then 1 else 0 end) as petition_uploaded  "
+					+ ", sum(case when a.ecourts_case_status='Closed' then 1 else 0 end) as closed_cases "
+					+ ",sum(case when a.ecourts_case_status='Pending' and counter_filed_document is not null  and length(counter_filed_document)>10 then 1 else 0 end) as counter_uploaded ,"
+					+ " sum(case when a.ecourts_case_status='Pending' and pwr_uploaded_copy is not null  and length(pwr_uploaded_copy)>10 then 1 else 0 end) as pwrcounter_uploaded  ,"
 					+ " sum(case when counter_approved_gp='Yes' then 1 else 0 end) as counter_approved_gp from ecourts_case_data a "
 					+ " left join apolcms.ecourts_olcms_case_details b using (cino) "
 					+ " inner join dept_new dn on (a.dept_code=dn.dept_code) "

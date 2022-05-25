@@ -264,7 +264,7 @@ public class WelcomePageAction extends DispatchAction{
 				else if(roleId.equals("6")) { // GPO
 					
 				}
-				else if(roleId.equals("13")) { // HC-DEOs
+				else if(roleId.equals("13") || roleId.equals("14")) { // HC-DEOs
 					
 				}
 				

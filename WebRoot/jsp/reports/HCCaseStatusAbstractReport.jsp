@@ -481,9 +481,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 										</td>
 										<td>
-											<logic:notEmpty name="map" property="scanned_document_path">
+											<logic:notEmpty name="map" property="scanned_document_path1">
+												<logic:notEqual value="-"  name="map" property="scanned_document_path1">
 												<%-- ./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf --%>
 												<a href="./${map.scanned_document_path}" target="_new" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-save"></i><span>Scanned Affidavit</span></a>
+											</logic:notEqual>
 											</logic:notEmpty>
 										</td>
 										<td>
