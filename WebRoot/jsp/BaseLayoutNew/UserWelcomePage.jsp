@@ -92,7 +92,7 @@ label{
 
 </head>
 
-<body class="fixed-navbar">
+<body class="fixed-navbar fixed-layout">
 	<div class="page-wrapper">
 		<!-- START HEADER-->
 		<tiles:insert attribute="Header" name="Header" />
