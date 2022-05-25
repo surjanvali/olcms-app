@@ -115,6 +115,10 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 					sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='"+deptCode+"') ";
 			}
 			
+			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14"))) {
+				request.setAttribute("SHOWUSERWISE", "SHOWUSERWISE");
+			}
+			
 			if (roleId.equals("2")) {
 				sqlCondition += " and ad.distid='" + distCode + "' ";
 				cform.setDynaForm("districtId", distCode);
@@ -262,7 +266,11 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox(
 					"select sno,case_full_name from case_type_master order by sno",
 					con));
-
+			
+			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14"))) {
+				request.setAttribute("SHOWUSERWISE", "SHOWUSERWISE");
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -363,6 +371,10 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 					"select sno,case_full_name from case_type_master order by sno",
 					con));
 
+			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14"))) {
+				request.setAttribute("SHOWUSERWISE", "SHOWUSERWISE");
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -501,7 +513,10 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox(
 					"select sno,case_full_name from case_type_master order by sno",
 					con));
-
+			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14"))) {
+				request.setAttribute("SHOWUSERWISE", "SHOWUSERWISE");
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

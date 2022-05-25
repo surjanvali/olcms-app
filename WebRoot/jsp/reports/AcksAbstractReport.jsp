@@ -150,9 +150,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<input
 								type="button" name="showcases3" value="Show District Wise"
 								class="btn btn-success" onclick="return fnShowDistWise();" />
-								<input
-								type="button" name="showcases4" value="Show User Wise"
-								class="btn btn-success" onclick="return fnShowUserWise();" />
+								
+								<logic:present name="SHOWUSERWISE">
+									<input
+									type="button" name="showcases4" value="Show User Wise"
+									class="btn btn-success" onclick="return fnShowUserWise();" />
+								</logic:present>
 						</div>
 					</div>
 				</div>
