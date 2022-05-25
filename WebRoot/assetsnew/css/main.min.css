@@ -4188,8 +4188,14 @@ a.text-danger:focus, a.text-danger:hover {
 	overflow: hidden
 }
 
-.side-menu .nav-2-level>li>a {
+/*.side-menu .nav-2-level>li>a {
 	padding: 7px 10px 7px 45px
+}*/
+
+.side-menu .nav-2-level>li>a {
+    padding: 7px 10px 7px 45px;
+    font-size: small;
+    white-space: initial;
 }
 
 .side-menu .nav-3-level>li>a {

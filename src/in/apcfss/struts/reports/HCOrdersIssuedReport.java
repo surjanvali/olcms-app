@@ -248,8 +248,17 @@ public class HCOrdersIssuedReport extends DispatchAction {
 			// sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
 			if (CommonModels.checkStringObject(request.getParameter("repType")).equals("HOD"))
 				sql += " and (a.dept_code='" + deptCode + "') ";
-			else 
+			else  if (CommonModels.checkStringObject(request.getParameter("repType")).equals("SD"))
 				sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
+			
+			
+			
+			if(roleId.equals("3") || roleId.equals("4")) {
+				sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or a.dept_code='" + session.getAttribute("dept_code") + "') ";
+			}
+			if(roleId.equals("5") || roleId.equals("9")) {
+				sql += " and (a.dept_code='" + session.getAttribute("dept_code") + "') ";
+			}
 			
 			
 			if(roleId.equals("2")){

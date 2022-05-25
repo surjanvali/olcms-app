@@ -22,21 +22,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
-
 </head>
-
 <body>
 	<div class="page-content fade-in-up">
-
-
 		<logic:notEqual value="13" name="role_id" scope="session">
-
 			<div class="row">
-
 				<logic:notEmpty name="dashboardCounts">
-
 					<logic:iterate id="innerData" name="dashboardCounts">
-
 						<logic:greaterThan value="0" name="innerData" property="assigned">
 							<div class="col-lg-3 col-md-6">
 								<a href="./AssignedCasesToSection.do">
@@ -151,6 +143,55 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</logic:greaterThan>
 
 				</logic:notEmpty>
+				
+				<logic:notEmpty name="INTERIMORDERS">
+					<logic:greaterThan value="0" name="INTERIMORDERS">
+						<div class="col-lg-3 col-md-6">
+							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
+							
+							<a href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=IO">
+								<div class="ibox bg-info color-white widget-stat">
+									<div class="ibox-body">
+										<h2 class="m-b-5 font-strong">${INTERIMORDERS }</h2>
+										<div class="m-b-5">Interim Orders Issued</div>
+										<i class="fa fa-file-text-o widget-stat-icon"></i>
+										<div>
+											<small> &nbsp;</small>
+										</div>
+
+									</div>
+								</div>
+							</a>
+						</div>
+					</logic:greaterThan>
+
+				</logic:notEmpty>
+				
+				<logic:notEmpty name="FINALORDERS">
+					<logic:greaterThan value="0" name="FINALORDERS">
+						<div class="col-lg-3 col-md-6">
+							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
+							
+							<a href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=FO">
+								<div class="ibox bg-warning color-white widget-stat">
+									<div class="ibox-body">
+										<h2 class="m-b-5 font-strong">${FINALORDERS }</h2>
+										<div class="m-b-5">Final Order Issued</div>
+										<i class="fa fa-file-text-o widget-stat-icon"></i>
+										<div>
+											<small> &nbsp;</small>
+										</div>
+
+									</div>
+								</div>
+							</a>
+						</div>
+					</logic:greaterThan>
+
+				</logic:notEmpty>
+				
+				
+				
 
 				<div class="col-lg-3 col-md-6">
 					<a href="./HighCourtCauseList.do">
