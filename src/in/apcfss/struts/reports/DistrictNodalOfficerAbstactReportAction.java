@@ -42,7 +42,12 @@ public class DistrictNodalOfficerAbstactReportAction extends DispatchAction {
 			request.setAttribute("HEADING", "District Nodal Officer (Legal) Abstract ");
 
 			sql = "select dist_id as  distid,upper(b.district_name) as district_name,count(*) as acks From nodal_officer_details a "
-					+ "inner join district_mst b on (a.dist_id=b.district_id) group by a.dist_id,b.district_name order by district_name ";
+					+ "inner join district_mst b on (a.dist_id=b.district_id) ";
+			
+			if(!deptCode.equals("") && !deptCode.equals("0"))
+					sql+=" where a.dept_id='"+deptCode+"'";
+					
+			sql+=" group by a.dist_id,b.district_name order by district_name ";
 
 			System.out.println("SQL:" + sql);
 
@@ -73,11 +78,12 @@ public class DistrictNodalOfficerAbstactReportAction extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql = null, deptId = null;
+		String userId = null, roleId = null, sql = null, deptId = null,deptCode="";
 		try {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
@@ -98,7 +104,12 @@ public class DistrictNodalOfficerAbstactReportAction extends DispatchAction {
 						+ tableName + ") nd on (m.employeeid=nd.employee_id and m.designation=nd.designation_id)"
 						+ "inner join users u on (m.emailid=u.userid)"
 						+ "inner join dept_new d on (m.dept_id=d.dept_code)" + "where m.dist_id='" + dist
-						+ "' order by 1";
+						+ "'";
+				
+				if(!deptCode.equals("") && !deptCode.equals("0"))
+							sql+=" and  m.dept_id='"+deptCode+"'";
+				
+						sql+= " order by 1";
 
 				System.out.println("SQL:" + sql);
 
