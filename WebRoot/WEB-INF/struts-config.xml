@@ -3,13 +3,14 @@
 
 <struts-config>
 	<data-sources>
-		<data-source key="dbsource" type="org.apache.commons.dbcp.BasicDataSource">
-			<set-property property="driverClassName" value="org.postgresql.Driver" />
+		<data-source key="dbsource"
+			type="org.apache.commons.dbcp.BasicDataSource">
+			<set-property property="driverClassName"
+				value="org.postgresql.Driver" />
 			<!-- Live -->
-			<!-- <set-property property="url"
-				value="jdbc:postgresql://10.96.54.54:6432/apolcms" />
-			<set-property property="username" value="apolcms" />
-			<set-property property="password" value="@p0l(m$" /> -->
+			<!-- <set-property property="url" value="jdbc:postgresql://10.96.54.54:6432/apolcms" 
+				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
+				value="@p0l(m$" /> -->
 
 			<!-- Test -->
 			<!-- <set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" 
@@ -363,6 +364,27 @@
 			parameter="mode" scope="request">
 			<forward name="success"
 				path="DistrictNodalOfficerAbstactReport"></forward>
+		</action>
+
+
+		<action path="/UpdateEcourtsData" name="CommonForm"
+			type="in.apcfss.struts.Actions.UpdateEcourtsDataAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="UpdateEcourtsData"></forward>
+		</action>
+
+
+		<action path="/AssignmentAndNewCases" name="CommonForm"
+			type="in.apcfss.struts.reports.AssignmentAndNewCasesAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="assignments"></forward>
+		</action>
+
+
+		<action path="/AssignedNewCasesToEmp" name="CommonForm"
+			type="in.apcfss.struts.reports.AssignedNewCasesToEmpAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="AssignedNewCasesToEmp"></forward>
 		</action>
 
 	</action-mappings>

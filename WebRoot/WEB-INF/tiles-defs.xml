@@ -193,43 +193,68 @@
 	</definition>
 
 	<definition name="officersreport" extends="UserLayoutNew">
-		<put name="content" value="/jsp/reports/OfficersRegisteredReport.jsp" />
+		<put name="content"
+			value="/jsp/reports/OfficersRegisteredReport.jsp" />
 	</definition>
 
 	<definition name="uploadeofficedata" extends="UserLayoutNew">
 		<put name="content" value="/jsp/masters/UploadEofficeData.jsp" />
 	</definition>
-	
+
 	<definition name="searchcase" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/SearchCase.jsp" />
 	</definition>
-	
+
 	<definition name="acksreport" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/AcksReport.jsp" />
 	</definition>
-	
+
 	<definition name="acksabstract" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/AcksAbstractReport.jsp" />
 	</definition>
-	
+
 	<definition name="hccasedocsupload" extends="UserLayoutNew">
-		<put name="content" value="/jsp/reports/HCCaseDocsUploadAbstractReport.jsp" />
+		<put name="content"
+			value="/jsp/reports/HCCaseDocsUploadAbstractReport.jsp" />
 	</definition>
-	
-	<definition name="hcordersissuedreport" extends="UserLayoutNew">
+
+	<definition name="hcordersissuedreport"
+		extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/HCOrdersIssuedReport.jsp" />
 	</definition>
-	
-	<definition name="contemptcasesreport" extends="UserLayoutNew">
-		<put name="content" value="/jsp/reports/ContemptCasesAbstractReport.jsp" />
+
+	<definition name="contemptcasesreport"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/ContemptCasesAbstractReport.jsp" />
 	</definition>
-	
-	<definition name="eofficeEmployeeReport" extends="UserLayoutNew">
+
+	<definition name="eofficeEmployeeReport"
+		extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/eofficeEmployeeReport.jsp" />
 	</definition>
-	
-	<definition name="DistrictNodalOfficerAbstactReport" extends="UserLayoutNew">
-		<put name="content" value="/jsp/reports/DistrictNodalOfficerAbstactReport.jsp" />
+
+	<definition name="DistrictNodalOfficerAbstactReport"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/DistrictNodalOfficerAbstactReport.jsp" />
 	</definition>
+
+
+	<definition name="UpdateEcourtsData" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/UpdateEcourtsData.jsp" />
+	</definition>
+
+
+	<definition name="assignments" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/AssignmentAndNewCases.jsp" />
+	</definition>
+
+	<definition name="AssignedNewCasesToEmp"
+		extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/AssignedNewCasesToEmp.jsp" />
+	</definition>
+
 
 </tiles-definitions>

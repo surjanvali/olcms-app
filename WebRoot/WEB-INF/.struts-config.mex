@@ -121,6 +121,12 @@
   <StrutsActivity path="closedcasesreport" location="2450,2350" dimension="124,51" />
   <StrutsActivity path="mlologinstatusreport" location="650,2950" dimension="141,51" />
   <StrutsActivity path="/form/eofficeEmployeeReport.jsp" location="350,3450" dimension="207,51" />
+  <StrutsActivity path="/UpdateEcourtsData.do" location="3050,1650" dimension="299,96" />
+  <StrutsActivity path="UpdateEcourtsData" location="3050,2050" dimension="131,51" />
+  <StrutsActivity path="/AssignmentAndNewCases.do" location="3050,2250" dimension="334,96" />
+  <StrutsActivity path="assignments" location="3050,2750" dimension="96,51" />
+  <StrutsActivity path="/AssignedNewCasesToEmp.do" />
+  <StrutsActivity path="AssignedNewCasesToEmp" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,595" />
@@ -192,6 +198,12 @@
       <AbsolutePoint location="2890,3246" />
       <AbsolutePoint location="2890,3275" />
       <AbsolutePoint location="1991,3275" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/UpdateEcourtsData.do,success,UpdateEcourtsData,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3115,1746" />
+      <AbsolutePoint location="3115,2050" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/HighCourtCasesAssignedList.do,success,assignedhccases,1" routingType="0">
@@ -503,7 +515,19 @@
       <AbsolutePoint location="998,703" />
     </AutomaticBendpoints>
   </StrutsTransition>
+  <StrutsTransition id="/AssignmentAndNewCases.do,success,assignments,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3098,2346" />
+      <AbsolutePoint location="3098,2750" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
   <StrutsTransition id="/AcksReport.do,success,acksreport,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="0,0" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/AssignedNewCasesToEmp.do,success,AssignedNewCasesToEmp,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="0,0" />
       <AbsolutePoint location="0,0" />
