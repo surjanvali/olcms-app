@@ -78,7 +78,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<tr>
 										<th>Sl.No</th>
 										<th>District</th>
-										<th>New Cases Registered</th>
+										<th>Nodal Officers Registered</th>
 									</tr>
 								</thead>
 								<tbody>
