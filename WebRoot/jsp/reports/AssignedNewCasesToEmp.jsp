@@ -38,6 +38,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden styleId="selectedCaseIds"
 			property="dynaForm(selectedCaseIds)" />
+			<html:hidden styleId="fileCino"
+			property="dynaForm(fileCino)" />
+			
+			
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -91,6 +95,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Advocate Name</th>
 										<!-- <th>Remarks</th> -->
 										<th>Download / Print</th>
+										<th style="width: 150px !important;">Action</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -134,6 +139,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
 													<span>Scanned Affidavit</span> <!-- <span>Download</span> -->
 											</a></td>
+											
+											<td style="min-width: 150px !important;">
+
+												<button class="btn btn-sm btn-primary"
+													onclick="caseStatusUpdate('${map.ack_no}');">Update
+													Status</button>
+											</td>
 										</tr>
 									</logic:iterate>
 								</tbody>
@@ -182,6 +194,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		});
 	});
 
+	function caseStatusUpdate(fileCino) {
+		$("#mode").val("caseStatusUpdate");
+		$("#fileCino").val("" + fileCino);
+		$("#AssignedCasesToSectionForm").submit();
+	}
+	
 	function fnShowDistWise() {
 		$("#mode").val("showDistWise");
 		$("#acksAbstractFormId").submit();

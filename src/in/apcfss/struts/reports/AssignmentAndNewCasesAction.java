@@ -684,14 +684,15 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 							+ "select distinct b.email,d.sdeptcode||d.deptcode,b.designation_id,b.employee_id,b.mobile1,uid, '"
 							+ (String) session.getAttribute("userid") + "', '" + request.getRemoteAddr()
 							+ "'::inet,"+distCode+" from "+tableName+" b inner join dept_new d on (d.dept_code='"
-							+ cform.getDynaForm("empDept") + "') where b.employee_id='"+ cform.getDynaForm("employeeId") + "'";
+							+ cform.getDynaForm("empDept") + "') where trim(b.employee_identity)='"+cform.getDynaForm("empSection")+"' and trim(b.post_name_en)='"+cform.getDynaForm("empPost")+"' and trim(b.employee_id)='"+cform.getDynaForm("employeeId")+"'";
+							
 					System.out.println("NEW SECTION OFFICER CREATION SQL:"+sql);
 					b += DatabasePlugin.executeUpdate(sql, con);
 					
 					sql="insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id, dept_code, user_type, dist_id) " +
 							"select distinct b.email, md5('olcms@2021'), b.fullname_en, '"+(String) session.getAttribute("userid")
 							+"', now(),'"+request.getRemoteAddr() +"'::inet, d.dept_id,d.dept_code,"+newRoleId+","+distCode+" from "+tableName+" b inner join dept_new d on (d.dept_code='"+cform.getDynaForm("empDept")
-							+"') where b.employee_id='"+cform.getDynaForm("employeeId")+"' ";
+							+"') where trim(b.employee_identity)='"+cform.getDynaForm("empSection")+"' and trim(b.post_name_en)='"+cform.getDynaForm("empPost")+"' and trim(b.employee_id)='"+cform.getDynaForm("employeeId")+"'";
 					
 					System.out.println("USER CREATION SQL:"+sql);
 					
