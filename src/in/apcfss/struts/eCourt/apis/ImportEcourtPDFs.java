@@ -28,7 +28,8 @@ public class ImportEcourtPDFs {
 	public static void main(String[] args) {
 		
 		String request_token = "", requeststring = "";
-		String inputStr = "", targetURL = "";int i=0;
+		String inputStr = "", targetURL = "";
+		int i = 0;
 		String authToken = "";
 		Connection con = null;
 		ResultSet rs = null;
@@ -42,7 +43,9 @@ public class ImportEcourtPDFs {
 			
 			System.out.println("opVal:"+opVal);
 			
-			sql = "select cino,order_no,to_char(order_date,'yyyy-mm-dd') as order_date, cino||'-"+orderFileName+"-'||order_no as filename from "+apolcmsOrdersTable+" where order_document_path is null ";//limit 50 where cino='APHC010294162021'
+			sql = "select cino,order_no,to_char(order_date,'yyyy-mm-dd') as order_date, cino||'-"+orderFileName+"-'||order_no as filename from "+apolcmsOrdersTable+" where order_document_path is null";// limit 5";//0 where cino='APHC010294162021'
+			System.out.println("SQL:"+sql);
+			// sql = "select cino,order_no,to_char(order_date,'yyyy-mm-dd') as order_date, cino||'-"+orderFileName+"-'||order_no as filename from "+apolcmsOrdersTable+" where order_document_path ilike '%626%' ";//limit 50 where cino='APHC010294162021'
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
 			
@@ -104,13 +107,13 @@ public class ImportEcourtPDFs {
 				System.out.println("TEXT File Saved");
 			*/
 			
-			File pdfFile = new File("E:\\HighCourtsCaseOrders\\" + fileName + ".pdf");
+			File pdfFile = new File("E:\\HighCourtsCaseOrders\\24052022\\" + fileName + ".pdf");
 			FileOutputStream fos = new FileOutputStream(pdfFile);
 			byte[] decoder = Base64.getDecoder().decode(decryptedRespStr.replace("\"", "").replace("\\", ""));
 			fos.write(decoder);
 			System.out.println("PDF File Saved");
 			// sql="update ecourts_case_interimorder set order_document_path='HighCourtsCaseOrders/"+fileName+".pdf' where cino||'-interimorder-'||order_no='"+fileName+"'";
-			sql="update "+apolcmsOrdersTable+" set order_document_path='HighCourtsCaseOrders/"+fileName+".pdf' where cino||'-"+orderFileName+"-'||order_no='"+fileName+"'";
+			sql="update "+apolcmsOrdersTable+" set order_document_path='HighCourtsCaseOrders/"+fileName+".pdf', updated_time=now() where cino||'-"+orderFileName+"-'||order_no='"+fileName+"'";
 			DatabasePlugin.executeUpdate(sql, con);
 			
 		}

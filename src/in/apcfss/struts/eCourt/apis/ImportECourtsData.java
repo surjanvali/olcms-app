@@ -17,7 +17,6 @@ import plugins.DatabasePlugin;
 
 public class ImportECourtsData
 {
-  // static final String apolcmsDataBase = "jdbc:postgresql://172.16.98.2:9432/apolcms";
   static final String apolcmsDataBase = "jdbc:postgresql://172.16.98.2:9432/apolcms";
   static final String apolcmsUserName = "apolcms";
   static final String apolcmsPassword = "apolcms";
@@ -42,21 +41,31 @@ public class ImportECourtsData
 			System.out.println("opVal:"+opVal);
 			
 			// sql="select cino from ecourts_cinos where ecourts_response is null and cino not in (select cino from ecourts_case_data) order by slno";
-			sql="select cino from ecourts_cinos_new  where ecourts_response is null and dept_name in ('MISCELLANEOUS','FORESTENERGYENVIRONMENTSCIENCE & TECH.DEPT','EXCISE  (MISC.MATTERS)','TIRUMALA TIRUPATHI DEVASTHANAM (MISC.MATTERS)','PIL Cases','MOTOR VEHICLES ACT','WAKF BOARD (MISC.MATTERS)','MISCELLANEOUS MATTERS','W.C.ACT & E.S.I. ACT','CENTRAL ADMINISTRATIVE TRIBUNAL','TAX REVISION CASES','ROADS AND BUILDINGS','Income Tax Tribunal Appeals','PROVIDENT FUND (MISC.MATTERS)','FINANCE & PLANNING (MISC.MATTERS)','Securitization Act Cases','WPs Challanging the Vires of Rules/Section/Acts. incl Tax','TRANSPORT (MISC.MATTERS)','RAILWAY (MISC.MATTERS)','JUDICIAL MATTERS','SUITS FOR DAMAGES','LEGAL SERVICE AUTHORITY','PORT TRUST/DOCK LABOUR BOARD','DISPOSAL OTHERWISE (PARTLY ALLOWED DISPOSED OF REMANDED ETC','CENTRAL GOVT. UNDERTAKINGS','RURAL BANKS','ARBITRATION ACT','APPSC (MISC.MATTERS)','RIGHT TO INFORMATION ACT','OTHER DECLARATORY SUITS','FACTORIES','CIVIL MISC. SECOND APPEALS','GENERAL ADMINISTRTION DEPT.(MISC.MATTERS)','RENT CONTROL','L.I.C (MISC.MATTERS)','OTHERS','CENTRAL EXCISE APPEAL','CENTRAL EXCISE  & CUSTOMS (MISC.MATTERS)','CUSTOMS AND CENTRAL EXCISE (MISC.MATTERS)','HOUSING BOARD  (MISC.MATTERS)','Debt Recovery tribunal Matters','INCOME TAX AND WELTH TAX (MISC.MATTERS)','EMPLOYMENT GENERATION & YOUTH SERVICES','INSURANCE','FOOD CORPORATION OF INDIA (MISC.MATTERS)','Pocso Act','LAW DEPT.','GUARDIANS & WARDS ACT','LAND GRABBING','SPORTS AUTHORITY','POST AND TELEGRPH DEPARTMENT (MISC.MATTERS)','URBAN LAND CEILING (MISC.MATTERS)','MAINTENANCE','LAND REFORMS','INDIAN SUCCESSION ACT','PARTNERSHIP SUITS','TRUSTS & ENDOWMENTS','HABEAS CORPUS','COMMISSIONS','DEFENCE MATTERS (MISC.MATTERS)','CISF','CONSUMER FORUM','INDUSTRIES & FINANCIAL RECONSTRUCTION','LEGISLATIVE DEPT.(MISC.MATTERS)','LAND GRABBING APPEAL','COURTS','ALL SERVICE MATTERS OTHER THAN MENTIONED','RAILWAY CLAIMS TRIBUNAL','ARBITRATION APLICATION','COMPANY PETITION','LAND REFORMS CASES (MISC.MATTERS)','LATTER PATENT APPEAL','Wealth Tax Appeals','ORIGINAL SIDE APPEALS','ARBTRATION','ARCHAEOLOGY & MUSEUMS','TR CMP','LIABRARIES / GRANDHALAYAS','TAKEN UP CASES','RC','SINGARENI COLLORIES (MISC.MATTERS)','APPLICATION','CIVIL SUITS','INSTITUTES','MARKET COMMITTEE','COMPANY APPLICATION','ELECTION PETITION','SMALL CAUSES','ARBITRATION','Arbitration Act in WP category','CC Suomoto Cases','ENTERTAINMENT TAX','INSOLVENCY','AP HIGH COURT SERVICE MATTERS','COMPANY APPEAL','TENANCY REVISION','AP LAW OFFICERS RECURITMENT  (MISC.MATTERS)','CINEMAS (MISC.MATTERS)','DEPT. OF PERSONEL & TRAINING','EXECUTION PETITION','PUBLIC SECTOR','P.W.D. (MISC.MATTERS)','SECUNDERBAD CONTONMENT MATTERS','TITLE SUITS(IMMOVABLE PROPERTY)')"
+			
+			/* sql="select cino from ecourts_cinos_new  where ecourts_response is null and dept_name in ('MISCELLANEOUS','FORESTENERGYENVIRONMENTSCIENCE & TECH.DEPT','EXCISE  (MISC.MATTERS)','TIRUMALA TIRUPATHI DEVASTHANAM (MISC.MATTERS)','PIL Cases','MOTOR VEHICLES ACT','WAKF BOARD (MISC.MATTERS)','MISCELLANEOUS MATTERS','W.C.ACT & E.S.I. ACT','CENTRAL ADMINISTRATIVE TRIBUNAL','TAX REVISION CASES','ROADS AND BUILDINGS','Income Tax Tribunal Appeals','PROVIDENT FUND (MISC.MATTERS)','FINANCE & PLANNING (MISC.MATTERS)','Securitization Act Cases','WPs Challanging the Vires of Rules/Section/Acts. incl Tax','TRANSPORT (MISC.MATTERS)','RAILWAY (MISC.MATTERS)','JUDICIAL MATTERS','SUITS FOR DAMAGES','LEGAL SERVICE AUTHORITY','PORT TRUST/DOCK LABOUR BOARD','DISPOSAL OTHERWISE (PARTLY ALLOWED DISPOSED OF REMANDED ETC','CENTRAL GOVT. UNDERTAKINGS','RURAL BANKS','ARBITRATION ACT','APPSC (MISC.MATTERS)','RIGHT TO INFORMATION ACT','OTHER DECLARATORY SUITS','FACTORIES','CIVIL MISC. SECOND APPEALS','GENERAL ADMINISTRTION DEPT.(MISC.MATTERS)','RENT CONTROL','L.I.C (MISC.MATTERS)','OTHERS','CENTRAL EXCISE APPEAL','CENTRAL EXCISE  & CUSTOMS (MISC.MATTERS)','CUSTOMS AND CENTRAL EXCISE (MISC.MATTERS)','HOUSING BOARD  (MISC.MATTERS)','Debt Recovery tribunal Matters','INCOME TAX AND WELTH TAX (MISC.MATTERS)','EMPLOYMENT GENERATION & YOUTH SERVICES','INSURANCE','FOOD CORPORATION OF INDIA (MISC.MATTERS)','Pocso Act','LAW DEPT.','GUARDIANS & WARDS ACT','LAND GRABBING','SPORTS AUTHORITY','POST AND TELEGRPH DEPARTMENT (MISC.MATTERS)','URBAN LAND CEILING (MISC.MATTERS)','MAINTENANCE','LAND REFORMS','INDIAN SUCCESSION ACT','PARTNERSHIP SUITS','TRUSTS & ENDOWMENTS','HABEAS CORPUS','COMMISSIONS','DEFENCE MATTERS (MISC.MATTERS)','CISF','CONSUMER FORUM','INDUSTRIES & FINANCIAL RECONSTRUCTION','LEGISLATIVE DEPT.(MISC.MATTERS)','LAND GRABBING APPEAL','COURTS','ALL SERVICE MATTERS OTHER THAN MENTIONED','RAILWAY CLAIMS TRIBUNAL','ARBITRATION APLICATION','COMPANY PETITION','LAND REFORMS CASES (MISC.MATTERS)','LATTER PATENT APPEAL','Wealth Tax Appeals','ORIGINAL SIDE APPEALS','ARBTRATION','ARCHAEOLOGY & MUSEUMS','TR CMP','LIABRARIES / GRANDHALAYAS','TAKEN UP CASES','RC','SINGARENI COLLORIES (MISC.MATTERS)','APPLICATION','CIVIL SUITS','INSTITUTES','MARKET COMMITTEE','COMPANY APPLICATION','ELECTION PETITION','SMALL CAUSES','ARBITRATION','Arbitration Act in WP category','CC Suomoto Cases','ENTERTAINMENT TAX','INSOLVENCY','AP HIGH COURT SERVICE MATTERS','COMPANY APPEAL','TENANCY REVISION','AP LAW OFFICERS RECURITMENT  (MISC.MATTERS)','CINEMAS (MISC.MATTERS)','DEPT. OF PERSONEL & TRAINING','EXECUTION PETITION','PUBLIC SECTOR','P.W.D. (MISC.MATTERS)','SECUNDERBAD CONTONMENT MATTERS','TITLE SUITS(IMMOVABLE PROPERTY)')"
 					+ "and cino not in (select cino from ecourts_case_data) "
 					+ "and cino not in (select cino from ecourts_cinos) "
-					+ "order by dept_name limit 50000";
+					+ "order by dept_name limit 50000"; */
 			
-			sql="select cino from ecourts_cinos_2022 where ecourts_response is null and cino in ('APHC010522732021','APHC010488842021','APHC010511362021','APHC010521482021','APHC010510322021','APHC010502132021','APHC010516642021','APHC010500622021','APHC010517472021','APHC010519952021','APHC010501022021','APHC010519832021','APHC010507302021','APHC010518872021','APHC010496942021','APHC010511042021','APHC010517392021','APHC010513312021','APHC010511152021','APHC010507822021','APHC010504922021','APHC010508922021','APHC010522012021','APHC010518522021','APHC010508352021','APHC010516982021','APHC010517102021','APHC010510182021','APHC010503182021','APHC010523112021','APHC010527752021','APHC010516382021','APHC010514472021','APHC010519422021','APHC010520712021')";
+			// sql="select cino from ecourts_cinos_2022 where ecourts_response is null and cino in ('APHC010522732021','APHC010488842021','APHC010511362021','APHC010521482021','APHC010510322021','APHC010502132021','APHC010516642021','APHC010500622021','APHC010517472021','APHC010519952021','APHC010501022021','APHC010519832021','APHC010507302021','APHC010518872021','APHC010496942021','APHC010511042021','APHC010517392021','APHC010513312021','APHC010511152021','APHC010507822021','APHC010504922021','APHC010508922021','APHC010522012021','APHC010518522021','APHC010508352021','APHC010516982021','APHC010517102021','APHC010510182021','APHC010503182021','APHC010523112021','APHC010527752021','APHC010516382021','APHC010514472021','APHC010519422021','APHC010520712021')";
 			
 			
-			sql = "select cino from ecourts_cinos_new where cino in ('APHC010860492018','APHC010806812018','APHC010163702018','APHC010809902018','APHC010882852018','APHC010923532018','APHC010163722018','APHC010800242018','APHC010816552018')"; //ecourts_response is null and
+			// sql = "select cino from ecourts_cinos_new where cino in ('APHC010860492018','APHC010806812018','APHC010163702018','APHC010809902018','APHC010882852018','APHC010923532018','APHC010163722018','APHC010800242018','APHC010816552018')"; //ecourts_response is null and
 			
 			// sql = "select cino from ecourts_cinos_new where cino in ('APHC010202442020','APHC010202432020','APHC010062562018','APHC010214192006')"; //ecourts_response is null and
 			// sql = "select cino from ecourts_cinos_new where cino in ('APHC010512122021','APHC010514102021','APHC010516852021','APHC010518262021','APHC010518442021','APHC010521522021','APHC010521642021','APHC010521932021','APHC010522062021','APHC010522302021','APHC010522342021','APHC010522722021','APHC010523122021','APHC010523142021','APHC010523282021','APHC010523412021','APHC010523472021','APHC010523662021','APHC010523982021','APHC010524082021','APHC010524182021','APHC010524262021','APHC010524302021','APHC010524402021','APHC010524462021','APHC010525022021','APHC010525062021','APHC010526072021','APHC010526322021','APHC010527752021','APHC010527982021')"; //ecourts_response is null and
 			
-			sql = "select cino from ecourts_cinos_new where to_char(inserted_time,'dd/mm/yyyy hh:mi:ss')='18/01/2022 02:12:48' and  ecourts_response is not null ";
+			// sql = "select cino from ecourts_cinos_new where to_char(inserted_time,'dd/mm/yyyy hh:mi:ss')='18/01/2022 02:12:48' and  ecourts_response is not null ";
 			
+			// sql = "select distinct cino from ecourts_cinos_new where to_char(inserted_time,'dd/mm/yyyy')='03/02/2022' and ecourts_response is null and cino='APHC010000942022'";
+			
+			// sql = "select distinct a.cino from ecourts_contempt_cinos a left join ecourts_case_data b using (cino) where b.cino is null ";
+			 sql ="select distinct a.cino from ecourts_cinos_new a where cino='APHC010080012022'";
+			
+			// sql = "select distinct a.cino from ecourts_cinos_1105_1605 a left join ecourts_case_data b using (cino) where b.cino is null ";
+			
+			//sql = "select distinct a.cino from ecourts_cinos_1705_2305 a left join ecourts_case_data b using (cino) where b.cino is null";
+			System.out.println("SQL:"+sql);
 			
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
@@ -83,15 +92,25 @@ public class ImportECourtsData
 				}
 				else if(opVal!=null && !opVal.equals("")){
 					try {
-					resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
+						resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
 					}catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
-				
+				// resp=null;
 				if (resp != null && !resp.equals("")) {
 					try {
-						processCNRsearchResponse(resp, opVal, con, rs.getString("cino").trim());
+						String response_str="", decryptedRespStr="";
+						JSONObject jObj = new JSONObject(resp);
+					      if ((jObj.has("response_str")) && (jObj.getString("response_str") != null)) {
+					        response_str = jObj.getString("response_str").toString();
+					      }
+					      
+					      if ((response_str != null) && (!response_str.equals(""))) {
+					          decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
+					        }
+					      System.out.println("decryptedRespStr:"+decryptedRespStr);
+						 // processCNRsearchResponse(resp, opVal, con, rs.getString("cino").trim());
 					}catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -385,7 +404,9 @@ public class ImportECourtsData
       if (sqls.size() > 0) {
     	  
     	  // sql="update ecourts_cinos_2022 set ecourts_response=null where cino='"+cino+"' and ecourts_response is not null"; 
-    	  sql="update ecourts_cinos_new set ecourts_response=null where cino='"+cino+"' and ecourts_response is not null"; 
+    	  // sql="update ecourts_cinos_new set ecourts_response=null where cino='"+cino+"' and ecourts_response is not null"; 
+    	  // sql="update ecourts_cinos_2022_1 set ecourts_response=null where cino='"+cino+"' and ecourts_response is not null";
+    	  sql="update ecourts_contempt_cinos set ecourts_response='UPDATED' where cino='"+cino+"' and ecourts_response is not null";
     	  sqls.add(sql);
     	  
     	  executedSqls = DatabasePlugin.executeBatchSQLs(sqls, con);
@@ -401,8 +422,10 @@ public class ImportECourtsData
     }
     else
     {
-    	sql="update ecourts_cinos_new set ecourts_response='"+resp+"' where cino='"+cino+"'";
+    	// sql="update ecourts_cinos_new set ecourts_response='"+resp+"' where cino='"+cino+"'";
+    	//sql="update ecourts_cinos_2022_1 set ecourts_response='"+resp+"' where cino='"+cino+"'";
     	//sql="update ecourts_cinos_2022 set ecourts_response='"+resp+"' where cino='"+cino+"'";
+    	sql="update ecourts_contempt_cinos set ecourts_response='"+resp+"' where cino='"+cino+"'";
     	DatabasePlugin.executeUpdate(sql, con);
     	System.out.println("Invalid/Empty Response::"+"SQL:"+sql);
     }
