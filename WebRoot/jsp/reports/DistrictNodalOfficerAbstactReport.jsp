@@ -37,7 +37,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		styleId="acksAbstractFormId">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden property="dynaForm(districtId)" styleId="districtId" />
-		<html:hidden property="dynaForm(district_name)" styleId="district_name" />
+		<html:hidden property="dynaForm(district_name)"
+			styleId="district_name" />
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -67,14 +68,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			<logic:present name="DISTWISEACKS">
 				<div class="ibox">
-					<div class="ibox-head">
-						<div class="ibox-title">${HEADING }</div>
-					</div>
+					<!-- <div class="ibox-head">
+						<div class="ibox-title"></div>
+					</div> -->
 					<div class="ibox-body">
 						<div class="table-responsive">
 							<table id="example" class="table table-striped table-bordered"
 								style="width:100%">
 								<thead>
+									<tr>
+										<th colspan="3">${HEADING }</th>
+									</tr>
 									<tr>
 										<th>Sl.No</th>
 										<th>District</th>
@@ -86,7 +90,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<logic:iterate id="map" name="DISTWISEACKS" indexId="i">
 										<tr>
 											<td>${i+1 }.</td>
-											<td><a href="javascript:showDistCases('${map.distid}','${map.district_name }');">
+											<td><a
+												href="javascript:showDistCases('${map.distid}','${map.district_name }');">
 													${map.district_name } </a></td>
 											<td style="text-align: right;">${map.acks }</td>
 										</tr>
@@ -113,42 +118,43 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 					<div class="ibox-body">
-					<div class="table-responsive">
-						<table class="table table-striped table-bordered table-hover"
-							id="example" cellpadding="0" cellspacing="0">
-							<thead>
-								<tr>
-									<th>Sl.No</th>
-									<th>Department Code</th>
-									<th>Department</th>
-									<th>Employee Name</th>
-									<th>Designation</th>
-									<th>Mobile No</th>
-									<th>eMail</th>
-								</tr>
-							</thead>
-							<tbody>
-								<logic:iterate id="map" name="EMPWISEDATA" indexId="i">
+						<div class="table-responsive">
+							<table class="table table-striped table-bordered table-hover"
+								id="example" cellpadding="0" cellspacing="0">
+								<thead>
 									<tr>
-										<td>${i+1 }.</td>
-										<td>${map.dept_id }</td>
-										<td>${map.description }</td>
-										<td>${map.fullname_en }</td>
-										<td>${map.designation_name_en }</td>
-										<td>${map.mobileno }</td>
-										<td>${map.emailid }</td>
+										<th>Sl.No</th>
+										<th>Department Code</th>
+										<th>Department</th>
+										<th>Employee Name</th>
+										<th>Designation</th>
+										<th>Mobile No</th>
+										<th>eMail</th>
 									</tr>
-								</logic:iterate>
-							</tbody>
-							<tfoot>
-								<tR>
-									<td colspan="7">&nbsp;</td>
-								</tR>
-							</tfoot>
-						</table>
+								</thead>
+								<tbody>
+									<logic:iterate id="map" name="EMPWISEDATA" indexId="i">
+										<tr>
+											<td>${i+1 }.</td>
+											<td>${map.dept_id }</td>
+											<td>${map.description }</td>
+											<td>${map.fullname_en }</td>
+											<td>${map.designation_name_en }</td>
+											<td>${map.mobileno }</td>
+											<td>${map.emailid }</td>
+										</tr>
+									</logic:iterate>
+								</tbody>
+								<tfoot>
+									<tR>
+										<td colspan="7">&nbsp;</td>
+									</tR>
+								</tfoot>
+							</table>
 
+						</div>
 					</div>
-				</div></div>
+				</div>
 			</logic:notEmpty>
 
 		</div>
@@ -194,7 +200,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		//return true;
 	} */
 
-	function showDistCases(distid,district_name) {
+	function showDistCases(distid, district_name) {
 		$("#districtId").val(distid);
 		$("#district_name").val(district_name);
 		//$("#deptId").val($("#deptId").val());
