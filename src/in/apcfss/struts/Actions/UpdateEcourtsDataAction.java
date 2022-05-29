@@ -62,84 +62,12 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 
 			con = DatabasePlugin.connect();
 
-			if (cform.getDynaForm("dofFromDate") != null
-					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
-				sqlCondition += " and a.date_of_filing >= to_date('" + cform.getDynaForm("dofFromDate")
-						+ "','dd-mm-yyyy') ";
-			}
-			if (cform.getDynaForm("dofToDate") != null
-					&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
-				sqlCondition += " and a.date_of_filing <= to_date('" + cform.getDynaForm("dofToDate")
-						+ "','dd-mm-yyyy') ";
-			}
-			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
-					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
-				sqlCondition += " and trim(a.type_name_reg)='" + cform.getDynaForm("caseTypeId").toString().trim()
-						+ "' ";
-			}
-			if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
-					&& !cform.getDynaForm("districtId").toString().contentEquals("0")) {
-				sqlCondition += " and a.dist_id='" + cform.getDynaForm("districtId").toString().trim() + "' ";
-			}
-			if (!CommonModels.checkStringObject(cform.getDynaForm("regYear")).equals("ALL")
-					&& CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
-				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
-			}
-			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
-					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
-				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
-			}
-
-			sql = "select x.cino,x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases  from ("
-					+ "select a.dept_code ,a.cino, case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,count(*) as total_cases, "
-					+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
-					+ "sum(case when (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withmlo, "
-					+ "sum(case when case_status=3  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withhod, "
-					+ "sum(case when case_status=4  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withnodal, "
-					+ "sum(case when case_status=5 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsection, "
-					+ "sum(case when case_status=7  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdc, "
-					+ "sum(case when case_status=8  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdistno, "
-					+ "sum(case when case_status=9 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectionhod, "
-					+ "sum(case when case_status=10 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectiondist, "
-					+ "sum(case when case_status=6 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withgpo, "
-					+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases "
-					+ "from ecourts_case_data a " + "inner join dept_new d on (a.dept_code=d.dept_code) "
-					+ "where d.display = true " + sqlCondition;
-
-			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
-				sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or a.dept_code='"
-						+ session.getAttribute("dept_code") + "')";
-
-			if (roleId.equals("2")) {
-				sql += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
-				cform.setDynaForm("districtId", session.getAttribute("dist_id"));
-			}
-
-			sql += " group by a.dept_code,d.dept_code ,reporting_dept_code,a.cino ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code) "
-					+ " group by x.reporting_dept_code, d1.description,x.cino order by 1 limit 25 ";
-
-			request.setAttribute("HEADING", "Sect. Dept. Wise High Court Cases Abstract Report");
-
-			System.out.println("SQL:" + sql);
-			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
-			if (data != null && !data.isEmpty() && data.size() > 0)
-				request.setAttribute("CASEWISEACKS", data);
-			else
-				request.setAttribute("errorMsg", "No Records found to display");
 
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
 			e.printStackTrace();
 		} finally {
-			if (roleId.equals("2"))
-				cform.setDynaForm("distList",
-						DatabasePlugin.getSelectBox(
-								"select district_id,upper(district_name) from district_mst where district_id='"
-										+ session.getAttribute("dist_id") + "' order by district_name",
-								con));
-			else
-				cform.setDynaForm("distList", DatabasePlugin
+			cform.setDynaForm("distList", DatabasePlugin
 						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
 
 			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
@@ -162,7 +90,6 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
 
-			// request.setAttribute("SHOWFILTERS", "SHOWFILTERS");
 
 			DatabasePlugin.closeConnection(con);
 		}
@@ -312,17 +239,51 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 
 		try {
 			System.out.println("update--------------" + cform.getDynaForm("cino"));
+			String sqlCondition = "";
 			con = DatabasePlugin.connect();
+
+			if (cform.getDynaForm("dofFromDate") != null
+					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
+				sqlCondition += " and a.date_of_filing >= to_date('" + cform.getDynaForm("dofFromDate")
+						+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("dofToDate") != null
+					&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
+				sqlCondition += " and a.date_of_filing <= to_date('" + cform.getDynaForm("dofToDate")
+						+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
+					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
+				sqlCondition += " and trim(a.type_name_reg)='" + cform.getDynaForm("caseTypeId").toString().trim()
+						+ "' ";
+			}
+			if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
+					&& !cform.getDynaForm("districtId").toString().contentEquals("0")) {
+				sqlCondition += " and a.dist_id='" + cform.getDynaForm("districtId").toString().trim() + "' ";
+			}
+			if (!CommonModels.checkStringObject(cform.getDynaForm("regYear")).equals("ALL")
+					&& CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
+				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
+			}
+			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
+					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
+				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+			}
+			
+			if (cform.getDynaForm("cino") != null && !cform.getDynaForm("cino").toString().contentEquals("")
+					&& !cform.getDynaForm("cino").toString().contentEquals("0")) {
+				sqlCondition += " and a.cino='" + cform.getDynaForm("cino").toString().trim() + "' ";
+			}
+			
 			String opVal = ECourtAPIs.getSelectParam(1);
 
 			String cino = "";//cform.getDynaForm("cino").toString();
 
-			sql="select cino from ecourts_case_data where last_updated_ecourts<=now()::date - integer '2' order by last_updated_ecourts asc limit 10";
+			sql="select cino from ecourts_case_data a where last_updated_ecourts<=now()::date - integer '2' "+sqlCondition+" order by last_updated_ecourts asc limit 100";
 			// sql="select cino from ecourts_case_data where cino='APHC010183002019'";
 			
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
-			
 			
 			while(rs.next()) {
 			//if (cino != null) {
@@ -354,13 +315,13 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 				System.out.println("resp--" + resp);
 
 				if (resp != null && !resp.equals("")) {
-						boolean b = processCNRsearchResponse(resp, opVal, con, cino);
-
-						if (b) {
-							request.setAttribute("successMsg", "Successfully saved/ Updated data form ecourts.");
-						} else {
-							request.setAttribute("errorMsg", "Error-1 while Updating data form ecourts.");
-						}
+					boolean b = processCNRsearchResponse(resp, opVal, con, cino);
+	
+					if (b) {
+						request.setAttribute("successMsg", "Successfully saved/ Updated data form ecourts.");
+					} else {
+						request.setAttribute("errorMsg", "Error-1 while Updating data form ecourts.");
+					}
 				}
 			}
 			System.out.println("FINAL END : Records fetched:" + totalCount);
@@ -369,7 +330,33 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			request.setAttribute("errorMsg", "Error-3 while Updating data form ecourts.");
 			e.printStackTrace();
 		} finally {
-			saveToken(request);
+
+			cform.setDynaForm("distList", DatabasePlugin
+						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+
+			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+					con));
+			cform.setDynaForm("caseTypesList", DatabasePlugin
+					.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
+			ArrayList selectData = new ArrayList();
+			for (int i = 2022; i > 1980; i--) {
+				selectData.add(new LabelValueBean(i + "", i + ""));
+			}
+			cform.setDynaForm("yearsList", selectData);
+
+			cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate"));
+			cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate"));
+			cform.setDynaForm("caseTypeId", cform.getDynaForm("caseTypeId"));
+			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
+			cform.setDynaForm("regYear", cform.getDynaForm("regYear"));
+			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
+			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
+
+
+			DatabasePlugin.closeConnection(con);
+		
 			DatabasePlugin.close(con, ps, null);
 		}
 		return mapping.findForward("success");
@@ -888,8 +875,9 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		Statement st = null;
 		String sql = "";
 		int totalCount = 0, successCount = 0, failCount = 0;
+		CommonForm cform = (CommonForm) form;
 		try {
-			CommonForm cform = (CommonForm) form;
+			
 			con = DatabasePlugin.connect();
 			con.setAutoCommit(false);
 			
@@ -938,6 +926,34 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			con.rollback();
 			e.printStackTrace();
 		} finally {
+
+			cform.setDynaForm("distList", DatabasePlugin
+						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+
+			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+					con));
+			cform.setDynaForm("caseTypesList", DatabasePlugin
+					.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
+			ArrayList selectData = new ArrayList();
+			for (int i = 2022; i > 1980; i--) {
+				selectData.add(new LabelValueBean(i + "", i + ""));
+			}
+			cform.setDynaForm("yearsList", selectData);
+
+			cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate"));
+			cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate"));
+			cform.setDynaForm("caseTypeId", cform.getDynaForm("caseTypeId"));
+			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
+			cform.setDynaForm("regYear", cform.getDynaForm("regYear"));
+			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
+			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
+
+
+			DatabasePlugin.closeConnection(con);
+		
+			
 			if (con != null)
 				con.close();
 		}
