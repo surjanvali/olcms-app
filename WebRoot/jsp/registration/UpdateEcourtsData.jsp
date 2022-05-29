@@ -300,7 +300,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	$(document).ready(function() {
 		$(".select2Class").select2();
 		$('.input-group.date').datepicker({
-			format : "dd-mm-yyyy"
+			format : "yyyy-mm-dd"
 		});
 	});
 

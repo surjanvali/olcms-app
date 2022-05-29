@@ -315,17 +315,18 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			con = DatabasePlugin.connect();
 			String opVal = ECourtAPIs.getSelectParam(1);
 
-			String cino = cform.getDynaForm("cino").toString();
+			String cino = "";//cform.getDynaForm("cino").toString();
 
-			String cinoAll = cino.replaceAll("cino=", "");
-			String cinoAll_new = cinoAll.replace("{", "");
-			String cinoAll_new1 = cinoAll_new.replace("}", "");
-			String cinoAll_new2 = cinoAll_new1.replace("[", "");
-			String cinoAll_final = cinoAll_new2.replace("]", "");
-			System.out.println("cinoAll---" + cinoAll);
-			System.out.println("cinoAll_final---" + cinoAll_final);
-			// while(rs.next()) {
-			if (cino != null) {
+			sql="select cino from ecourts_case_data where last_updated_ecourts<=now()::date - integer '2' order by last_updated_ecourts asc limit 10";
+			// sql="select cino from ecourts_case_data where cino='APHC010183002019'";
+			
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			
+			
+			while(rs.next()) {
+			//if (cino != null) {
+				cino = rs.getString("cino").toString().trim();
 				totalCount++;
 				inputStr = "cino=" + cino;// ECourtAPIs.getInputStringValue(opVal);
 
@@ -353,7 +354,6 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 				System.out.println("resp--" + resp);
 
 				if (resp != null && !resp.equals("")) {
-					try {
 						boolean b = processCNRsearchResponse(resp, opVal, con, cino);
 
 						if (b) {
@@ -361,10 +361,6 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 						} else {
 							request.setAttribute("errorMsg", "Error-1 while Updating data form ecourts.");
 						}
-					} catch (Exception e) {
-						request.setAttribute("errorMsg", "Error-2 while Updating data form ecourts.");
-						e.printStackTrace();
-					}
 				}
 			}
 			System.out.println("FINAL END : Records fetched:" + totalCount);
@@ -825,20 +821,33 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 				decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
 			}
 
-			String destinationPath = ApplicationVariables.contextPath + "\\HighCourtsCaseOrders\\" + fileName + ".pdf";
+			String destinationPath = ApplicationVariables.contextPath + "HighCourtsCaseOrders\\";
 			System.out.println("destinationPath:" + destinationPath);
-			File pdfFile = new File(destinationPath);
-			System.out.println("pdfFile.exists()::" + pdfFile.exists());
-
-			if (pdfFile.getTotalSpace() > 0 && !pdfFile.exists()) {
-				FileOutputStream fos = new FileOutputStream(pdfFile);
-				byte[] decoder = Base64.getDecoder().decode(decryptedRespStr.replace("\"", "").replace("\\", ""));
-				fos.write(decoder);
-				System.out.println("PDF File Saved");
-				sql = "update " + apolcmsOrdersTable + " set order_document_path='HighCourtsCaseOrders/" + fileName
-						+ ".pdf', updated_time=now() where cino||'-" + orderFileName + "-'||order_no='" + fileName
-						+ "'";
-				DatabasePlugin.executeUpdate(sql, con);
+			
+			//String filesUploadPath=ApplicationVariables.contextPath+"\\uploads\\HighCourtsCauseList\\"+causelistDate+"\\";
+			
+			File upload_folder = new File(destinationPath);
+			if (!upload_folder.exists()) {
+				upload_folder.mkdirs();
+			}
+			if (upload_folder.exists()) {
+				File pdfFile = new File(destinationPath + fileName + ".pdf");
+				System.out.println("pdfFile.exists()::" + pdfFile.exists());
+	
+				if (!pdfFile.exists()) {
+					
+					FileOutputStream fos = new FileOutputStream(pdfFile);
+					byte[] decoder = Base64.getDecoder().decode(decryptedRespStr.replace("\"", "").replace("\\", ""));
+					fos.write(decoder);
+					System.out.println("PDF File Saved");
+					sql = "update " + apolcmsOrdersTable + " set order_document_path='HighCourtsCaseOrders/" + fileName
+							+ ".pdf', updated_time=now() where cino||'-" + orderFileName + "-'||order_no='" + fileName
+							+ "'";
+					DatabasePlugin.executeUpdate(sql, con);
+				}
+				else {
+					System.out.println("File Already exist.");
+				}
 			}
 		} else {
 			sql = "update " + apolcmsOrdersTable + " set order_document_path='" + resp + "' where cino||'-"
@@ -882,6 +891,8 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		try {
 			CommonForm cform = (CommonForm) form;
 			con = DatabasePlugin.connect();
+			con.setAutoCommit(false);
+			
 			String opVal = ECourtAPIs.getSelectParam(11);
 
 			String estCode = "APHC01", causelistDate =  (String)cform.getDynaForm("causeListDate");//"2022-04-25";// 2022-04-06
@@ -918,8 +929,13 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					e.printStackTrace();
 				}
 			}
+			con.commit();
+				request.setAttribute("successMsg", "Successfully saved/ Updated Causelist data from ecourts.");
+				
 			System.out.println("CAUSE LIST BENCH END");
 		} catch (Exception e) {
+			request.setAttribute("errorMsg", "Error-1 while Updating Cause list data from ecourts.");
+			con.rollback();
 			e.printStackTrace();
 		} finally {
 			if (con != null)
@@ -943,11 +959,10 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		
 		String sql = "";
 		int totalCount = 0, successCount = 0, failCount = 0;
-		try {
 			String opVal = ECourtAPIs.getSelectParam(12);
 			
-			sql="select distinct toretrieveCauseList_char(causelist_date,'dd/mm/yyyy') as causelist_date1, causelist_date from ecourts_causelist_data"
-					+ " where causelist_date='"+causelistDate+"'";
+			sql="select distinct to_char(causelist_date,'dd/mm/yyyy') as causelist_date1, causelist_date from ecourts_causelist_data"
+					+ " where causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd')";
 			System.out.println("retrieveCauseList SQL:"+sql);
 			st1 = con.createStatement();
 			rs1 = st1.executeQuery(sql);
@@ -976,29 +991,19 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					authToken = EHighCourtAPI.getAuthToken();
 					String resp = "";
 					 if (opVal != null && !opVal.equals("")) {
-						try {
 							resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						
 					}
 		
 					if (resp != null && !resp.equals("")) {
-						try {
 							HighCourtCauseListAPI.processApiResponse(resp, estCode, causelistDate, con);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+							retrieveCauselistPdfs(con, causelistDate);
+						
 					}
 				}
 			}
 			System.out.println("CAUSE LIST END");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (con != null)
-				con.close();
-		}
+		
 	
 	}
 	
@@ -1012,12 +1017,11 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		Statement st = null;
 		String sql = "";
 		int totalCount = 0, successCount = 0, failCount = 0;
-		try {
 			String opVal = ECourtAPIs.getSelectParam(13);
 			
 			String estCode="APHC01", bench_id="",causelist_id="" ;
 			
-			sql="SELECT slno, est_code, causelist_date, bench_id, inserted_time,causelist_id, cause_list_type FROM apolcms.ecourts_causelist_bench_data where causelist_date='"+causelistDate+"'"
+			sql="SELECT slno, est_code, causelist_date, bench_id, inserted_time,causelist_id, cause_list_type FROM apolcms.ecourts_causelist_bench_data where causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd')"
 					//+ "slno=36";
 					+ " and causelist_document is null and causelist_id is not null order by causelist_date";
 			System.out.println("retrieveCauselistPdfs SQL:"+sql);
@@ -1025,7 +1029,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			rs = st.executeQuery(sql);
 			
 			while(rs.next()) {
-				causelistDate = rs.getString("causelist_date"); 
+				// causelistDate = rs.getString("causelist_date"); 
 				bench_id = rs.getString("bench_id"); 
 				causelist_id = rs.getString("causelist_id"); 
 				
@@ -1047,29 +1051,15 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					authToken = EHighCourtAPI.getAuthToken();
 					String resp = "";
 					 if (opVal != null && !opVal.equals("")) {
-						try {
 							resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
 					}
 		
 					if (resp != null && !resp.equals("")) {
-						try {
 							processPDForderResponse(resp, estCode, causelistDate, bench_id,causelist_id, con);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
 					}
 				}
 			}
 			System.out.println("END");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (con != null)
-				con.close();
-		}
 	}
 	
 	public static void processPDForderResponse(String resp, String estCode, String causelistDate,String bench_id, String causelist_id, Connection con)  throws Exception{
