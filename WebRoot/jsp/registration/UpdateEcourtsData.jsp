@@ -68,101 +68,133 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			<div class="ibox">
 				<div class="ibox-head">
-					<div class="ibox-title">Update New Assigned Cases</div>
+					<div class="ibox-title">Import/Update e-Courts Data</div>
 				</div>
 				<div class="ibox-body">
-				<div class="row">
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label>Case Type</label>
-							<html:select styleId="caseTypeId" property="dynaForm(caseTypeId)"
-								styleClass="form-control select2Class">
-								<html:option value="0">---ALL---</html:option>
-								<logic:notEmpty name="CommonForm"
-									property="dynaForm(caseTypesList)">
-									<html:optionsCollection name="CommonForm"
-										property="dynaForm(caseTypesList)" />
-								</logic:notEmpty>
-							</html:select>
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Case Type</label>
+								<html:select styleId="caseTypeId"
+									property="dynaForm(caseTypeId)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---ALL---</html:option>
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(caseTypesList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(caseTypesList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
 						</div>
-					</div>
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label>Department</label>
-							<html:select styleId="deptId" property="dynaForm(deptId)"
-								styleClass="form-control select2Class">
-								<html:option value="0">---ALL---</html:option>
-								<logic:notEmpty name="CommonForm" property="dynaForm(deptList)">
-									<html:optionsCollection name="CommonForm"
-										property="dynaForm(deptList)" />
-								</logic:notEmpty>
-							</html:select>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Department</label>
+								<html:select styleId="deptId" property="dynaForm(deptId)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---ALL---</html:option>
+									<logic:notEmpty name="CommonForm" property="dynaForm(deptList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(deptList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
 						</div>
-					</div>
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label>District</label>
-							<html:select styleId="districtId" property="dynaForm(districtId)"
-								styleClass="form-control select2Class">
-								<html:option value="0">---ALL---</html:option>
-								<logic:notEmpty name="CommonForm" property="dynaForm(distList)">
-									<html:optionsCollection name="CommonForm"
-										property="dynaForm(distList)" />
-								</logic:notEmpty>
-							</html:select>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label>Case Registration Year</label>
-							<html:select styleId="regYear" property="dynaForm(regYear)"
-								styleClass="form-control select2Class">
-								<html:option value="0">---ALL---</html:option>
-								<logic:notEmpty name="CommonForm" property="dynaForm(yearsList)">
-									<html:optionsCollection name="CommonForm"
-										property="dynaForm(yearsList)" />
-								</logic:notEmpty>
-							</html:select>
-						</div>
-					</div>
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label class="font-bold">Date of Filing From Date</label>
-							<div class="input-group date">
-								<span class="input-group-addon bg-white"><i
-									class="fa fa-calendar"></i></span>
-								<html:text styleId="dofFromDate"
-									property="dynaForm(dofFromDate)"
-									styleClass="form-control datepicker" />
-
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>District</label>
+								<html:select styleId="districtId"
+									property="dynaForm(districtId)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---ALL---</html:option>
+									<logic:notEmpty name="CommonForm" property="dynaForm(distList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(distList)" />
+									</logic:notEmpty>
+								</html:select>
 							</div>
 						</div>
 					</div>
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label class="font-bold">Date of Filing From Date</label>
-							<div class="input-group date">
-								<span class="input-group-addon bg-white"><i
-									class="fa fa-calendar"></i></span>
-								<html:text styleId="dofToDate" property="dynaForm(dofToDate)"
-									styleClass="form-control datepicker" />
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Case Registration Year</label>
+								<html:select styleId="regYear" property="dynaForm(regYear)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---ALL---</html:option>
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(yearsList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(yearsList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Date of Filing From Date</label>
+								<div class="input-group date">
+									<span class="input-group-addon bg-white"><i
+										class="fa fa-calendar"></i></span>
+									<html:text styleId="dofFromDate"
+										property="dynaForm(dofFromDate)"
+										styleClass="form-control datepicker" />
 
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Date of Filing To Date</label>
+								<div class="input-group date">
+									<span class="input-group-addon bg-white"><i
+										class="fa fa-calendar"></i></span>
+									<html:text styleId="dofToDate" property="dynaForm(dofToDate)"
+										styleClass="form-control datepicker" />
+
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				
 
-				<div class="row">
-					<div class="col-md-12 col-xs-12">
-						<input type="button" name="getreport" value="Get Report" 
-							class="btn btn-success" onclick="return fnShowCases();" />
+
+					<div class="row">
+						<div class="col-md-12 col-xs-12">
+							<input type="button" name="getreport" value="Get Report"
+								class="btn btn-success" onclick="return fnShowCases();" />
+						</div>
 					</div>
 				</div>
 			</div>
+
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">Import/Update e-Courts Cause List
+						Data</div>
+				</div>
+				<div class="ibox-body">
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Cause List Date</label>
+								<div class="input-group date">
+									<span class="input-group-addon bg-white"><i
+										class="fa fa-calendar"></i></span>
+									<html:text styleId="causeListDate"
+										property="dynaForm(causeListDate)"
+										styleClass="form-control datepicker" />
+
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<input type="button" name="getCauseList"
+								value="Import Cause List" class="btn btn-success"
+								onclick="return fnGetCauseList();" />
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<logic:notEmpty name="CASEWISEACKS">
@@ -207,10 +239,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td>${map.withhod }</td>
 											<td>${map.withnodal }</td>
 
-												<td style="text-align: center;" nowrap="nowrap"><div
+											<td style="text-align: center;" nowrap="nowrap"><div
 													class="row">
 													<div class="col-md-12 col-xs-12">
-														<input type="submit" name="cino" id="cino" 
+														<input type="submit" name="cino" id="cino"
 															class="btn btn-success"
 															onclick="return updateCino('${map.cino}');" />
 													</div>
@@ -284,8 +316,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	}
 	function fnShowCases() {
 		$("#mode").val("showCaseWise");
-		 $("#updateEcourtsDataFormId").submit();
+		$("#updateEcourtsDataFormId").submit();
 		///return true;
+	}
+
+	function fnGetCauseList() {
+		if ($("#causeListDate").val() == "") {
+			alert("Select a Date");
+			return false;
+		} else {
+			$("#mode").val("retrieveCauseList");
+			$("#updateEcourtsDataFormId").submit();
+			///return true;
+		}
 	}
 
 	function updateCino(cino) {
