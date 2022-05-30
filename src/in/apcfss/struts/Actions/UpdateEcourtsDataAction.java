@@ -62,85 +62,12 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 
 			con = DatabasePlugin.connect();
 
-			if (cform.getDynaForm("dofFromDate") != null
-					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
-				sqlCondition += " and a.date_of_filing >= to_date('" + cform.getDynaForm("dofFromDate")
-						+ "','dd-mm-yyyy') ";
-			}
-			if (cform.getDynaForm("dofToDate") != null
-					&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
-				sqlCondition += " and a.date_of_filing <= to_date('" + cform.getDynaForm("dofToDate")
-						+ "','dd-mm-yyyy') ";
-			}
-			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
-					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
-				sqlCondition += " and trim(a.type_name_reg)='" + cform.getDynaForm("caseTypeId").toString().trim()
-						+ "' ";
-			}
-			if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
-					&& !cform.getDynaForm("districtId").toString().contentEquals("0")) {
-				sqlCondition += " and a.dist_id='" + cform.getDynaForm("districtId").toString().trim() + "' ";
-			}
-			if (!CommonModels.checkStringObject(cform.getDynaForm("regYear")).equals("ALL")
-					&& CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
-				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
-			}
-			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
-					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
-				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
-			}
-
-			sql = "select x.cino,x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases  from ("
-					+ "select a.dept_code ,a.cino, case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,count(*) as total_cases, "
-					+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
-					+ "sum(case when (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withmlo, "
-					+ "sum(case when case_status=3  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withhod, "
-					+ "sum(case when case_status=4  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withnodal, "
-					+ "sum(case when case_status=5 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsection, "
-					+ "sum(case when case_status=7  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdc, "
-					+ "sum(case when case_status=8  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdistno, "
-					+ "sum(case when case_status=9 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectionhod, "
-					+ "sum(case when case_status=10 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectiondist, "
-					+ "sum(case when case_status=6 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withgpo, "
-					+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases "
-					+ "from ecourts_case_data a " + "inner join dept_new d on (a.dept_code=d.dept_code) "
-					+ "where d.display = true " + sqlCondition;
-
-			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
-				sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or a.dept_code='"
-						+ session.getAttribute("dept_code") + "')";
-
-			if (roleId.equals("2")) {
-				sql += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
-				cform.setDynaForm("districtId", session.getAttribute("dist_id"));
-			}
-
-			sql += " group by a.dept_code,d.dept_code ,reporting_dept_code,a.cino ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code) "
-					+ " group by x.reporting_dept_code, d1.description,x.cino order by 1 limit 25 ";
-
-			request.setAttribute("HEADING", "Sect. Dept. Wise High Court Cases Abstract Report");
-
-			System.out.println("SQL:" + sql);
-			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
-			if (data != null && !data.isEmpty() && data.size() > 0)
-				request.setAttribute("CASEWISEACKS", data);
-			else
-				request.setAttribute("errorMsg", "No Records found to display");
-
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
 			e.printStackTrace();
 		} finally {
-			if (roleId.equals("2"))
-				cform.setDynaForm("distList",
-						DatabasePlugin.getSelectBox(
-								"select district_id,upper(district_name) from district_mst where district_id='"
-										+ session.getAttribute("dist_id") + "' order by district_name",
-								con));
-			else
-				cform.setDynaForm("distList", DatabasePlugin
-						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+			cform.setDynaForm("distList", DatabasePlugin
+					.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
 
 			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
@@ -161,8 +88,6 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
 			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
-
-			// request.setAttribute("SHOWFILTERS", "SHOWFILTERS");
 
 			DatabasePlugin.closeConnection(con);
 		}
@@ -288,7 +213,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
 
 			// request.setAttribute("SHOWFILTERS", "SHOWFILTERS");
-
+			DatabasePlugin.closeConnection(con);
 		}
 
 		return mapping.findForward("success");
@@ -312,20 +237,55 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 
 		try {
 			System.out.println("update--------------" + cform.getDynaForm("cino"));
+			String sqlCondition = "";
 			con = DatabasePlugin.connect();
+
+			if (cform.getDynaForm("dofFromDate") != null
+					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
+				sqlCondition += " and a.date_of_filing >= to_date('" + cform.getDynaForm("dofFromDate")
+						+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("dofToDate") != null
+					&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
+				sqlCondition += " and a.date_of_filing <= to_date('" + cform.getDynaForm("dofToDate")
+						+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
+					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
+				sqlCondition += " and trim(a.type_name_reg)='" + cform.getDynaForm("caseTypeId").toString().trim()
+						+ "' ";
+			}
+			if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
+					&& !cform.getDynaForm("districtId").toString().contentEquals("0")) {
+				sqlCondition += " and a.dist_id='" + cform.getDynaForm("districtId").toString().trim() + "' ";
+			}
+			if (!CommonModels.checkStringObject(cform.getDynaForm("regYear")).equals("ALL")
+					&& CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
+				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
+			}
+			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
+					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
+				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+			}
+
+			if (cform.getDynaForm("cino") != null && !cform.getDynaForm("cino").toString().contentEquals("")
+					&& !cform.getDynaForm("cino").toString().contentEquals("0")) {
+				sqlCondition += " and a.cino='" + cform.getDynaForm("cino").toString().trim() + "' ";
+			}
+
 			String opVal = ECourtAPIs.getSelectParam(1);
 
-			String cino = "";//cform.getDynaForm("cino").toString();
+			String cino = "";// cform.getDynaForm("cino").toString();
 
-			sql="select cino from ecourts_case_data where last_updated_ecourts<=now()::date - integer '2' order by last_updated_ecourts asc limit 10";
+			sql = "select cino from ecourts_case_data a where last_updated_ecourts<=now()::date - integer '2' "
+					+ sqlCondition + " order by last_updated_ecourts asc limit 100";
 			// sql="select cino from ecourts_case_data where cino='APHC010183002019'";
-			
+
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
-			
-			
-			while(rs.next()) {
-			//if (cino != null) {
+
+			while (rs.next()) {
+				// if (cino != null) {
 				cino = rs.getString("cino").toString().trim();
 				totalCount++;
 				inputStr = "cino=" + cino;// ECourtAPIs.getInputStringValue(opVal);
@@ -354,13 +314,13 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 				System.out.println("resp--" + resp);
 
 				if (resp != null && !resp.equals("")) {
-						boolean b = processCNRsearchResponse(resp, opVal, con, cino);
+					boolean b = processCNRsearchResponse(resp, opVal, con, cino);
 
-						if (b) {
-							request.setAttribute("successMsg", "Successfully saved/ Updated data form ecourts.");
-						} else {
-							request.setAttribute("errorMsg", "Error-1 while Updating data form ecourts.");
-						}
+					if (b) {
+						request.setAttribute("successMsg", "Successfully saved/ Updated data form ecourts.");
+					} else {
+						request.setAttribute("errorMsg", "Error-1 while Updating data form ecourts.");
+					}
 				}
 			}
 			System.out.println("FINAL END : Records fetched:" + totalCount);
@@ -369,8 +329,31 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			request.setAttribute("errorMsg", "Error-3 while Updating data form ecourts.");
 			e.printStackTrace();
 		} finally {
-			saveToken(request);
-			DatabasePlugin.close(con, ps, null);
+
+			cform.setDynaForm("distList", DatabasePlugin
+					.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+
+			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+					con));
+			cform.setDynaForm("caseTypesList", DatabasePlugin
+					.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
+			ArrayList selectData = new ArrayList();
+			for (int i = 2022; i > 1980; i--) {
+				selectData.add(new LabelValueBean(i + "", i + ""));
+			}
+			cform.setDynaForm("yearsList", selectData);
+
+			cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate"));
+			cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate"));
+			cform.setDynaForm("caseTypeId", cform.getDynaForm("caseTypeId"));
+			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
+			cform.setDynaForm("regYear", cform.getDynaForm("regYear"));
+			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
+			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
+
+			DatabasePlugin.closeConnection(con);
 		}
 		return mapping.findForward("success");
 		// return showCaseWise(mapping, cform, request, response);
@@ -823,9 +806,10 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 
 			String destinationPath = ApplicationVariables.contextPath + "HighCourtsCaseOrders\\";
 			System.out.println("destinationPath:" + destinationPath);
-			
-			//String filesUploadPath=ApplicationVariables.contextPath+"\\uploads\\HighCourtsCauseList\\"+causelistDate+"\\";
-			
+
+			// String
+			// filesUploadPath=ApplicationVariables.contextPath+"\\uploads\\HighCourtsCauseList\\"+causelistDate+"\\";
+
 			File upload_folder = new File(destinationPath);
 			if (!upload_folder.exists()) {
 				upload_folder.mkdirs();
@@ -833,9 +817,9 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			if (upload_folder.exists()) {
 				File pdfFile = new File(destinationPath + fileName + ".pdf");
 				System.out.println("pdfFile.exists()::" + pdfFile.exists());
-	
+
 				if (!pdfFile.exists()) {
-					
+
 					FileOutputStream fos = new FileOutputStream(pdfFile);
 					byte[] decoder = Base64.getDecoder().decode(decryptedRespStr.replace("\"", "").replace("\\", ""));
 					fos.write(decoder);
@@ -844,8 +828,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 							+ ".pdf', updated_time=now() where cino||'-" + orderFileName + "-'||order_no='" + fileName
 							+ "'";
 					DatabasePlugin.executeUpdate(sql, con);
-				}
-				else {
+				} else {
 					System.out.println("File Already exist.");
 				}
 			}
@@ -888,14 +871,16 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		Statement st = null;
 		String sql = "";
 		int totalCount = 0, successCount = 0, failCount = 0;
+		CommonForm cform = (CommonForm) form;
 		try {
-			CommonForm cform = (CommonForm) form;
+
 			con = DatabasePlugin.connect();
 			con.setAutoCommit(false);
-			
+
 			String opVal = ECourtAPIs.getSelectParam(11);
 
-			String estCode = "APHC01", causelistDate =  (String)cform.getDynaForm("causeListDate");//"2022-04-25";// 2022-04-06
+			String estCode = "APHC01", causelistDate = (String) cform.getDynaForm("causeListDate");// "2022-04-25";//
+																									// 2022-04-06
 
 			inputStr = "est_code=" + estCode + "|causelist_date=" + causelistDate;// ECourtAPIs.getInputStringValue(opVal);
 			// 1. Encoding Request Token
@@ -912,104 +897,115 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			authToken = EHighCourtAPI.getAuthToken();
 			String resp = "";
 			if (opVal != null && !opVal.equals("")) {
-				try {
-					resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
 			}
 
 			if (resp != null && !resp.equals("")) {
-				try {
-					HighCourtCauseListBenchAPI.processApiResponse(resp, estCode, causelistDate, con);
-					
-					retrieveCauseList(estCode, causelistDate, con);
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			con.commit();
+				HighCourtCauseListBenchAPI.processApiResponse(resp, estCode, causelistDate, con);
+				retrieveCauseList(estCode, causelistDate, con);
+				con.commit();
 				request.setAttribute("successMsg", "Successfully saved/ Updated Causelist data from ecourts.");
-				
+			}
+
 			System.out.println("CAUSE LIST BENCH END");
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Error-1 while Updating Cause list data from ecourts.");
 			con.rollback();
 			e.printStackTrace();
 		} finally {
-			if (con != null)
-				con.close();
+
+			cform.setDynaForm("distList", DatabasePlugin
+					.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+
+			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+					con));
+			cform.setDynaForm("caseTypesList", DatabasePlugin
+					.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
+			ArrayList selectData = new ArrayList();
+			for (int i = 2022; i > 1980; i--) {
+				selectData.add(new LabelValueBean(i + "", i + ""));
+			}
+			cform.setDynaForm("yearsList", selectData);
+
+			cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate"));
+			cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate"));
+			cform.setDynaForm("caseTypeId", cform.getDynaForm("caseTypeId"));
+			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
+			cform.setDynaForm("regYear", cform.getDynaForm("regYear"));
+			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
+			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
+
+			DatabasePlugin.closeConnection(con);
 		}
 
 		return mapping.findForward("success");
 	}
 
-	
-	
 	public static void retrieveCauseList(String estCode, String causelistDate, Connection con) throws Exception {
 		String request_token = "", requeststring = "";
 		String inputStr = "", targetURL = "";
 		String authToken = "";
 		ResultSet rs = null;
 		Statement st = null;
-		
+
 		ResultSet rs1 = null;
 		Statement st1 = null;
-		
+
 		String sql = "";
 		int totalCount = 0, successCount = 0, failCount = 0;
-			String opVal = ECourtAPIs.getSelectParam(12);
-			
-			sql="select distinct to_char(causelist_date,'dd/mm/yyyy') as causelist_date1, causelist_date from ecourts_causelist_data"
-					+ " where causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd')";
-			System.out.println("retrieveCauseList SQL:"+sql);
-			st1 = con.createStatement();
-			rs1 = st1.executeQuery(sql);
-			
-			while (rs1.next()){
-				sql = "SELECT slno, est_code, causelist_date, bench_id, judge_name, inserted_time FROM apolcms.ecourts_causelist_data where causelist_date=to_date('"+rs1.getString("causelist_date1")
-					+"','dd/mm/yyyy') order by causelist_date ";
-				
-				st = con.createStatement();
-				rs = st.executeQuery(sql);
-				
-				while(rs.next()) {
-					causelistDate = rs.getString("causelist_date");
-					inputStr = "est_code="+estCode+"|causelist_date="+causelistDate+"|bench_id="+rs.getString("bench_id");//ECourtAPIs.getInputStringValue(opVal);
-					// 1. Encoding Request Token
-					byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"), inputStr.getBytes("UTF-8"));
-					request_token = String.format("%032x", new BigInteger(1, hmacSha256));
-					// 2. Encoding Request String
-					requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
-		
-					targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
-		
-					System.out.println(totalCount + ":URL : " + targetURL);
-					System.out.println("Input String : " + inputStr);
-		
-					authToken = EHighCourtAPI.getAuthToken();
-					String resp = "";
-					 if (opVal != null && !opVal.equals("")) {
-							resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
-						
-					}
-		
-					if (resp != null && !resp.equals("")) {
-							HighCourtCauseListAPI.processApiResponse(resp, estCode, causelistDate, con);
-							retrieveCauselistPdfs(con, causelistDate);
-						
-					}
+		String opVal = ECourtAPIs.getSelectParam(12);
+
+		sql = "select distinct to_char(causelist_date,'dd/mm/yyyy') as causelist_date1, causelist_date from ecourts_causelist_data"
+				+ " where causelist_date=to_date('" + causelistDate + "','yyyy-mm-dd')";
+		System.out.println("retrieveCauseList SQL:" + sql);
+		st1 = con.createStatement();
+		rs1 = st1.executeQuery(sql);
+
+		while (rs1.next()) {
+			sql = "SELECT slno, est_code, causelist_date, bench_id, judge_name, inserted_time FROM apolcms.ecourts_causelist_data where causelist_date=to_date('"
+					+ rs1.getString("causelist_date1") + "','dd/mm/yyyy') order by causelist_date ";
+
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+
+			while (rs.next()) {
+				causelistDate = rs.getString("causelist_date");
+				inputStr = "est_code=" + estCode + "|causelist_date=" + causelistDate + "|bench_id="
+						+ rs.getString("bench_id");// ECourtAPIs.getInputStringValue(opVal);
+				// 1. Encoding Request Token
+				byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"),
+						inputStr.getBytes("UTF-8"));
+				request_token = String.format("%032x", new BigInteger(1, hmacSha256));
+				// 2. Encoding Request String
+				requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
+
+				targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
+
+				System.out.println(totalCount + ":URL : " + targetURL);
+				System.out.println("Input String : " + inputStr);
+
+				authToken = EHighCourtAPI.getAuthToken();
+				String resp = "";
+				if (opVal != null && !opVal.equals("")) {
+					resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
+
+				}
+
+				if (resp != null && !resp.equals("")) {
+					HighCourtCauseListAPI.processApiResponse(resp, estCode, causelistDate, con);
+					retrieveCauselistPdfs(con, causelistDate);
+
 				}
 			}
-			System.out.println("CAUSE LIST END");
-		
-	
+		}
+		System.out.println("CAUSE LIST END");
+
 	}
-	
-	public static void retrieveCauselistPdfs(Connection con, String causelistDate) throws Exception{
-		
-		
+
+	public static void retrieveCauselistPdfs(Connection con, String causelistDate) throws Exception {
+
 		String request_token = "", requeststring = "";
 		String inputStr = "", targetURL = "";
 		String authToken = "";
@@ -1017,90 +1013,102 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		Statement st = null;
 		String sql = "";
 		int totalCount = 0, successCount = 0, failCount = 0;
-			String opVal = ECourtAPIs.getSelectParam(13);
-			
-			String estCode="APHC01", bench_id="",causelist_id="" ;
-			
-			sql="SELECT slno, est_code, causelist_date, bench_id, inserted_time,causelist_id, cause_list_type FROM apolcms.ecourts_causelist_bench_data where causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd')"
-					//+ "slno=36";
-					+ " and causelist_document is null and causelist_id is not null order by causelist_date";
-			System.out.println("retrieveCauselistPdfs SQL:"+sql);
-			st = con.createStatement();
-			rs = st.executeQuery(sql);
-			
-			while(rs.next()) {
-				// causelistDate = rs.getString("causelist_date"); 
-				bench_id = rs.getString("bench_id"); 
-				causelist_id = rs.getString("causelist_id"); 
-				
-				if(causelistDate!=null && bench_id!=null && causelist_id!=null && !causelistDate.equals("") && !bench_id.equals("") && !causelist_id.equals(""))
-				{
-					inputStr = "est_code="+estCode+"|causelist_date="+causelistDate+"|bench_id="+bench_id+"|causelist_id="+causelist_id;//ECourtAPIs.getInputStringValue(opVal);
-					System.out.println("inputStr:"+inputStr);
-					// 1. Encoding Request Token
-					byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"), inputStr.getBytes("UTF-8"));
-					request_token = String.format("%032x", new BigInteger(1, hmacSha256));
-					// 2. Encoding Request String
-					requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
-		
-					targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
-		
-					System.out.println(totalCount + ":URL : " + targetURL);
-					System.out.println("Input String : " + inputStr);
-		
-					authToken = EHighCourtAPI.getAuthToken();
-					String resp = "";
-					 if (opVal != null && !opVal.equals("")) {
-							resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
-					}
-		
-					if (resp != null && !resp.equals("")) {
-							processPDForderResponse(resp, estCode, causelistDate, bench_id,causelist_id, con);
-					}
+		String opVal = ECourtAPIs.getSelectParam(13);
+
+		String estCode = "APHC01", bench_id = "", causelist_id = "";
+
+		sql = "SELECT slno, est_code, causelist_date, bench_id, inserted_time,causelist_id, cause_list_type FROM apolcms.ecourts_causelist_bench_data where causelist_date=to_date('"
+				+ causelistDate + "','yyyy-mm-dd')"
+				// + "slno=36";
+				+ " and causelist_document is null and causelist_id is not null order by causelist_date";
+		System.out.println("retrieveCauselistPdfs SQL:" + sql);
+		st = con.createStatement();
+		rs = st.executeQuery(sql);
+
+		while (rs.next()) {
+			// causelistDate = rs.getString("causelist_date");
+			bench_id = rs.getString("bench_id");
+			causelist_id = rs.getString("causelist_id");
+
+			if (causelistDate != null && bench_id != null && causelist_id != null && !causelistDate.equals("")
+					&& !bench_id.equals("") && !causelist_id.equals("")) {
+				inputStr = "est_code=" + estCode + "|causelist_date=" + causelistDate + "|bench_id=" + bench_id
+						+ "|causelist_id=" + causelist_id;// ECourtAPIs.getInputStringValue(opVal);
+				System.out.println("inputStr:" + inputStr);
+				// 1. Encoding Request Token
+				byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"),
+						inputStr.getBytes("UTF-8"));
+				request_token = String.format("%032x", new BigInteger(1, hmacSha256));
+				// 2. Encoding Request String
+				requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
+
+				targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
+
+				System.out.println(totalCount + ":URL : " + targetURL);
+				System.out.println("Input String : " + inputStr);
+
+				authToken = EHighCourtAPI.getAuthToken();
+				String resp = "";
+				if (opVal != null && !opVal.equals("")) {
+					resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
+				}
+
+				if (resp != null && !resp.equals("")) {
+					processPDForderResponse(resp, estCode, causelistDate, bench_id, causelist_id, con);
 				}
 			}
-			System.out.println("END");
+		}
+		System.out.println("END");
 	}
-	
-	public static void processPDForderResponse(String resp, String estCode, String causelistDate,String bench_id, String causelist_id, Connection con)  throws Exception{
 
-	    String response_str = "";String response_token = "";String version = "";String decryptedRespStr = "";String sql = "";
-	    resp = resp.trim();
-	    System.out.println("processPDForderResponse RESP:"+resp);
-	    if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_TOKEN")) && (!resp.contains("RECORD_NOT_FOUND")))
-		{
+	public static void processPDForderResponse(String resp, String estCode, String causelistDate, String bench_id,
+			String causelist_id, Connection con) throws Exception {
+
+		String response_str = "";
+		String response_token = "";
+		String version = "";
+		String decryptedRespStr = "";
+		String sql = "";
+		resp = resp.trim();
+		System.out.println("processPDForderResponse RESP:" + resp);
+		if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_TOKEN"))
+				&& (!resp.contains("RECORD_NOT_FOUND"))) {
 			JSONObject jObj = new JSONObject(resp);
 			response_str = jObj.getString("response_str").toString();
 			// System.out.println("response_str::"+response_str);
 			if ((response_str != null) && (!response_str.equals(""))) {
-		        decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
-		    }
-			
-			System.out.println("decryptedRespStr:"+decryptedRespStr);
-			
-			String filesUploadPath=ApplicationVariables.contextPath+"\\uploads\\HighCourtsCauseList\\"+causelistDate+"\\";
-			
+				decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
+			}
+
+			System.out.println("decryptedRespStr:" + decryptedRespStr);
+
+			String filesUploadPath = ApplicationVariables.contextPath + "\\uploads\\HighCourtsCauseList\\"
+					+ causelistDate + "\\";
+
 			File upload_folder = new File(filesUploadPath);
 			if (!upload_folder.exists()) {
 				upload_folder.mkdirs();
 			}
 			if (upload_folder.exists()) {
-				File pdfFile = new File( filesUploadPath+ estCode+causelistDate+bench_id+causelist_id + ".pdf");
+				File pdfFile = new File(filesUploadPath + estCode + causelistDate + bench_id + causelist_id + ".pdf");
 				FileOutputStream fos = new FileOutputStream(pdfFile);
 				byte[] decoder = Base64.getDecoder().decode(decryptedRespStr.replace("\"", "").replace("\\", ""));
 				fos.write(decoder);
 				System.out.println("PDF File Saved");
-				
-				sql = "update ecourts_causelist_bench_data set causelist_document='uploads/HighCourtsCauseList/"+causelistDate+"/"+estCode+causelistDate+bench_id+causelist_id+".pdf' where est_code='"+estCode+"' and causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd') and bench_id='"+bench_id+"' and causelist_id='"+causelist_id+"'";
-				System.out.println("UPDATE SQL:"+sql);
+
+				sql = "update ecourts_causelist_bench_data set causelist_document='uploads/HighCourtsCauseList/"
+						+ causelistDate + "/" + estCode + causelistDate + bench_id + causelist_id
+						+ ".pdf' where est_code='" + estCode + "' and causelist_date=to_date('" + causelistDate
+						+ "','yyyy-mm-dd') and bench_id='" + bench_id + "' and causelist_id='" + causelist_id + "'";
+				System.out.println("UPDATE SQL:" + sql);
 				DatabasePlugin.executeUpdate(sql, con);
 			}
-		}
-	    else
-		{
-			 sql = "update ecourts_causelist_bench_data set causelist_document='" + resp + "' where est_code='"+estCode+"' and causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd') and bench_id='"+bench_id+"' and causelist_id='"+causelist_id+"'";
-			 System.out.println("UPDATE SQL:"+sql);
-			 DatabasePlugin.executeUpdate(sql, con);
+		} else {
+			sql = "update ecourts_causelist_bench_data set causelist_document='" + resp + "' where est_code='" + estCode
+					+ "' and causelist_date=to_date('" + causelistDate + "','yyyy-mm-dd') and bench_id='" + bench_id
+					+ "' and causelist_id='" + causelist_id + "'";
+			System.out.println("UPDATE SQL:" + sql);
+			DatabasePlugin.executeUpdate(sql, con);
 			System.out.println("Invalid/Empty Response");
 		}
 	}

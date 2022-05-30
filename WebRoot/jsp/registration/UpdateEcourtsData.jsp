@@ -163,6 +163,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<div class="col-md-12 col-xs-12">
 							<input type="button" name="getreport" value="Get Report"
 								class="btn btn-success" onclick="return fnShowCases();" />
+								
+								<input type="button" name="updateCases" value="Update Cases Data"
+								class="btn btn-success" onclick="return fnUpdateCasesData();" />
 						</div>
 					</div>
 				</div>
@@ -320,6 +323,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		///return true;
 	}
 
+	function fnUpdateCasesData() {
+		$("#mode").val("updateCino");
+		$("#updateEcourtsDataFormId").submit();
+		///return true;
+	}
+	
 	function fnGetCauseList() {
 		if ($("#causeListDate").val() == "") {
 			alert("Select a Date");
