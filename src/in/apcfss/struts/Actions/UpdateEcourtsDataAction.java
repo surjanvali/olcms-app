@@ -62,13 +62,12 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 
 			con = DatabasePlugin.connect();
 
-
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
 			e.printStackTrace();
 		} finally {
 			cform.setDynaForm("distList", DatabasePlugin
-						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+					.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
 
 			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
@@ -89,7 +88,6 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
 			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
-
 
 			DatabasePlugin.closeConnection(con);
 		}
@@ -215,7 +213,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
 
 			// request.setAttribute("SHOWFILTERS", "SHOWFILTERS");
-
+			DatabasePlugin.closeConnection(con);
 		}
 
 		return mapping.findForward("success");
@@ -269,24 +267,25 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
 				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 			}
-			
+
 			if (cform.getDynaForm("cino") != null && !cform.getDynaForm("cino").toString().contentEquals("")
 					&& !cform.getDynaForm("cino").toString().contentEquals("0")) {
 				sqlCondition += " and a.cino='" + cform.getDynaForm("cino").toString().trim() + "' ";
 			}
-			
+
 			String opVal = ECourtAPIs.getSelectParam(1);
 
-			String cino = "";//cform.getDynaForm("cino").toString();
+			String cino = "";// cform.getDynaForm("cino").toString();
 
-			sql="select cino from ecourts_case_data a where last_updated_ecourts<=now()::date - integer '2' "+sqlCondition+" order by last_updated_ecourts asc limit 100";
+			sql = "select cino from ecourts_case_data a where last_updated_ecourts<=now()::date - integer '2' "
+					+ sqlCondition + " order by last_updated_ecourts asc limit 100";
 			// sql="select cino from ecourts_case_data where cino='APHC010183002019'";
-			
+
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
-			
-			while(rs.next()) {
-			//if (cino != null) {
+
+			while (rs.next()) {
+				// if (cino != null) {
 				cino = rs.getString("cino").toString().trim();
 				totalCount++;
 				inputStr = "cino=" + cino;// ECourtAPIs.getInputStringValue(opVal);
@@ -316,7 +315,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 
 				if (resp != null && !resp.equals("")) {
 					boolean b = processCNRsearchResponse(resp, opVal, con, cino);
-	
+
 					if (b) {
 						request.setAttribute("successMsg", "Successfully saved/ Updated data form ecourts.");
 					} else {
@@ -332,7 +331,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		} finally {
 
 			cform.setDynaForm("distList", DatabasePlugin
-						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+					.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
 
 			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
@@ -354,10 +353,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
 
-
 			DatabasePlugin.closeConnection(con);
-		
-			DatabasePlugin.close(con, ps, null);
 		}
 		return mapping.findForward("success");
 		// return showCaseWise(mapping, cform, request, response);
@@ -810,9 +806,10 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 
 			String destinationPath = ApplicationVariables.contextPath + "HighCourtsCaseOrders\\";
 			System.out.println("destinationPath:" + destinationPath);
-			
-			//String filesUploadPath=ApplicationVariables.contextPath+"\\uploads\\HighCourtsCauseList\\"+causelistDate+"\\";
-			
+
+			// String
+			// filesUploadPath=ApplicationVariables.contextPath+"\\uploads\\HighCourtsCauseList\\"+causelistDate+"\\";
+
 			File upload_folder = new File(destinationPath);
 			if (!upload_folder.exists()) {
 				upload_folder.mkdirs();
@@ -820,9 +817,9 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			if (upload_folder.exists()) {
 				File pdfFile = new File(destinationPath + fileName + ".pdf");
 				System.out.println("pdfFile.exists()::" + pdfFile.exists());
-	
+
 				if (!pdfFile.exists()) {
-					
+
 					FileOutputStream fos = new FileOutputStream(pdfFile);
 					byte[] decoder = Base64.getDecoder().decode(decryptedRespStr.replace("\"", "").replace("\\", ""));
 					fos.write(decoder);
@@ -831,8 +828,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 							+ ".pdf', updated_time=now() where cino||'-" + orderFileName + "-'||order_no='" + fileName
 							+ "'";
 					DatabasePlugin.executeUpdate(sql, con);
-				}
-				else {
+				} else {
 					System.out.println("File Already exist.");
 				}
 			}
@@ -877,13 +873,14 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		int totalCount = 0, successCount = 0, failCount = 0;
 		CommonForm cform = (CommonForm) form;
 		try {
-			
+
 			con = DatabasePlugin.connect();
 			con.setAutoCommit(false);
-			
+
 			String opVal = ECourtAPIs.getSelectParam(11);
 
-			String estCode = "APHC01", causelistDate =  (String)cform.getDynaForm("causeListDate");//"2022-04-25";// 2022-04-06
+			String estCode = "APHC01", causelistDate = (String) cform.getDynaForm("causeListDate");// "2022-04-25";//
+																									// 2022-04-06
 
 			inputStr = "est_code=" + estCode + "|causelist_date=" + causelistDate;// ECourtAPIs.getInputStringValue(opVal);
 			// 1. Encoding Request Token
@@ -900,26 +897,16 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			authToken = EHighCourtAPI.getAuthToken();
 			String resp = "";
 			if (opVal != null && !opVal.equals("")) {
-				try {
-					resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
 			}
 
 			if (resp != null && !resp.equals("")) {
-				try {
-					HighCourtCauseListBenchAPI.processApiResponse(resp, estCode, causelistDate, con);
-					
-					retrieveCauseList(estCode, causelistDate, con);
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			con.commit();
+				HighCourtCauseListBenchAPI.processApiResponse(resp, estCode, causelistDate, con);
+				retrieveCauseList(estCode, causelistDate, con);
+				con.commit();
 				request.setAttribute("successMsg", "Successfully saved/ Updated Causelist data from ecourts.");
-				
+			}
+
 			System.out.println("CAUSE LIST BENCH END");
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Error-1 while Updating Cause list data from ecourts.");
@@ -928,7 +915,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		} finally {
 
 			cform.setDynaForm("distList", DatabasePlugin
-						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+					.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
 
 			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
@@ -950,82 +937,75 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
 
-
 			DatabasePlugin.closeConnection(con);
-		
-			
-			if (con != null)
-				con.close();
 		}
 
 		return mapping.findForward("success");
 	}
 
-	
-	
 	public static void retrieveCauseList(String estCode, String causelistDate, Connection con) throws Exception {
 		String request_token = "", requeststring = "";
 		String inputStr = "", targetURL = "";
 		String authToken = "";
 		ResultSet rs = null;
 		Statement st = null;
-		
+
 		ResultSet rs1 = null;
 		Statement st1 = null;
-		
+
 		String sql = "";
 		int totalCount = 0, successCount = 0, failCount = 0;
-			String opVal = ECourtAPIs.getSelectParam(12);
-			
-			sql="select distinct to_char(causelist_date,'dd/mm/yyyy') as causelist_date1, causelist_date from ecourts_causelist_data"
-					+ " where causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd')";
-			System.out.println("retrieveCauseList SQL:"+sql);
-			st1 = con.createStatement();
-			rs1 = st1.executeQuery(sql);
-			
-			while (rs1.next()){
-				sql = "SELECT slno, est_code, causelist_date, bench_id, judge_name, inserted_time FROM apolcms.ecourts_causelist_data where causelist_date=to_date('"+rs1.getString("causelist_date1")
-					+"','dd/mm/yyyy') order by causelist_date ";
-				
-				st = con.createStatement();
-				rs = st.executeQuery(sql);
-				
-				while(rs.next()) {
-					causelistDate = rs.getString("causelist_date");
-					inputStr = "est_code="+estCode+"|causelist_date="+causelistDate+"|bench_id="+rs.getString("bench_id");//ECourtAPIs.getInputStringValue(opVal);
-					// 1. Encoding Request Token
-					byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"), inputStr.getBytes("UTF-8"));
-					request_token = String.format("%032x", new BigInteger(1, hmacSha256));
-					// 2. Encoding Request String
-					requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
-		
-					targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
-		
-					System.out.println(totalCount + ":URL : " + targetURL);
-					System.out.println("Input String : " + inputStr);
-		
-					authToken = EHighCourtAPI.getAuthToken();
-					String resp = "";
-					 if (opVal != null && !opVal.equals("")) {
-							resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
-						
-					}
-		
-					if (resp != null && !resp.equals("")) {
-							HighCourtCauseListAPI.processApiResponse(resp, estCode, causelistDate, con);
-							retrieveCauselistPdfs(con, causelistDate);
-						
-					}
+		String opVal = ECourtAPIs.getSelectParam(12);
+
+		sql = "select distinct to_char(causelist_date,'dd/mm/yyyy') as causelist_date1, causelist_date from ecourts_causelist_data"
+				+ " where causelist_date=to_date('" + causelistDate + "','yyyy-mm-dd')";
+		System.out.println("retrieveCauseList SQL:" + sql);
+		st1 = con.createStatement();
+		rs1 = st1.executeQuery(sql);
+
+		while (rs1.next()) {
+			sql = "SELECT slno, est_code, causelist_date, bench_id, judge_name, inserted_time FROM apolcms.ecourts_causelist_data where causelist_date=to_date('"
+					+ rs1.getString("causelist_date1") + "','dd/mm/yyyy') order by causelist_date ";
+
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+
+			while (rs.next()) {
+				causelistDate = rs.getString("causelist_date");
+				inputStr = "est_code=" + estCode + "|causelist_date=" + causelistDate + "|bench_id="
+						+ rs.getString("bench_id");// ECourtAPIs.getInputStringValue(opVal);
+				// 1. Encoding Request Token
+				byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"),
+						inputStr.getBytes("UTF-8"));
+				request_token = String.format("%032x", new BigInteger(1, hmacSha256));
+				// 2. Encoding Request String
+				requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
+
+				targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
+
+				System.out.println(totalCount + ":URL : " + targetURL);
+				System.out.println("Input String : " + inputStr);
+
+				authToken = EHighCourtAPI.getAuthToken();
+				String resp = "";
+				if (opVal != null && !opVal.equals("")) {
+					resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
+
+				}
+
+				if (resp != null && !resp.equals("")) {
+					HighCourtCauseListAPI.processApiResponse(resp, estCode, causelistDate, con);
+					retrieveCauselistPdfs(con, causelistDate);
+
 				}
 			}
-			System.out.println("CAUSE LIST END");
-		
-	
+		}
+		System.out.println("CAUSE LIST END");
+
 	}
-	
-	public static void retrieveCauselistPdfs(Connection con, String causelistDate) throws Exception{
-		
-		
+
+	public static void retrieveCauselistPdfs(Connection con, String causelistDate) throws Exception {
+
 		String request_token = "", requeststring = "";
 		String inputStr = "", targetURL = "";
 		String authToken = "";
@@ -1033,90 +1013,102 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		Statement st = null;
 		String sql = "";
 		int totalCount = 0, successCount = 0, failCount = 0;
-			String opVal = ECourtAPIs.getSelectParam(13);
-			
-			String estCode="APHC01", bench_id="",causelist_id="" ;
-			
-			sql="SELECT slno, est_code, causelist_date, bench_id, inserted_time,causelist_id, cause_list_type FROM apolcms.ecourts_causelist_bench_data where causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd')"
-					//+ "slno=36";
-					+ " and causelist_document is null and causelist_id is not null order by causelist_date";
-			System.out.println("retrieveCauselistPdfs SQL:"+sql);
-			st = con.createStatement();
-			rs = st.executeQuery(sql);
-			
-			while(rs.next()) {
-				// causelistDate = rs.getString("causelist_date"); 
-				bench_id = rs.getString("bench_id"); 
-				causelist_id = rs.getString("causelist_id"); 
-				
-				if(causelistDate!=null && bench_id!=null && causelist_id!=null && !causelistDate.equals("") && !bench_id.equals("") && !causelist_id.equals(""))
-				{
-					inputStr = "est_code="+estCode+"|causelist_date="+causelistDate+"|bench_id="+bench_id+"|causelist_id="+causelist_id;//ECourtAPIs.getInputStringValue(opVal);
-					System.out.println("inputStr:"+inputStr);
-					// 1. Encoding Request Token
-					byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"), inputStr.getBytes("UTF-8"));
-					request_token = String.format("%032x", new BigInteger(1, hmacSha256));
-					// 2. Encoding Request String
-					requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
-		
-					targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
-		
-					System.out.println(totalCount + ":URL : " + targetURL);
-					System.out.println("Input String : " + inputStr);
-		
-					authToken = EHighCourtAPI.getAuthToken();
-					String resp = "";
-					 if (opVal != null && !opVal.equals("")) {
-							resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
-					}
-		
-					if (resp != null && !resp.equals("")) {
-							processPDForderResponse(resp, estCode, causelistDate, bench_id,causelist_id, con);
-					}
+		String opVal = ECourtAPIs.getSelectParam(13);
+
+		String estCode = "APHC01", bench_id = "", causelist_id = "";
+
+		sql = "SELECT slno, est_code, causelist_date, bench_id, inserted_time,causelist_id, cause_list_type FROM apolcms.ecourts_causelist_bench_data where causelist_date=to_date('"
+				+ causelistDate + "','yyyy-mm-dd')"
+				// + "slno=36";
+				+ " and causelist_document is null and causelist_id is not null order by causelist_date";
+		System.out.println("retrieveCauselistPdfs SQL:" + sql);
+		st = con.createStatement();
+		rs = st.executeQuery(sql);
+
+		while (rs.next()) {
+			// causelistDate = rs.getString("causelist_date");
+			bench_id = rs.getString("bench_id");
+			causelist_id = rs.getString("causelist_id");
+
+			if (causelistDate != null && bench_id != null && causelist_id != null && !causelistDate.equals("")
+					&& !bench_id.equals("") && !causelist_id.equals("")) {
+				inputStr = "est_code=" + estCode + "|causelist_date=" + causelistDate + "|bench_id=" + bench_id
+						+ "|causelist_id=" + causelist_id;// ECourtAPIs.getInputStringValue(opVal);
+				System.out.println("inputStr:" + inputStr);
+				// 1. Encoding Request Token
+				byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"),
+						inputStr.getBytes("UTF-8"));
+				request_token = String.format("%032x", new BigInteger(1, hmacSha256));
+				// 2. Encoding Request String
+				requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
+
+				targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
+
+				System.out.println(totalCount + ":URL : " + targetURL);
+				System.out.println("Input String : " + inputStr);
+
+				authToken = EHighCourtAPI.getAuthToken();
+				String resp = "";
+				if (opVal != null && !opVal.equals("")) {
+					resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
+				}
+
+				if (resp != null && !resp.equals("")) {
+					processPDForderResponse(resp, estCode, causelistDate, bench_id, causelist_id, con);
 				}
 			}
-			System.out.println("END");
+		}
+		System.out.println("END");
 	}
-	
-	public static void processPDForderResponse(String resp, String estCode, String causelistDate,String bench_id, String causelist_id, Connection con)  throws Exception{
 
-	    String response_str = "";String response_token = "";String version = "";String decryptedRespStr = "";String sql = "";
-	    resp = resp.trim();
-	    System.out.println("processPDForderResponse RESP:"+resp);
-	    if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_TOKEN")) && (!resp.contains("RECORD_NOT_FOUND")))
-		{
+	public static void processPDForderResponse(String resp, String estCode, String causelistDate, String bench_id,
+			String causelist_id, Connection con) throws Exception {
+
+		String response_str = "";
+		String response_token = "";
+		String version = "";
+		String decryptedRespStr = "";
+		String sql = "";
+		resp = resp.trim();
+		System.out.println("processPDForderResponse RESP:" + resp);
+		if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_TOKEN"))
+				&& (!resp.contains("RECORD_NOT_FOUND"))) {
 			JSONObject jObj = new JSONObject(resp);
 			response_str = jObj.getString("response_str").toString();
 			// System.out.println("response_str::"+response_str);
 			if ((response_str != null) && (!response_str.equals(""))) {
-		        decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
-		    }
-			
-			System.out.println("decryptedRespStr:"+decryptedRespStr);
-			
-			String filesUploadPath=ApplicationVariables.contextPath+"\\uploads\\HighCourtsCauseList\\"+causelistDate+"\\";
-			
+				decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
+			}
+
+			System.out.println("decryptedRespStr:" + decryptedRespStr);
+
+			String filesUploadPath = ApplicationVariables.contextPath + "\\uploads\\HighCourtsCauseList\\"
+					+ causelistDate + "\\";
+
 			File upload_folder = new File(filesUploadPath);
 			if (!upload_folder.exists()) {
 				upload_folder.mkdirs();
 			}
 			if (upload_folder.exists()) {
-				File pdfFile = new File( filesUploadPath+ estCode+causelistDate+bench_id+causelist_id + ".pdf");
+				File pdfFile = new File(filesUploadPath + estCode + causelistDate + bench_id + causelist_id + ".pdf");
 				FileOutputStream fos = new FileOutputStream(pdfFile);
 				byte[] decoder = Base64.getDecoder().decode(decryptedRespStr.replace("\"", "").replace("\\", ""));
 				fos.write(decoder);
 				System.out.println("PDF File Saved");
-				
-				sql = "update ecourts_causelist_bench_data set causelist_document='uploads/HighCourtsCauseList/"+causelistDate+"/"+estCode+causelistDate+bench_id+causelist_id+".pdf' where est_code='"+estCode+"' and causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd') and bench_id='"+bench_id+"' and causelist_id='"+causelist_id+"'";
-				System.out.println("UPDATE SQL:"+sql);
+
+				sql = "update ecourts_causelist_bench_data set causelist_document='uploads/HighCourtsCauseList/"
+						+ causelistDate + "/" + estCode + causelistDate + bench_id + causelist_id
+						+ ".pdf' where est_code='" + estCode + "' and causelist_date=to_date('" + causelistDate
+						+ "','yyyy-mm-dd') and bench_id='" + bench_id + "' and causelist_id='" + causelist_id + "'";
+				System.out.println("UPDATE SQL:" + sql);
 				DatabasePlugin.executeUpdate(sql, con);
 			}
-		}
-	    else
-		{
-			 sql = "update ecourts_causelist_bench_data set causelist_document='" + resp + "' where est_code='"+estCode+"' and causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd') and bench_id='"+bench_id+"' and causelist_id='"+causelist_id+"'";
-			 System.out.println("UPDATE SQL:"+sql);
-			 DatabasePlugin.executeUpdate(sql, con);
+		} else {
+			sql = "update ecourts_causelist_bench_data set causelist_document='" + resp + "' where est_code='" + estCode
+					+ "' and causelist_date=to_date('" + causelistDate + "','yyyy-mm-dd') and bench_id='" + bench_id
+					+ "' and causelist_id='" + causelist_id + "'";
+			System.out.println("UPDATE SQL:" + sql);
+			DatabasePlugin.executeUpdate(sql, con);
 			System.out.println("Invalid/Empty Response");
 		}
 	}
