@@ -443,7 +443,16 @@ public class HighCourtCasesListAction extends DispatchAction {
 				
 				String assign2deptId = DatabasePlugin.getStringfromQuery("select dept_id from dept_new where dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("caseDept"))+"'", con);
 				
-				sql = "update ecourts_case_data set dept_id='"+assign2deptId+"',dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("caseDept"))+"',case_status=3  where cino in (" + selectedCaseIds + ") ";
+				String caseNewDept = CommonModels.checkStringObject(cform.getDynaForm("caseDept"));
+				String newStatusCode="4";
+					if (caseNewDept.contains("01")) { 
+						newStatusCode="2";
+					}
+					else { 
+						newStatusCode="4";
+					}
+				
+				sql = "update ecourts_case_data set dept_id='"+assign2deptId+"',dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("caseDept"))+"',case_status='"+newStatusCode+"'  where cino in (" + selectedCaseIds + ") ";
 				
 				System.out.println("UPDATE SQL:"+sql);
 				
@@ -607,7 +616,7 @@ public class HighCourtCasesListAction extends DispatchAction {
 						
 						System.out.println(mobileNo+""+smsText+""+templateId);
 						if(mobileNo!=null && !mobileNo.equals("")) {
-							mobileNo = "9618048663";
+							// mobileNo = "9618048663";
 							System.out.println("mobileNo::"+mobileNo);
 							SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
 						}

@@ -45,6 +45,9 @@
   <StrutsActivity path="/ContemptCasesAbstract.do" location="650,3250" dimension="323,96" />
   <StrutsActivity path="/eofficeEmployeeReport.do" location="2150,3350" dimension="369,96" />
   <StrutsActivity path="/DistrictNodalOfficerAbstactReport.do" location="3050,1050" dimension="375,96" />
+  <StrutsActivity path="/UpdateEcourtsData.do" location="3050,1650" dimension="299,96" />
+  <StrutsActivity path="/AssignmentAndNewCases.do" location="3050,2250" dimension="334,96" />
+  <StrutsActivity path="/AssignedNewCasesToEmp.do" location="3050,750" dimension="333,96" />
   <StrutsActivity path="Login;6" location="350,1750" dimension="92,81" />
   <StrutsActivity path="Logout;6" location="50,650" dimension="203,87" />
   <StrutsActivity path="Welcome;6" location="950,1450" dimension="107,81" />
@@ -98,6 +101,9 @@
   <StrutsActivity path="contemptcasesreport" location="50,3350" dimension="142,51" />
   <StrutsActivity path="eofficeEmployeeReport" location="2750,3350" dimension="153,51" />
   <StrutsActivity path="DistrictNodalOfficerAbstactReport" location="3050,1450" dimension="210,51" />
+  <StrutsActivity path="UpdateEcourtsData" location="3050,2050" dimension="131,51" />
+  <StrutsActivity path="assignments" location="3050,2750" dimension="96,51" />
+  <StrutsActivity path="AssignedNewCasesToEmp" location="3050,2950" dimension="168,51" />
   <StrutsActivity path="districtreport" location="2150,2650" dimension="98,51" />
   <StrutsActivity path="benchreport" location="50,2750" dimension="95,51" />
   <StrutsActivity path="HomePage;6" location="950,1050" dimension="116,81" />
@@ -121,12 +127,6 @@
   <StrutsActivity path="closedcasesreport" location="2450,2350" dimension="124,51" />
   <StrutsActivity path="mlologinstatusreport" location="650,2950" dimension="141,51" />
   <StrutsActivity path="/form/eofficeEmployeeReport.jsp" location="350,3450" dimension="207,51" />
-  <StrutsActivity path="/UpdateEcourtsData.do" location="3050,1650" dimension="299,96" />
-  <StrutsActivity path="UpdateEcourtsData" location="3050,2050" dimension="131,51" />
-  <StrutsActivity path="/AssignmentAndNewCases.do" location="3050,2250" dimension="334,96" />
-  <StrutsActivity path="assignments" location="3050,2750" dimension="96,51" />
-  <StrutsActivity path="/AssignedNewCasesToEmp.do" />
-  <StrutsActivity path="AssignedNewCasesToEmp" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,595" />

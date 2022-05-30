@@ -205,7 +205,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 
 			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
 					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
-				sqlCondition += " and ad.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+				sqlCondition += " and d.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 			}
 
 			if (cform.getDynaForm("fromDate") != null && !cform.getDynaForm("fromDate").toString().contentEquals("")) {
@@ -307,7 +307,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 
 			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
 					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
-				sqlCondition += " and ad.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+				sqlCondition += " and d.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 			}
 
 			if (cform.getDynaForm("fromDate") != null && !cform.getDynaForm("fromDate").toString().contentEquals("")) {
