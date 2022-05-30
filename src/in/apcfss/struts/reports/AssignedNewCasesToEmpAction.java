@@ -205,14 +205,6 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 
 				//sql = "select * from ecourts_gpo_ack_dtls where ack_no='" + cIno + "'";//user list
 				
-				
-				
-
-					
-					
-				
-				
-
 				String sqlCondition = "";
 
 				if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
@@ -294,8 +286,8 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 						+ "inner join district_mst dm on (a.distid=dm.district_id) "
 						+ "inner join dept_new dmt on (ad.dept_code=dmt.dept_code)"
 						+ "inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
-						+ "where a.delete_status is false and ack_type='NEW' " + sqlCondition
-						+ "order by inserted_time desc";
+						+ "where a.delete_status is false and ack_type='NEW' " + sqlCondition 
+						+ " and a.ack_no='"+cIno+"'  order by inserted_time desc";
 
 				System.out.println("CASES SQL:" + sql);
 
@@ -354,6 +346,12 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 					else if(roleId.equals("6") ) { // GP LOGIN
 						request.setAttribute("SHOWGPAPPROVEBTN", "SHOWGPAPPROVEBTN");
 					}
+					
+					sql="select cino,action_type,inserted_by,inserted_on,assigned_to,remarks as remarks, "
+							+ "    CASE  WHEN length(trim(uploaded_doc_path)) > 10 THEN uploaded_doc_path else '---'  end as uploaded_doc_path from ecourts_case_activities where cino = '"+cIno+"' order by inserted_on";
+					System.out.println("ecourts activities SQL:" + sql);
+					data = DatabasePlugin.executeQuery(sql, con);
+					request.setAttribute("ACTIVITIESDATA", data);
 					 
 
 					request.setAttribute("STATUSUPDATEBTN", "STATUSUPDATEBTN");
@@ -504,7 +502,7 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 
 					int a = DatabasePlugin.executeUpdate(sql, con);
 
-					sql="update ecourts_gpo_ack_depts set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"',section_officer_updated='T' where ack_no='"+cIno+"'";
+					sql="update ecourts_gpo_ack_depts set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"',section_officer_updated='T' where ack_no='"+cIno+"' and dept_code='"+deptCode+"'";
 					a += DatabasePlugin.executeUpdate(sql, con);
 
 					sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks ) "
@@ -597,13 +595,13 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 					int a = DatabasePlugin.executeUpdate(sql, con);
 					System.out.println("a-----2------------"+a);
 					if(roleId!=null && (roleId.equals("4") || roleId.equals("5") || roleId.equals("10"))) {//MLO / NO / Dist-NO
-						sql="update ecourts_gpo_ack_depts set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"', mlo_no_updated='T' where ack_no='"+cIno+"'";
+						sql="update ecourts_gpo_ack_depts set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"', mlo_no_updated='T' where ack_no='"+cIno+"' and dept_code='"+deptCode+"'   ";
 						a += DatabasePlugin.executeUpdate(sql, con);
 						System.out.println("a-----3------------"+a);
 					}
 					
 					else {
-						sql="update ecourts_gpo_ack_depts set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"', section_officer_updated='T' where ack_no='"+cIno+"'";
+						sql="update ecourts_gpo_ack_depts set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"', section_officer_updated='T' where ack_no='"+cIno+"' and dept_code='"+deptCode+"' ";
 						a += DatabasePlugin.executeUpdate(sql, con);
 					}
 					System.out.println("a-----4------------"+a);
@@ -674,7 +672,7 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 					newStatus = "1";
 					msg = "Case details ("+cIno+") forwarded successfully to Sect. Department.";
 					
-					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' and case_status='2'";
+					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' and case_status='2' and dept_code='"+deptCode+"' ";
 					
 				}
 				else if(roleId!=null && roleId.equals("5")) {//FROM NO TO HOD
@@ -682,7 +680,7 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 					newStatus = "3";
 					msg = "Case details ("+cIno+") forwarded successfully to HOD.";
 					
-					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' and case_status='4'";
+					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' and case_status='4'  and dept_code='"+deptCode+"' ";
 					
 				}
 				else if(roleId!=null && roleId.equals("10")) {//FROM Dist-NO TO HOD
@@ -690,7 +688,7 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 					newStatus = "3";
 					msg = "Case details ("+cIno+") forwarded successfully to HOD.";
 					
-					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' and case_status='8'";
+					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' and case_status='8'  and dept_code='"+deptCode+"'";
 					
 				}
 				
@@ -701,14 +699,14 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 					newStatus = "2";
 					msg = "Case details ("+cIno+") forwarded successfully to MLO.";
 					
-					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and case_status='5'";
+					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and case_status='5'  and dept_code='"+deptCode+"' ";
 				} 
 				else if(roleId!=null && roleId.equals("11")){// FROM SECTION(HOD) TO NO-HOD
 					fwdOfficer = DatabasePlugin.selectString("select emailid from nodal_officer_details where dept_id='"+deptCode+"' and user_id not like '%DC-%'", con);
 					newStatus = "4";
 					msg = "Case details ("+cIno+") forwarded successfully to Nodal Officer.";
 					
-					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and case_status='9'";
+					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and case_status='9'  and dept_code='"+deptCode+"' ";
 					
 				}
 				else if(roleId!=null && roleId.equals("12")){// FROM SECTION(DIST) TO NO-HOD-DIST
@@ -716,7 +714,7 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 					newStatus = "8";
 					msg = "Case details ("+cIno+") forwarded successfully to Nodal Officer.";
 					
-					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and case_status='10'";
+					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and case_status='10' and dept_code='"+deptCode+"'";
 					
 				}
 				

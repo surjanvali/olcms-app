@@ -255,6 +255,10 @@
 		extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/AssignedNewCasesToEmp.jsp" />
 	</definition>
+	
+	<definition name="caseStatusUpdationEmpl" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/CaseStatusUpdationEmp.jsp" />
+	</definition>
 
 
 </tiles-definitions>

@@ -27,17 +27,9 @@ body {
 	overflow-y: auto;
 }
 </style>
-<!-- START PAGE CONTENT-->
-<%-- <div class="page-heading">
-	<h3 class="page-title" style="text-align:center">
-		<logic:notEmpty name="HEADING">
-									${HEADING }
-								</logic:notEmpty>
-	</h3>
 
-</div> --%>
 <div class="page-content fade-in-up">
-	<html:form action="/AssignedCasesToSection"
+	<html:form action="/AssignedNewCasesToEmp"
 		styleId="AssignedCasesToSectionForm" enctype="multipart/form-data">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden property="dynaForm(fileCino)" styleId="fileCino" />
@@ -82,461 +74,105 @@ body {
 
 						<div class="row">
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Date of filing: </b>
+								<b> Generated date: </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.date_of_filing}</div>
+								${map.generated_date}</div>
 
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
 								<b> Case Type : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.type_name_reg}</div>
+								${map.casetype}</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Filing No.: </b>
+								<b> Main Case No.: </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.fil_no}</div>
+								${map.maincaseno}</div>
 						</div>
 						<div class="row">
 
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Filing Year: </b>
+								<b>Reported By: </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.fil_year}</div>
+								${map.inserted_by}</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
 								<b> Registration No: </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.reg_no}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Est Code: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.est_code}</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Case ID: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.case_type_id}</div>
-
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Cause Type: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.causelist_type}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Bench Name: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.bench_name}</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Judicial Branch: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.judicial_branch}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Coram: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.coram}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Court Est Name: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.court_est_name}</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> State Name: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.state_name}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
+								${map.ack_no}</div>
+								
+								<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
 								<b>District : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.dist_name}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Date Of First List : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.date_first_list}</div>
+								${map.district_name}</div>
+							
 						</div>
-						<div class="row">
+						
+						
+						
+						
+						
+						
+						
+						<%-- <div class="row">
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
 								<b>Date Of Next List </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.date_next_list}</div>
+								${map.generated_date}</div>
 
 
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
 								<b>Date Of Decision : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.date_of_decision}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Purpose : </b>
+								${map.generated_date}</div>
+								<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
+								<b>Department Description : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.purpose_name}</div>
-						</div>
+								${map.dept_descs}</div>
+							
+						</div> --%>
+						
 						<div class="row">
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Petetioner Name: </b>
+								<b>Advocate Name: </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.pet_name}</div>
+								${map.advocatename}</div>
 
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Petetioner Advacate : </b>
+								<b>Advocate No: </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.pet_adv}</div>
+								${map.advocateccno}</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Petetioner Legal Heir : </b>
+								<b>Case Full Name : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.pet_legal_heir}</div>
+								${map.case_full_name}</div>
 						</div>
+						
+
+
 						<div class="row">
+							
+							
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Respondent Name : </b>
+								<b>Services  : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.res_name}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Respondent Advocate : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.res_adv}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Respondent Advocate : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.res_adv}</div>
+								${map.services_flag}</div>
 						</div>
-
 
 					</logic:iterate>
 
 				</logic:present>
 				<hr />
-				<%-- <div class="ibox-head">
-					<div class="ibox-title">
-						<h5 style="color:Black;">
-							<logic:notEmpty name="Act">
-									${Act }
-								</logic:notEmpty>
-						</h5>
-					</div>
-				</div> --%>
-				<logic:present name="actlist">
-					<div class="row">
-						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<th colspan="4">ACTS List</th>
-									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Act</th>
-										<th>Act Name</th>
-										<th>Section</th>
-									</tr>
-								</thead>
-								<tbody>
-									<logic:iterate id="ccd" name="actlist" indexId="i">
-										<tr>
-
-											<td>${i+1}</td>
-											<td>${ccd.act}</td>
-											<td>${ccd.actname}</td>
-											<td>${ccd.section}</td>
-										</tr>
-									</logic:iterate>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</logic:present>
-				<logic:present name="PETEXTRAPARTYLIST">
-					<div class="row">
-						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<th colspan="3">Petetioner's List</th>
-									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Party No</th>
-										<th>Party Name</th>
-									</tr>
-								</thead>
-								<tbody>
-									<logic:iterate id="pet" name="PETEXTRAPARTYLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${pet.party_no}</td>
-											<td>${pet.party_name}</td>
-										</tr>
-									</logic:iterate>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</logic:present>
-				<logic:present name="RESEXTRAPARTYLIST">
-					<div class="row">
-						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<th colspan="3">Respondent List</th>
-									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Party No</th>
-										<th>Party Name</th>
-									</tr>
-								</thead>
-								<tbody>
-									<logic:iterate id="res" name="RESEXTRAPARTYLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${res.party_no}</td>
-											<td>${res.party_name}</td>
-										</tr>
-									</logic:iterate>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</logic:present>
-				<logic:present name="IAFILINGLIST">
-					<div class="row">
-						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<th colspan="6">IAFilling List</th>
-									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Sr No</th>
-										<th>IA NO</th>
-										<th>IA PetetionerName</th>
-										<th>IA PetetionerDispoasal</th>
-										<th>IA Date of Filling</th>
-									</tr>
-								</thead>
-								<tbody>
-									<logic:iterate id="iafi" name="IAFILINGLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${iafi.sr_no}</td>
-											<td>${iafi.ia_no}</td>
-											<td>${iafi.ia_pet_name}</td>
-											<td>${iafi.ia_pend_disp}</td>
-											<td>${iafi.date_of_filing}</td>
-										</tr>
-									</logic:iterate>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</logic:present>
-				<logic:present name="INTERIMORDERSLIST">
-					<div class="row">
-						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<th colspan="6">InterimOrder List</th>
-									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Sr No</th>
-										<th>Order NO</th>
-										<th>Order Date</th>
-										<th>Order Details</th>
-										<th>Order Document</th>
-									</tr>
-								</thead>
-								<tbody>
-									<logic:iterate id="inter" name="INTERIMORDERSLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${inter.sr_no}</td>
-											<td>${inter.order_no}</td>
-											<td>${inter.order_date}</td>
-											<td>${inter.order_details}</td>
-											<td><logic:notEmpty name="inter"
-													property="order_document_path">
-													<a href="./${inter.order_document_path}"
-														class="btn btn-sm btn-info" target="_new">
-														${inter.order_details}-${inter.order_no}</a>
-												</logic:notEmpty></td>
-										</tr>
-									</logic:iterate>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</logic:present>
-				<logic:present name="LINKCASESLIST">
-					<div class="row">
-						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<th colspan="4">Case Link List</th>
-									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Sr No</th>
-										<th>Filling NO</th>
-										<th>Case Number</th>
-									</tr>
-								</thead>
-								<tbody>
-									<logic:iterate id="link" name="LINKCASESLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${link.sr_no}</td>
-											<td>${link.filing_number}</td>
-											<td>${link.case_number}</td>
-										</tr>
-									</logic:iterate>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</logic:present>
-				<logic:present name="OBJECTIONSLIST">
-					<div class="row">
-						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<th colspan="6">Objections List</th>
-									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Objection Number</th>
-										<th>Objection Description</th>
-										<th>Scrunity Date</th>
-										<th>Compliance Date</th>
-										<th>Receipt Date</th>
-									</tr>
-								</thead>
-								<tbody>
-									<logic:iterate id="obj" name="OBJECTIONSLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${obj.objection_no}</td>
-											<td>${obj.objection_desc}</td>
-											<td>${obj.scrutiny_date}</td>
-											<td>${obj.objections_compliance_by_date}</td>
-											<td>${obj.obj_reciept_date}</td>
-										</tr>
-									</logic:iterate>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</logic:present>
-				<logic:present name="CASEHISTORYLIST">
-					<div class="row">
-						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<th colspan="7">Case History Details</th>
-									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Sr No</th>
-										<th>Judge Name</th>
-										<th>Business Date</th>
-										<th>Hearing Date</th>
-										<th>Purpose of Listing</th>
-										<th>Cause Type</th>
-									</tr>
-								</thead>
-								<tbody>
-									<logic:iterate id="history" name="CASEHISTORYLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${history.sr_no}</td>
-											<td>${history.judge_name}</td>
-											<td>${history.business_date}</td>
-											<td>${history.hearing_date}</td>
-											<td>${history.purpose_of_listing}</td>
-											<td>${history.causelist_type}</td>
-										</tr>
-									</logic:iterate>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</logic:present>
-				<logic:present name="orderlist">
-					<div class="row">
-						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<th colspan="6">Final Order Details</th>
-									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Sr No</th>
-										<th>Order NO</th>
-										<th>Order Date</th>
-										<th>Order Details</th>
-										<th>Order Document</th>
-									</tr>
-								</thead>
-								<tbody>
-									<logic:iterate id="order" name="orderlist" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${order.sr_no}</td>
-											<td>${order.order_no}</td>
-											<td>${order.order_date}</td>
-											<td>${order.order_details}</td>
-											<td><logic:notEmpty name="order"
-													property="order_document_path">
-													<a href="./${order.order_document_path}"
-														class="btn btn-sm btn-info" target="">
-														${order.order_details}-${order.order_no}</a>
-												</logic:notEmpty></td>
-										</tr>
-									</logic:iterate>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</logic:present>
-
 				<logic:present name="ACTIVITIESDATA">
 					<div class="row">
 						<div class="col-md-12">
@@ -566,7 +202,7 @@ body {
 											<td>${activities.inserted_by}</td>
 											<td>${activities.assigned_to}</td>
 											<td>${activities.remarks }</td>
-											<td><logic:notEmpty name="activities"
+											<td style="text-align: center"><logic:notEmpty name="activities"
 													property="uploaded_doc_path">
 
 													<logic:notEqual value="---" name="activities"
@@ -575,7 +211,10 @@ body {
 														<a href='${activities.uploaded_doc_path}' target='_new'
 															class="btn btn-sm btn-info">View Uploaded File</a>
 													</logic:notEqual>
-													
+													<logic:equal value="---" name="activities"
+														property="uploaded_doc_path">
+														---
+													</logic:equal>
 												</logic:notEmpty></td>
 										</tr>
 									</logic:iterate>
@@ -588,7 +227,7 @@ body {
 				<hr />
 
 				<div class="row">
-					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
+					<%-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
 						<label>Upload Petition <bean:message key="mandatory" /></label>
 						<html:file styleClass="form-control" styleId="petitionDocument"
 							property="dynaForm(petitionDocument)" />
@@ -602,7 +241,7 @@ body {
 								target='_new' class="btn btn-sm btn-info">View Uploaded File</a>
 						</logic:notEmpty>
 
-					</div>
+					</div> --%>
 
 					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 						<div class="form-group">
@@ -612,29 +251,12 @@ body {
 								property="dynaForm(ecourtsCaseStatus)" styleClass="form-control">
 								<html:option value="0">---SELECT---</html:option>
 								<html:option value="Pending">Pending</html:option>
-								<html:option value="Closed">Closed</html:option>
+							<%-- 	<html:option value="Closed">Closed</html:option> --%>
 							</html:select>
 						</div>
 					</div>
 				</div>
 
-				<%-- <div class="row">
-					<div class="col-sm-6 form-group">
-						<label>Action to Perform <bean:message key="mandatory" />
-						</label>
-						<html:select styleId="actionToPerform"
-							property="dynaForm(actionToPerform)" styleClass="form-control">
-							<html:option value="0">---SELECT---</html:option>
-							<html:option value="Parawise Remarks">Parawise Remarks</html:option>
-							<html:option value="Counter Affidavit">Counter Affidavit</html:option>
-							<html:option value="Interim Orders">Interim Orders</html:option>
-							<html:option value="Appeal">Appeal</html:option>
-							<html:option value="Contempt">Contempt</html:option>
-							<html:option value="Judgement">Judgement</html:option>
-						</html:select>
-					</div>
-					<div class="col-sm-6 form-group"></div>
-				</div> --%>
 
 				<div class="row">
 					<div class="col-sm-6 form-group casecloseddiv">
@@ -717,20 +339,9 @@ body {
 									target='_new' class="btn btn-sm btn-info">View Uploaded
 									File</a>
 							</logic:notEmpty>
-
 						</div>
 
 						<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
-							<%-- <label for="sel1"> Corresponding GP's <font color="red">*</font></label>
-							<html:select property="dynaForm(relatedGp)"
-								onchange="checkCaseExists(this)" styleId="relatedGp"
-								styleClass="form-control">
-								<html:option value="0">---SELECT---</html:option>
-								<html:option value="42">GP for General</html:option>
-								<html:option value="45">GP for Services</html:option>
-								<html:option value="47">GP for SW</html:option>
-								<html:option value="48">GP for TW</html:option>
-							</html:select> --%>
 
 							<label for="sel1"> Parawise Remarks Approved by GP<font
 								color="red">*</font></label>
@@ -740,9 +351,7 @@ body {
 								<html:option value="No">No</html:option>
 								<html:option value="Yes">Yes</html:option>
 							</html:select>
-
 						</div>
-
 					</div>
 
 					<div class="row parawiseRemarksapproveddiv">
@@ -846,14 +455,7 @@ body {
 					</div>
 				</div>
 
-				<%-- <div class="row">
-					<div class="col-xs-12 col-sm-6 form-group">
-						<label class="font-bold">Remarks <font color="red">*</font>
-						</label>
-						<html:textarea styleId="remarks" property="dynaForm(remarks)"
-							styleClass="form-control" />
-					</div>
-				</div> --%>
+				
 				<div class="row">
 					<div class="col-sm-6 form-group">
 						<label>Action <bean:message key="mandatory" />
@@ -863,10 +465,7 @@ body {
 							<html:option value="0">---SELECT---</html:option>
 							<html:option value="Parawise Remarks">Parawise Remarks</html:option>
 							<html:option value="Counter Affidavit">Counter Affidavit</html:option>
-							<%-- <html:option value="Interim Orders">Interim Orders</html:option>
-							<html:option value="Appeal">Appeal</html:option>
-							<html:option value="Contempt">Contempt</html:option>
-							<html:option value="Judgement">Judgement</html:option> --%>
+							
 						</html:select>
 					</div>
 					<div class="col-sm-6 form-group"></div>
@@ -892,7 +491,6 @@ body {
 				</div>
 
 
-
 				<hr />
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -913,7 +511,7 @@ body {
 								Case Details</button>
 						</logic:notEmpty>
 
-						<logic:notEmpty name="SHOWNOBTN">
+						<%-- <logic:notEmpty name="SHOWNOBTN">
 							<button class="btn btn-md btn-success" type="submit"
 								name="forward" onclick="return forwardCase();">Forward
 								to Nodal Officer</button>
@@ -936,7 +534,7 @@ body {
 							<button class="btn btn-md btn-success" type="submit"
 								name="forward" onclick="return forwardCase();">Forward
 								to Sect. Dept.</button>
-						</logic:notEmpty>
+						</logic:notEmpty> --%>
 
 						<logic:notEmpty name="SHOWGPBTN">
 
@@ -1009,41 +607,59 @@ body {
 	}
 
 	function updateCaseDetails() {
+		
+		
+		//alert("jeev");
 
-		if ($("#petitionDocument").val() == ""
-				|| $("#petitionDocument").val() == null) {
-			alert("Petition Document Required.");
-			$("#petitionDocument").focus();
-			return false;
-		} else if ($("#ecourtsCaseStatus").val() == ""
+		
+		/* if ($("#ecourtsCaseStatus").val() == ""
 				|| $("#ecourtsCaseStatus").val() == null
 				|| $("#ecourtsCaseStatus").val() == "0") {
 
 			alert("Case Status Required.");
 			$("#ecourtsCaseStatus").focus();
 			return false;
-		} else if ($("#ecourtsCaseStatus").val() == "Closed"
-				&& ($("#judgementOrder").val() == null || $("#judgementOrder")
-						.val() == "")) {
-			alert("Judgement Order Required.");
-			$("#judgementOrder").focus();
-			return false;
-		} else if ($("#ecourtsCaseStatus").val() == "Closed"
-				&& ($("#actionTakenOrder").val() == null || $(
-						"#actionTakenOrder").val() == "")) {
-			alert("Action Taken Order Required.");
-			$("#actionTakenOrder").focus();
-			return false;
-		} else {
+		}else {
 			$("#mode").val("updateCaseDetails");
-			//$("#AssignedCasesToSectionForm").submit();
+			$("#AssignedCasesToSectionForm").submit();
 			return true;
-		}
+		} */
+		
+		
+		 if ($("#ecourtsCaseStatus").val() == ""
+			|| $("#ecourtsCaseStatus").val() == null
+			|| $("#ecourtsCaseStatus").val() == "0") {
+
+		alert("Case Status Required.");
+		$("#ecourtsCaseStatus").focus();
+		return false;
+	} else if ($("#ecourtsCaseStatus").val() == "Closed"
+			&& ($("#judgementOrder").val() == null || $("#judgementOrder")
+					.val() == "")) {
+		alert("Judgement Order Required.");
+		$("#judgementOrder").focus();
+		return false;
+	} else if ($("#ecourtsCaseStatus").val() == "Closed"
+			&& ($("#actionTakenOrder").val() == null || $(
+					"#actionTakenOrder").val() == "")) {
+		alert("Action Taken Order Required.");
+		$("#actionTakenOrder").focus();
+		return false;
+	} else {
+		$("#mode").val("updateCaseDetails");
+		//$("#AssignedCasesToSectionForm").submit();
+		return true;
+	}
+		
+		
+		
+		
+		
 	}
 
 	function forwardCase() {
 		$("#mode").val("forwardCaseDetails");
-		//$("#AssignedCasesToSectionForm").submit();
+		$("#AssignedCasesToSectionForm").submit();
 		return true;
 	}
 	function forwardCase2GP() {
@@ -1186,7 +802,7 @@ body {
 						}
 
 						/* this function will call when onchange event fired */
-						$("#petitionDocument")
+						$("#parawiseRemarksCopy")
 								.on(
 										"change",
 										function() {
@@ -1200,7 +816,7 @@ body {
 													.substr(filename
 															.lastIndexOf("."));
 											/* define allowed file types */
-											var allowedExtensionsRegx = /(\.pdf|\.PDF)$/i;
+											var allowedExtensionsRegx = /(\.doc|\.DOC)$/i;
 											/* testing extension with regular expression */
 											var isAllowed = allowedExtensionsRegx
 													.test(extension);
@@ -1222,6 +838,44 @@ body {
 												return false;
 											}
 										});
+						
+						
+						$("#counterFileCopy")
+						.on(
+								"change",
+								function() {
+									/* current this object refer to input element */
+									var $input = $(this);
+									/* collect list of files choosen */
+									var files = $input[0].files;
+									var filename = files[0].name;
+									/* getting file extenstion eg- .jpg,.png, etc */
+									var extension = filename
+											.substr(filename
+													.lastIndexOf("."));
+									/* define allowed file types */
+									var allowedExtensionsRegx = /(\.doc|\.DOC)$/i;
+									/* testing extension with regular expression */
+									var isAllowed = allowedExtensionsRegx
+											.test(extension);
+									var fileSize = files[0].size;
+									/* 1024 = 1MB */
+									var size = Math
+											.round((fileSize / 1024));
+									/* checking for less than or equals to 2MB file size */
+
+									if (isAllowed == false) {
+										alert("Invalid File type for the upload.");
+										$(this).focus();
+										$(this).val("");
+										return false;
+									} else if (size > 100 * 1024) {
+										alert("Invalid file size");
+										$(this).focus();
+										$(this).val("");
+										return false;
+									}
+								});
 
 					});
 </script>
