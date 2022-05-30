@@ -383,6 +383,30 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			else if(actionType.equals("HODWISE")) {
 			}
 			
+			String caseCategory = CommonModels.checkStringObject(request.getParameter("caseCategory"));
+if(caseCategory!=null && !caseCategory.equals("")) {
+				
+				if(caseCategory.equals("DISPOSED")) {
+					sqlCondition +=" and (disposal_type='DISPOSED OF NO COSTS' or disposal_type='DISPOSED OF AS INFRUCTUOUS')";
+				}
+				else if(caseCategory.equals("ALLOWED")) {
+					sqlCondition +=" and (disposal_type='ALLOWED NO COSTS' or disposal_type='PARTLY ALLOWED NO COSTS')";
+				}
+				else if(caseCategory.equals("DISMISSED")) {
+					sqlCondition +=" and (disposal_type='DISMISSED' or disposal_type='DISMISSED AS INFRUCTUOUS' or disposal_type='DISMISSED NO COSTS' or disposal_type='DISMISSED FOR DEFAULT' or disposal_type='DISMISSED AS NON PROSECUTION' or disposal_type='DISMISSED AS ABATED' or disposal_type='DISMISSED AS NOT PRESSED' )";
+				}
+				else if(caseCategory.equals("WITHDRAWN")) {
+					sqlCondition +=" and (disposal_type='WITHDRAWN')";
+				}
+				else if(caseCategory.equals("CLOSED")) {
+					sqlCondition +=" and (disposal_type='CLOSED NO COSTS' or disposal_type='CLOSED AS NOT PRESSED')";
+				}
+				else if(caseCategory.equals("RETURNED")) {
+					sqlCondition +=" and (disposal_type='REJECTED' or disposal_type='ORDERED' or disposal_type='RETURN TO COUNSEL' or disposal_type='TRANSFERRED')";
+				}
+				
+			}
+			
 			sql="select a.*,coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths from ecourts_case_data a left join" + " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from "
@@ -393,8 +417,10 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
 					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
 					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) where d.display = true ";
+			if(deptCode!=null && !deptCode.equals(""))
+			sql+=" and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
 			
-			sql+=" and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') "+sqlCondition;
+			sql+=sqlCondition;
 			
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

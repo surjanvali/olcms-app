@@ -109,8 +109,24 @@ public class WelcomePageAction extends DispatchAction{
 					sql="select sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_finalorder";
 					request.setAttribute("FINALORDERS", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder";
-					request.setAttribute("INTERIMORDERS", DatabasePlugin.getStringfromQuery(sql, con));
+					sql="select count(distinct cino) ||','||sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder";
+					String interimData[]=DatabasePlugin.getStringfromQuery(sql, con).split(",");
+					
+					request.setAttribute("INTERIMCASES", interimData[0]);
+					request.setAttribute("INTERIMORDERS", interimData[1]);
+					
+					
+					sql="select "
+							+ " sum(case when disposal_type='DISPOSED OF NO COSTS' or disposal_type='DISPOSED OF AS INFRUCTUOUS' then 1 else 0 end) as disposed,"
+							+ " sum(case when disposal_type='ALLOWED NO COSTS' or disposal_type='PARTLY ALLOWED NO COSTS' then 1 else 0 end) as allowed,"
+							+ " sum(case when disposal_type='DISMISSED' or disposal_type='DISMISSED AS INFRUCTUOUS' or disposal_type='DISMISSED NO COSTS' or disposal_type='DISMISSED FOR DEFAULT' or disposal_type='DISMISSED AS NON PROSECUTION' or disposal_type='DISMISSED AS ABATED' or disposal_type='DISMISSED AS NOT PRESSED'  then 1 else 0 end) as dismissed ,"
+							+ " sum(case when disposal_type='WITHDRAWN' then 1 else 0 end) as withdrawn,"
+							+ " sum(case when disposal_type='CLOSED NO COSTS' or disposal_type='CLOSED AS NOT PRESSED' then 1 else 0 end) as closed,"
+							+ " sum(case when disposal_type='REJECTED' or disposal_type='ORDERED' or disposal_type='RETURN TO COUNSEL' or disposal_type='TRANSFERRED' then 1 else 0 end) as returned"
+							+ " from ecourts_case_data";
+					List<Map<Object, String>> disposedCasesStatus = DatabasePlugin.executeQuery(con, sql);
+					request.setAttribute("disposedCasesStatus", disposedCasesStatus);
+					
 					
 				}
 				else if(roleId.equals("3") || roleId.equals("4")  || roleId.equals("5") || roleId.equals("9")) {
@@ -150,11 +166,36 @@ public class WelcomePageAction extends DispatchAction{
 					
 					request.setAttribute("FINALORDERS", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder b inner join ecourts_case_data a on (a.cino=b.cino) "
+					/*
+					 sql="select sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder b inner join ecourts_case_data a on (a.cino=b.cino) "
 							+ "inner join dept_new d on (a.dept_code=d.dept_code) "
 							+ "where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
 					request.setAttribute("INTERIMORDERS", DatabasePlugin.getStringfromQuery(sql, con));
+					*/
+					// sql="select count(distinct cino) ||','||sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder";
+					sql="select count(distinct cino) ||','||sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder b "
+							+ "inner join ecourts_case_data a on (a.cino=b.cino) "
+							+ "inner join dept_new d on (a.dept_code=d.dept_code) "
+							+ "where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
 					
+					String interimData[]=DatabasePlugin.getStringfromQuery(sql, con).split(",");
+					
+					request.setAttribute("INTERIMCASES", interimData[0]);
+					request.setAttribute("INTERIMORDERS", interimData[1]);
+					
+					sql="select "
+							+ " sum(case when disposal_type='DISPOSED OF NO COSTS' or disposal_type='DISPOSED OF AS INFRUCTUOUS' then 1 else 0 end) as disposed,"
+							+ " sum(case when disposal_type='ALLOWED NO COSTS' or disposal_type='PARTLY ALLOWED NO COSTS' then 1 else 0 end) as allowed,"
+							+ " sum(case when disposal_type='DISMISSED' or disposal_type='DISMISSED AS INFRUCTUOUS' or disposal_type='DISMISSED NO COSTS' or disposal_type='DISMISSED FOR DEFAULT' or disposal_type='DISMISSED AS NON PROSECUTION' or disposal_type='DISMISSED AS ABATED' or disposal_type='DISMISSED AS NOT PRESSED'  then 1 else 0 end) as dismissed ,"
+							+ " sum(case when disposal_type='WITHDRAWN' then 1 else 0 end) as withdrawn,"
+							+ " sum(case when disposal_type='CLOSED NO COSTS' or disposal_type='CLOSED AS NOT PRESSED' then 1 else 0 end) as closed,"
+							+ " sum(case when disposal_type='REJECTED' or disposal_type='ORDERED' or disposal_type='RETURN TO COUNSEL' or disposal_type='TRANSFERRED' then 1 else 0 end) as returned"
+							+ " from ecourts_case_data a "
+							+ " inner join dept_new d on (a.dept_code=d.dept_code) "
+							+ " where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
+					
+					List<Map<Object, String>> disposedCasesStatus = DatabasePlugin.executeQuery(con, sql);
+					request.setAttribute("disposedCasesStatus", disposedCasesStatus);
 				}
 				
 				//District Collector
@@ -202,8 +243,25 @@ public class WelcomePageAction extends DispatchAction{
 					sql="select sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_finalorder b inner join ecourts_case_data a on (a.cino=b.cino) where a.dist_id='"+distId+"' ";
 					request.setAttribute("FINALORDERS", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder b inner join ecourts_case_data a on (a.cino=b.cino) where a.dist_id='"+distId+"' ";
-					request.setAttribute("INTERIMORDERS", DatabasePlugin.getStringfromQuery(sql, con));
+					
+					sql="select count(distinct cino) ||','||sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder b inner join ecourts_case_data a on (a.cino=b.cino) where a.dist_id='"+distId+"' ";
+					String interimData[]=DatabasePlugin.getStringfromQuery(sql, con).split(",");
+					request.setAttribute("INTERIMCASES", interimData[0]);
+					request.setAttribute("INTERIMORDERS", interimData[1]);
+					
+					sql="select "
+							+ " sum(case when disposal_type='DISPOSED OF NO COSTS' or disposal_type='DISPOSED OF AS INFRUCTUOUS' then 1 else 0 end) as disposed,"
+							+ " sum(case when disposal_type='ALLOWED NO COSTS' or disposal_type='PARTLY ALLOWED NO COSTS' then 1 else 0 end) as allowed,"
+							+ " sum(case when disposal_type='DISMISSED' or disposal_type='DISMISSED AS INFRUCTUOUS' or disposal_type='DISMISSED NO COSTS' or disposal_type='DISMISSED FOR DEFAULT' or disposal_type='DISMISSED AS NON PROSECUTION' or disposal_type='DISMISSED AS ABATED' or disposal_type='DISMISSED AS NOT PRESSED'  then 1 else 0 end) as dismissed ,"
+							+ " sum(case when disposal_type='WITHDRAWN' then 1 else 0 end) as withdrawn,"
+							+ " sum(case when disposal_type='CLOSED NO COSTS' or disposal_type='CLOSED AS NOT PRESSED' then 1 else 0 end) as closed,"
+							+ " sum(case when disposal_type='REJECTED' or disposal_type='ORDERED' or disposal_type='RETURN TO COUNSEL' or disposal_type='TRANSFERRED' then 1 else 0 end) as returned"
+							+ " from ecourts_case_data a "
+							+ " inner join dept_new d on (a.dept_code=d.dept_code) "
+							+ " where d.display = true and a.dist_id='"+distId+"' ";
+					
+					List<Map<Object, String>> disposedCasesStatus = DatabasePlugin.executeQuery(con, sql);
+					request.setAttribute("disposedCasesStatus", disposedCasesStatus);
 					
 				}else if(roleId.equals("3")) { // Sect. Dept.
 					// sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=2 and coalesce(ecourts_case_status,'')!='Closed'";

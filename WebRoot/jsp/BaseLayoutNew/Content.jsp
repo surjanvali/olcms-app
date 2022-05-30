@@ -50,10 +50,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 						<logic:greaterThan value="0" name="innerData" property="total">
 							<div class="col-lg-3 col-md-6">
-								<div class="ibox bg-info color-white widget-stat">
+								<div class="ibox bg-primary color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${innerData.total }</h2>
-										<div class="m-b-5">Total Dept. Cases</div>
+										<div class="m-b-5">Total Cases</div>
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
 											<small> &nbsp;</small>
@@ -125,7 +125,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<logic:greaterThan value="0" name="NEWCASES">
 						<div class="col-lg-3 col-md-6">
 							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
-							
+
 							<a href="./AcksAbstractReport.do">
 								<div class="ibox bg-warning color-white widget-stat">
 									<div class="ibox-body">
@@ -143,13 +143,38 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</logic:greaterThan>
 
 				</logic:notEmpty>
-				
+
+				<logic:notEmpty name="INTERIMCASES">
+					<logic:greaterThan value="0" name="INTERIMCASES">
+						<div class="col-lg-3 col-md-6">
+							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
+
+							<a
+								href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=IO">
+								<div class="ibox bg-info color-white widget-stat">
+									<div class="ibox-body">
+										<h2 class="m-b-5 font-strong">${INTERIMCASES }</h2>
+										<div class="m-b-5">No. of Cases with Interim Orders</div>
+										<i class="fa fa-file-text-o widget-stat-icon"></i>
+										<div>
+											<small> &nbsp;</small>
+										</div>
+
+									</div>
+								</div>
+							</a>
+						</div>
+					</logic:greaterThan>
+
+				</logic:notEmpty>
+
 				<logic:notEmpty name="INTERIMORDERS">
 					<logic:greaterThan value="0" name="INTERIMORDERS">
 						<div class="col-lg-3 col-md-6">
 							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
-							
-							<a href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=IO">
+
+							<a
+								href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=IO">
 								<div class="ibox bg-info color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${INTERIMORDERS }</h2>
@@ -166,13 +191,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</logic:greaterThan>
 
 				</logic:notEmpty>
-				
+
 				<logic:notEmpty name="FINALORDERS">
 					<logic:greaterThan value="0" name="FINALORDERS">
 						<div class="col-lg-3 col-md-6">
 							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
-							
-							<a href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=FO">
+
+							<a
+								href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=FO">
 								<div class="ibox bg-warning color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${FINALORDERS }</h2>
@@ -189,15 +215,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</logic:greaterThan>
 
 				</logic:notEmpty>
-				
-				
-				
 
 				<div class="col-lg-3 col-md-6">
 					<a href="./HighCourtCauseList.do">
 						<div class="ibox bg-warning color-white widget-stat">
 							<div class="ibox-body">
-								<h2 class="m-b-5 font-strong">High Court Cause List</h2>
+								<h2 class="m-b-5 font-strong">Cause List</h2>
 								<div class="m-b-5">&nbsp;</div>
 								<i class="fa fa-file-text-o widget-stat-icon"></i>
 								<div>
@@ -211,7 +234,126 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</a>
 				</div>
+
 			</div>
+
+
+			<logic:notEmpty name="disposedCasesStatus">
+				<div class="row">
+					<logic:iterate id="inner" name="disposedCasesStatus">
+
+						<logic:greaterThan value="0" name="inner" property="disposed">
+							<div class="col-lg-3 col-md-6">
+								<a
+									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=DISPOSED">
+									<div class="ibox bg-info color-white widget-stat">
+										<div class="ibox-body">
+											<h2 class="m-b-5 font-strong">${inner.disposed }</h2>
+											<div class="m-b-5">Disposed Cases</div>
+											<i class="fa fa-file-text-o widget-stat-icon"></i>
+											<div>
+												<small> &nbsp;</small>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+						</logic:greaterThan>
+
+
+						<logic:greaterThan value="0" name="inner" property="allowed">
+							<div class="col-lg-3 col-md-6">
+								<a
+									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=ALLOWED">
+									<div class="ibox bg-info color-white widget-stat">
+										<div class="ibox-body">
+											<h2 class="m-b-5 font-strong">${inner.allowed }</h2>
+											<div class="m-b-5">Allowed Cases</div>
+											<i class="fa fa-file-text-o widget-stat-icon"></i>
+											<div>
+												<small> &nbsp;</small>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+						</logic:greaterThan>
+
+						<logic:greaterThan value="0" name="inner" property="dismissed">
+							<div class="col-lg-3 col-md-6">
+								<a
+									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=DISMISSED">
+									<div class="ibox bg-info color-white widget-stat">
+										<div class="ibox-body">
+											<h2 class="m-b-5 font-strong">${inner.dismissed }</h2>
+											<div class="m-b-5">Dismissed Cases</div>
+											<i class="fa fa-file-text-o widget-stat-icon"></i>
+											<div>
+												<small> &nbsp;</small>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+						</logic:greaterThan>
+
+						<logic:greaterThan value="0" name="inner" property="withdrawn">
+							<div class="col-lg-3 col-md-6">
+								<a
+									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=WITHDRAWN">
+									<div class="ibox bg-info color-white widget-stat">
+										<div class="ibox-body">
+											<h2 class="m-b-5 font-strong">${inner.withdrawn }</h2>
+											<div class="m-b-5">Withdrawn Cases</div>
+											<i class="fa fa-file-text-o widget-stat-icon"></i>
+											<div>
+												<small> &nbsp;</small>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+						</logic:greaterThan>
+
+						<logic:greaterThan value="0" name="inner" property="closed">
+							<div class="col-lg-3 col-md-6">
+								<a
+									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=CLOSED">
+									<div class="ibox bg-info color-white widget-stat">
+										<div class="ibox-body">
+											<h2 class="m-b-5 font-strong">${inner.closed }</h2>
+											<div class="m-b-5">Closed Cases</div>
+											<i class="fa fa-file-text-o widget-stat-icon"></i>
+											<div>
+												<small> &nbsp;</small>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+						</logic:greaterThan>
+
+						<logic:greaterThan value="0" name="inner" property="returned">
+							<div class="col-lg-3 col-md-6">
+								<a
+									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=RETURNED">
+									<div class="ibox bg-info color-white widget-stat">
+										<div class="ibox-body">
+											<h2 class="m-b-5 font-strong">${inner.returned }</h2>
+											<div class="m-b-5">Returned Cases</div>
+											<i class="fa fa-file-text-o widget-stat-icon"></i>
+											<div>
+												<small> &nbsp;</small>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+						</logic:greaterThan>
+
+					</logic:iterate>
+				</div>
+			</logic:notEmpty>
 
 			<logic:notEmpty name="SHOWABSTRACTS">
 				<div class="row">
