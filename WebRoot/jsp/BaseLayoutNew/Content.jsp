@@ -245,7 +245,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<logic:greaterThan value="0" name="inner" property="disposed">
 							<div class="col-lg-3 col-md-6">
 								<a
-									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=DISPOSED">
+									href="./HCCaseStatusAbstractReport.do?mode=getCasesGroupList&src=dashBoard&caseCategory=DISPOSED">
 									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${inner.disposed }</h2>
@@ -264,7 +264,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<logic:greaterThan value="0" name="inner" property="allowed">
 							<div class="col-lg-3 col-md-6">
 								<a
-									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=ALLOWED">
+									href="./HCCaseStatusAbstractReport.do?mode=getCasesGroupList&src=dashBoard&caseCategory=ALLOWED">
 									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${inner.allowed }</h2>
@@ -282,7 +282,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<logic:greaterThan value="0" name="inner" property="dismissed">
 							<div class="col-lg-3 col-md-6">
 								<a
-									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=DISMISSED">
+									href="./HCCaseStatusAbstractReport.do?mode=getCasesGroupList&src=dashBoard&caseCategory=DISMISSED">
 									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${inner.dismissed }</h2>
@@ -300,7 +300,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<logic:greaterThan value="0" name="inner" property="withdrawn">
 							<div class="col-lg-3 col-md-6">
 								<a
-									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=WITHDRAWN">
+									href="./HCCaseStatusAbstractReport.do?mode=getCasesGroupList&src=dashBoard&caseCategory=WITHDRAWN">
 									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${inner.withdrawn }</h2>
@@ -318,7 +318,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<logic:greaterThan value="0" name="inner" property="closed">
 							<div class="col-lg-3 col-md-6">
 								<a
-									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=CLOSED">
+									href="./HCCaseStatusAbstractReport.do?mode=getCasesGroupList&src=dashBoard&caseCategory=CLOSED">
 									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${inner.closed }</h2>
@@ -336,7 +336,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<logic:greaterThan value="0" name="inner" property="returned">
 							<div class="col-lg-3 col-md-6">
 								<a
-									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=RETURNED">
+									href="./HCCaseStatusAbstractReport.do?mode=getCasesGroupList&src=dashBoard&caseCategory=RETURNED">
 									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${inner.returned }</h2>

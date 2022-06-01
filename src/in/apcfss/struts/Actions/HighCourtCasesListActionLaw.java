@@ -412,10 +412,20 @@ public class HighCourtCasesListActionLaw extends DispatchAction {
 						.getStringfromQuery("select dept_id from dept where sdeptcode||deptcode='"
 								+ CommonModels.checkStringObject(cform.getDynaForm("caseDept")) + "'", con);
 
-				sql = "update ecourts_case_data set dept_id='" + assign2deptId + "',dept_code='"
-						+ CommonModels.checkStringObject(cform.getDynaForm("caseDept"))
-						+ "',case_status=3  where cino in (" + selectedCaseIds + ") ";
+				// sql = "update ecourts_case_data set dept_id='" + assign2deptId + "',dept_code='" + CommonModels.checkStringObject(cform.getDynaForm("caseDept")) + "',case_status=3  where cino in (" + selectedCaseIds + ") ";
 
+				String caseNewDept = CommonModels.checkStringObject(cform.getDynaForm("caseDept"));
+				String newStatusCode="4";
+					if (caseNewDept.contains("01")) { 
+						newStatusCode="2";
+					}
+					else { 
+						newStatusCode="4";
+					}
+				
+				sql = "update ecourts_case_data set dept_id='"+assign2deptId+"',dept_code='"+caseNewDept+"',case_status='"+newStatusCode+"'  where cino in (" + selectedCaseIds + ") ";
+				
+				
 				System.out.println("UPDATE SQL:" + sql);
 
 				DatabasePlugin.executeUpdate(sql, con);
@@ -736,11 +746,18 @@ public class HighCourtCasesListActionLaw extends DispatchAction {
 					selectedCaseIds = selectedCaseIds.substring(0, selectedCaseIds.length() - 1);
 				}
 
-				String assign2deptId = "0";
+				String unknownCat = CommonModels.checkStringObject(cform.getDynaForm("unknownCat"));
+				
+				String newStatus="";
+				if(unknownCat.equals("GoI")) {
+					newStatus="96";
+				} else if(unknownCat.equals("PSU")) {
+					newStatus="97";
+				} else if(unknownCat.equals("Private")) {
+					newStatus="98";
+				}
 
-				sql = "update ecourts_case_data set dept_id='" + assign2deptId + "',dept_code='"
-						+ CommonModels.checkStringObject(cform.getDynaForm("unknownCat"))
-						+ "',case_status=3  where cino in (" + selectedCaseIds + ") ";
+				sql = "update ecourts_case_data set case_status="+newStatus+"  where cino in (" + selectedCaseIds + ") ";
 
 				System.out.println("UPDATE SQL:" + sql);
 

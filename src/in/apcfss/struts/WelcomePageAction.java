@@ -88,7 +88,7 @@ public class WelcomePageAction extends DispatchAction{
 
 					System.out.println("SQL:" + sql);
 					List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-					System.out.println("data=" + data);
+					// System.out.println("data=" + data);
 					if (data != null && !data.isEmpty() && data.size() > 0)
 						request.setAttribute("secdeptwise", data);
 					request.setAttribute("showReport1", "showReport1");
@@ -151,7 +151,7 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("SQL:" + sql);
 					request.setAttribute("HEADING", "Abstract Report");
 					List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-					System.out.println("data=" + data);
+					// System.out.println("data=" + data);
 					if (data != null && !data.isEmpty() && data.size() > 0)
 						request.setAttribute("deptwise", data);
 					request.setAttribute("showReport1", "showReport1");
@@ -230,7 +230,7 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("SQL:" + sql);
 					request.setAttribute("HEADING", "Abstract Report");
 					List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-					System.out.println("data=" + data);
+					// System.out.println("data=" + data);
 					if (data != null && !data.isEmpty() && data.size() > 0)
 						request.setAttribute("deptwise", data);
 					request.setAttribute("showReport1", "showReport1");
