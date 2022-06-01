@@ -8,6 +8,24 @@
 String path = request.getContextPath();
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
+
+<link rel='stylesheet'
+	href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+<link rel='stylesheet'
+	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
+<link rel='stylesheet'
+	href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+
+<link href="./assetsnew/vendors/select2/dist/css/select2.min.css"
+	rel="stylesheet" />
+<!-- <link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet" type="text/css" /> -->
+
+<!-- PLUGINS STYLES-->
+<link href="./assetsnew/vendors/DataTables/datatables.min.css"
+	rel="stylesheet" />
+<!-- THEME STYLES-->
+<link href="assetsnew/css/main.min.css" rel="stylesheet" />
+
 <div class="page-content fade-in-up">
 	<html:form action="/ContemptCasesAbstract"
 		styleId="HCCaseStatusAbstract">
@@ -50,6 +68,61 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</h4>
 				</div>
 			</div>
+			<div class="ibox">
+				<!-- <div class="ibox-head">
+					<div class="ibox-title">Import/Update e-Courts Data</div>
+				</div> -->
+				<div class="ibox-body">
+					<div class="row">
+						
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Date of Filing From Date</label>
+								<div class="input-group date">
+									<span class="input-group-addon bg-white"><i
+										class="fa fa-calendar"></i></span>
+									<html:text styleId="dofFromDate" 
+										property="dynaForm(dofFromDate)"
+										styleClass="form-control datepicker" />
+
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Date of Filing To Date</label>
+								<div class="input-group date">	
+									<span class="input-group-addon bg-white"><i
+										class="fa fa-calendar"></i></span>
+									<html:text styleId="dofToDate" property="dynaForm(dofToDate)" 
+										styleClass="form-control datepicker" />
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-12 col-xs-12">
+							<input type="button" name="getreport" value="Get Report"
+								class="btn btn-success" onclick="return fnShowCases();" />
+								<!-- <input type="button" name="updateCases" value="Update Cases Data"
+								class="btn btn-success" onclick="return fnUpdateCasesData();" /> -->
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="ibox-head">
+				<div class="ibox-title">
+					<h4 class="m-t-0 header-title">
+						<b><logic:notEmpty name="HEADING_Date">
+									${HEADING_Date }
+								</logic:notEmpty> </b>
+					</h4>
+				</div>
+			</div>
 			<div class="ibox-body">
 				<div class="table-responsive">
 					<logic:present name="secdeptwise">
@@ -70,8 +143,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${i+1 }</td>
 										<%-- <td>${map.deptcode }</td> --%>
 										<%-- <td>${map.description } --%>
-										<td><a href="./ContemptCasesAbstract.do?mode=getCasesList&deptId=${map.deptcode}&deptName=${map.description }">${map.description }</a>
-										</td>
+										<td>			
+										<logic:empty name="HEADING_Date">							
+										<a href="./ContemptCasesAbstract.do?mode=getCasesList&deptId=${map.deptcode}&deptName=${map.description }">${map.description }</a>
+										</logic:empty>
+										<logic:notEmpty name="HEADING_Date">
+										<a href="./ContemptCasesAbstract.do?mode=getCasesList&deptId=${map.deptcode}&fr_date=${fr_date}&to_date=${to_date}&deptName=${map.description }">${map.description }</a>
+										</logic:notEmpty></td>
 										<td style="text-align: right;">${map.total_cases }</td>
 									</tr>
 									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
@@ -263,7 +341,30 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	</div>
 </div>
 
+
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script
+	src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
+<script
+	src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js'></script>
+
+<script src="./assetsnew/vendors/select2/dist/js/select2.full.min.js"
+	type="text/javascript"></script>
+
+
 <script type="text/javascript">
+
+$('.datepicker').datepicker({
+	uiLibrary : 'bootstrap4'
+});
+
+$(document).ready(function() {
+	$(".select2Class").select2();
+	$('.input-group.date').datepicker({
+		format : "yyyy-mm-dd"
+	});
+});
 	function ShowHODWise(deptId, deptDesc) {
 		$("#deptId").val(deptId);
 		$("#deptName").val(deptDesc);
@@ -277,6 +378,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#mode").val("getCasesList");
 		$("#HCCaseStatusAbstract").submit();
 	}
+	
+	
+	
+	function fnShowCases() {
+		//alert("hai");
+		$("#mode").val("ShowCasesData");
+		$("#HCCaseStatusAbstract").submit();
+		///return true;
+	}
+	
+	
 
 	function viewCaseDetailsPopup(cino) {
 		var heading = "View Case Details for CINO : " + cino;

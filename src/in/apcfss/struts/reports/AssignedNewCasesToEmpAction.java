@@ -348,7 +348,8 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 					}
 					
 					sql="select cino,action_type,inserted_by,inserted_on,assigned_to,remarks as remarks, "
-							+ "    CASE  WHEN length(trim(uploaded_doc_path)) > 10 THEN uploaded_doc_path else '---'  end as uploaded_doc_path from ecourts_case_activities where cino = '"+cIno+"' order by inserted_on";
+							+ "    CASE  WHEN length(trim(uploaded_doc_path)) > 10 THEN uploaded_doc_path else '---'  end as uploaded_doc_path "
+							+ " from ecourts_case_activities where cino = '"+cIno+"' order by inserted_on";
 					System.out.println("ecourts activities SQL:" + sql);
 					data = DatabasePlugin.executeQuery(sql, con);
 					request.setAttribute("ACTIVITIESDATA", data);

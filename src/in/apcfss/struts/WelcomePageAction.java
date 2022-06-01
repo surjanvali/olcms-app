@@ -156,7 +156,7 @@ public class WelcomePageAction extends DispatchAction{
 						request.setAttribute("deptwise", data);
 					request.setAttribute("showReport1", "showReport1");
 					
-					sql="select count(*)  from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls ad1 on (ad.ack_no=ad1.ack_no) where ack_type='NEW' and dept_code='"+deptCode+"'";
+					sql="select count(*)  from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls ad1 on (ad.ack_no=ad1.ack_no) where ack_type='NEW' and dept_code='"+deptCode+"' ";
 					System.out.println("ACK SQL:"+sql);
 					request.setAttribute("NEWCASES", DatabasePlugin.getStringfromQuery(sql, con));
 					
@@ -236,7 +236,7 @@ public class WelcomePageAction extends DispatchAction{
 					request.setAttribute("showReport1", "showReport1");
 					
 					
-					sql="select count(*) from ecourts_gpo_ack_dtls ad  where ack_type='NEW' and distid='"+distId+"'";
+					sql="select count(*) from ecourts_gpo_ack_dtls ad  where ack_type='NEW' and distid='"+distId+"' ";
 					request.setAttribute("NEWCASES", DatabasePlugin.getStringfromQuery(sql, con));
 					
 					

@@ -275,6 +275,19 @@ public class UploadEofficeDataAction extends DispatchAction {
 				System.out.println("Data saved for:" + tableName);
 			}
 			request.setAttribute("successMsg", c+" records data saved to table "+tableName);
+			
+			sql="update "+tableName+" set designation_id='0' where designation_id='' or designation_id is null";
+			DatabasePlugin.executeUpdate(sql, con);
+			
+			sql="update nic_data set global_org_name='ENE55-APEPDCL' where global_org_name in ('APEPDCL','APEPDCL CORPORATE OFFICE')";
+			DatabasePlugin.executeUpdate(sql, con);
+			
+			sql="update nic_data set global_org_name='ENE70-APCPDCL VIJAYAWADA' where global_org_name in ('APCPDCL VIJAYAWADA')";
+			DatabasePlugin.executeUpdate(sql, con);
+			
+			sql="update nic_data set global_org_name='ENE53-CORPORATE OFFICE' where global_org_name in ('CORPORATE OFFICE')";
+			DatabasePlugin.executeUpdate(sql, con);
+			
 			con.commit();
 		} catch (Exception e) {
 			con.rollback();

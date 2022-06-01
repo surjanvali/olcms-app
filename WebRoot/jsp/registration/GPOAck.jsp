@@ -94,52 +94,6 @@ label {
 					property="dynaForm(respondentIds)" value="1" />
 				<logic:empty name="ACKDATA">
 					<logic:empty name="DEPTACKDATA">
-						<!-- 
-						<div class="page-heading">
-							<h4 class="m-t-0 header-title">
-								<b>Acknowledgement Generation</b>
-							</h4>
-						</div>
-						<hr> 
-					-->
-						<%-- <div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> Department <bean:message key="mandatory" />
-								</label>
-								<html:select styleId="deptId" property="deptId" multiple="true"
-									styleClass="select2Class" style="width: 100%;">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty name="CommonForm" property="dynaForm(deptList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(deptList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-					</div> --%>
-						<%-- <div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> Department <bean:message key="mandatory" />
-								</label>
-								<table style="width: 100%;border: 1px solid #000;">
-									<tr>
-										<td style="width: 20%;">Respondent - 1</td>
-										<td style="width: 80%;"><html:select styleId="deptId1" property="dynaForm(deptId1)" styleClass="select2Class"
-												style="width: 100%;">
-												<html:option value="0">---SELECT---</html:option>
-												<logic:notEmpty name="CommonForm" property="dynaForm(deptList)">
-													<html:optionsCollection name="CommonForm" property="dynaForm(deptList)" />
-												</logic:notEmpty>
-											</html:select>
-											</td>
-									</tr>
-								</table>
-							</div>
-						</div>
-					</div> --%>
-
 
 						<div class="row">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -149,15 +103,20 @@ label {
 										style="width: 100%;">
 										<thead>
 											<tr>
-												<th colspan="2">Respondents <span class="pull-right"><input
+												<th colspan="10">Respondents <span class="pull-right"><input
 														type="button" value="Add" class="btn btn-sm btn-success"
 														name="add" id="addResp" /> <input type="button"
 														value="Remove" class="btn btn-sm btn-danger" name="remove"
 														id="removeResp" /></span></th>
 											</tr>
 											<tr>
-												<th style="width: 20%;">Sl No.</th>
-												<th style="width: 80%;">Respondent Department</th>
+												<th style="width: 3%;">Sl No.</th>
+												<th style="width: 20%;">Respondent Department</th>
+												<th style="width: 15%;">Service Type</th>
+												<th style="width: 20%;">Designation</th>
+												<th style="width: 20%;">District</th>
+												<th style="width: 20%;">Mandal</th>
+												<th style="width: 20%;">Village</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -173,6 +132,58 @@ label {
 																property="dynaForm(deptList)" />
 														</logic:notEmpty>
 													</html:select></td>
+												<td><html:select property="dynaForm(serviceType1)"
+														styleClass="select2Class" style="width: 100%;"
+														styleId="serviceType1">
+														<html:option value="0">---SELECT---</html:option>
+														<html:option value="NON-SERVICES">NON-SERVICES</html:option>
+														<logic:notEmpty property="dynaForm(serviceTypesList)"
+															name="CommonForm">
+															<html:optionsCollection property="dynaForm(serviceTypesList)" name="CommonForm" />
+														</logic:notEmpty>
+													</html:select></td>
+
+												<td><html:select styleId="designation1"
+														property="dynaForm(designation1)" styleClass="select2Class"
+														style="width: 100%;">
+														<html:option value="0">---SELECT---</html:option>
+														<logic:notEmpty name="CommonForm"
+															property="dynaForm(designationList)">
+															<html:optionsCollection name="CommonForm"
+																property="dynaForm(designationList)" />
+														</logic:notEmpty>
+													</html:select></td>
+
+												<td><html:select styleId="distId1"
+														property="dynaForm(distId1)" styleClass="select2Class"
+														style="width: 100%;">
+														<html:option value="0">---SELECT---</html:option>
+														<logic:notEmpty name="CommonForm"
+															property="dynaForm(distList)">
+															<html:optionsCollection name="CommonForm"
+																property="dynaForm(distList)" />
+														</logic:notEmpty>
+													</html:select></td>
+												<td><html:select styleId="mandalId1"
+														property="dynaForm(mandalId1)" styleClass="select2Class"
+														style="width: 100%;">
+														<html:option value="0">---SELECT---</html:option>
+														<logic:notEmpty name="CommonForm"
+															property="dynaForm(mdlList)">
+															<html:optionsCollection name="CommonForm"
+																property="dynaForm(mdlList)" />
+														</logic:notEmpty>
+													</html:select></td>
+												<td><html:select styleId="villageId1"
+														property="dynaForm(villageId1)" styleClass="select2Class"
+														style="width: 100%;">
+														<html:option value="0">---SELECT---</html:option>
+														<logic:notEmpty name="CommonForm"
+															property="dynaForm(vilList)">
+															<html:optionsCollection name="CommonForm"
+																property="dynaForm(vilList)" />
+														</logic:notEmpty>
+													</html:select></td>
 											</tr>
 										</tbody>
 									</table>
@@ -181,7 +192,7 @@ label {
 						</div>
 
 						<div class="row">
-							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<%-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 								<div class="form-group">
 									<label> District <bean:message key="mandatory" />
 									</label>
@@ -195,7 +206,7 @@ label {
 										</logic:notEmpty>
 									</html:select>
 								</div>
-							</div>
+							</div> --%>
 							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 								<div class="form-group">
 									<label> Petitioner Name <bean:message key="mandatory" />
@@ -294,68 +305,9 @@ label {
 							</div>
 						</div>
 
-						<%-- 	
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label for="sel1">Select GP <bean:message
-										key="mandatory" />
-								</label>
-								<html:select property="dynaForm(gpCode)"
-									styleClass="select2Class" style="width: 100%;" styleId="gpCode">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty property="dynaForm(gpsList)" name="CommonForm">
-										<html:optionsCollection property="dynaForm(gpsList)"
-											name="CommonForm" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> Upload Documents(If Any) </label>
-								<html:file styleId="changeLetter" styleClass="form-control"
-									property="changeLetter" />
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<div class="form-group">
 
-								<table id="RESPSTABID" class="table table-bordered"
-									style="width: 100%;">
-									<thead>
-										<tr>
-											<th colspan="3">Respondents <span class="pull-right"><input
-													type="button" value="Add" class="btn btn-sm btn-success"
-													name="add" id="addResp" /> <input type="button"
-													value="Remove" class="btn btn-sm btn-danger" name="remove"
-													id="removeResp" /></span></th>
-										</tr>
-										<tr>
-											<th>Sl No.</th>
-											<th>Respondent Name</th>
-											<th>Address</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr id="1">
-											<td>1.</td>
-											<td><html:text styleId="respondantName_1"
-													styleClass="form-control"
-													property="dynaForm(respondantName_1)" maxlength="125" /></td>
-											<td><html:textarea styleId="respondantAddr_1"
-													styleClass="form-control"
-													property="dynaForm(respondantAddr_1)" cols="50" rows="3" /></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div> --%>
 
-						<div class="row">
+						<%-- <div class="row">
 							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 								<div class="form-group">
 									<label> Services / Non-Services <bean:message
@@ -387,7 +339,7 @@ label {
 									</html:select>
 								</div>
 							</div>
-						</div>
+						</div> --%>
 						<div class="row">
 							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 								<div class="form-group">
@@ -404,10 +356,12 @@ label {
 									class="btn btn-primary pull-right" onclick="showAckListAll();" /> &nbsp;&nbsp; -->
 									<input type="button" name="Submit" value="show Acks List"
 										class="btn btn-primary pull-right" onclick="showAckList();" /> &nbsp;&nbsp;
+												
 												<logic:equal value="INSERT" name="saveAction">
 										<input type="button" name="Submit" value="Submit"
 											class="btn btn-success pull-right" onclick="saveAck();" />
 									</logic:equal>
+									
 									<logic:equal value="UPDATE" name="saveAction">
 
 										<input type="button" name="Submit" value="Update"
@@ -538,7 +492,7 @@ label {
 											<th>District</th>
 											<th>Case Type</th>
 											<!-- <th>Main Case No.</th> -->
-											<th>Departments / Respondents </th>
+											<th>Departments / Respondents</th>
 											<th>Advocate CC No.</th>
 											<th>Advocate Name</th>
 
@@ -638,27 +592,106 @@ label {
 			  let rowCount = $("#RESPSTABID tbody tr").length; //$('tbody', rowfyable).rows.length;
 			  let rowCount2 = rowCount+1;
 			  let prevVal=$("#deptId"+rowCount).val();
-			  if(prevVal != null && prevVal != "" && prevVal!="0" )
+			  let service=$("#serviceType"+rowCount).val();
+			  let design=$("#designation"+rowCount).val();
+			  let dist=$("#distId"+rowCount).val();
+			  let mandal=$("#mandalId"+rowCount).val();
+			  let village=$("#villageId"+rowCount).val();
+			  
+			 // alert("prevVal--"+prevVal);
+			  if( (prevVal != null && prevVal != "" && prevVal!="0") && (service != null && service != "" && service!="0")
+					  && (design != null && design != "" && design!="0" ) && (dist != null && dist != "" && dist!="0" ) 
+					  && (mandal != null && mandal != "" && mandal!="0" ) && (village != null && village != "" && village!="0" ) )
 			  {
-				  console.log("rowCount:"+rowCount);
-				  console.log("rowCount2:"+rowCount2);
-				  console.log("prevVal:"+prevVal);
-				  // $('tbody', rowfyable).append("<tr id='"+randomNo+"'><td>"+(rowCount + 1)+".</td><td><input type='text' id='respondantName_"+randomNo+"' class='form-control' name='dynaForm(respondantName_"+randomNo+")' maxlength='125' /></td>"
-				  // +"<td><textarea id='respondantAddr_"+randomNo+"'class='form-control' name='dynaForm(respondantAddr_"+randomNo+")' cols='50' rows='3' /></td></tr>");
+				  //console.log("rowCount:"+rowCount);
+				 // console.log("rowCount2:"+rowCount2);
+			
 				  $('tbody', rowfyable).append("<tr id='"+rowCount2+"'><td>"+rowCount2+".</td><td>"
-				  		+"<select name='dynaForm(deptId"+rowCount2+")' id='deptId"+rowCount2+"' style='width: 100%;' ></select></td></tr>");
+				  		+"<select name='dynaForm(deptId"+rowCount2+")' id='deptId"+rowCount2+"' style='width: 100%;' ></select></td>"
+				  +"<td><select name='dynaForm(serviceType"+rowCount2+")' id='serviceType"+rowCount2+"' style='width: 100%;' ></select></td>"
+				  +"<td><select name='dynaForm(designation"+rowCount2+")' id='designation"+rowCount2+"' style='width: 100%;' ></select></td>"
+		 +"<td><select name='dynaForm(distId"+rowCount2+")' id='distId"+rowCount2+"' style='width: 100%;' ></select></td>"
+	 +"<td><select name='dynaForm(mandalId"+rowCount2+")' id='mandalId"+rowCount2+"' style='width: 100%;' ></select></td>"
+	 +"<td><select name='dynaForm(villageId"+rowCount2+")' id='villageId"+rowCount2+"' style='width: 100%;' ></select></td></tr>");
+				  
+				  
 				  $("#deptId"+rowCount+" option").clone().appendTo("#deptId"+rowCount2);
 				  $("#deptId"+rowCount2).select2();
 				  $("#deptId"+rowCount2).select2("val", "0");
 				  
+				  $("#serviceType"+rowCount+" option").clone().appendTo("#serviceType"+rowCount2);
+				  $("#serviceType"+rowCount2).select2();
+				  $("#serviceType"+rowCount2).select2("val", "0");
+				 
+				  
+				  
+				  $("#designation"+rowCount+" option").clone().appendTo("#designation"+rowCount2);
+				  $("#designation"+rowCount2).select2();
+				  $("#designation"+rowCount2).select2("val", "0");
+				  
+				  
+				  $("#distId"+rowCount+" option").clone().appendTo("#distId"+rowCount2);
+				  $("#distId"+rowCount2).select2();
+				  $("#distId"+rowCount2).select2("val", "0");
+				  
+				  
+				  $("#mandalId"+rowCount+" option").clone().appendTo("#mandalId"+rowCount2);
+				  $("#mandalId"+rowCount2).select2();
+				  $("#mandalId"+rowCount2).select2("val", "0");
+				  
+				  $("#villageId"+rowCount+" option").clone().appendTo("#villageId"+rowCount2);
+				  $("#villageId"+rowCount2).select2();
+				  $("#villageId"+rowCount2).select2("val", "0"); 
+				
 				  $("#deptId"+rowCount2+" option[value="+prevVal+"]").remove();
+				 // $("#serviceType"+rowCount2+" option[value="+service+"]").remove();
+				 // $("#designation"+rowCount2+" option[value="+service+"]").remove();
+				  //$("#distId"+rowCount2+" option[value="+service+"]").remove();
+				 // $("#mandalId"+rowCount2+" option[value="+service+"]").remove();
+				 // $("#villageId"+rowCount2+" option[value="+service+"]").remove(); 
 				  
 				  $("#respondentIds").val($("#RESPSTABID tbody tr").length);
 			  }
-			  else{
+			  
+			  if( (prevVal=="0") )
+			  {
+				 // alert("else prevVal--"+prevVal);
 			  	alert("Select Respondant Department.");
 			  	$("#deptId"+rowCount).focus();
 			  }
+			  
+			  if(  ( service=="0") )
+			  {
+			  	alert("Select Service Type");
+			  	$("#serviceType"+rowCount).focus();
+			  }
+			  
+			  if( ( design=="0" ) )
+			  {
+			  	alert("Select Designation");
+			  	$("#designation"+rowCount).focus();
+			  }
+			  
+			  if(  ( dist=="0" ) )
+			  {
+			  	alert("Select District");
+			  	$("#distId"+rowCount).focus();
+			  
+			  }
+			  
+			  if( ( mandal=="0" ) )
+			  {
+			  	alert("Select Mandal");
+			  	$("#mandalId"+rowCount).focus();
+			  }
+			  
+			  if(( village=="0" ) )
+			  {
+				alert("Select Village");
+			  	$("#villageId"+rowCount).focus();
+			  
+			  }
+			  
 		});
 		$("#removeResp").click(function(){
 			let rowfyable = $("#RESPSTABID").closest('table');
@@ -704,27 +737,35 @@ label {
 	});
 
 	function saveAck() {
-		if ($("#distId").val() == null || $("#distId").val() == "" || $("#distId").val() == "0") {
+		/* if ($("#distId").val() == null || $("#distId").val() == "" || $("#distId").val() == "0") {
 			alert("District Required");
 			$("#distId").focus();
 			return false;
-		} else if ($("#deptId1").val() == null || $("#deptId1").val() == "" || $("#deptId1").val() == "0") {
+		} else  */if ($("#deptId1").val() == null || $("#deptId1").val() == "" || $("#deptId1").val() == "0") {
 			alert("Department Required");
 			$("#deptId1").focus();
+			return false;
+		}else if ($("#petitionerName").val() == null || $("#petitionerName").val() == "" || $("#petitionerName").val() == "0") {
+			alert("Petitioner Name Required");
+			$("#petitionerName").focus();
+			return false;
+		}else if ($("#advocateCCno").val() == null || $("#advocateCCno").val() == "" || $("#advocateCCno").val() == "0") {
+			alert("Advocate CC No. Required");
+			$("#advocateCCno").focus();
 			return false;
 		} else if ($("#advocateName").val() == null || $("#advocateName").val() == "" || $("#advocateName").val() == "0") {
 			alert("Advocate Name Required");
 			$("#advocateName").focus();
 			return false;
-		} else if ($("#advocateCCno").val() == null || $("#advocateCCno").val() == "" || $("#advocateCCno").val() == "0") {
-			alert("Advocate CC No. Required");
-			$("#advocateCCno").focus();
-			return false;
 		} else if ($("#caseType").val() == null || $("#caseType").val() == "" || $("#caseType").val() == "0") {
-			alert("Case Type Required");
+			alert("Case Type (Nature of Petition) Required");
 			$("#caseType").focus();
 			return false;
-		} else if ($("#serviceNonService").val() == null || $("#serviceNonService").val() == "" || $("#serviceNonService").val() == "0") {
+		} else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
+			alert("Main Case No. Required");
+			$("#mainCaseNo").focus();
+			return false;
+		} /* *//*  else if ($("#serviceNonService").val() == null || $("#serviceNonService").val() == "" || $("#serviceNonService").val() == "0") {
 			alert("Service / Non-Service Required");
 			$("#serviceNonService").focus();
 			return false;
@@ -732,11 +773,7 @@ label {
 			alert("Service Type Required");
 			$("#serviceType").focus();
 			return false;
-		} /* else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
-			alert("Main Case No. Required");
-			$("#mainCaseNo").focus();
-			return false;
-		}  else if ($("#remarks").val() == null || $("#remarks").val() == "" || $("#remarks").val() == "0") {
+		} */ /*   else if ($("#remarks").val() == null || $("#remarks").val() == "" || $("#remarks").val() == "0") {
 			alert("Remarks Required");
 			$("#remarks").focus();
 			return false;
@@ -750,11 +787,11 @@ label {
 
 
 	function updateAck() {
-		if ($("#distId").val() == null || $("#distId").val() == "" || $("#distId").val() == "0") {
+		/* if ($("#distId").val() == null || $("#distId").val() == "" || $("#distId").val() == "0") {
 			alert("District Required");
 			$("#distId").focus();
 			return false;
-		} else if ($("#deptId").val() == null || $("#deptId").val() == "" || $("#deptId").val() == "0") {
+		} else */ if ($("#deptId").val() == null || $("#deptId").val() == "" || $("#deptId").val() == "0") {
 			alert("Department Required");
 			$("#deptId").focus();
 			return false;
@@ -766,11 +803,11 @@ label {
 			alert("Advocate CC No. Required");
 			$("#advocateCCno").focus();
 			return false;
-		} else if ($("#caseType").val() == null || $("#caseType").val() == "" || $("#caseType").val() == "0") {
+		} /* else if ($("#caseType").val() == null || $("#caseType").val() == "" || $("#caseType").val() == "0") {
 			alert("Case Type Required");
 			$("#caseType").focus();
 			return false;
-		} else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
+		}  */else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
 			alert("Main Case No. Required");
 			$("#mainCaseNo").focus();
 			return false;
