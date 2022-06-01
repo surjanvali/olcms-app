@@ -173,7 +173,7 @@ public class WelcomePageAction extends DispatchAction{
 					request.setAttribute("INTERIMORDERS", DatabasePlugin.getStringfromQuery(sql, con));
 					*/
 					// sql="select count(distinct cino) ||','||sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder";
-					sql="select count(distinct cino) ||','||sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder b "
+					sql="select count(distinct a.cino) ||','||sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder b "
 							+ "inner join ecourts_case_data a on (a.cino=b.cino) "
 							+ "inner join dept_new d on (a.dept_code=d.dept_code) "
 							+ "where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
@@ -244,7 +244,7 @@ public class WelcomePageAction extends DispatchAction{
 					request.setAttribute("FINALORDERS", DatabasePlugin.getStringfromQuery(sql, con));
 					
 					
-					sql="select count(distinct cino) ||','||sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder b inner join ecourts_case_data a on (a.cino=b.cino) where a.dist_id='"+distId+"' ";
+					sql="select count(distinct b.cino) ||','||sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder b inner join ecourts_case_data a on (a.cino=b.cino) where a.dist_id='"+distId+"' ";
 					String interimData[]=DatabasePlugin.getStringfromQuery(sql, con).split(",");
 					request.setAttribute("INTERIMCASES", interimData[0]);
 					request.setAttribute("INTERIMORDERS", interimData[1]);

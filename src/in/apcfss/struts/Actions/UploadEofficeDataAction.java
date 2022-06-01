@@ -126,6 +126,10 @@ public class UploadEofficeDataAction extends DispatchAction {
 			System.out.println("ALTER NEW TABLE:"+sql);
 			DatabasePlugin.executeUpdate(sql, con);
 			
+			//update nic_data_chittoor set designation_id='0' where designation_id='' or designation_id is null
+			sql="update "+tableName+" set designation_id='0' where designation_id='' or designation_id is null";
+			DatabasePlugin.executeUpdate(sql, con);
+			
 			request.setAttribute("successMsg", c+" records data saved to table "+tableName);
 			con.commit();
 		} catch (Exception e) {
@@ -144,7 +148,7 @@ public class UploadEofficeDataAction extends DispatchAction {
 	}
 
 	
-	public ActionForward saveDataNew(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	public ActionForward saveDataOld(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		CommonForm cForm = (CommonForm) form;
 		String tableName = "", tableNameNew="", tableNameBkp="";
@@ -204,6 +208,10 @@ public class UploadEofficeDataAction extends DispatchAction {
 			
 			sql="alter table "+tableNameNew+" rename to "+tableName;
 			System.out.println("ALTER NEW TABLE:"+sql);
+			DatabasePlugin.executeUpdate(sql, con);
+			
+			//update nic_data_chittoor set designation_id='0' where designation_id='' or designation_id is null
+			sql="update "+tableName+" set designation_id='0' where designation_id='' or designation_id is null";
 			DatabasePlugin.executeUpdate(sql, con);
 			
 			request.setAttribute("successMsg", c+" records data saved to table "+tableName);

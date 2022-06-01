@@ -32,7 +32,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<logic:greaterThan value="0" name="innerData" property="assigned">
 							<div class="col-lg-3 col-md-6">
 								<a href="./AssignedCasesToSection.do">
-									<div class="ibox bg-success color-white widget-stat">
+									<div class="ibox bg-danger color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${innerData.assigned }</h2>
 											<div class="m-b-5">Assigned Cases</div>
@@ -68,7 +68,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="col-lg-3 col-md-6">
 								<a
 									href="./HighCourtCasesList.do?mode=getCasesList&src=dashBoard">
-									<div class="ibox bg-success color-white widget-stat">
+									<div class="ibox bg-danger color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${innerData.assignment_pending }</h2>
 											<div class="m-b-5">Pending for Assignment</div>
@@ -86,7 +86,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							property="approval_pending">
 							<div class="col-lg-3 col-md-6">
 								<a href="./AssignedCasesToSection.do">
-									<div class="ibox bg-success color-white widget-stat">
+									<div class="ibox bg-danger color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${innerData.approval_pending }</h2>
 											<div class="m-b-5">Pending for Approval</div>
@@ -103,10 +103,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							property="closedcases">
 							<div class="col-lg-3 col-md-6">
 								<a href="./ClosedCasesReport.do">
-									<div class="ibox bg-danger color-white widget-stat">
+									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${innerData.closedcases }</h2>
-											<div class="m-b-5">Closed</div>
+											<div class="m-b-5"> Closed by MLO / NO / Section Officers</div>
 											<i class="fa fa-file-text-o widget-stat-icon"></i>
 											<div>
 												<small> &nbsp;</small>
@@ -127,7 +127,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
 
 							<a href="./AcksAbstractReport.do">
-								<div class="ibox bg-warning color-white widget-stat">
+								<div class="ibox bg-danger color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${NEWCASES }</h2>
 										<div class="m-b-5">New Cases Registered</div>
@@ -199,7 +199,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 							<a
 								href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=FO">
-								<div class="ibox bg-warning color-white widget-stat">
+								<div class="ibox bg-success color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${FINALORDERS }</h2>
 										<div class="m-b-5">Final Order Issued</div>
@@ -227,9 +227,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<small> &nbsp;</small>
 								</div>
 								<!-- <i class="fa fa-money widget-stat-icon"></i>
-						<div>
-							<i class="fa fa-level-up m-r-5"></i><small>22% higher</small>
-						</div> -->
+								<div>
+									<i class="fa fa-level-up m-r-5"></i><small>22% higher</small>
+								</div> -->
 							</div>
 						</div>
 					</a>
@@ -246,7 +246,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="col-lg-3 col-md-6">
 								<a
 									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=DISPOSED">
-									<div class="ibox bg-info color-white widget-stat">
+									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${inner.disposed }</h2>
 											<div class="m-b-5">Disposed Cases</div>
@@ -265,7 +265,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="col-lg-3 col-md-6">
 								<a
 									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=ALLOWED">
-									<div class="ibox bg-info color-white widget-stat">
+									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${inner.allowed }</h2>
 											<div class="m-b-5">Allowed Cases</div>
@@ -283,7 +283,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="col-lg-3 col-md-6">
 								<a
 									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=DISMISSED">
-									<div class="ibox bg-info color-white widget-stat">
+									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${inner.dismissed }</h2>
 											<div class="m-b-5">Dismissed Cases</div>
@@ -301,7 +301,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="col-lg-3 col-md-6">
 								<a
 									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=WITHDRAWN">
-									<div class="ibox bg-info color-white widget-stat">
+									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${inner.withdrawn }</h2>
 											<div class="m-b-5">Withdrawn Cases</div>
@@ -319,7 +319,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="col-lg-3 col-md-6">
 								<a
 									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=CLOSED">
-									<div class="ibox bg-info color-white widget-stat">
+									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${inner.closed }</h2>
 											<div class="m-b-5">Closed Cases</div>
@@ -337,7 +337,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="col-lg-3 col-md-6">
 								<a
 									href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=RETURNED">
-									<div class="ibox bg-info color-white widget-stat">
+									<div class="ibox bg-success color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${inner.returned }</h2>
 											<div class="m-b-5">Returned Cases</div>
