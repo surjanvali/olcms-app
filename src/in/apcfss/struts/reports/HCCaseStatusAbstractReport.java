@@ -109,7 +109,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 
 				System.out.println("SQL:" + sql);
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-				System.out.println("data=" + data);
+				// System.out.println("data=" + data);
 				if (data != null && !data.isEmpty() && data.size() > 0)
 					request.setAttribute("secdeptwise", data);
 				else
@@ -235,7 +235,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			request.setAttribute("HEADING", "HOD Wise High Court Cases Abstract Report for " + deptName);
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
+			// System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0)
 				request.setAttribute("deptwise", data);
 			else
