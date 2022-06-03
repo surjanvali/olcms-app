@@ -37,6 +37,9 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/struts.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/servlet-2_4.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/org.apache.commons.httpclient.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-2.0.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/logback-classic-0.9.jar"/>
 	<classpathentry kind="con" path="com.genuitec.runtime.library/com.genuitec.jstl_1.2.1">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="WEB-INF/lib"/>

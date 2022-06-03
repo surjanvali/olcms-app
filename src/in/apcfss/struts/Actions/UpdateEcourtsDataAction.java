@@ -283,9 +283,9 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			String cino = "";// cform.getDynaForm("cino").toString();
 
 			sql = "select cino from ecourts_case_data a where last_updated_ecourts<=now()::date - integer '2' "
-					+ sqlCondition + " order by last_updated_ecourts asc limit 100";
+					+ sqlCondition + " order by last_updated_ecourts asc limit 2500";
 			// sql="select cino from ecourts_case_data where cino='APHC010183002019'";
-
+			System.out.println("SQLLLLLLLLLLLLLL:::::::"+sql);
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
 
@@ -329,7 +329,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 				}
 			}
 			System.out.println("FINAL END : Records fetched:" + totalCount);
-
+			request.setAttribute("successMsg", "Successfully saved/ Updated "+totalCount+" records data form ecourts.");
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Error-3 while Updating data form ecourts.");
 			e.printStackTrace();

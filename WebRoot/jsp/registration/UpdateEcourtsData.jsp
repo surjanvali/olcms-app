@@ -163,9 +163,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="row">
 						<div class="col-md-12 col-xs-12">
 							<input type="button" name="getreport" value="Get Report"
-								class="btn btn-success" onclick="return fnShowCases();" /> <input
+								class="btn btn-info" onclick="return fnShowCases();" /> <input
 								type="button" name="updateCases" value="Update Cases Data"
-								class="btn btn-success" onclick="return fnUpdateCasesData();" />
+								class="btn btn-warning" onclick="return fnUpdateCasesData();" />
 							<input type="button" name="updateCases2"
 								value="Import Cases Data" class="btn btn-success"
 								onclick="return fnImportCinosData();" />
@@ -230,7 +230,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 									<input type="button" name="getCauseList"
-										value="Import Cause List" class="btn btn-success"
+										value="Import Cause List" class="btn btn-primary"
 										onclick="return fnGetCauseList();" />
 								</div>
 							</div>
