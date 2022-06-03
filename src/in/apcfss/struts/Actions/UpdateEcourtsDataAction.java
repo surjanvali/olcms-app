@@ -1,7 +1,11 @@
 package in.apcfss.struts.Actions;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.sql.Connection;
@@ -23,6 +27,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -311,7 +316,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 
 				resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
 
-				System.out.println("resp--" + resp);
+				//System.out.println("resp--" + resp);
 
 				if (resp != null && !resp.equals("")) {
 					boolean b = processCNRsearchResponse(resp, opVal, con, cino);
@@ -359,6 +364,217 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		// return showCaseWise(mapping, cform, request, response);
 	}
 
+	
+	public ActionForward importNewCinosData(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		System.out.println( "HighCourtCasesListAction....................................uploadandRetrieveEcourtsData()");
+		Connection con = null;
+		PreparedStatement ps = null;
+		CommonForm cform = (CommonForm) form;
+		HttpSession session = request.getSession();
+		ResultSet rs = null;
+		Statement st = null;
+		String sql = null, roleId = null, deptCode = null, distCode = "0";
+		int totalCount = 0;
+		String inputStr = "", targetURL = "";
+		String authToken = "";
+		String request_token = "", requeststring = "";
+
+		try {
+			String sqlCondition = "";
+			con = DatabasePlugin.connect();
+
+			String opVal = ECourtAPIs.getSelectParam(1);
+			
+			String cino = "";
+
+			sql = "SELECT cino FROM apolcms.ecourts_cinos_new where inserted_time::date = current_date and ecourts_response is null";
+			
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+
+			while (rs.next()) {
+				// if (cino != null) {
+				cino = rs.getString("cino").toString().trim();
+				totalCount++;
+				inputStr = "cino=" + cino;// ECourtAPIs.getInputStringValue(opVal);
+
+				// 1. Encoding Request Token
+				byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"),
+						inputStr.getBytes("UTF-8"));
+				request_token = String.format("%032x", new BigInteger(1, hmacSha256));
+				// 2. Encoding Request String
+				requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
+
+				targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
+
+				System.out.println(totalCount + ":opVal : " + opVal);
+
+				System.out.println(totalCount + ":URL : " + targetURL);
+				System.out.println("Input String : " + inputStr);
+
+				authToken = EHighCourtAPI.getAuthToken();
+				System.out.println("authToken---" + authToken);
+				String resp = "";
+				System.out.println("OPVAL:" + opVal);
+
+				resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
+
+				//System.out.println("resp--" + resp);
+
+				if (resp != null && !resp.equals("")) {
+					boolean b = processCNRsearchResponseInsert(resp, opVal, con, cino);
+
+					if (b) {
+						request.setAttribute("successMsg", "Successfully saved/ Updated data form ecourts.");
+					} else {
+						request.setAttribute("errorMsg", "Error-1 while Updating data form ecourts.");
+					}
+				}
+			}
+			System.out.println("FINAL END : Records fetched:" + totalCount);
+
+		} catch (Exception e) {
+			request.setAttribute("errorMsg", "Error-3 while Updating data form ecourts.");
+			e.printStackTrace();
+		} finally {
+
+			cform.setDynaForm("distList", DatabasePlugin
+					.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+
+			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+					con));
+			cform.setDynaForm("caseTypesList", DatabasePlugin
+					.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
+			ArrayList selectData = new ArrayList();
+			for (int i = 2022; i > 1980; i--) {
+				selectData.add(new LabelValueBean(i + "", i + ""));
+			}
+			cform.setDynaForm("yearsList", selectData);
+
+			cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate"));
+			cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate"));
+			cform.setDynaForm("caseTypeId", cform.getDynaForm("caseTypeId"));
+			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
+			cform.setDynaForm("regYear", cform.getDynaForm("regYear"));
+			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
+			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
+
+			DatabasePlugin.closeConnection(con);
+		}
+		return mapping.findForward("success");
+		// return showCaseWise(mapping, cform, request, response);
+	}
+	
+	//EXCE LUPLOAD METHOD
+	public ActionForward uploadandRetrieveEcourtsData(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		System.out.println( "HighCourtCasesListAction....................................uploadandRetrieveEcourtsData()");
+		Connection con = null;
+		PreparedStatement ps = null;
+		CommonForm cform = (CommonForm) form;
+		HttpSession session = request.getSession();
+		ResultSet rs = null;
+		Statement st = null;
+		String sql = null, roleId = null, deptCode = null, distCode = "0";
+		int totalCount = 0;
+		String inputStr = "", targetURL = "";
+		String authToken = "";
+		String request_token = "", requeststring = "";
+
+		try {
+			String sqlCondition = "";
+			con = DatabasePlugin.connect();
+
+			String opVal = ECourtAPIs.getSelectParam(1);
+			FormFile cinoExcelFile = cform.getChangeLetter();
+			// Read from excel and import into database
+			// saveDataToTableFromExcel(cinoExcelFile, con);
+			
+			String cino = "";// cform.getDynaForm("cino").toString();
+
+			sql = "SELECT cino FROM apolcms.ecourts_cinos_new where inserted_time::date=current_date";
+			
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+
+			while (rs.next()) {
+				// if (cino != null) {
+				cino = rs.getString("cino").toString().trim();
+				totalCount++;
+				inputStr = "cino=" + cino;// ECourtAPIs.getInputStringValue(opVal);
+
+				// 1. Encoding Request Token
+				byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"),
+						inputStr.getBytes("UTF-8"));
+				request_token = String.format("%032x", new BigInteger(1, hmacSha256));
+				// 2. Encoding Request String
+				requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
+
+				targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
+
+				System.out.println(totalCount + ":opVal : " + opVal);
+
+				System.out.println(totalCount + ":URL : " + targetURL);
+				System.out.println("Input String : " + inputStr);
+
+				authToken = EHighCourtAPI.getAuthToken();
+				System.out.println("authToken---" + authToken);
+				String resp = "";
+				System.out.println("OPVAL:" + opVal);
+
+				resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
+
+				//System.out.println("resp--" + resp);
+
+				if (resp != null && !resp.equals("")) {
+					boolean b = processCNRsearchResponseInsert(resp, opVal, con, cino);
+
+					if (b) {
+						request.setAttribute("successMsg", "Successfully saved/ Updated data form ecourts.");
+					} else {
+						request.setAttribute("errorMsg", "Error-1 while Updating data form ecourts.");
+					}
+				}
+			}
+			System.out.println("FINAL END : Records fetched:" + totalCount);
+
+		} catch (Exception e) {
+			request.setAttribute("errorMsg", "Error-3 while Updating data form ecourts.");
+			e.printStackTrace();
+		} finally {
+
+			cform.setDynaForm("distList", DatabasePlugin
+					.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+
+			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+					con));
+			cform.setDynaForm("caseTypesList", DatabasePlugin
+					.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
+			ArrayList selectData = new ArrayList();
+			for (int i = 2022; i > 1980; i--) {
+				selectData.add(new LabelValueBean(i + "", i + ""));
+			}
+			cform.setDynaForm("yearsList", selectData);
+
+			cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate"));
+			cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate"));
+			cform.setDynaForm("caseTypeId", cform.getDynaForm("caseTypeId"));
+			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
+			cform.setDynaForm("regYear", cform.getDynaForm("regYear"));
+			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
+			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
+
+			DatabasePlugin.closeConnection(con);
+		}
+		return mapping.findForward("success");
+		// return showCaseWise(mapping, cform, request, response);
+	}
+	
 	public static boolean processCNRsearchResponse(String resp, String fileName, Connection con, String cino)
 			throws Exception {
 		String response_str = "";
@@ -367,7 +583,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		String decryptedRespStr = "";
 		String sql = "";
 		resp = resp.trim();
-		System.out.println("processCNRsearchResponse:" + resp);
+		//System.out.println("processCNRsearchResponse:" + resp);
 		if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_TOKEN")) && (!resp.contains("Array("))) {
 			JSONObject jObj = new JSONObject(resp);
 			if ((jObj.has("response_str")) && (jObj.getString("response_str") != null)) {
@@ -382,6 +598,9 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			if ((response_str != null) && (!response_str.equals(""))) {
 				decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
 			}
+			
+			if(decryptedRespStr!=null && !decryptedRespStr.equals(""))
+			{
 			JSONObject jObjCaseData = new JSONObject(decryptedRespStr);
 			ArrayList<String> sqls = new ArrayList();
 
@@ -497,7 +716,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			 * "'"; DatabasePlugin.executeUpdate(sql, con); }
 			 */
 
-			System.out.println("acts:" + checkStringJSONObj(jObjCaseData, "acts"));
+			// System.out.println("acts:" + checkStringJSONObj(jObjCaseData, "acts"));
 			JSONObject jObjActsData = new JSONObject();
 			JSONObject jObjActsInnerData = new JSONObject();
 			if ((checkStringJSONObj(jObjCaseData, "acts") != null)
@@ -516,7 +735,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					sqls.add(sql);
 				}
 			}
-			System.out.println("historyofcasehearing:" + checkStringJSONObj(jObjCaseData, "historyofcasehearing"));
+			// System.out.println("historyofcasehearing:" + checkStringJSONObj(jObjCaseData, "historyofcasehearing"));
 			JSONObject jObjHistoryData = new JSONObject();
 			JSONObject jObjHistoryInnerData = new JSONObject();
 			if ((checkStringJSONObj(jObjCaseData, "historyofcasehearing") != null)
@@ -545,7 +764,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					sqls.add(sql);
 				}
 			}
-			System.out.println("pet_extra_party:" + checkStringJSONObj(jObjCaseData, "pet_extra_party"));
+			//System.out.println("pet_extra_party:" + checkStringJSONObj(jObjCaseData, "pet_extra_party"));
 			JSONObject jObjMainData = new JSONObject();
 			JSONObject jObjInnerData = new JSONObject();
 			if ((checkStringJSONObj(jObjCaseData, "pet_extra_party") != null)
@@ -562,7 +781,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					sqls.add(sql);
 				}
 			}
-			System.out.println("res_extra_party:" + checkStringJSONObj(jObjCaseData, "res_extra_party"));
+			//System.out.println("res_extra_party:" + checkStringJSONObj(jObjCaseData, "res_extra_party"));
 			if ((checkStringJSONObj(jObjCaseData, "res_extra_party") != null)
 					&& (checkStringJSONObj(jObjCaseData, "res_extra_party") != "null")
 					&& (!checkStringJSONObj(jObjCaseData, "res_extra_party").equals(""))
@@ -578,7 +797,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 				}
 			}
 
-			System.out.println("iafiling:" + checkStringJSONObj(jObjCaseData, "iafiling"));
+			//System.out.println("iafiling:" + checkStringJSONObj(jObjCaseData, "iafiling"));
 			if ((checkStringJSONObj(jObjCaseData, "iafiling") != null)
 					&& (checkStringJSONObj(jObjCaseData, "iafiling") != "null")
 					&& (!checkStringJSONObj(jObjCaseData, "iafiling").equals(""))
@@ -602,7 +821,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					sqls.add(sql);
 				}
 			}
-			System.out.println("link_cases:" + checkStringJSONObj(jObjCaseData, "link_cases"));
+			//System.out.println("link_cases:" + checkStringJSONObj(jObjCaseData, "link_cases"));
 			if ((checkStringJSONObj(jObjCaseData, "link_cases") != null)
 					&& (checkStringJSONObj(jObjCaseData, "link_cases") != "null")
 					&& (!checkStringJSONObj(jObjCaseData, "link_cases").equals(""))
@@ -619,7 +838,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					sqls.add(sql);
 				}
 			}
-			System.out.println("objections:" + checkStringJSONObj(jObjCaseData, "objections"));
+			//System.out.println("objections:" + checkStringJSONObj(jObjCaseData, "objections"));
 			if ((checkStringJSONObj(jObjCaseData, "objections") != null)
 					&& (checkStringJSONObj(jObjCaseData, "objections") != "null")
 					&& (!checkStringJSONObj(jObjCaseData, "objections").equals(""))
@@ -654,7 +873,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 				sqls.add(sql);
 			}
 
-			System.out.println("interimorder:" + checkStringJSONObj(jObjCaseData, "interimorder"));
+			//System.out.println("interimorder:" + checkStringJSONObj(jObjCaseData, "interimorder"));
 			if ((checkStringJSONObj(jObjCaseData, "interimorder") != null)
 					&& (checkStringJSONObj(jObjCaseData, "interimorder") != "null")
 					&& (!checkStringJSONObj(jObjCaseData, "interimorder").equals(""))
@@ -684,7 +903,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					}
 				}
 			}
-			System.out.println("finalorder:" + checkStringJSONObj(jObjCaseData, "finalorder"));
+			//System.out.println("finalorder:" + checkStringJSONObj(jObjCaseData, "finalorder"));
 			if ((checkStringJSONObj(jObjCaseData, "finalorder") != null)
 					&& (checkStringJSONObj(jObjCaseData, "finalorder") != "null")
 					&& (!checkStringJSONObj(jObjCaseData, "finalorder").equals(""))
@@ -724,6 +943,10 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 				retrieveOrderDocuments(con, cino, "ecourts_case_finalorder");
 			}
 			System.out.println("Successfully saved...executedSqls:" + executedSqls);
+			}
+			else {
+				System.out.println("DATA NOT UPDATED INVALID DECRYPT STRING");	
+			}
 			System.out.println("END");
 			return true;
 		} else {
@@ -803,8 +1026,9 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			if ((response_str != null) && (!response_str.equals(""))) {
 				decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
 			}
-
-			String destinationPath = ApplicationVariables.contextPath + "HighCourtsCaseOrders\\";
+			if(decryptedRespStr!=null && !decryptedRespStr.equals("")) {
+			String fileSeperator=ApplicationVariables.filesepartor;
+			String destinationPath = ApplicationVariables.contextPath + "HighCourtsCaseOrders"+fileSeperator;
 			System.out.println("destinationPath:" + destinationPath);
 
 			// String
@@ -831,6 +1055,10 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 				} else {
 					System.out.println("File Already exist.");
 				}
+			}
+			else {
+				System.out.println("DATA NOT UPDATED INVALID DECRYPT STRING");	
+			}
 			}
 		} else {
 			sql = "update " + apolcmsOrdersTable + " set order_document_path='" + resp + "' where cino||'-"
@@ -1070,7 +1298,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		String decryptedRespStr = "";
 		String sql = "";
 		resp = resp.trim();
-		System.out.println("processPDForderResponse RESP:" + resp);
+		//System.out.println("processPDForderResponse RESP:" + resp);
 		if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_TOKEN"))
 				&& (!resp.contains("RECORD_NOT_FOUND"))) {
 			JSONObject jObj = new JSONObject(resp);
@@ -1080,30 +1308,34 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 				decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
 			}
 
-			System.out.println("decryptedRespStr:" + decryptedRespStr);
-
-			String filesUploadPath = ApplicationVariables.contextPath + "\\uploads\\HighCourtsCauseList\\"
-					+ causelistDate + "\\";
-
-			File upload_folder = new File(filesUploadPath);
-			if (!upload_folder.exists()) {
-				upload_folder.mkdirs();
+			//System.out.println("decryptedRespStr:" + decryptedRespStr);
+			if(decryptedRespStr!=null && !decryptedRespStr.equals("")) {
+				String fileSeperator=ApplicationVariables.filesepartor;
+				String filesUploadPath = ApplicationVariables.contextPath +fileSeperator +"uploads"+fileSeperator+"HighCourtsCauseList"+fileSeperator
+						+ causelistDate + fileSeperator;
+	
+				File upload_folder = new File(filesUploadPath);
+				if (!upload_folder.exists()) {
+					upload_folder.mkdirs();
+				}
+				if (upload_folder.exists()) {
+					File pdfFile = new File(filesUploadPath + estCode + causelistDate + bench_id + causelist_id + ".pdf");
+					FileOutputStream fos = new FileOutputStream(pdfFile);
+					byte[] decoder = Base64.getDecoder().decode(decryptedRespStr.replace("\"", "").replace("\\", ""));
+					fos.write(decoder);
+					System.out.println("PDF File Saved");
+	
+					sql = "update ecourts_causelist_bench_data set causelist_document='uploads/HighCourtsCauseList/"
+							+ causelistDate + "/" + estCode + causelistDate + bench_id + causelist_id
+							+ ".pdf' where est_code='" + estCode + "' and causelist_date=to_date('" + causelistDate
+							+ "','yyyy-mm-dd') and bench_id='" + bench_id + "' and causelist_id='" + causelist_id + "'";
+					System.out.println("UPDATE SQL:" + sql);
+					DatabasePlugin.executeUpdate(sql, con);
+				}
+			}else {
+				System.out.println("DATA NOT UPDATED INVALID DECRYPT STRING");	
 			}
-			if (upload_folder.exists()) {
-				File pdfFile = new File(filesUploadPath + estCode + causelistDate + bench_id + causelist_id + ".pdf");
-				FileOutputStream fos = new FileOutputStream(pdfFile);
-				byte[] decoder = Base64.getDecoder().decode(decryptedRespStr.replace("\"", "").replace("\\", ""));
-				fos.write(decoder);
-				System.out.println("PDF File Saved");
-
-				sql = "update ecourts_causelist_bench_data set causelist_document='uploads/HighCourtsCauseList/"
-						+ causelistDate + "/" + estCode + causelistDate + bench_id + causelist_id
-						+ ".pdf' where est_code='" + estCode + "' and causelist_date=to_date('" + causelistDate
-						+ "','yyyy-mm-dd') and bench_id='" + bench_id + "' and causelist_id='" + causelist_id + "'";
-				System.out.println("UPDATE SQL:" + sql);
-				DatabasePlugin.executeUpdate(sql, con);
-			}
-		} else {
+		}else {
 			sql = "update ecourts_causelist_bench_data set causelist_document='" + resp + "' where est_code='" + estCode
 					+ "' and causelist_date=to_date('" + causelistDate + "','yyyy-mm-dd') and bench_id='" + bench_id
 					+ "' and causelist_id='" + causelist_id + "'";
@@ -1112,4 +1344,302 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			System.out.println("Invalid/Empty Response");
 		}
 	}
+
+	
+	public static boolean saveDataToTableFromExcel(FormFile cinoExcelFile,Connection con) throws Exception, IOException {
+		String sql = "";
+		
+		InputStream myFile = cinoExcelFile.getInputStream();
+		
+		sql = "insert into apolcms.ecourts_cinos_new (cino, case_type, reg_no, reg_year, dept_name, ecourts_response, dept_id, dept_code, inserted_time) "
+				+ " values ()";
+		
+		return true;
+	}
+	
+	
+	public static boolean processCNRsearchResponseInsert(String resp, String fileName, Connection con, String cino)
+			throws Exception {
+	    String response_str = "";String response_token = "";String version = "";String decryptedRespStr = "";String sql = "";
+	    resp = resp.trim();
+	    boolean savedstatus=false; 
+	    System.out.println("processCNRsearchResponse:"+resp);
+	    if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_TOKEN")))
+	    {
+	      JSONObject jObj = new JSONObject(resp);
+	      if ((jObj.has("response_str")) && (jObj.getString("response_str") != null)) {
+	        response_str = jObj.getString("response_str").toString();
+	      }
+	      if ((jObj.has("response_token")) && (jObj.getString("response_token") != null)) {
+	        response_token = jObj.getString("response_token").toString();
+	      }
+	      if ((jObj.has("version")) && (jObj.getString("version") != null)) {
+	        version = jObj.getString("version").toString();
+	      }
+	      if ((response_str != null) && (!response_str.equals(""))) {
+	        decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
+	      }
+	      JSONObject jObjCaseData = new JSONObject(decryptedRespStr);
+	      ArrayList<String> sqls = new ArrayList();
+	      
+	      sql = "INSERT INTO apolcms.ecourts_case_data (date_of_filing, cino, dt_regis, type_name_fil, type_name_reg, case_type_id, fil_no, fil_year, reg_no, reg_year, date_first_list, "
+	      		+ "date_next_list, pend_disp, date_of_decision, disposal_type, bench_type, causelist_type, bench_name, judicial_branch, coram, short_order, bench_id, court_est_name, "
+	      		+ "est_code, state_name, dist_name, purpose_name, pet_name, pet_adv, pet_legal_heir, res_name, res_adv, res_legal_heir, main_matter, fir_no, police_station, fir_year, "
+	      		+ "lower_court_name, lower_court_caseno, lower_court_dec_dt, trial_lower_court_name, trial_lower_court_caseno, trial_lower_court_dec_dt, date_last_list, main_matter_cino, "
+	      		+ "date_filing_disp, reason_for_rej, category, sub_category,last_updated_ecourts) values ( to_date('" + 
+	      
+	        jObjCaseData.get("date_of_filing").toString() + "', 'yyyy-mm-dd'), " + 
+	        "'" + checkStringJSONObj(jObjCaseData, "cino") + "' ," + 
+	        " to_date('" + jObjCaseData.get("dt_regis").toString() + "', 'yyyy-mm-dd'), " + 
+	        "'" + checkStringJSONObj(jObjCaseData, "type_name_fil") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "type_name_reg") + "' ," + 
+	        "'" + checkIntegerJSONObj(jObjCaseData, "case_type_id") + "' ," + 
+	        "'" + checkIntegerJSONObj(jObjCaseData, "fil_no") + "' ," + 
+	        "'" + checkIntegerJSONObj(jObjCaseData, "fil_year") + "' ," + 
+	        "'" + checkIntegerJSONObj(jObjCaseData, "reg_no") + "' ," + 
+	        "'" + checkIntegerJSONObj(jObjCaseData, "reg_year") + "' ," + 
+	        " to_date('" + jObjCaseData.get("date_first_list").toString() + "', 'yyyy-mm-dd'), " + 
+	        " to_date('" + jObjCaseData.get("date_next_list").toString() + "', 'yyyy-mm-dd'), " + 
+	        "'" + checkStringJSONObj(jObjCaseData, "pend_disp") + "' ," + 
+	        " to_date('" + jObjCaseData.get("date_of_decision").toString() + "', 'yyyy-mm-dd'), " + 
+	        "'" + checkStringJSONObj(jObjCaseData, "disposal_type") + "' ," + 
+	        "'" + checkIntegerJSONObj(jObjCaseData, "bench_type") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "causelist_type") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "bench_name") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "judicial_branch") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "coram") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "short_order") + "' ," + 
+	        "'" + checkIntegerJSONObj(jObjCaseData, "bench_id") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "court_est_name") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "est_code") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "state_name") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "dist_name") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "purpose_name") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "pet_name") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "pet_adv") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "pet_legal_heir") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "res_name") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "res_adv") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "res_legal_heir") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "main_matter") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "fir_no") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "police_station") + "' ," + 
+	        "'" + checkIntegerJSONObj(jObjCaseData, "fir_year") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "lower_court_name") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "lower_court_caseno") + "' ," + 
+	        " to_date('" + jObjCaseData.get("lower_court_dec_dt").toString() + "', 'yyyy-mm-dd'), " + 
+	        "'" + checkStringJSONObj(jObjCaseData, "trial_lower_court_name") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "trial_lower_court_caseno") + "' ," + 
+	        " to_date('" + jObjCaseData.get("trial_lower_court_dec_dt").toString() + "', 'yyyy-mm-dd'), " + 
+	        " to_date('" + jObjCaseData.get("date_last_list").toString() + "', 'yyyy-mm-dd'), " + 
+	        "'" + checkStringJSONObj(jObjCaseData, "main_matter_cino") + "' ," + 
+	        " to_date('" + jObjCaseData.get("date_filing_disp").toString() + "', 'yyyy-mm-dd'), " + 
+	        "'" + checkStringJSONObj(jObjCaseData, "reason_for_rej") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "category") + "' ," + 
+	        "'" + checkStringJSONObj(jObjCaseData, "sub_category") + "', now())";
+	      
+	      //System.out.println("SQL:" + sql);
+	      sqls.add(sql);
+	      
+	      System.out.println("acts:" + checkStringJSONObj(jObjCaseData, "acts"));
+	      JSONObject jObjActsData = new JSONObject();
+	      JSONObject jObjActsInnerData = new JSONObject();
+	      if ((checkStringJSONObj(jObjCaseData, "acts") != null) && (checkStringJSONObj(jObjCaseData, "acts") != "null") && (!checkStringJSONObj(jObjCaseData, "acts").equals("")) && (!checkStringJSONObj(jObjCaseData, "acts").equals("[]")))
+	      {
+	        jObjActsData = new JSONObject(checkStringJSONObj(jObjCaseData, "acts"));
+	        for (int i = 1; i <= jObjActsData.length(); i++)
+	        {
+	          jObjActsInnerData = new JSONObject(jObjActsData.get("act" + i).toString());
+	          
+	          sql = "INSERT INTO apolcms.ecourts_case_acts(cino, act, actname, section) VALUES('" + checkStringJSONObj(jObjCaseData, "cino") + "', " + i + ", '" + checkStringJSONObj(jObjActsInnerData, "actname") + "', '" + checkStringJSONObj(jObjActsInnerData, "section") + "')";
+	          //System.out.println("ACTS SQL:" + sql);
+	          sqls.add(sql);
+	        }
+	      }
+	      System.out.println("historyofcasehearing:" + checkStringJSONObj(jObjCaseData, "historyofcasehearing"));
+	      JSONObject jObjHistoryData = new JSONObject();
+	      JSONObject jObjHistoryInnerData = new JSONObject();
+	      if ((checkStringJSONObj(jObjCaseData, "historyofcasehearing") != null) && (checkStringJSONObj(jObjCaseData, "historyofcasehearing") != "null") && (!checkStringJSONObj(jObjCaseData, "historyofcasehearing").equals("")) && (!checkStringJSONObj(jObjCaseData, "historyofcasehearing").equals("[]")))
+	      {
+	        jObjHistoryData = new JSONObject(checkStringJSONObj(jObjCaseData, "historyofcasehearing"));
+	        for (int i = 1; i <= jObjHistoryData.length(); i++)
+	        {
+	          jObjHistoryInnerData = new JSONObject(jObjHistoryData.get("sr_no" + i).toString());
+	          
+	          sql = "INSERT INTO apolcms.ecourts_historyofcasehearing(cino, sr_no, judge_name, business_date, hearing_date, purpose_of_listing, causelist_type)  VALUES('" + 
+	            checkStringJSONObj(jObjCaseData, "cino") + "', " + i + ", '" + 
+	            checkStringJSONObj(jObjHistoryInnerData, "judge_name") + "', " + " to_date('" + jObjHistoryInnerData.get("business_date").toString() + "', 'yyyy-mm-dd'), ";
+	          if ((jObjHistoryInnerData.get("hearing_date") != null) && (!jObjHistoryInnerData.get("hearing_date").toString().equals("Next Date Not Given"))) {
+	            sql = sql + " to_date('" + jObjHistoryInnerData.get("hearing_date").toString() + "', 'yyyy-mm-dd'), ";
+	          } else {
+	            sql = sql + " to_date(null, 'yyyy-mm-dd'), ";
+	          }
+	          sql = 
+	            sql + " '" + checkStringJSONObj(jObjHistoryInnerData, "purpose_of_listing") + "', '" + checkStringJSONObj(jObjHistoryInnerData, "causelist_type") + "')";
+	          //System.out.println("historyofcasehearing SQL:" + sql);
+	          sqls.add(sql);
+	        }
+	      }
+	      System.out.println("pet_extra_party:" + checkStringJSONObj(jObjCaseData, "pet_extra_party"));
+	      JSONObject jObjMainData = new JSONObject();
+	      JSONObject jObjInnerData = new JSONObject();
+	      if ((checkStringJSONObj(jObjCaseData, "pet_extra_party") != null) && (checkStringJSONObj(jObjCaseData, "pet_extra_party") != "null") && (!checkStringJSONObj(jObjCaseData, "pet_extra_party").equals("")) && (!checkStringJSONObj(jObjCaseData, "pet_extra_party").equals("[]")))
+	      {
+	        jObjMainData = new JSONObject(checkStringJSONObj(jObjCaseData, "pet_extra_party"));
+	        for (int i = 1; i <= jObjMainData.length(); i++)
+	        {
+	          sql = 
+	            "INSERT INTO apolcms.ecourts_pet_extra_party(cino, party_no, party_name) VALUES('" + checkStringJSONObj(jObjCaseData, "cino") + "', " + i + ", '" + checkStringJSONObj(jObjMainData, new StringBuilder("party_no").append(i).toString()) + "')";
+	         // System.out.println("pet_extra_party SQL:" + sql);
+	          sqls.add(sql);
+	        }
+	      }
+	      System.out.println("res_extra_party:" + checkStringJSONObj(jObjCaseData, "res_extra_party"));
+	      if ((checkStringJSONObj(jObjCaseData, "res_extra_party") != null) && (checkStringJSONObj(jObjCaseData, "res_extra_party") != "null") && (!checkStringJSONObj(jObjCaseData, "res_extra_party").equals("")) && (!checkStringJSONObj(jObjCaseData, "res_extra_party").equals("[]")))
+	      {
+	        jObjMainData = new JSONObject(checkStringJSONObj(jObjCaseData, "res_extra_party"));
+	        for (int i = 1; i <= jObjMainData.length(); i++)
+	        {
+	          sql = 
+	          
+	            "INSERT INTO apolcms.ecourts_res_extra_party(cino, party_no, party_name)  VALUES('" + checkStringJSONObj(jObjCaseData, "cino") + "', " + i + ", '" + checkStringJSONObj(jObjMainData, new StringBuilder("party_no").append(i).toString()) + "')";
+	          //System.out.println("res_extra_party SQL:" + sql);
+	          sqls.add(sql);
+	        }
+	      }
+	      System.out.println("interimorder:" + checkStringJSONObj(jObjCaseData, "interimorder"));
+	      if ((checkStringJSONObj(jObjCaseData, "interimorder") != null) && (checkStringJSONObj(jObjCaseData, "interimorder") != "null") && (!checkStringJSONObj(jObjCaseData, "interimorder").equals("")) && (!checkStringJSONObj(jObjCaseData, "interimorder").equals("[]")))
+	      {
+	        jObjMainData = new JSONObject(checkStringJSONObj(jObjCaseData, "interimorder"));
+	        for (int i = 1; i <= jObjMainData.length(); i++)
+	        {
+	          jObjInnerData = new JSONObject(jObjMainData.get("sr_no" + i).toString());
+	          sql = "INSERT INTO apolcms.ecourts_case_interimorder(cino, sr_no, order_no, order_date, order_details)  VALUES('" + 
+	            checkStringJSONObj(jObjCaseData, "cino") + "'," + i + " ,'" + 
+	            checkIntegerJSONObj(jObjInnerData, "order_no") + "',";
+	          if ((jObjInnerData.get("order_date") != null) && (jObjInnerData.get("order_date").toString() != "null")) {
+	            sql = sql + " to_date('" + jObjInnerData.get("order_date").toString() + "', 'yyyy-mm-dd'),";
+	          } else {
+	            sql = sql + " to_date(null, 'yyyy-mm-dd'),";
+	          }
+	          sql = sql + " '" + checkStringJSONObj(jObjInnerData, "order_details") + "')";
+	          
+	          //System.out.println("interimorder SQL:" + sql);
+	          sqls.add(sql);
+	        }
+	      }
+	      System.out.println("finalorder:" + checkStringJSONObj(jObjCaseData, "finalorder"));
+	      if ((checkStringJSONObj(jObjCaseData, "finalorder") != null) && (checkStringJSONObj(jObjCaseData, "finalorder") != "null") && (!checkStringJSONObj(jObjCaseData, "finalorder").equals("")) && 
+	        (!checkStringJSONObj(jObjCaseData, "finalorder").equals("[]")))
+	      {
+	        //System.out.println("finalorder:" + checkStringJSONObj(jObjCaseData, "finalorder"));
+	        jObjMainData = new JSONObject(checkStringJSONObj(jObjCaseData, "finalorder"));
+	        for (int i = 1; i <= jObjMainData.length(); i++)
+	        {
+	          jObjInnerData = new JSONObject(jObjMainData.get("sr_no" + i).toString());
+	          sql = "INSERT INTO apolcms.ecourts_case_finalorder(cino, sr_no, order_no, order_date, order_details)  VALUES('" + 
+	            checkStringJSONObj(jObjCaseData, "cino") + "'," + i + " ,'" + 
+	            checkIntegerJSONObj(jObjInnerData, "order_no") + "',";
+	          if ((jObjInnerData.get("order_date") != null) && (jObjInnerData.get("order_date").toString() != "null")) {
+	            sql = sql + " to_date('" + jObjInnerData.get("order_date").toString() + "', 'yyyy-mm-dd')";
+	          } else {
+	            sql = sql + " to_date(null, 'yyyy-mm-dd')";
+	          }
+	          sql = sql + ", '" + checkStringJSONObj(jObjInnerData, "order_details") + "')";
+	          //System.out.println("finalorder SQL:" + sql);
+	          sqls.add(sql);
+	        }
+	      }
+	      System.out.println("iafiling:" + checkStringJSONObj(jObjCaseData, "iafiling"));
+	      if ((checkStringJSONObj(jObjCaseData, "iafiling") != null) && (checkStringJSONObj(jObjCaseData, "iafiling") != "null") && (!checkStringJSONObj(jObjCaseData, "iafiling").equals("")) && (!checkStringJSONObj(jObjCaseData, "iafiling").equals("[]")))
+	      {
+	        jObjMainData = new JSONObject(checkStringJSONObj(jObjCaseData, "iafiling"));
+	        for (int i = 1; i <= jObjMainData.length(); i++)
+	        {
+	          jObjInnerData = new JSONObject(jObjMainData.get("sr_no" + i).toString());
+	          sql = "INSERT INTO apolcms.ecourts_case_iafiling(cino, sr_no, ia_number, ia_pet_name, ia_pend_disp, date_of_filing) VALUES('" + 
+	            checkStringJSONObj(jObjCaseData, "cino") + "'," + i + " ,'" + 
+	            checkStringJSONObj(jObjInnerData, "ia_number") + "','" + 
+	            checkStringJSONObj(jObjInnerData, "ia_pet_name") + "','" + 
+	            checkStringJSONObj(jObjInnerData, "ia_pend_disp") + "',";
+	          if ((jObjInnerData.has("date_of_filing")) && (jObjInnerData.get("date_of_filing") != null) && (jObjInnerData.get("date_of_filing").toString() != "null")) {
+	            sql = sql + " to_date('" + jObjInnerData.get("date_of_filing").toString() + "', 'yyyy-mm-dd'))";
+	          } else {
+	            sql = sql + " to_date(null, 'yyyy-mm-dd'))";
+	          }
+	         // System.out.println("iafiling SQL:" + sql);
+	          sqls.add(sql);
+	        }
+	      }
+	      System.out.println("link_cases:" + checkStringJSONObj(jObjCaseData, "link_cases"));
+	      if ((checkStringJSONObj(jObjCaseData, "link_cases") != null) && (checkStringJSONObj(jObjCaseData, "link_cases") != "null") && (!checkStringJSONObj(jObjCaseData, "link_cases").equals("")) && (!checkStringJSONObj(jObjCaseData, "link_cases").equals("[]")))
+	      {
+	        jObjMainData = new JSONObject(checkStringJSONObj(jObjCaseData, "link_cases"));
+	        for (int i = 1; i <= jObjMainData.length(); i++)
+	        {
+	          jObjInnerData = new JSONObject(jObjMainData.get("sr_no" + i).toString());
+	          sql = "INSERT INTO apolcms.ecourts_case_link_cases(cino, sr_no, filing_number, case_number) VALUES('" + 
+	            checkStringJSONObj(jObjCaseData, "cino") + "'," + i + " ,'" + 
+	            checkStringJSONObj(jObjInnerData, "filing_number") + "','" + 
+	            checkStringJSONObj(jObjInnerData, "case_number") + "')";
+	         // System.out.println("link_cases SQL:" + sql);
+	          sqls.add(sql);
+	        }
+	      }
+	      System.out.println("objections:" + checkStringJSONObj(jObjCaseData, "objections"));
+	      if ((checkStringJSONObj(jObjCaseData, "objections") != null) && (checkStringJSONObj(jObjCaseData, "objections") != "null") && (!checkStringJSONObj(jObjCaseData, "objections").equals("")) && (!checkStringJSONObj(jObjCaseData, "objections").equals("[]")))
+	      {
+	        jObjMainData = new JSONObject(checkStringJSONObj(jObjCaseData, "objections"));
+	        System.out.println("-" + jObjMainData.length());
+	        
+	        sql = "INSERT INTO apolcms.ecourts_case_objections(cino, objection_no, objection_desc, scrutiny_date, objections_compliance_by_date, obj_reciept_date) VALUES('" + 
+	          checkStringJSONObj(jObjCaseData, "cino") + "',1 ,'" + 
+	          checkStringJSONObj(jObjMainData, "objection1") + "',";
+	        if ((jObjMainData.get("scrutiny_date") != null) && (jObjMainData.get("scrutiny_date").toString() != "null")) {
+	          sql = sql + " to_date('" + jObjMainData.get("scrutiny_date").toString() + "', 'yyyy-mm-dd'),";
+	        } else {
+	          sql = sql + " to_date(null, 'yyyy-mm-dd'),";
+	        }
+	        if ((jObjMainData.get("objections_compliance_by_date") != null) && (jObjMainData.get("objections_compliance_by_date").toString() != "null")) {
+	          sql = sql + " to_date('" + jObjMainData.get("objections_compliance_by_date").toString() + "', 'yyyy-mm-dd'),";
+	        } else {
+	          sql = sql + " to_date(null, 'yyyy-mm-dd'),";
+	        }
+	        if ((jObjMainData.get("obj_reciept_date") != null) && (jObjMainData.get("obj_reciept_date").toString() != "null")) {
+	          sql = sql + " to_date('" + jObjMainData.get("obj_reciept_date").toString() + "', 'yyyy-mm-dd'))";
+	        } else {
+	          sql = sql + " to_date(null, 'yyyy-mm-dd'))";
+	        }
+	        //System.out.println("objections SQL:" + sql);
+	        sqls.add(sql);
+	      }
+	      int executedSqls = 0;
+	      if (sqls.size() > 0) {
+	    	  savedstatus = true;
+	    	  sql="update ecourts_cinos_new set ecourts_response=null where cino='"+cino+"' and ecourts_response is not null"; 
+	    	  sqls.add(sql);
+	    	  
+	    	  sql="update ecourts_case_data set dept_code=ecourts_cinos_new.dept_code,  from ecourts_cinos_new where ecourts_case_data.cino=ecourts_cinos_new.cino and ecourts_case_data.cino='"+cino+"'"; 
+	    	  sqls.add(sql);
+	    	  
+	    	  executedSqls = DatabasePlugin.executeBatchSQLs(sqls, con);
+	    	  
+	    	  retrieveOrderDocuments(con, cino, "ecourts_case_interimorder");
+			  retrieveOrderDocuments(con, cino, "ecourts_case_finalorder");
+	    	  
+	      }
+	      System.out.println("Successfully saved...executedSqls:"+executedSqls);
+	      
+	      System.out.println("END");
+	    }
+	    else
+	    {
+	    	sql="update ecourts_cinos_new set ecourts_response='"+resp+"' where cino='"+cino+"'";
+	    	DatabasePlugin.executeUpdate(sql, con);
+	    	System.out.println("Invalid/Empty Response::"+"SQL:"+sql);
+	    }
+	    
+	    return savedstatus;
+	  }
+
 }

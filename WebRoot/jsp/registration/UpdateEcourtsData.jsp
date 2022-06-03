@@ -34,10 +34,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 </div>
 <div class="page-content fade-in-up">
 	<html:form method="post" action="/UpdateEcourtsData"
-		styleId="updateEcourtsDataFormId">
+		styleId="updateEcourtsDataFormId" enctype="multipart/form-data">
 		<html:hidden styleId="mode" property="mode" />
-		<%-- <html:hidden styleId="selectedCaseIds"
-			property="dynaForm(selectedCaseIds)" /> --%>
+
+		<%-- <html:hidden styleId="selectedCaseIds" property="dynaForm(selectedCaseIds)" /> --%>
+
 		<html:hidden styleId="cino" property="dynaForm(cino)" />
 		<html:hidden styleId="cinoTotal" property="dynaForm(cinoTotal)" />
 		<div class="container-fluid">
@@ -162,14 +163,40 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="row">
 						<div class="col-md-12 col-xs-12">
 							<input type="button" name="getreport" value="Get Report"
-								class="btn btn-success" onclick="return fnShowCases();" />
-								
-								<input type="button" name="updateCases" value="Update Cases Data"
+								class="btn btn-success" onclick="return fnShowCases();" /> 
+							<input
+								type="button" name="updateCases" value="Update Cases Data"
 								class="btn btn-success" onclick="return fnUpdateCasesData();" />
+							<input
+								type="button" name="updateCases2" value="Import Cases Data"
+								class="btn btn-success" onclick="return fnImportCinosData();" />	
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">Import/Update e-Courts Data from
+						Excel</div>
+				</div>
+				<div class="ibox-body">
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Upload New Cases List in Excel</label>
+								<html:file property="changeLetter" styleId="changeLetter" styleClass="form-control"></html:file>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<input type="button" name="uploadandRetrieve"
+									value="Upload and Retrieve Data" class="btn btn-success"
+									onclick="return fnUploadandRetrieve();" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 
 			<div class="ibox">
 				<div class="ibox-head">
@@ -306,7 +333,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			format : "yyyy-mm-dd"
 		});
 	});
-
+	
+	
+	function fnUploadandRetrieve() {
+		$("#mode").val("uploadandRetrieveEcourtsData");
+		$("#updateEcourtsDataFormId").submit();
+		//return true;
+	}
+	
 	function fnShowDistWise() {
 		$("#mode").val("showDistWise");
 		$("#updateEcourtsDataFormId").submit();
@@ -329,6 +363,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		///return true;
 	}
 	
+	function fnImportCinosData() {
+		$("#mode").val("importNewCinosData");
+		$("#updateEcourtsDataFormId").submit();
+		///return true;
+	}
+
 	function fnGetCauseList() {
 		if ($("#causeListDate").val() == "") {
 			alert("Select a Date");

@@ -103,7 +103,7 @@ public class HighCourtCauseListAPI {
 		String sql = "";
 		resp = resp.trim();
 
-		System.out.println("processMastersResponse"+resp);
+		//System.out.println("processMastersResponse"+resp);
 		if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_TOKEN"))) {
 			JSONObject jObj = new JSONObject(resp);
 			if ((jObj.has("response_str")) && (jObj.getString("response_str") != null)) {
@@ -118,7 +118,7 @@ public class HighCourtCauseListAPI {
 			if ((response_str != null) && (!response_str.equals(""))) {
 				decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
 			}
-			System.out.println("decryptedRespStr:"+decryptedRespStr);
+			//System.out.println("decryptedRespStr:"+decryptedRespStr);
 			JSONObject jObjCaseData = new JSONObject(decryptedRespStr);
 			ArrayList<String> sqls = new ArrayList();
 
@@ -130,10 +130,6 @@ public class HighCourtCauseListAPI {
 					{
 						jObjActsInnerData = new JSONObject(jObjCaseData.get("case" + i).toString());
 	
-						sql = "update ecourts_causelist_data set causelist_id='"+ImportECourtsData.checkStringJSONObj(jObjActsInnerData, "causelist_id")
-								+"', cause_list_type='"+ImportECourtsData.checkStringJSONObj(jObjActsInnerData, "cause_list_type").trim()+"' where est_code='"+estCode+"' and causelist_date=to_date('"+causelistDate+"','yyyy-mm-dd') and bench_id='"
-								+ ImportECourtsData.checkStringJSONObj(jObjActsInnerData, "bench_id") + "'";
-						
 						sql = "insert into ecourts_causelist_bench_data (est_code , causelist_date , bench_id , causelist_id , cause_list_type, inserted_time) values "
 								+ " ('" + estCode + "',to_date('" + causelistDate + "','yyyy-mm-dd'),'"
 								+ ImportECourtsData.checkStringJSONObj(jObjActsInnerData, "bench_id") + "','"

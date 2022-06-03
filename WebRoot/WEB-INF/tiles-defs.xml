@@ -259,6 +259,12 @@
 	<definition name="caseStatusUpdationEmpl" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/CaseStatusUpdationEmp.jsp" />
 	</definition>
+	
+	
+	<definition name="HighCourtCasesCategoryUpdation" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/HighCourtCasesCategoryUpdation.jsp" />
+	</definition>
 
 
 </tiles-definitions>

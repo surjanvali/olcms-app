@@ -97,10 +97,14 @@ public class EofficeEmployeeReportAction extends DispatchAction {
 
 			String sql = "select substr(global_org_name,1,5) as code,global_org_name,count(*) from " + tableName;
 
-			if (roleId.equals("3")) { // 2. Sect Dept. Login
-				sql += " where substr(global_org_name,1,5) in (select dept_code from dept_new where reporting_dept_code='"
+			if (roleId.equals("3") || roleId.equals("4")) { // 2. Sect Dept./ MLO Login
+				sql += " where substr(trim(global_org_name),1,5) in (select dept_code from dept_new where reporting_dept_code='"
 						+ deptCode + "' or dept_code='" + deptCode + "')";
 			}
+			if (roleId.equals("5") || roleId.equals("9")) { // 2. HOD / NO Login
+				sql += " where substr(trim(global_org_name),1,5)='" + deptCode + "'";
+			}
+			
 			sql += " group by global_org_name order by global_org_name";
 
 			System.out.println("SQL:" + sql);

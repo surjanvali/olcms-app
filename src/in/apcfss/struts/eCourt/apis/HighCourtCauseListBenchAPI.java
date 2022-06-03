@@ -88,7 +88,7 @@ public class HighCourtCauseListBenchAPI {
 		String sql = "";
 		resp = resp.trim();
 
-		System.out.println("processMastersResponse"+resp);
+		//System.out.println("processMastersResponse"+resp);
 		if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_TOKEN"))) {
 			JSONObject jObj = new JSONObject(resp);
 			if ((jObj.has("response_str")) && (jObj.getString("response_str") != null)) {
@@ -103,7 +103,7 @@ public class HighCourtCauseListBenchAPI {
 			if ((response_str != null) && (!response_str.equals(""))) {
 				decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
 			}
-			System.out.println("decryptedRespStr:"+decryptedRespStr);
+			//System.out.println("decryptedRespStr:"+decryptedRespStr);
 			JSONObject jObjCaseData = new JSONObject(decryptedRespStr);
 			ArrayList<String> sqls = new ArrayList();
 
@@ -129,7 +129,7 @@ public class HighCourtCauseListBenchAPI {
 				executedSqls = DatabasePlugin.executeBatchSQLs(sqls, con);
 			}
 
-			System.out.println("Successfully saved..actname.executedSqls:" + executedSqls);
+			System.out.println("Successfully saved..CAUSE LIST .executedSqls:" + executedSqls);
 
 			System.out.println("END");
 		} else {
