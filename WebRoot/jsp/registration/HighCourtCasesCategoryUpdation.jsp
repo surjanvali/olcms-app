@@ -24,9 +24,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <link href="assetsnew/css/main.min.css" rel="stylesheet" />
 <style>
 .myDiv {
-  border: 5px outset red;
-  background-color: lightblue;
-  text-align: center;
+	border: 5px outset red;
+	background-color: lightblue;
+	text-align: center;
 }
 </style>
 <!-- START PAGE CONTENT-->
@@ -40,194 +40,198 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 </div>
 <div class="page-content fade-in-up">
 	<html:form method="post" action="/HighCourtCasesCategoryUpdation"
-styleId="HighCourtCasesListForm">
-<html:hidden styleId="mode" property="mode" />
-<%-- <html:hidden styleId="selectedCaseIds"
+		styleId="HighCourtCasesListForm">
+		<html:hidden styleId="mode" property="mode" />
+		<%-- <html:hidden styleId="selectedCaseIds"
 	property="dynaForm(selectedCaseIds)" /> --%>
-	<html:hidden styleId="cino" property="dynaForm(cino)"/>   <%-- value="${map.cino} --%>
-	<html:hidden styleId="total" property="dynaForm(total)" />
+		<html:hidden styleId="cino" property="dynaForm(cino)" />
+		<%-- value="${map.cino} --%>
+		<html:hidden styleId="total" property="dynaForm(total)" />
 
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<div class="dashboard-cat-title">
-				<logic:notEmpty name="successMsg">
-			<div class="alert alert-success" role="alert">
-				<button type="button" class="close" data-dismiss="alert"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<i class="mdi mdi-check-all"></i> <strong>${successMsg}</strong>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="dashboard-cat-title">
+						<logic:notEmpty name="successMsg">
+							<div class="alert alert-success" role="alert">
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<i class="mdi mdi-check-all"></i> <strong>${successMsg}</strong>
+							</div>
+						</logic:notEmpty>
+						<logic:notEmpty name="errorMsg">
+							<div class="alert alert-danger" role="alert">
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<i class="mdi mdi-block-helper"></i> <strong>${errorMsg}</strong>
+							</div>
+						</logic:notEmpty>
+					</div>
+				</div>
 			</div>
-		</logic:notEmpty>
-		<logic:notEmpty name="errorMsg">
-			<div class="alert alert-danger" role="alert">
-				<button type="button" class="close" data-dismiss="alert"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<i class="mdi mdi-block-helper"></i> <strong>${errorMsg}</strong>
-			</div>
-		</logic:notEmpty>
-		</div>
-	</div>
-</div>
 
-<div class="ibox">
-	<div class="ibox-head">
-		<div class="ibox-title">List of High Court Cases to be
-			Assigned to Section Officer</div>
-	</div>
-	<div class="ibox-body">
-		<!-- <h4 class="m-t-0 header-title">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">List of High Court Cases to be
+						Assigned to Section Officer</div>
+				</div>
+				<div class="ibox-body">
+					<!-- <h4 class="m-t-0 header-title">
 		<b>High Court Cases List</b>
 	</h4>
 	<hr /> -->
 
-	<div class="row">
-		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-			<div class="form-group">
-				<label>Case Registration Year</label>
-				<html:select styleId="regYear" property="dynaForm(regYear)"
-					styleClass="form-control select2Class">
-					<html:option value="0">---SELECT---</html:option>
-					<html:option value="ALL">ALL</html:option>
-					<logic:notEmpty name="CommonForm"
-						property="dynaForm(yearsList)">
-						<html:optionsCollection name="CommonForm"
-							property="dynaForm(yearsList)" />
-					</logic:notEmpty>
-				</html:select>
-			</div>
-		</div>
-		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-			<div class="form-group">
-				<label class="font-bold">Date of Filing From Date</label>
-				<div class="input-group date">
-					<span class="input-group-addon bg-white"><i
-						class="fa fa-calendar"></i></span>
-					<html:text styleId="dofFromDate"
-						property="dynaForm(dofFromDate)"
-						styleClass="form-control datepicker" />
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Case Registration Year</label>
+								<html:select styleId="regYear" property="dynaForm(regYear)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---SELECT---</html:option>
+									<html:option value="ALL">ALL</html:option>
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(yearsList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(yearsList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Date of Filing From Date</label>
+								<div class="input-group date">
+									<span class="input-group-addon bg-white"><i
+										class="fa fa-calendar"></i></span>
+									<html:text styleId="dofFromDate"
+										property="dynaForm(dofFromDate)"
+										styleClass="form-control datepicker" />
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Date of Filing From Date</label>
+								<div class="input-group date">
+									<span class="input-group-addon bg-white"><i
+										class="fa fa-calendar"></i></span>
+									<html:text styleId="dofToDate" property="dynaForm(dofToDate)"
+										styleClass="form-control datepicker" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Purpose</label>
+								<html:select styleId="purpose" property="dynaForm(purpose)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---SELECT---</html:option>
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(purposeList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(purposeList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
+						</div>
+
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>District</label>
+								<html:select styleId="districtId"
+									property="dynaForm(districtId)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---SELECT---</html:option>
+									<logic:notEmpty name="CommonForm" property="dynaForm(distList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(distList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12 col-xs-12">
+							<input type="submit" name="submit" value="Get Cases"
+								class="btn btn-success" onclick="return fnShowCases();" />
+						</div>
+					</div>
+
+
 				</div>
 			</div>
-		</div>
-		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-			<div class="form-group">
-				<label class="font-bold">Date of Filing From Date</label>
-				<div class="input-group date">
-					<span class="input-group-addon bg-white"><i
-						class="fa fa-calendar"></i></span>
-					<html:text styleId="dofToDate" property="dynaForm(dofToDate)"
-						styleClass="form-control datepicker" />
+
+			<div class="row">
+				<div class="col-md-12 col-xs-12">
+					<div class="alert alert-info" role="alert">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<i class="mdi mdi-block-helper"></i> <strong><b>A1</b></strong>:All
+						contempt cases,where bill are uploaded in CFMS & waiting for fund
+						clearance<br> <i class="mdi mdi-block-helper"></i> <strong><b>A2</b></strong>:Contempt
+						cases,where bill are NOT uploaded in CFMS for lack of
+						budget/HOA/etc <br> <i class="mdi mdi-block-helper"></i> <strong><b>B1</b></strong>:All
+						writ Petitions,with interim/final orders for payments,where bill
+						are uploaded in CFMS & waiting for fund clearance<br> <i
+							class="mdi mdi-block-helper"></i> <strong><b>B2</b></strong>:All
+						writ Petitions,with interim/final orders for payments where bill
+						are not uploaded in CFMS for lack of budget/HOA/etc<br> <i
+							class="mdi mdi-block-helper"></i> <strong><b>C1</b></strong>:All
+						fresh writ Petitions,where bill are uploaded in CFMS & waiting for
+						fund clearance <br> <i class="mdi mdi-block-helper"></i> <strong><b>C2</b></strong>:All
+						fresh writ Petitions,where bill are not uploaded in CFMS for lack
+						of budget/HOA/etc
+					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-			<div class="form-group">
-				<label>Purpose</label>
-				<html:select styleId="purpose" property="dynaForm(purpose)"
-					styleClass="form-control select2Class">
-					<html:option value="0">---SELECT---</html:option>
-					<logic:notEmpty name="CommonForm"
-						property="dynaForm(purposeList)">
-						<html:optionsCollection name="CommonForm"
-							property="dynaForm(purposeList)" />
-					</logic:notEmpty>
-				</html:select>
-			</div>
-		</div>
 
-		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-			<div class="form-group">
-				<label>District</label>
-				<html:select styleId="districtId"
-					property="dynaForm(districtId)"
-					styleClass="form-control select2Class">
-					<html:option value="0">---SELECT---</html:option>
-					<logic:notEmpty name="CommonForm" property="dynaForm(distList)">
-						<html:optionsCollection name="CommonForm"
-							property="dynaForm(distList)" />
-					</logic:notEmpty>
-				</html:select>
-			</div>
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-md-12 col-xs-12">
-			<input type="submit" name="submit" value="Get Cases"
-				class="btn btn-success" onclick="return fnShowCases();" />
-		</div>
-	</div>
 
-	
-	</div>
-</div>
 
-<div class="row" >
+			<logic:notEmpty name="CASESLIST">
+				<div class="ibox">
+					<div class="ibox-body">
+						<div class="table-responsive">
 
-<div class="alert alert-info" role="alert">
-				<button type="button" class="close" data-dismiss="alert"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<i class="mdi mdi-block-helper"></i> <strong><b>A1</b></strong>:All contempt cases,where bill are uploaded in CFMS & waiting for fund clearance<br>
-				<i class="mdi mdi-block-helper"></i> <strong><b>A2</b></strong>:Contempt cases,where bill are NOT uploaded in CFMS for lack of budget/HOA/etc <br>
-				<i class="mdi mdi-block-helper"></i> <strong><b>B1</b></strong>:All writ Petitions,with interim/final orders for payments,where bill are uploaded in CFMS & waiting for fund clearance<br>
-				<i class="mdi mdi-block-helper"></i> <strong><b>B2</b></strong>:All writ Petitions,with interim/final orders for payments where bill are not uploaded in CFMS for lack of budget/HOA/etc<br>
-				<i class="mdi mdi-block-helper"></i> <strong><b>C1</b></strong>:All fresh writ Petitions,where bill are uploaded in CFMS & waiting for fund clearance <br>
-				<i class="mdi mdi-block-helper"></i> <strong><b>C2</b></strong>:All fresh writ Petitions,where bill are not uploaded in CFMS for lack of budget/HOA/etc
-			</div>
-			
-			
-				
+							<table id="example" class="table table-striped table-bordered"
+								style="width:100%">
+								<thead>
+									<tr>
+										<th>Sl.No</th>
+										<!-- <th></th> -->
+										<th>CINo</th>
+										<th>Date of Filing</th>
+										<th>Case Type</th>
+										<th>Reg.No.</th>
+										<th>Reg. Year</th>
 
-<logic:notEmpty name="CASESLIST">
-<div class="ibox">
-	<%-- <div class="ibox-head">
-	<div class="ibox-title">
-		<logic:notEmpty name="HEADING">
-						${HEADING }
-					</logic:notEmpty>
-	</div>
-</div> --%>
-	<div class="ibox-body">
-		<div class="table-responsive">
+										<th>Petitioner</th>
 
-			<table id="example" class="table table-striped table-bordered"
-				style="width:100%">
-				<thead>
-					<tr>
-						<th>Sl.No</th>
-						<!-- <th></th> -->
-						<th>CINo</th>
-						<th>Date of Filing</th>
-						<th>Case Type</th>
-						<th>Reg.No.</th>
-						<th>Reg. Year</th>
-						
-						<th>Petitioner</th>
+										<th>District</th>
+										<th>Purpose</th>
+										<th>Respondents</th>
 
-						<th>District</th>
-						<th>Purpose</th>
-						<th>Respondents</th>
+										<th>Petitioner Advocate</th>
+										<th>Respondent Advocate</th>
 
-						<th>Petitioner Advocate</th>
-						<th>Respondent Advocate</th>
+										<th>Select Category</th>
 
-						<th>Select Category</th>
-						
-					</tr>
-				</thead>
-				<tbody>
+									</tr>
+								</thead>
+								<tbody>
 
-					<logic:iterate id="map" name="CASESLIST" indexId="i">
-						<tr>
-							<td>${i+1 }.</td>
-							<%-- <td>
+									<logic:iterate id="map" name="CASESLIST" indexId="i">
+										<tr>
+											<td>${i+1 }.</td>
+											<%-- <td>
 								
 								<div class="form-group">
 									<label class="ui-checkbox"> <input type="checkbox"
@@ -236,121 +240,124 @@ styleId="HighCourtCasesListForm">
 								</div>
 
 							</td> --%>
-							
-							
-							
-							<td><input type="button" id="btnShowPopup"
-								value="${map.cino}"
-								class="btn btn-sm btn-info waves-effect waves-light"
-								onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
-								
-							</td>
-							<td><logic:notEmpty name="map" property="date_of_filing">
-									<logic:notEqual value="0001-01-01" name="map"
-										property="date_of_filing">
+
+
+
+											<td><input type="button" id="btnShowPopup"
+												value="${map.cino}"
+												class="btn btn-sm btn-info waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
+
+											</td>
+											<td><logic:notEmpty name="map" property="date_of_filing">
+													<logic:notEqual value="0001-01-01" name="map"
+														property="date_of_filing">
 													${map.date_of_filing }
 												</logic:notEqual>
-								</logic:notEmpty></td>
-							<td>${map.type_name_fil }</td>
-							<td>${map.reg_no}</td>
-							<td>${map.reg_year }</td>
-							<td>${map.pet_name }</td>
-							<td>${map.dist_name }</td>
-							<td>${map.purpose_name }</td>
-							<td>${map.res_name }</td>
-							<td>${map.pet_adv }</td>
-							<td>${map.res_adv }</td>
-							
-							<td>
-			<div class="form-group">
-			<html:hidden styleId="cino${i}" property="dynaForm(cino${i})" value="${map.cino}"/> 
-				
-				<html:select styleId="fin_category${i}" 
-					property="dynaForm(fin_category${i})" value="${map.finance_category}"
-					styleClass="form-control select2Class">
-					<html:option value="0">Select</html:option>
-					<html:option value="A1">A1</html:option>
-					<html:option value="A2">A2</html:option>
-					<html:option value="B1">B1</html:option>
-					<html:option value="B2">B2</html:option>
-					<html:option value="C1">C1</html:option>
-					<html:option value="C2">C2</html:option>
-				</html:select>
-			</div></td>
-							
-						</tr>
-						
-					</logic:iterate>
-				</tbody>
-				<tfoot>
-					<tR>
-						<td colspan="14">&nbsp;</td>
-					</tR>
-				</tfoot>
-			</table>
-		</div>
-	</div>
-</div>
-<div class="row" style="text-align: center">
-		<div class="col-md-12 col-xs-12">
-			<input type="submit" name="submit" value="Submit" 
-				class="btn btn-success" onclick="return fnSubmitCategory();" />
-		</div>
-	</div>
+												</logic:notEmpty></td>
+											<td>${map.type_name_fil }</td>
+											<td>${map.reg_no}</td>
+											<td>${map.reg_year }</td>
+											<td>${map.pet_name }</td>
+											<td>${map.dist_name }</td>
+											<td>${map.purpose_name }</td>
+											<td>${map.res_name }</td>
+											<td>${map.pet_adv }</td>
+											<td>${map.res_adv }</td>
 
-</logic:notEmpty>
-</div>
-</html:form>
+											<td>
+												<div class="form-group">
+													<html:hidden styleId="cino${i}"
+														property="dynaForm(cino${i})" value="${map.cino}" />
+
+													<html:select styleId="fin_category${i}"
+														property="dynaForm(fin_category${i})"
+														value="${map.finance_category}"
+														styleClass="form-control select2Class">
+														<html:option value="0">---SELECT---</html:option>
+														<html:option value="A1">Category - A1</html:option>
+														<html:option value="A2">Category - A2</html:option>
+														<html:option value="B1">Category - B1</html:option>
+														<html:option value="B2">Category - B2</html:option>
+														<html:option value="C1">Category - C1</html:option>
+														<html:option value="C2">Category - C2</html:option>
+													</html:select>
+												</div>
+											</td>
+
+										</tr>
+
+									</logic:iterate>
+								</tbody>
+								<tfoot>
+									<tR>
+										<td colspan="14">&nbsp;</td>
+									</tR>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="text-align: center">
+					<div class="col-md-12 col-xs-12">
+						<input type="submit" name="submit" value="Submit"
+							class="btn btn-success" onclick="return fnSubmitCategory();" />
+					</div>
+				</div>
+
+			</logic:notEmpty>
+		</div>
+	</html:form>
 </div>
 
 <!-- Modal  Start-->
 <logic:notEmpty name="SHOWMESG">
-<div id="panel-modal" class="modal fade" role="dialog"
-	style="padding-top:200px;">
-<div class="modal-dialog modal-md modal-primary">
-	<!-- Modal content-->
-<div class="modal-content">
-	<div class="modal-header"
-		style="background-color: #374f65;color: #fff;">
-	<h4 class="modal-title">Important Notes</h4>
-</div>
-<div class="modal-body">
-	<ul>
-		<li>Cases filed in the year 2021 & 2022 are listed below.</li>
-		<li>To view and process remaining year's cases please use the
-			Year filter or select From and To dates.</li>
-		<!-- <li>To view and process other cases please use the Year
+	<div id="panel-modal" class="modal fade" role="dialog"
+		style="padding-top:200px;">
+		<div class="modal-dialog modal-md modal-primary">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header"
+					style="background-color: #374f65;color: #fff;">
+					<h4 class="modal-title">Important Notes</h4>
+				</div>
+				<div class="modal-body">
+					<ul>
+						<li>Cases filed in the year 2021 & 2022 are listed below.</li>
+						<li>To view and process remaining year's cases please use the
+							Year filter or select From and To dates.</li>
+						<!-- <li>To view and process other cases please use the Year
 			filter or select From and To dates and press the 'Get Cases'
 			button for the Cases List.</li> -->
-					<li>To View the full Case Details click on CINo.</li>
-					<li>To Assign a Case/Cases please check the checkbox and
-						assign to either HOD/Section Officer (provided at the bottom).</li>
-				</ul>
-			</div>
-			<div class="modal-footer">
-				<button type="button"
-					class="btn btn-sm btn-primary btnClosePopup pull-right"
-					data-dismiss="modal" aria-hidden="true">Close</button>
+						<li>To View the full Case Details click on CINo.</li>
+						<li>To Assign a Case/Cases please check the checkbox and
+							assign to either HOD/Section Officer (provided at the bottom).</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<button type="button"
+						class="btn btn-sm btn-primary btnClosePopup pull-right"
+						data-dismiss="modal" aria-hidden="true">Close</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 </logic:notEmpty>
 <div id="MyPopup" class="modal fade" role="dialog"
 	style="padding-top:200px;">
-<div class="modal-dialog modal-lg">
-	<!-- Modal content-->
-<div class="modal-content">
-	<div class="modal-header"
-		style="background-color: #3498db;color: #fff;">
-	<button type="button" class="close" data-dismiss="modal">
-		&times;</button>
-	<h4 class="modal-title"></h4>
-</div>
-<div class="modal-body">
-	<p>
-		<iframe src="" id="page" name="model_window"
-			style="width:100%;min-height:600px;;border:0px;"> </iframe>
+	<div class="modal-dialog modal-lg">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header"
+				style="background-color: #3498db;color: #fff;">
+				<button type="button" class="close" data-dismiss="modal">
+					&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					<iframe src="" id="page" name="model_window"
+						style="width:100%;min-height:600px;;border:0px;"> </iframe>
 				</p>
 			</div>
 			<div class="modal-footer">

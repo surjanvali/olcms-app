@@ -388,7 +388,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			
 			String cino = "";
 
-			sql = "SELECT cino FROM apolcms.ecourts_cinos_new where inserted_time::date = current_date and ecourts_response is null";
+			sql = "SELECT cino FROM apolcms.ecourts_cinos_new where inserted_time::date = current_date and coalesce(ecourts_response,'')=''";
 			
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
@@ -1619,7 +1619,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 	    	  sql="update ecourts_cinos_new set ecourts_response=null where cino='"+cino+"' and ecourts_response is not null"; 
 	    	  sqls.add(sql);
 	    	  
-	    	  sql="update ecourts_case_data set dept_code=ecourts_cinos_new.dept_code,  from ecourts_cinos_new where ecourts_case_data.cino=ecourts_cinos_new.cino and ecourts_case_data.cino='"+cino+"'"; 
+	    	  sql="update ecourts_case_data set dept_code=ecourts_cinos_new.dept_code from ecourts_cinos_new where ecourts_case_data.cino=ecourts_cinos_new.cino and ecourts_case_data.cino='"+cino+"'"; 
 	    	  sqls.add(sql);
 	    	  
 	    	  executedSqls = DatabasePlugin.executeBatchSQLs(sqls, con);

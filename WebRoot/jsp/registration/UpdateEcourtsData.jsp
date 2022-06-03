@@ -163,70 +163,81 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="row">
 						<div class="col-md-12 col-xs-12">
 							<input type="button" name="getreport" value="Get Report"
-								class="btn btn-success" onclick="return fnShowCases();" /> 
-							<input
+								class="btn btn-success" onclick="return fnShowCases();" /> <input
 								type="button" name="updateCases" value="Update Cases Data"
 								class="btn btn-success" onclick="return fnUpdateCasesData();" />
-							<input
-								type="button" name="updateCases2" value="Import Cases Data"
-								class="btn btn-success" onclick="return fnImportCinosData();" />	
+							<input type="button" name="updateCases2"
+								value="Import Cases Data" class="btn btn-success"
+								onclick="return fnImportCinosData();" />
 						</div>
 					</div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
-			<div class="ibox">
-				<div class="ibox-head">
-					<div class="ibox-title">Import/Update e-Courts Data from
-						Excel</div>
-				</div>
-				<div class="ibox-body">
-					<div class="row">
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label class="font-bold">Upload New Cases List in Excel</label>
-								<html:file property="changeLetter" styleId="changeLetter" styleClass="form-control"></html:file>
+					<div class="ibox">
+						<div class="ibox-head">
+							<div class="ibox-title">Import/Update e-Courts Data from
+								Excel</div>
+						</div>
+						<div class="ibox-body">
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<div class="form-group">
+										<label class="font-bold">Upload New Cases List in
+											Excel</label>
+										<html:file property="changeLetter" styleId="changeLetter"
+											styleClass="form-control"></html:file>
+									</div>
+								</div>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-								<input type="button" name="uploadandRetrieve"
-									value="Upload and Retrieve Data" class="btn btn-success"
-									onclick="return fnUploadandRetrieve();" />
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<input type="button" name="uploadandRetrieve"
+										value="Upload and Retrieve Data" class="btn btn-success"
+										onclick="return fnUploadandRetrieve();" />
+								</div>
+
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+				<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
 
-			<div class="ibox">
-				<div class="ibox-head">
-					<div class="ibox-title">Import/Update e-Courts Cause List
-						Data</div>
-				</div>
-				<div class="ibox-body">
-					<div class="row">
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label class="font-bold">Cause List Date</label>
-								<div class="input-group date">
-									<span class="input-group-addon bg-white"><i
-										class="fa fa-calendar"></i></span>
-									<html:text styleId="causeListDate"
-										property="dynaForm(causeListDate)"
-										styleClass="form-control datepicker" />
+					<div class="ibox">
+						<div class="ibox-head">
+							<div class="ibox-title">Import/Update e-Courts Cause List
+								Data</div>
+						</div>
+						<div class="ibox-body">
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<div class="form-group">
+										<label class="font-bold">Cause List Date</label>
+										<div class="input-group date">
+											<span class="input-group-addon bg-white"><i
+												class="fa fa-calendar"></i></span>
+											<html:text styleId="causeListDate"
+												property="dynaForm(causeListDate)"
+												styleClass="form-control datepicker" />
 
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<input type="button" name="getCauseList"
+										value="Import Cause List" class="btn btn-success"
+										onclick="return fnGetCauseList();" />
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<input type="button" name="getCauseList"
-								value="Import Cause List" class="btn btn-success"
-								onclick="return fnGetCauseList();" />
-						</div>
 					</div>
 				</div>
 			</div>
-
 			<logic:notEmpty name="CASEWISEACKS">
 				<div class="ibox">
 					<div class="ibox-body">
@@ -333,14 +344,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			format : "yyyy-mm-dd"
 		});
 	});
-	
-	
+
 	function fnUploadandRetrieve() {
 		$("#mode").val("uploadandRetrieveEcourtsData");
 		$("#updateEcourtsDataFormId").submit();
 		//return true;
 	}
-	
+
 	function fnShowDistWise() {
 		$("#mode").val("showDistWise");
 		$("#updateEcourtsDataFormId").submit();
@@ -362,7 +372,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#updateEcourtsDataFormId").submit();
 		///return true;
 	}
-	
+
 	function fnImportCinosData() {
 		$("#mode").val("importNewCinosData");
 		$("#updateEcourtsDataFormId").submit();
