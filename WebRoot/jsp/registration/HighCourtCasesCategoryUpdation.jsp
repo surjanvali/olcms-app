@@ -76,8 +76,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			<div class="ibox">
 				<div class="ibox-head">
-					<div class="ibox-title">List of High Court Cases to be
-						Assigned to Section Officer</div>
+					<div class="ibox-title">Category Updation for High Court Cases</div>
 				</div>
 				<div class="ibox-body">
 					<!-- <h4 class="m-t-0 header-title">
@@ -311,38 +310,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 </div>
 
 <!-- Modal  Start-->
-<logic:notEmpty name="SHOWMESG">
-	<div id="panel-modal" class="modal fade" role="dialog"
-		style="padding-top:200px;">
-		<div class="modal-dialog modal-md modal-primary">
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header"
-					style="background-color: #374f65;color: #fff;">
-					<h4 class="modal-title">Important Notes</h4>
-				</div>
-				<div class="modal-body">
-					<ul>
-						<li>Cases filed in the year 2021 & 2022 are listed below.</li>
-						<li>To view and process remaining year's cases please use the
-							Year filter or select From and To dates.</li>
-						<!-- <li>To view and process other cases please use the Year
-			filter or select From and To dates and press the 'Get Cases'
-			button for the Cases List.</li> -->
-						<li>To View the full Case Details click on CINo.</li>
-						<li>To Assign a Case/Cases please check the checkbox and
-							assign to either HOD/Section Officer (provided at the bottom).</li>
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<button type="button"
-						class="btn btn-sm btn-primary btnClosePopup pull-right"
-						data-dismiss="modal" aria-hidden="true">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</logic:notEmpty>
+
 <div id="MyPopup" class="modal fade" role="dialog"
 	style="padding-top:200px;">
 	<div class="modal-dialog modal-lg">
