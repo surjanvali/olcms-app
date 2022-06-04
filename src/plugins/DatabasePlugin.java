@@ -46,7 +46,7 @@ public class DatabasePlugin implements PlugIn {
 		try {
 			if (con == null) {
 				con = datasource.getConnection();
-				System.out.println("-->: APCOS AFTER CONNECTING : Active : " + ((BasicDataSource)datasource).getNumActive() + " - Idle : " + ((BasicDataSource)datasource).getNumIdle() );
+				System.out.println("-->: APOLCMS AFTER CONNECTING : Active : " + ((BasicDataSource)datasource).getNumActive() + " - Idle : " + ((BasicDataSource)datasource).getNumIdle() );
 			}
 
 		} catch (Exception e) {
@@ -279,7 +279,7 @@ public class DatabasePlugin implements PlugIn {
 			if (con != null) {
 				con.close();
 			}
-			System.out.println("-->: APESR AFTER CLOSING : Active : " + ((BasicDataSource)datasource).getNumActive() + " - Idle : " + ((BasicDataSource)datasource).getNumIdle() );
+			System.out.println("-->: APOLCMS AFTER CLOSING : Active : " + ((BasicDataSource)datasource).getNumActive() + " - Idle : " + ((BasicDataSource)datasource).getNumIdle() );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -295,7 +295,7 @@ public class DatabasePlugin implements PlugIn {
 			if (con != null) {
 				closeConnection(con);
 			}
-			System.out.println("-->: APESR AFTER CLOSING : Active : " + ((BasicDataSource)datasource).getNumActive() + " - Idle : " + ((BasicDataSource)datasource).getNumIdle() );
+			System.out.println("-->: APOLCMS AFTER CLOSING : Active : " + ((BasicDataSource)datasource).getNumActive() + " - Idle : " + ((BasicDataSource)datasource).getNumIdle() );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1370,9 +1370,11 @@ public class DatabasePlugin implements PlugIn {
 		finally
 		{
 			try
-			{
-				st.close();
-				rs.close();
+			{	
+				if(st!=null)
+					st.close();
+				if(rs!=null)
+					rs.close();
 			}catch(Exception e)
 			{
 				e.printStackTrace();

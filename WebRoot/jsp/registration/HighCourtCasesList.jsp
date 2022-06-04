@@ -6,12 +6,12 @@
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 
-<link rel='stylesheet'
-	href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+<!-- <link rel='stylesheet'
+	href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'> -->
 <link rel='stylesheet'
 	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
 <link rel='stylesheet'
-	href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+	href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' />
 
 <link href="./assetsnew/vendors/select2/dist/css/select2.min.css"
 	rel="stylesheet" />
@@ -21,7 +21,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <link href="./assetsnew/vendors/DataTables/datatables.min.css"
 	rel="stylesheet" />
 <!-- THEME STYLES-->
-<link href="assetsnew/css/main.min.css" rel="stylesheet" />
+<!-- <link href="assetsnew/css/main.min.css" rel="stylesheet" /> -->
 
 <!-- START PAGE CONTENT-->
 <div class="page-heading">
@@ -94,7 +94,7 @@ styleId="HighCourtCasesListForm">
 		</div>
 		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 			<div class="form-group">
-				<label class="font-bold">Date of Filing From Date</label>
+				<label class="font-bold">Date of Registration(From Date)</label>
 				<div class="input-group date">
 					<span class="input-group-addon bg-white"><i
 						class="fa fa-calendar"></i></span>
@@ -107,7 +107,7 @@ styleId="HighCourtCasesListForm">
 		</div>
 		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 			<div class="form-group">
-				<label class="font-bold">Date of Filing From Date</label>
+				<label class="font-bold">Date of Registration (To Date)</label>
 				<div class="input-group date">
 					<span class="input-group-addon bg-white"><i
 						class="fa fa-calendar"></i></span>

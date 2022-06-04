@@ -98,13 +98,13 @@ public class HighCourtCasesListAction extends DispatchAction {
 			if(!src.equals("dashBoard")) {
 				if (cform.getDynaForm("dofFromDate") != null
 						&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
-					sqlCondition += " and date_of_filing >= to_date('" + cform.getDynaForm("dofFromDate")
-							+ "','dd-mm-yyyy') ";
+					// sqlCondition += " and dt_regis >= to_date('" + cform.getDynaForm("dofFromDate") + "','dd-mm-yyyy') ";
+					sqlCondition += " and dt_regis >= to_date('" + cform.getDynaForm("dofFromDate") + "','dd-mm-yyyy') ";
 				}
 				if (cform.getDynaForm("dofToDate") != null
 						&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
-					sqlCondition += " and date_of_filing <= to_date('" + cform.getDynaForm("dofToDate")
-							+ "','dd-mm-yyyy') ";
+					//sqlCondition += " and dt_regis <= to_date('" + cform.getDynaForm("dofToDate") + "','dd-mm-yyyy') ";
+					sqlCondition += " and dt_regis <= to_date('" + cform.getDynaForm("dofToDate") + "','dd-mm-yyyy') ";
 				}
 				if (cform.getDynaForm("purpose") != null && !cform.getDynaForm("purpose").toString().contentEquals("")
 						&& !cform.getDynaForm("purpose").toString().contentEquals("0")) {
