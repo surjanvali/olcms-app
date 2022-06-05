@@ -409,5 +409,5 @@
 			value="false" />
 	</plug-in>
 	<plug-in className="plugins.DatabasePlugin"></plug-in>
-	<plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPlugin" />
+	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPlugin" /> -->
 </struts-config>

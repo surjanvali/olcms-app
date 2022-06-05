@@ -665,42 +665,49 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			String count = DatabasePlugin.getSingleValue(con, sql);
 			if (Integer.parseInt(count) > 0) {
 				sql = "delete from ecourts_case_acts  where cino='" + cino + "'";
+				System.out.println("SQL:" + sql);
 				DatabasePlugin.executeUpdate(sql, con);
 			}
 			sql = " select count(*) from ecourts_historyofcasehearing where cino='" + cino + "'";
 			count = DatabasePlugin.getSingleValue(con, sql);
 			if (Integer.parseInt(count) > 0) {
 				sql = "delete from ecourts_historyofcasehearing  where cino='" + cino + "'";
+				System.out.println("SQL:" + sql);
 				DatabasePlugin.executeUpdate(sql, con);
 			}
 			sql = " select count(*) from ecourts_pet_extra_party where cino='" + cino + "'";
 			count = DatabasePlugin.getSingleValue(con, sql);
 			if (Integer.parseInt(count) > 0) {
 				sql = "delete from ecourts_pet_extra_party  where cino='" + cino + "'";
+				System.out.println("SQL:" + sql);
 				DatabasePlugin.executeUpdate(sql, con);
 			}
 			sql = " select count(*) from ecourts_res_extra_party where cino='" + cino + "'";
 			count = DatabasePlugin.getSingleValue(con, sql);
 			if (Integer.parseInt(count) > 0) {
 				sql = "delete from ecourts_res_extra_party  where cino='" + cino + "'";
+				System.out.println("SQL:" + sql);
 				DatabasePlugin.executeUpdate(sql, con);
 			}
 			sql = " select count(*) from ecourts_case_iafiling where cino='" + cino + "'";
 			count = DatabasePlugin.getSingleValue(con, sql);
 			if (Integer.parseInt(count) > 0) {
 				sql = "delete from ecourts_case_iafiling  where cino='" + cino + "'";
+				System.out.println("SQL:" + sql);
 				DatabasePlugin.executeUpdate(sql, con);
 			}
 			sql = " select count(*) from ecourts_case_link_cases where cino='" + cino + "'";
 			count = DatabasePlugin.getSingleValue(con, sql);
 			if (Integer.parseInt(count) > 0) {
 				sql = "delete from ecourts_case_link_cases  where cino='" + cino + "'";
+				System.out.println("SQL:" + sql);
 				DatabasePlugin.executeUpdate(sql, con);
 			}
 			sql = " select count(*) from ecourts_case_objections where cino='" + cino + "'";
 			count = DatabasePlugin.getSingleValue(con, sql);
 			if (Integer.parseInt(count) > 0) {
 				sql = "delete from ecourts_case_objections  where cino='" + cino + "'";
+				System.out.println("SQL:" + sql);
 				DatabasePlugin.executeUpdate(sql, con);
 			}
 
@@ -731,7 +738,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 							+ checkStringJSONObj(jObjCaseData, "cino") + "', " + i + ", '"
 							+ checkStringJSONObj(jObjActsInnerData, "actname") + "', '"
 							+ checkStringJSONObj(jObjActsInnerData, "section") + "')";
-					// System.out.println("ACTS SQL:" + sql);
+					System.out.println("ACTS SQL:" + sql);
 					sqls.add(sql);
 				}
 			}
@@ -760,7 +767,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					}
 					sql = sql + " '" + checkStringJSONObj(jObjHistoryInnerData, "purpose_of_listing") + "', '"
 							+ checkStringJSONObj(jObjHistoryInnerData, "causelist_type") + "')";
-					// System.out.println("historyofcasehearing SQL:" + sql);
+					System.out.println("historyofcasehearing SQL:" + sql);
 					sqls.add(sql);
 				}
 			}
@@ -777,7 +784,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 							+ checkStringJSONObj(jObjCaseData, "cino") + "', " + i + ", '"
 							+ checkStringJSONObj(jObjMainData, new StringBuilder("party_no").append(i).toString())
 							+ "')";
-					// System.out.println("pet_extra_party SQL:" + sql);
+					System.out.println("pet_extra_party SQL:" + sql);
 					sqls.add(sql);
 				}
 			}
@@ -792,7 +799,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 							+ checkStringJSONObj(jObjCaseData, "cino") + "', " + i + ", '"
 							+ checkStringJSONObj(jObjMainData, new StringBuilder("party_no").append(i).toString())
 							+ "')";
-					// System.out.println("res_extra_party SQL:" + sql);
+					System.out.println("res_extra_party SQL:" + sql);
 					sqls.add(sql);
 				}
 			}
@@ -817,7 +824,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					} else {
 						sql = sql + " to_date(null, 'yyyy-mm-dd'))";
 					}
-					// System.out.println("iafiling SQL:" + sql);
+					System.out.println("iafiling SQL:" + sql);
 					sqls.add(sql);
 				}
 			}
@@ -834,7 +841,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 							+ checkStringJSONObj(jObjCaseData, "cino") + "'," + i + " ,'"
 							+ checkStringJSONObj(jObjInnerData, "filing_number") + "','"
 							+ checkStringJSONObj(jObjInnerData, "case_number") + "')";
-					// System.out.println("link_cases SQL:" + sql);
+					System.out.println("link_cases SQL:" + sql);
 					sqls.add(sql);
 				}
 			}
@@ -845,7 +852,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					&& (!checkStringJSONObj(jObjCaseData, "objections").equals("[]"))) {
 
 				jObjMainData = new JSONObject(checkStringJSONObj(jObjCaseData, "objections"));
-				System.out.println("-" + jObjMainData.length());
+				//System.out.println("-" + jObjMainData.length());
 
 				sql = "INSERT INTO apolcms.ecourts_case_objections(cino, objection_no, objection_desc, scrutiny_date, objections_compliance_by_date, obj_reciept_date) VALUES('"
 						+ checkStringJSONObj(jObjCaseData, "cino") + "',1 ,'"
@@ -869,7 +876,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 				} else {
 					sql = sql + " to_date(null, 'yyyy-mm-dd'))";
 				}
-				// System.out.println("objections SQL:" + sql);
+				System.out.println("objections SQL:" + sql);
 				sqls.add(sql);
 			}
 
@@ -898,7 +905,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 						}
 						sql = sql + " '" + checkStringJSONObj(jObjInnerData, "order_details") + "')";
 
-						// System.out.println("interimorder SQL:" + sql);
+						System.out.println("interimorder SQL:" + sql);
 						sqls.add(sql);
 					}
 				}
@@ -926,7 +933,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 							sql = sql + " to_date(null, 'yyyy-mm-dd')";
 						}
 						sql = sql + ", '" + checkStringJSONObj(jObjInnerData, "order_details") + "')";
-						// System.out.println("finalorder SQL:" + sql);
+						System.out.println("finalorder SQL:" + sql);
 						sqls.add(sql);
 					}
 				}
