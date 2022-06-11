@@ -110,12 +110,12 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 				condition=" and a.case_status=6";
 			}
 			
-			sql = "select a.*, b.orderpaths , od.pwr_uploaded,od.counter_filed, od.pwr_approved_gp, coalesce(od.counter_approved_gp,'-') as counter_approved_gp "
-					+ ",case when pwr_uploaded='Yes' then 'Parawise Remarks Uploaded' else 'Parawise Remarks not Submitted' end as casestatus1,"
-					+ "case when pwr_approved_gp='Yes' then 'Parawise Remarks Approved by GP' else 'Parawise Remarks Not Approved by GP' end as casestatus2,"
-					+ "case when counter_filed='Yes' then 'Counter Filed' else 'Counter Not Filed' end as casestatus3,"
-					+ "case when counter_approved_gp='T' then 'Counter Approved by GP' else 'Counter Not Approved by GP' end as casestatus4 "
-					+ ""
+			sql = "select a.*, b.orderpaths , od.pwr_uploaded, od.counter_filed, od.pwr_approved_gp, coalesce(od.counter_approved_gp,'-') as counter_approved_gp "
+					+ " ,case when pwr_uploaded='Yes' then 'Parawise Remarks Uploaded' else 'Parawise Remarks not Submitted' end as casestatus1,"
+					+ " case when pwr_approved_gp='Yes' then 'Parawise Remarks Approved by GP' else 'Parawise Remarks Not Approved by GP' end as casestatus2,"
+					+ " case when counter_filed='Yes' then 'Counter Filed' else 'Counter Not Filed' end as casestatus3,"
+					+ " case when counter_approved_gp='T' then 'Counter Approved by GP' else 'Counter Not Approved by GP' end as casestatus4 "
+					+ " "
 					+ " from ecourts_case_data a left join" + " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from "
@@ -128,20 +128,19 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					+ " on (a.cino=b.cino) "
 					+ " "
 					+ " left join ecourts_olcms_case_details od on (a.cino=od.cino)"
-					+ ""
-					+ ""
-					+ "where assigned=true "+condition
+					+ " "
+					+ " where assigned=true "+condition
 					+ " and coalesce(a.ecourts_case_status,'')!='Closed' "
 					+ " order by a.cino";
 			
-			System.out.println("ecourts SQL:" + sql);
+			System.out.println("AssignedCasesToSectionAction unspecified SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			// System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
 				request.setAttribute("CASESLIST", data);
 				request.setAttribute("HEADING", "Assigned Cases List");
 			} else {
-				request.setAttribute("errorMsg", "No Records Found to display.");
+				request.setAttribute("errorMsg", "You have Zero cases to Process.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -252,15 +251,20 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 				request.setAttribute("OLCMSCASEDATALOG", data);
 			*/
 				
-				sql="select cino,action_type,inserted_by,inserted_on,assigned_to,remarks as remarks, uploaded_doc_path from ecourts_case_activities where cino = '"+cIno+"' order by inserted_on";
+				sql="select cino,action_type,inserted_by,inserted_on,assigned_to,remarks as remarks, coalesce(uploaded_doc_path,'-') as uploaded_doc_path from ecourts_case_activities where cino = '"+cIno+"' order by inserted_on";
 				System.out.println("ecourts activities SQL:" + sql);
 				data = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("ACTIVITIESDATA", data);
 			
 			
-			sql = "SELECT cino, petition_document, counter_filed_document, judgement_order, action_taken_order, last_updated_by, last_updated_on, counter_filed, remarks, ecourts_case_status, corresponding_gp, "
-					+ " pwr_uploaded, to_char(pwr_submitted_date,'dd/mm/yyyy') as pwr_submitted_date, to_char(pwr_received_date,'dd/mm/yyyy') as pwr_received_date, pwr_approved_gp, to_char(pwr_gp_approved_date,'dd/mm/yyyy') as pwr_gp_approved_date, appeal_filed, "
-					+ "appeal_filed_copy, to_char(appeal_filed_date,'dd/mm/yyyy') as appeal_filed_date, pwr_uploaded_copy "
+			sql = "SELECT cino, case when length(petition_document) > 0 then petition_document else null end as petition_document, "
+					+ " case when length(counter_filed_document) > 0 then counter_filed_document else null end as counter_filed_document,"
+					+ " case when length(judgement_order) > 0 then judgement_order else null end as judgement_order,"
+					+ " case when length(action_taken_order) > 0 then action_taken_order else null end as action_taken_order,"
+					+ " last_updated_by, last_updated_on, counter_filed, remarks, ecourts_case_status, corresponding_gp, "
+					+ " pwr_uploaded, to_char(pwr_submitted_date,'dd/mm/yyyy') as pwr_submitted_date, to_char(pwr_received_date,'dd/mm/yyyy') as pwr_received_date, "
+					+ " pwr_approved_gp, to_char(pwr_gp_approved_date,'dd/mm/yyyy') as pwr_gp_approved_date, appeal_filed, "
+					+ " appeal_filed_copy, to_char(appeal_filed_date,'dd/mm/yyyy') as appeal_filed_date, pwr_uploaded_copy "
 					+ " FROM apolcms.ecourts_olcms_case_details where cino='" + cIno + "'";
 			
 			data = DatabasePlugin.executeQuery(sql, con);
@@ -306,6 +310,9 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 			cIno = CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
 
 			if (cIno != null && !cIno.equals("")) {
+				
+				System.out.println("IN CASE STATUS UPDATE METHOD :"+cIno);
+				
 				con = DatabasePlugin.connect();
 				
 				sql = "select * from ecourts_case_data where cino='" + cIno + "'";
@@ -342,7 +349,8 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					}
 					else if((roleId.equals("3") || roleId.equals("9")) && CommonModels.checkStringObject(caseData1.get("mlo_no_updated")).equals("T")) {
 	
-						sql="select emailid, first_name||' '||last_name||' - '||designation from ecourts_mst_gps order by emailid";
+						sql="select emailid, first_name||' '||last_name||' - '||designation from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b using (gp_id) where b.dept_code='"+deptCode+"' order by emailid";
+						sql="select emailid, first_name||' '||last_name||' - '||designation from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b on (a.emailid=b.gp_id) where b.dept_code='"+deptCode+"' order by emailid";
 						cform.setDynaForm("GPSLIST", DatabasePlugin.getSelectBox(sql, con));
 						request.setAttribute("SHOWGPBTN", "SHOWGPBTN");
 					}
@@ -428,6 +436,16 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 				sql = "SELECT cino, petition_document, counter_filed_document, judgement_order, action_taken_order, last_updated_by, last_updated_on, counter_filed, remarks, ecourts_case_status, corresponding_gp, "
 						+ " pwr_uploaded, to_char(pwr_submitted_date,'dd/mm/yyyy') as pwr_submitted_date, to_char(pwr_received_date,'dd/mm/yyyy') as pwr_received_date, pwr_approved_gp, to_char(pwr_gp_approved_date,'dd/mm/yyyy') as pwr_gp_approved_date, appeal_filed, "
 						+ " appeal_filed_copy, to_char(appeal_filed_date,'dd/mm/yyyy') as appeal_filed_date, pwr_uploaded_copy, action_to_perfom  "
+						+ " FROM apolcms.ecourts_olcms_case_details where cino='" + cIno + "'";
+				
+				sql = "SELECT cino, case when length(petition_document) > 0 then petition_document else null end as petition_document, "
+						+ " case when length(counter_filed_document) > 0 then counter_filed_document else null end as counter_filed_document,"
+						+ " case when length(judgement_order) > 0 then judgement_order else null end as judgement_order,"
+						+ " case when length(action_taken_order) > 0 then action_taken_order else null end as action_taken_order,"
+						+ " last_updated_by, last_updated_on, counter_filed, remarks, ecourts_case_status, corresponding_gp, "
+						+ " pwr_uploaded, to_char(pwr_submitted_date,'dd/mm/yyyy') as pwr_submitted_date, to_char(pwr_received_date,'dd/mm/yyyy') as pwr_received_date, "
+						+ " pwr_approved_gp, to_char(pwr_gp_approved_date,'dd/mm/yyyy') as pwr_gp_approved_date, appeal_filed, "
+						+ " appeal_filed_copy, to_char(appeal_filed_date,'dd/mm/yyyy') as appeal_filed_date, pwr_uploaded_copy "
 						+ " FROM apolcms.ecourts_olcms_case_details where cino='" + cIno + "'";
 				
 				data = DatabasePlugin.executeQuery(sql, con);

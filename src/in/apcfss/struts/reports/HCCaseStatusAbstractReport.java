@@ -50,12 +50,12 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 				if (cform.getDynaForm("dofFromDate") != null
 						&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
 					sqlCondition += " and a.dt_regis >= to_date('" + cform.getDynaForm("dofFromDate")
-							+ "','dd-mm-yyyy') ";
+					+ "','dd-mm-yyyy') ";
 				}
 				if (cform.getDynaForm("dofToDate") != null
 						&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
 					sqlCondition += " and a.dt_regis <= to_date('" + cform.getDynaForm("dofToDate")
-							+ "','dd-mm-yyyy') ";
+					+ "','dd-mm-yyyy') ";
 				}
 				if (cform.getDynaForm("caseTypeId") != null
 						&& !cform.getDynaForm("caseTypeId").toString().contentEquals("")
@@ -71,7 +71,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 				if (!CommonModels.checkStringObject(cform.getDynaForm("regYear")).equals("ALL")
 						&& CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
 					sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear"))
-							+ "' ";
+					+ "' ";
 				}
 				if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
 						&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
@@ -127,7 +127,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 								DatabasePlugin.getSelectBox(
 										"select district_id,upper(district_name) from district_mst where district_id='"
 												+ session.getAttribute("dist_id") + "' order by district_name",
-										con));
+												con));
 					}
 					else {
 						sql="select district_id,upper(district_name) from district_mst order by 1";
@@ -135,7 +135,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 						System.out.println("DIST SQL CON:"+con);
 						cform.setDynaForm("distList", DatabasePlugin.getSelectBox(sql, con));
 					}
-		
+
 					cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 							"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 							con));
@@ -146,7 +146,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 						selectData.add(new LabelValueBean(i + "", i + ""));
 					}
 					cform.setDynaForm("yearsList", selectData);
-		
+
 					cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate"));
 					cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate"));
 					cform.setDynaForm("caseTypeId", cform.getDynaForm("caseTypeId"));
@@ -155,7 +155,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
 					cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 					cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
-		
+
 					request.setAttribute("SHOWFILTERS", "SHOWFILTERS");
 					DatabasePlugin.closeConnection(con);
 				}
@@ -163,7 +163,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 		}
 		return mapping.findForward("success");
 	}
@@ -195,12 +195,12 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			if (cform.getDynaForm("dofFromDate") != null
 					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
 				sqlCondition += " and a.dt_regis >= to_date('" + cform.getDynaForm("dofFromDate")
-						+ "','dd-mm-yyyy') ";
+				+ "','dd-mm-yyyy') ";
 			}
 			if (cform.getDynaForm("dofToDate") != null
 					&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
 				sqlCondition += " and a.dt_regis <= to_date('" + cform.getDynaForm("dofToDate")
-						+ "','dd-mm-yyyy') ";
+				+ "','dd-mm-yyyy') ";
 			}
 			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
 					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
@@ -262,11 +262,11 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 							DatabasePlugin.getSelectBox(
 									"select district_id,upper(district_name) from district_mst where district_id='"
 											+ session.getAttribute("dist_id") + "' order by district_name",
-									con));
+											con));
 				else
 					cform.setDynaForm("distList", DatabasePlugin
 							.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
-	
+
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
@@ -277,7 +277,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					selectData.add(new LabelValueBean(i + "", i + ""));
 				}
 				cform.setDynaForm("yearsList", selectData);
-	
+
 				cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate"));
 				cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate"));
 				cform.setDynaForm("caseTypeId", cform.getDynaForm("caseTypeId"));
@@ -371,12 +371,12 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			if (cform.getDynaForm("dofFromDate") != null
 					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
 				sqlCondition += " and a.dt_regis >= to_date('" + cform.getDynaForm("dofFromDate")
-						+ "','dd-mm-yyyy') ";
+				+ "','dd-mm-yyyy') ";
 			}
 			if (cform.getDynaForm("dofToDate") != null
 					&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
 				sqlCondition += " and a.dt_regis <= to_date('" + cform.getDynaForm("dofToDate")
-						+ "','dd-mm-yyyy') ";
+				+ "','dd-mm-yyyy') ";
 			}
 			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
 					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
@@ -391,10 +391,10 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					&& CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
 				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
 			}
-			
-			
-			
-			
+
+
+
+
 			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
 					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
 				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
@@ -408,8 +408,16 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			if (actionType.equals("SDWISE")) {
 			} else if (actionType.equals("HODWISE")) {
 			}
+			
+			System.out.println("roleId--"+roleId);
+			
+			String condition="";
+			if (roleId.equals("6") )
+				condition= " inner join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) ";
 
 			String caseCategory = CommonModels.checkStringObject(request.getParameter("caseCategory"));
+			String deptType = CommonModels.checkStringObject(request.getParameter("deptType"));
+
 			if (caseCategory != null && !caseCategory.equals("")) {
 				/*
 				 * if(caseCategory.equals("DISPOSED")) { sqlCondition
@@ -426,9 +434,12 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 				 * +=" and (disposal_type='REJECTED' or disposal_type='ORDERED' or disposal_type='RETURN TO COUNSEL' or disposal_type='TRANSFERRED')"
 				 * ; }
 				 */
-				sqlCondition += " and trim(disposal_type)='" + caseCategory.trim() + "'";
-				heading += caseCategory.trim();
+				sqlCondition += " and trim(disposal_type)='" + caseCategory.trim() + "'  and trim(d.description)='"+deptType.trim()+"'  ";
+				heading += caseCategory.trim()+", Department : "+deptType.trim();
 			}
+			
+			
+			
 
 			sql = "select a.*,coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths from ecourts_case_data a left join"
 					+ " ("
@@ -439,7 +450,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
 					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
 					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
-					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) where d.display = true ";
+					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) "+condition+" where d.display = true ";
 
 			if (deptCode != null && !deptCode.equals(""))
 				sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
@@ -467,7 +478,237 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 						DatabasePlugin.getSelectBox(
 								"select district_id,upper(district_name) from district_mst where district_id='"
 										+ session.getAttribute("dist_id") + "' order by district_name",
-								con));
+										con));
+			else
+				cform.setDynaForm("distList", DatabasePlugin
+						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+
+			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+					con));
+			cform.setDynaForm("caseTypesList", DatabasePlugin
+					.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
+			ArrayList selectData = new ArrayList();
+			for (int i = 2022; i > 1980; i--) {
+				selectData.add(new LabelValueBean(i + "", i + ""));
+			}
+			cform.setDynaForm("yearsList", selectData);
+
+			cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate"));
+			cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate"));
+			cform.setDynaForm("caseTypeId", cform.getDynaForm("caseTypeId"));
+			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
+			cform.setDynaForm("regYear", cform.getDynaForm("regYear"));
+			cform.setDynaForm("deptId", cform.getDynaForm("deptId"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
+			cform.setDynaForm("respodentName", cform.getDynaForm("respodentName"));
+			request.setAttribute("SHOWFILTERS", "SHOWFILTERS");
+			DatabasePlugin.closeConnection(con);
+		}
+
+		return mapping.findForward("success");
+	}
+	public ActionForward getCasesDeptWiseList(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		System.out.println(
+				"HCCaseStatusAbstractReport..............................................................................getCasesList()");
+		Connection con = null;
+		PreparedStatement ps = null;
+		CommonForm cform = (CommonForm) form;
+		HttpSession session = request.getSession();
+		if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
+			return mapping.findForward("Logout");
+		}
+		String sql = null, sqlCondition = "", actionType = "", deptId = "", deptName = "", heading = "", roleId = null,
+				deptCode = null, caseStatus = null,dispType=null;
+		try {
+
+			con = DatabasePlugin.connect();
+
+			session = request.getSession();
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			deptCode = CommonModels.checkStringObject(cform.getDynaForm("deptId"));
+			caseStatus = CommonModels.checkStringObject(cform.getDynaForm("caseStatus"));
+			actionType = CommonModels.checkStringObject(cform.getDynaForm("actionType"));
+			deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
+			dispType = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
+
+			if (!caseStatus.equals("")) {
+				if (caseStatus.equals("withSD")) {
+					sqlCondition = " and case_status=1 and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading += " Pending at Sect Dept. Login";
+				}
+				if (caseStatus.equals("withMLO")) {
+					sqlCondition = " and (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading += " Pending at MLO Login";
+				}
+				if (caseStatus.equals("withHOD")) {
+					sqlCondition = " and case_status=3  and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading += " Pending at HOD Login";
+				}
+				if (caseStatus.equals("withNO")) {
+					sqlCondition = " and case_status=4  and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading += " Pending at Nodal Officer(HOD) Login";
+				}
+				if (caseStatus.equals("withSDSec")) {
+					sqlCondition = " and case_status=5 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading += " Pending at Section Officers Login (Sect Dept.)";
+				}
+				if (caseStatus.equals("withDC")) {
+					sqlCondition = " and case_status=7  and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading += " Pending at District Collector Login";
+				}
+				if (caseStatus.equals("withDistNO")) {
+					sqlCondition = " and case_status=8  and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading += " Pending at Nodal Officer(District) Login";
+				}
+				if (caseStatus.equals("withHODSec")) {
+					sqlCondition = " and case_status=9 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading += " Pending at Section Officer(HOD) Login";
+				}
+				if (caseStatus.equals("withDistSec")) {
+					sqlCondition = " and case_status=10 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading += " Pending at Sction Officer(District) Login";
+				}
+				if (caseStatus.equals("withGP")) {
+					sqlCondition = " and case_status=6 and coalesce(ecourts_case_status,'')!='Closed' ";
+					heading += " Pending at GP Login";
+				}
+				if (caseStatus.equals("closed")) {
+					sqlCondition = " and case_status=99 or coalesce(ecourts_case_status,'')='Closed' ";
+					heading += " All Closed Cases ";
+				}
+			}
+
+			if (cform.getDynaForm("dofFromDate") != null
+					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
+				sqlCondition += " and a.dt_regis >= to_date('" + cform.getDynaForm("dofFromDate")
+				+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("dofToDate") != null
+					&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
+				sqlCondition += " and a.dt_regis <= to_date('" + cform.getDynaForm("dofToDate")
+				+ "','dd-mm-yyyy') ";
+			}
+			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
+					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
+				sqlCondition += " and trim(a.type_name_reg)='" + cform.getDynaForm("caseTypeId").toString().trim()
+						+ "' ";
+			}
+			if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
+					&& !cform.getDynaForm("districtId").toString().contentEquals("0")) {
+				sqlCondition += " and a.dist_id='" + cform.getDynaForm("districtId").toString().trim() + "' ";
+			}
+			if (!CommonModels.checkStringObject(cform.getDynaForm("regYear")).equals("ALL")
+					&& CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
+				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
+			}
+			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
+					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
+				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+			}
+
+			if (roleId.equals("2") || roleId.equals("10")) {
+				sqlCondition += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
+				cform.setDynaForm("districtId", session.getAttribute("dist_id"));
+			}
+
+			String caseCategory = CommonModels.checkStringObject(request.getParameter("caseCategory"));
+
+			if (caseCategory != null && !caseCategory.equals("")) {
+
+				if (caseCategory.equals("DISPOSED OF NO COSTS")) {
+					sqlCondition += " and (disposal_type='DISPOSED OF NO COSTS')";
+				} else if (caseCategory.equals("DISPOSED OF AS INFRUCTUOUS")) {
+					sqlCondition += " and (disposal_type='DISPOSED OF AS INFRUCTUOUS')";
+				} 
+				else if (caseCategory.equals("ALLOWED NO COSTS")) {
+					sqlCondition += " and (disposal_type='ALLOWED NO COSTS')";
+				} 
+				else if (caseCategory.equals("PARTLY ALLOWED NO COSTS")) {
+					sqlCondition += " and (disposal_type='PARTLY ALLOWED NO COSTS')";
+				} 
+				else if (caseCategory.equals("DISMISSED")) {
+					sqlCondition += " and (disposal_type='DISMISSED')";
+				} 
+				else if (caseCategory.equals("DISMISSED AS INFRUCTUOUS")) {
+					sqlCondition += " and (disposal_type='DISMISSED AS INFRUCTUOUS')";
+				} 
+				else if (caseCategory.equals("DISMISSED NO COSTS")) {
+					sqlCondition += " and (disposal_type='DISMISSED NO COSTS')";
+				} 
+				else if (caseCategory.equals("DISMISSED FOR DEFAULT")) {
+					sqlCondition += " and (disposal_type='DISMISSED FOR DEFAULT')";
+				} 
+				else if (caseCategory.equals("DISMISSED AS NON PROSECUTION")) {
+					sqlCondition += " and (disposal_type='DISMISSED AS NON PROSECUTION')";
+				} 
+				else if (caseCategory.equals("DISMISSED AS ABATED")) {
+					sqlCondition += " and (disposal_type='DISMISSED AS ABATED')";
+				} 
+				else if (caseCategory.equals("DISMISSED AS NOT PRESSED")) {
+					sqlCondition += " and (disposal_type='DISMISSED AS NOT PRESSED')";
+				} 
+				else if (caseCategory.equals("WITHDRAWN")) {
+					sqlCondition += " and (disposal_type='WITHDRAWN')";
+				} 
+				else if (caseCategory.equals("CLOSED NO COSTS")) {
+					sqlCondition += " and (disposal_type='CLOSED NO COSTS')";
+				}
+				else if (caseCategory.equals("CLOSED AS NOT PRESSED")) {
+					sqlCondition += " and (disposal_type='CLOSED AS NOT PRESSED')";
+				}
+
+				else if (caseCategory.equals("REJECTED")) {
+					sqlCondition += " and (disposal_type='REJECTED' )";
+				}
+
+				else if (caseCategory.equals("ORDERED")) {
+					sqlCondition += " and ( disposal_type='ORDERED' )";
+				}
+				else if (caseCategory.equals("RETURN TO COUNSEL")) {
+					sqlCondition += " and (disposal_type='RETURN TO COUNSEL')";
+				}
+
+				else if (caseCategory.equals("TRANSFERRED")) {
+					sqlCondition += " and (disposal_type='TRANSFERRED')";
+				}
+			}
+			
+			String condition="";
+			if (roleId.equals("6") )
+				condition= " inner join ecourts_mst_gp_dept_map c on a.dept_code=c.dept_code ";
+
+			//sql = "select disposal_type, count(*) as casescount from ecourts_case_data a where 1=1 " + sqlCondition;
+			sql="select disposal_type,b.dept_code,b.description,count(*) as casescount from ecourts_case_data a "+condition+" inner join dept_new b on a.dept_code=b.dept_code   where 1=1 " + sqlCondition;
+
+
+			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
+				sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
+
+			sql += " group by disposal_type,b.description,b.dept_code";
+
+			heading = "Cases List for Category " + request.getParameter("caseCategory").toString();
+
+			System.out.println("DISPWISE SQL:" + sql);
+			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+			// System.out.println("data=" + data);
+			request.setAttribute("HEADING", heading);
+			if (data != null && !data.isEmpty() && data.size() > 0) {
+				request.setAttribute("DIPTWISECASES", data);
+			} else {
+				request.setAttribute("errorMsg", "No Records Found");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (roleId.equals("2"))
+				cform.setDynaForm("distList",
+						DatabasePlugin.getSelectBox(
+								"select district_id,upper(district_name) from district_mst where district_id='"
+										+ session.getAttribute("dist_id") + "' order by district_name",
+										con));
 			else
 				cform.setDynaForm("distList", DatabasePlugin
 						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
@@ -573,12 +814,12 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			if (cform.getDynaForm("dofFromDate") != null
 					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
 				sqlCondition += " and a.dt_regis >= to_date('" + cform.getDynaForm("dofFromDate")
-						+ "','dd-mm-yyyy') ";
+				+ "','dd-mm-yyyy') ";
 			}
 			if (cform.getDynaForm("dofToDate") != null
 					&& !cform.getDynaForm("dofToDate").toString().contentEquals("")) {
 				sqlCondition += " and a.dt_regis <= to_date('" + cform.getDynaForm("dofToDate")
-						+ "','dd-mm-yyyy') ";
+				+ "','dd-mm-yyyy') ";
 			}
 			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
 					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
@@ -621,13 +862,21 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 				}
 
 			}
+			
+			String condition="";
+			if (roleId.equals("6") )
+				condition= " inner join ecourts_mst_gp_dept_map b on a.dept_code=b.dept_code ";
 
-			sql = "select disposal_type, count(*) as casescount from ecourts_case_data a where 1=1 " + sqlCondition;
+			sql = "select disposal_type, count(*) as casescount from ecourts_case_data a "+condition+" where 1=1 " + sqlCondition;
 
 			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
 				sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
+			
+			
 
 			sql += " group by disposal_type";
+			
+			System.out.println("roleId--"+roleId);
 
 			heading = "Cases List for Category " + request.getParameter("caseCategory").toString();
 
@@ -649,7 +898,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 						DatabasePlugin.getSelectBox(
 								"select district_id,upper(district_name) from district_mst where district_id='"
 										+ session.getAttribute("dist_id") + "' order by district_name",
-								con));
+										con));
 			else
 				cform.setDynaForm("distList", DatabasePlugin
 						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));

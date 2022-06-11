@@ -53,6 +53,7 @@ public class WelcomePageAction extends DispatchAction{
 
 			System.out.println("in WelcomePageAction sql ............ " + sql);
 			System.out.println("roleId:"+roleId);
+			System.out.println("deptCode:"+deptCode);
 			ps = con.prepareStatement(sql);
 			DatabasePlugin.setDefaultParameters(ps, 1, roleId, "Int");
 			DatabasePlugin.setDefaultParameters(ps, 2, userid, "String");
@@ -344,6 +345,97 @@ public class WelcomePageAction extends DispatchAction{
 				}
 				
 				else if(roleId.equals("6")) { // GPO
+					
+					// LEGACY CASES DATA
+					sql="select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases  from ("
+							+ "select a.dept_code , case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,count(*) as total_cases, "
+							+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
+							+ "sum(case when (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withmlo, "
+							+ "sum(case when case_status=3  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withhod, "
+							+ "sum(case when case_status=4  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withnodal, "
+							+ "sum(case when case_status=5 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsection, "
+							+ "sum(case when case_status=7  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdc, "
+							+ "sum(case when case_status=8  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdistno, "
+							+ "sum(case when case_status=9 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectionhod, "
+							+ "sum(case when case_status=10 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectiondist, "
+							+ "sum(case when case_status=6 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withgpo, "
+							+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases "
+							+ "from ecourts_case_data a "
+							+ "inner join dept_new d on (a.dept_code=d.dept_code) "
+							+ " inner join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) "
+							+ "where d.display = true  and e.gp_id='"+userid+"' ";
+					
+						sql+= "group by a.dept_code,d.dept_code ,reporting_dept_code ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code)"
+							+ "group by x.reporting_dept_code, d1.description order by 1";
+					
+					request.setAttribute("HEADING", "High Court Cases Abstract Report");
+
+					System.out.println("SQL:" + sql);
+					List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+					// System.out.println("data=" + data);
+					if (data != null && !data.isEmpty() && data.size() > 0)
+						request.setAttribute("secdeptwise", data);
+					request.setAttribute("showReport1", "showReport1");
+					
+					sql="select count(*) as total, "
+							+ " sum(case when (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as assignment_pending,"
+							+ " sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases"
+							+ "  from ecourts_case_data a inner join ecourts_mst_gp_dept_map b on (a.dept_code=b.dept_code) where b.gp_id='"+userid+"'";
+					
+					System.out.println("total--"+sql);
+					
+					List<Map<Object, String>> dashboardCounts = DatabasePlugin.executeQuery(con, sql);
+					request.setAttribute("dashboardCounts", dashboardCounts);
+					
+					//sql="select count(*)  from ecourts_gpo_ack_dtls a inner join ecourts_mst_gp_dept_map b on (a.gp_id=b.gp_id) where ack_type='NEW' ";
+					sql="select count(*) from ecourts_gpo_ack_dtls ad inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) inner join dept_new dm on (d.dept_code=dm.dept_code) "
+							+ " inner join ecourts_mst_gp_dept_map egm on (egm.dept_code=d.dept_code)  where ack_type='NEW' and respondent_slno=1 and egm.gp_id='"+userid+"'";
+					//System.out.println("NEW--"+sql);
+					request.setAttribute("NEWCASES", DatabasePlugin.getStringfromQuery(sql, con));
+					
+					
+					// OLD CASES
+					sql="select count(*) From ecourts_olcms_case_details a "
+							+ "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  "
+							+ "inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code) "
+							+ "inner join ecourts_mst_gp_dept_map ad on (ad.dept_code =ecd.dept_code ) where counter_filed='Yes' and coalesce(counter_approved_gp,'NO')='NO' and ecd.case_status='6' "
+							+ "and emgd.gp_id='"+userid+"'";
+					System.out.println("COUNTERS SQL:"+sql);
+					request.setAttribute("counterFileCount", DatabasePlugin.getStringfromQuery(sql, con));
+					//System.out.println("counterFile--"+sql);
+					sql="select count(*) From ecourts_olcms_case_details a "
+							+ "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  "
+							+ "inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code) "
+							+ "inner join ecourts_mst_gp_dept_map ad on (ad.dept_code =ecd.dept_code ) where pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'NO')='NO' and ecd.case_status='6' "
+							+ "and emgd.gp_id='"+userid+"'  ";
+					System.out.println("PARAWISE COUNT SQL:"+sql);
+					request.setAttribute("parawiseCount", DatabasePlugin.getStringfromQuery(sql, con));
+					//System.out.println("parawise--"+sql);
+					
+					sql="select sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_finalorder a "
+							+ "inner join ecourts_case_data b  on (a.cino=b.cino) inner join ecourts_mst_gp_dept_map c on (b.dept_code=c.dept_code) where c.gp_id='"+userid+"'";
+					
+					request.setAttribute("FINALORDERS", DatabasePlugin.getStringfromQuery(sql, con));
+					//System.out.println("FINALORDERS--"+sql);
+					
+					  sql="select count(distinct a.cino) ||','||sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder a "
+					  		+ "inner join ecourts_case_data b  on (a.cino=b.cino) inner join ecourts_mst_gp_dept_map c on (b.dept_code=c.dept_code) where c.gp_id='"+userid+"'"; 
+					  String interimData[]=DatabasePlugin.getStringfromQuery(sql,con).split(",");
+					  //System.out.println("INTERIM--"+sql);
+					  request.setAttribute("INTERIMCASES", interimData[0]);
+					  request.setAttribute("INTERIMORDERS", interimData[1]);
+					
+					sql="select "
+							+ " sum(case when disposal_type='DISPOSED OF NO COSTS' or disposal_type='DISPOSED OF AS INFRUCTUOUS' then 1 else 0 end) as disposed,"
+							+ " sum(case when disposal_type='ALLOWED NO COSTS' or disposal_type='PARTLY ALLOWED NO COSTS' then 1 else 0 end) as allowed,"
+							+ " sum(case when disposal_type='DISMISSED' or disposal_type='DISMISSED AS INFRUCTUOUS' or disposal_type='DISMISSED NO COSTS' or disposal_type='DISMISSED FOR DEFAULT' or disposal_type='DISMISSED AS NON PROSECUTION' or disposal_type='DISMISSED AS ABATED' or disposal_type='DISMISSED AS NOT PRESSED'  then 1 else 0 end) as dismissed ,"
+							+ " sum(case when disposal_type='WITHDRAWN' then 1 else 0 end) as withdrawn,"
+							+ " sum(case when disposal_type='CLOSED NO COSTS' or disposal_type='CLOSED AS NOT PRESSED' then 1 else 0 end) as closed,"
+							+ " sum(case when disposal_type='REJECTED' or disposal_type='ORDERED' or disposal_type='RETURN TO COUNSEL' or disposal_type='TRANSFERRED' then 1 else 0 end) as returned"
+							+ " from ecourts_case_data a inner join ecourts_mst_gp_dept_map b on (a.dept_code=b.dept_code) where b.gp_id='"+userid+"'";
+					List<Map<Object, String>> disposedCasesStatus = DatabasePlugin.executeQuery(con, sql);
+					request.setAttribute("disposedCasesStatus", disposedCasesStatus);
+					
 					
 				}
 				else if(roleId.equals("13") || roleId.equals("14")) { // HC-DEOs

@@ -36,6 +36,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			String userid = CommonModels.checkStringObject(session.getAttribute("userid"));
 			
 			con = DatabasePlugin.connect();
 
@@ -49,6 +50,13 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2") || roleId.equals("14"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+						con));
+			else if (roleId.equals("6")) // GPO
+				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+						" select dept_code,dept_code||'-'||upper(description) from dept_new where "
+						+ " dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"') or "
+						+ " reporting_dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"')"
+						+ " order by dept_code",
 						con));
 			else
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
@@ -87,6 +95,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			String userid = CommonModels.checkStringObject(session.getAttribute("userid"));
 			
 			String sqlCondition = "";
 			con = DatabasePlugin.connect();
@@ -157,6 +166,13 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
+			else if (roleId.equals("6")) // GPO
+				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+						" select dept_code,dept_code||'-'||upper(description) from dept_new where "
+						+ " dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"') or "
+						+ " reporting_dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"')"
+						+ " order by dept_code",
+						con));
 			else
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true and reporting_dept_code='"
@@ -194,6 +210,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			String userid = CommonModels.checkStringObject(session.getAttribute("userid"));
 			
 			String sqlCondition = "";
 			con = DatabasePlugin.connect();
@@ -217,8 +234,15 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 						+ "','dd-mm-yyyy') ";
 			}
 			
-			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))) {
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14") || roleId.equals("6"))) {
 					sqlCondition += " and (dm.dept_code='" + deptCode + "' or dm.reporting_dept_code='"+deptCode+"') ";
+			}
+			System.out.println("roleId---"+roleId);
+			
+			String condition="";
+			if ((roleId.equals("6") )) {
+				condition = " left join ecourts_mst_gp_dept_map egm on (egm.dept_code=d.dept_code) ";
+				sqlCondition += " and egm.gp_id='"+userid+"'"; 
 			}
 			
 			if (roleId.equals("2")) {
@@ -232,7 +256,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			}
 			
 			sql = "select d.dept_code,upper(description) as description,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad  inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) "
-					+ "inner join dept_new dm on (d.dept_code=dm.dept_code)"
+					+ "inner join dept_new dm on (d.dept_code=dm.dept_code) "+condition+" "
 					+ " where ack_type='NEW' and respondent_slno=1 " + sqlCondition
 					+ " group by d.dept_code,description " + " order by d.dept_code,description";
 
@@ -256,6 +280,13 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2") || roleId.equals("14"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+						con));
+			else if (roleId.equals("6")) // GPO
+				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+						" select dept_code,dept_code||'-'||upper(description) from dept_new where "
+						+ " dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"') or "
+						+ " reporting_dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"')"
+						+ " order by dept_code",
 						con));
 			else
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
@@ -296,6 +327,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			String userid = CommonModels.checkStringObject(session.getAttribute("userid"));
 			
 			String sqlCondition = "";
 			con = DatabasePlugin.connect();
@@ -361,6 +393,13 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
+			else if (roleId.equals("6")) // GPO
+				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+						" select dept_code,dept_code||'-'||upper(description) from dept_new where "
+						+ " dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"') or "
+						+ " reporting_dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"')"
+						+ " order by dept_code",
+						con));
 			else
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true and reporting_dept_code='"
@@ -401,10 +440,13 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			String userid = CommonModels.checkStringObject(session.getAttribute("userid"));
 			
 			String inserted_by = CommonModels.checkStringObject(cform.getDynaForm("inserted_by"));
 			
 			System.out.println("inserted_by--"+inserted_by);
+			
+			System.out.println("dept id:-"+request.getParameter("deptId")+"---"+cform.getDynaForm("deptId"));
 			
 			String sqlCondition = "";
 			con = DatabasePlugin.connect();
@@ -454,9 +496,15 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("toDate", request.getParameter("toDate"));
 			}
 
-			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))) {
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14") || roleId.equals("6")) ) {
 					sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='"+deptCode+"') ";
 			}
+			
+			String condition="";
+			if ((roleId.equals("6") )) {
+				condition = " inner join ecourts_mst_gp_dept_map egm on (egm.dept_code=ad.dept_code) ";
+		}
+			
 			
 			if (roleId.equals("2")) {
 				sqlCondition += " and a.distid='" + distCode + "' ";
@@ -472,12 +520,12 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and a.inserted_by='" + inserted_by+ "' ";
 			}
 			
-			sql = "select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
+			sql = "select a.slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
 					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_desc(a.ack_no) as dept_descs "
 					+ "from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no and respondent_slno=1) "
 					+ "inner join district_mst dm on (a.distid=dm.district_id) "
-					+ "inner join dept_new dmt on (ad.dept_code=dmt.dept_code)"
+					+ "inner join dept_new dmt on (ad.dept_code=dmt.dept_code)  "+condition+" "
 					+ "inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
 					+ "where a.delete_status is false and ack_type='NEW' " + sqlCondition
 					+ "order by inserted_time desc";
@@ -503,6 +551,13 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			if (roleId.equals("1") || roleId.equals("7")|| roleId.equals("2") || roleId.equals("14"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+						con));
+			else if (roleId.equals("6")) // GPO
+				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
+						" select dept_code,dept_code||'-'||upper(description) from dept_new where "
+						+ " dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"') or "
+						+ " reporting_dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"')"
+						+ " order by dept_code",
 						con));
 			else
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(

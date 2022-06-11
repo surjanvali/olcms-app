@@ -1015,7 +1015,6 @@ function fnAssign2DistHOD(){
 			$("#caseDist").focus();
 			return false;
 		}
-		
 		else if(chkdVal=="DC-NO" && ($("#distDept").val()==null || $("#distDept").val()=="" || $("#distDept").val()=="0")){
 			alert("Select Department.");
 			$("#distDept").focus();
@@ -1024,7 +1023,6 @@ function fnAssign2DistHOD(){
 		else{
 			$("#mode").val("assign2DistCollector");
 			// alert($("#mode").val());
-			
 			$("#HighCourtCasesListForm").submit();
 		}
 	}

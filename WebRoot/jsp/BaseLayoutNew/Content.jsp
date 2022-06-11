@@ -63,8 +63,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</div>
 						</logic:greaterThan>
 
-						<logic:greaterThan value="0" name="innerData"
-							property="assignment_pending">
+						<logic:greaterThan value="0" name="innerData" property="assignment_pending">
+						<logic:notEqual value="6" name="role_id" scope="session">
 							<div class="col-lg-3 col-md-6">
 								<a
 									href="./HighCourtCasesList.do?mode=getCasesList&src=dashBoard">
@@ -79,7 +79,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										</div>
 									</div>
 								</a>
-							</div>
+							</div></logic:notEqual>
+						
 						</logic:greaterThan>
 
 						<logic:greaterThan value="0" name="innerData"
@@ -143,6 +144,48 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</logic:greaterThan>
 
 				</logic:notEmpty>
+				
+				<logic:notEmpty name="parawiseCount">
+					<logic:greaterThan value="0" name="parawiseCount">
+						<div class="col-lg-3 col-md-6">
+							<a href="./AssignedCasesToSection.do?mode=unspecified&pr_countr_flag=PR">
+								<div class="ibox bg-danger color-white widget-stat">
+									<div class="ibox-body">
+										<h2 class="m-b-5 font-strong">${parawiseCount }</h2>
+										<div class="m-b-5">Parawise Remarks Pending for Approval</div>
+										<i class="fa fa-file-text-o widget-stat-icon"></i>
+										<div>
+											<small> &nbsp;</small>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</logic:greaterThan>
+				</logic:notEmpty>
+				
+				<logic:notEmpty name="counterFileCount">
+					<logic:greaterThan value="0" name="counterFileCount">
+						<div class="col-lg-3 col-md-6">
+							<a href="./AssignedCasesToSection.do?mode=unspecified&pr_countr_flag=COUNTER">
+								<div class="ibox bg-danger color-white widget-stat">
+									<div class="ibox-body">
+										<h2 class="m-b-5 font-strong">${counterFileCount }</h2>
+										<div class="m-b-5">Counter Filed and Pending for Approval</div>
+										
+										<i class="fa fa-file-text-o widget-stat-icon"></i>
+										<div>
+											<small> &nbsp;</small>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</logic:greaterThan>
+
+				</logic:notEmpty>
+				
+				
 
 				<logic:notEmpty name="INTERIMCASES">
 					<logic:greaterThan value="0" name="INTERIMCASES">
@@ -153,69 +196,56 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=IO">
 								<div class="ibox bg-info color-white widget-stat">
 									<div class="ibox-body">
-										<h2 class="m-b-5 font-strong">${INTERIMCASES }</h2>
+										<h2 class="m-b-5 font-strong">${INTERIMCASES}</h2>
 										<div class="m-b-5">No. of Cases with Interim Orders</div>
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
 											<small> &nbsp;</small>
 										</div>
-
 									</div>
 								</div>
 							</a>
 						</div>
 					</logic:greaterThan>
-
 				</logic:notEmpty>
-
 				<logic:notEmpty name="INTERIMORDERS">
 					<logic:greaterThan value="0" name="INTERIMORDERS">
 						<div class="col-lg-3 col-md-6">
-							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
-
-							<a
-								href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=IO">
+							<a href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=IO">
 								<div class="ibox bg-info color-white widget-stat">
 									<div class="ibox-body">
-										<h2 class="m-b-5 font-strong">${INTERIMORDERS }</h2>
+										<h2 class="m-b-5 font-strong">${INTERIMORDERS}</h2>
 										<div class="m-b-5">Interim Orders Issued</div>
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
-											<small> &nbsp;</small>
+											<small>&nbsp;</small>
 										</div>
-
 									</div>
 								</div>
 							</a>
 						</div>
 					</logic:greaterThan>
-
 				</logic:notEmpty>
-
 				<logic:notEmpty name="FINALORDERS">
 					<logic:greaterThan value="0" name="FINALORDERS">
 						<div class="col-lg-3 col-md-6">
 							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
-
 							<a
 								href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=FO">
 								<div class="ibox bg-success color-white widget-stat">
 									<div class="ibox-body">
-										<h2 class="m-b-5 font-strong">${FINALORDERS }</h2>
+										<h2 class="m-b-5 font-strong">${FINALORDERS}</h2>
 										<div class="m-b-5">Final Order Issued</div>
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
 											<small> &nbsp;</small>
 										</div>
-
 									</div>
 								</div>
 							</a>
 						</div>
 					</logic:greaterThan>
-
 				</logic:notEmpty>
-
 				<div class="col-lg-3 col-md-6">
 					<a href="./HighCourtCauseList.do">
 						<div class="ibox bg-warning color-white widget-stat">

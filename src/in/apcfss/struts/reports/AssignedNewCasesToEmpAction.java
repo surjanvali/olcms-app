@@ -35,7 +35,7 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
 		HttpSession session = request.getSession();
-		String sql = null, roleId = null, deptCode = null, distCode="0";
+		String sql = null, userid=null,roleId = null, deptCode = null, distCode="0";
 		try {
 			if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 				return mapping.findForward("Logout");
@@ -43,8 +43,12 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			userid = CommonModels.checkStringObject(session.getAttribute("userid"));
 
 			String sqlCondition = "";
+			String condition1 = "";
+			String condition2 = "";
 			con = DatabasePlugin.connect();
 
 			if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
@@ -92,7 +96,7 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 				cform.setDynaForm("toDate", request.getParameter("toDate"));
 			}
 
-			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2"))) {
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("6"))) {
 				sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='"+deptCode+"') ";
 			}
 
@@ -113,21 +117,31 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 				sqlCondition += " and ad.case_status='10' ";
 				//cform.setDynaForm("districtId", distCode);
 			}
+			
+			if (roleId.equals("6")) {
+				condition1 = " inner join ecourts_mst_gp_dept_map emgd on (ad.dept_code=emgd.dept_code) "
+						//+ " inner join ecourts_mst_case_status emcs on (emcs.status_id='6') "
+						+ " inner join ecourts_case_data ecd on (ecd.dept_code=ad.dept_code) "
+						+ " inner join ecourts_olcms_case_details eocd on (eocd.cino=ecd.cino)";
+				
+				sqlCondition += " and counter_filed='Yes' and ad.ecourts_case_status='6' and emgd.gp_id='"+userid+"' ";
+				//cform.setDynaForm("districtId", distCode);
+			}
 
 			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
 					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
 				sqlCondition += " and a.casetype='" + cform.getDynaForm("caseTypeId").toString().trim() + "' ";
 			}
 
-			sql = "select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
+			sql = "select a.slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , a.remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
-					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_desc(a.ack_no) as dept_descs "
+					+ "to_char(a.inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_desc(a.ack_no) as dept_descs "
 					+ "from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no and respondent_slno=1) "
 					+ "inner join district_mst dm on (a.distid=dm.district_id) "
 					+ "inner join dept_new dmt on (ad.dept_code=dmt.dept_code)"
-					+ "inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
-					+ "where a.delete_status is false and ack_type='NEW' " + sqlCondition
-					+ "order by inserted_time desc";
+					+ "inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "+condition1+"   "
+					+ "where a.delete_status is false and ack_type='NEW'     " + sqlCondition
+					+ "order by a.inserted_time desc";
 
 			System.out.println("CASES SQL:" + sql);
 

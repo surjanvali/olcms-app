@@ -381,9 +381,19 @@ body {
 
 											<td><logic:notEmpty name="inter"
 													property="order_document_path">
-													<a href="./${inter.order_document_path}"
-														class="btn btn-sm btn-info" target="_new">
-														${inter.order_details}-${inter.order_no}</a>
+
+													<logic:notEqual value="-" name="inter"
+														property="order_document_path">
+
+														<a href="./${inter.order_document_path}"
+															class="btn btn-sm btn-info" target="_new">
+															${inter.order_details}-${inter.order_no}</a>
+													</logic:notEqual>
+
+
+
+
+
 												</logic:notEmpty></td>
 
 										</tr>
@@ -544,9 +554,12 @@ body {
 											<td>${order.order_details}</td>
 											<td><logic:notEmpty name="order"
 													property="order_document_path">
-													<a href="./${order.order_document_path}"
-														class="btn btn-sm btn-info" target="">
-														${order.order_details}-${order.order_no}</a>
+													<logic:notEqual value="-" name="inter"
+														property="order_document_path">
+														<a href="./${order.order_document_path}"
+															class="btn btn-sm btn-info" target="">
+															${order.order_details}-${order.order_no}</a>
+													</logic:notEqual>
 												</logic:notEmpty></td>
 										</tr>
 									</logic:iterate>
@@ -556,9 +569,9 @@ body {
 						</div>
 					</div>
 				</logic:present>
-				
-				
-								<logic:present name="ACTIVITIESDATA">
+
+
+				<logic:present name="ACTIVITIESDATA">
 					<div class="row">
 						<div class="col-md-12">
 							<table class="table table-striped table-bordered table-hover"
@@ -589,8 +602,11 @@ body {
 											<td>${activities.remarks }</td>
 											<td><logic:notEmpty name="activities"
 													property="uploaded_doc_path">
-													<a href='${activities.uploaded_doc_path }' target='_new'
-														class="btn btn-sm btn-info">View Uploaded File</a>
+													<logic:notEqual value="-" name="activities"
+														property="uploaded_doc_path">
+														<a href='${activities.uploaded_doc_path }' target='_new'
+															class="btn btn-sm btn-info">View Uploaded File</a>
+													</logic:notEqual>
 												</logic:notEmpty></td>
 										</tr>
 									</logic:iterate>
@@ -600,9 +616,9 @@ body {
 						</div>
 					</div>
 				</logic:present>
-				
-				
-				
+
+
+
 				<logic:present name="OLCMSCASEDATA">
 					<logic:iterate id="datamap" name="OLCMSCASEDATA">
 
@@ -635,118 +651,118 @@ body {
 						<div class="row">
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								<b>PWR Submitted Date: </b>
-								</div>
-								
-								<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+							</div>
+
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${datamap.pwr_submitted_date }</div>
-					
+
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Uploaded Counter Filed : </b></div>
-									<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-							<logic:notEmpty name="datamap" property="counter_filed">
+								<b>Uploaded Counter Filed : </b>
+							</div>
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+								<logic:notEmpty name="datamap" property="counter_filed">
 									<a href='${datamap.counter_filed }' target='_new'
 										class="btn btn-sm btn-info">View Uploaded File</a>
 								</logic:notEmpty>
-						
-						</div>
-						<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
+
+							</div>
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
 								<b>Remarks : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${datamap.remarks }</div>
 						</div>
-						
+
 						<div class="row">
-						<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								<b>Corresponding GP: </b>
-								</div>
+							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${datamap.corresponding_gp }</div>
-					
-						<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b> PWR Uploaded: </b>
-								</div>
-								<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-							${datamap.pwr_uploaded }
-						</div>
-						
-					
-								<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b>Action Taken Order</b>
-								</div>
 
-					<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+								<b> PWR Uploaded: </b>
+							</div>
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+								${datamap.pwr_uploaded }</div>
+
+
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+								<b>Action Taken Order</b>
+							</div>
+
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								<logic:notEmpty name="datamap" property="action_taken_order">
 									<a href='${datamap.action_taken_order }' target='_new'
 										class="btn btn-sm btn-info">View Uploaded File</a>
 								</logic:notEmpty>
 							</div>
 						</div>
-						
-						
-						
+
+
+
 						<div class="row">
-						<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								<b>PWR Received Date: </b>
-								</div>
+							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${datamap.pwr_received_date }</div>
-					
-					<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								<b>PWR Approved GP: </b>
-								</div>
+							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${datamap.pwr_approved_gp }</div>
-								
-								<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								<b>PWR Approved GP Date: </b>
-								</div>
+							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${datamap.pwr_gp_approved_date }</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+						</div>
+
+						<div class="row">
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								<b>Uploaded Appeal Filed: </b>
-								</div>
-						
-								<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-							<logic:notEmpty name="datamap" property="appeal_filed">
+							</div>
+
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+								<logic:notEmpty name="datamap" property="appeal_filed">
 									<a href='${datamap.appeal_filed_copy }' target='_new'
 										class="btn btn-sm btn-info">View Uploaded File</a>
 								</logic:notEmpty>
-						
-						</div>
-						<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+
+							</div>
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								<b>Appeal Filed: </b>
-								</div>
-								<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+							</div>
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${datamap.appeal_filed }</div>
-						
-						
-						
-						<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+
+
+
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								<b>Uploaded PWR File: </b>
-								</div>
-								
-									<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-							<logic:notEmpty name="datamap" property="pwr_uploaded">
+							</div>
+
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+								<logic:notEmpty name="datamap" property="pwr_uploaded">
 									<a href='${datamap.pwr_uploaded_copy }' target='_new'
 										class="btn btn-sm btn-info">View Uploaded File</a>
 								</logic:notEmpty>
-						
-						</div>
-						
-						<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+
+							</div>
+
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								<b>Appeal Filed Date: </b>
-								</div>
-								
-								<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+							</div>
+
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${datamap.appeal_filed_date }</div>
 
 						</div>
-						
-						
+
+
 					</logic:iterate>
 				</logic:present>
 

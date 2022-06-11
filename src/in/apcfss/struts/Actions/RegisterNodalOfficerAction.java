@@ -403,16 +403,21 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 						else {
 							sql = "insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id, dept_code, dist_id, user_type) select a.emailid, md5('olcms@2021'), b.fullname_en, '"
 									+ userId + "', now(),'" + request.getRemoteAddr()
-									+ "',d.dept_id,d.dept_code as deptcode,"+CommonModels.checkIntObject(session.getAttribute("dist_id"))
-									+", 10 from nodal_officer_details a "
-									
-									// + "inner join (select distinct employee_id,fullname_en from " + tableName + ") b on (a.employeeid=b.employee_id) " + ""
-									+ "inner join (select distinct employee_id,fullname_en,designation_id,designation_name_en, substr(global_org_name,1,5) as dept_code  from " + tableName + ") b on (a.employeeid=b.employee_id and a.dept_id=b.dept_code and a.designation=b.designation_id) "
+									+ "',d.dept_id,d.dept_code as deptcode,"
+									+ CommonModels.checkIntObject(session.getAttribute("dist_id"))
+									+ ", 10 from nodal_officer_details a "
+
+									// + "inner join (select distinct employee_id,fullname_en from " + tableName +
+									// ") b on (a.employeeid=b.employee_id) " + ""
+									+ "inner join (select distinct employee_id,fullname_en,designation_id,designation_name_en, substr(global_org_name,1,5) as dept_code  from "
+									+ tableName
+									+ ") b on (a.employeeid=b.employee_id and a.dept_id=b.dept_code and a.designation=b.designation_id) "
 									+ "inner join dept_new d on (d.dept_code=b.dept_code) "
-									
-									// + " inner join dept_new d on (d.dept_code='"+ (String) cform.getDynaForm("deptId") + "')" 
-									+ " inner join district_mst dm on (dm.short_name='"+userId+"')" 
-									+ " where employeeid='"+employeeId+"' and a.dept_id='"+(String) cform.getDynaForm("deptId")+"'";
+
+									// + " inner join dept_new d on (d.dept_code='"+ (String)
+									// cform.getDynaForm("deptId") + "')"
+									+ " inner join district_mst dm on (dm.short_name='" + userId + "') where employeeid='" + employeeId + "' and a.dept_id='"
+									+ (String) cform.getDynaForm("deptId") + "' and a.dist_id='" + CommonModels.checkIntObject(session.getAttribute("dist_id")) + "'";
 							
 							
 							
@@ -431,6 +436,8 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 						System.out.println("STATUS:"+status);
 						if(status==3) {
 							con.commit();
+							
+							//mobileNo="8500909816";
 							// String smsText="Your Userid on Finance Department Portal is:"+emailId+" and olcms@2021 is Password. Please do not share your Userid and Password with Others.  -APFINANCE";
 							String smsText="Your User Id is "+emailId+" and Password is olcms@2021 to Login to https://apolcms.ap.gov.in/ Portal. Please do not share with anyone. \r\n-APOLCMS";
 							String templateId="1007784197678878760";

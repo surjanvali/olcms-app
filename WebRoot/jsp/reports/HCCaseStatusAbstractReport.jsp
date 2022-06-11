@@ -565,7 +565,42 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${i+1 }.</td>
 
 										<td><a
-											href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=${map.disposal_type}">${map.disposal_type }</a></td>
+											href="./HCCaseStatusAbstractReport.do?mode=getCasesDeptWiseList&src=dashBoard&caseCategory=${map.disposal_type}">${map.disposal_type }</a></td>
+										<td style="text-align: right;">${map.casescount}</td>
+										<bean:define id="Totals" value="${Totals + map.casescount }"></bean:define>
+									</tr>
+								</logic:iterate>
+							</tbody>
+							<tfoot>
+								<tR>
+									<td colspan="2">Totals</td>
+									<td colspan="1" style="text-align: right;">${Totals }</td>
+								</tR>
+							</tfoot>
+						</table>
+					</logic:present>
+					
+					<logic:present name="DIPTWISECASES">
+						<table id="example" class="table table-striped table-bordered"
+							style="width:100%">
+							<thead>
+								<tr>
+									<th>Sl.No</th>
+									<!-- <th>Disposal Type</th> -->
+									<th>Department</th>
+									<th>Cases Count</th>
+
+								</tr>
+							</thead>
+							<tbody>
+								<bean:define id="Totals" value="0"></bean:define>
+								<logic:iterate id="map" name="DIPTWISECASES" indexId="i">
+									<tr>
+										<td>${i+1 }.</td>
+
+										<%-- <td>${map.disposal_type}</td> --%>
+										<td><a
+											href="./HCCaseStatusAbstractReport.do?mode=getCasesList&src=dashBoard&caseCategory=${map.disposal_type}&deptType=${map.description}">${map.description }</a></td>
 										<td style="text-align: right;">${map.casescount}</td>
 										<bean:define id="Totals" value="${Totals + map.casescount }"></bean:define>
 									</tr>

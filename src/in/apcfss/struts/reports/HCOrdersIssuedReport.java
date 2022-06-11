@@ -229,21 +229,35 @@ public class HCOrdersIssuedReport extends DispatchAction {
 						+ "','dd-mm-yyyy') ";
 			}
 			
-			sql = "select a.*, b.orderpaths from ecourts_case_data a inner join" + " ("
+			String condition="";
+			if (roleId.equals("6") )
+				condition= " inner join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) ";
+			
+			
+			
+			sql = "select a.*, b.orderpaths from ecourts_case_data a "+condition+" inner join" + " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from (select * from";
 
-			if (caseStatus.equals("IO"))
+			if (caseStatus.equals("IO") && roleId.equals("6"))
+				sql += "  (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder "
+						+ " where 1=1  " + sqlCondition + ") x1";
+			
+			if (caseStatus.equals("IO") && !roleId.equals("6"))
 				sql += "  (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
 						+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 " + sqlCondition + ") x1";
 
-			if (caseStatus.equals("FO"))
+			if (caseStatus.equals("FO") && !roleId.equals("6"))
 				sql += " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
 						+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
 						+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 " + sqlCondition + ") x2";
+			
+			if (caseStatus.equals("FO") && roleId.equals("6"))
+				sql += " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder "
+						+ " where length(order_document_path) > 10  " + sqlCondition + ") x2";
 
 			sql += " order by cino, order_date desc) c group by cino ) b"
-					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) where d.display = true ";
+					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code)  where d.display = true ";
 
 			// sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
 			if (CommonModels.checkStringObject(request.getParameter("repType")).equals("HOD"))

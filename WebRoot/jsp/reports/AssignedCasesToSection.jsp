@@ -73,33 +73,33 @@ body {
 				</div>
 			</div> --%>
 			<div class="ibox-body">
-				<logic:notEmpty name="CASESLIST">
-					<div class="table-responsive">
-						<table class="table table-striped table-bordered table-hover"
-							id="example" cellspacing="0" width="100%">
-							<thead>
-								<tr>
-									<th>Sl.No</th>
-									<th>CINo</th>
-									<th>Date of Filing</th>
-									<th>Case Type</th>
-									<th>Reg.No.</th>
-									<th>Reg. Year</th>
-									<th>Filing No.</th>
-									<th>Filing Year</th>
-									<!-- <th>Date of Next List</th>
-									<th>Bench</th> -->
-									<th>Judge Name</th>
-									<th>Petitioner</th>
-									<th>District</th>
-									<th>Purpose</th>
-									<th>Respondents</th>
-									<th>Orders</th>
-									<th style="width: 150px !important;">Action</th>
-								</tr>
-							</thead>
-							<tbody>
 
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered table-hover"
+						id="example" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>Sl.No</th>
+								<th>CINo</th>
+								<th>Date of Filing</th>
+								<th>Case Type</th>
+								<th>Reg.No.</th>
+								<th>Reg. Year</th>
+								<th>Filing No.</th>
+								<th>Filing Year</th>
+								<!-- <th>Date of Next List</th>
+									<th>Bench</th> -->
+								<th>Judge Name</th>
+								<th>Petitioner</th>
+								<th>District</th>
+								<th>Purpose</th>
+								<th>Respondents</th>
+								<th>Orders</th>
+								<th style="width: 150px !important;">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<logic:notEmpty name="CASESLIST">
 								<logic:iterate id="map" name="CASESLIST" indexId="i">
 									<tr>
 										<td>${i+1 }</td>
@@ -151,15 +151,16 @@ body {
 													Status</button>
 											</logic:equal></td>
 								</logic:iterate>
-							</tbody>
-							<tfoot>
-								<tR>
-									<td colspan="15">&nbsp;</td>
-								</tR>
-							</tfoot>
-						</table>
-					</div>
-				</logic:notEmpty>
+							</logic:notEmpty>
+						</tbody>
+						<tfoot>
+							<tR>
+								<td colspan="15">&nbsp;</td>
+							</tR>
+						</tfoot>
+					</table>
+				</div>
+
 			</div>
 		</div>
 	</html:form>
@@ -173,6 +174,7 @@ body {
 
 	function caseStatusUpdate(fileCino) {
 		$("#mode").val("caseStatusUpdate");
+		// alert("MODE:"+$("#mode").val());
 		$("#fileCino").val("" + fileCino);
 		$("#AssignedCasesToSectionForm").submit();
 	}

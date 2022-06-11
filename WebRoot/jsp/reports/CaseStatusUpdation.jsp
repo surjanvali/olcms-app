@@ -386,9 +386,14 @@ body {
 											<td>${inter.order_details}</td>
 											<td><logic:notEmpty name="inter"
 													property="order_document_path">
-													<a href="./${inter.order_document_path}"
-														class="btn btn-sm btn-info" target="_new">
-														${inter.order_details}-${inter.order_no}</a>
+
+													<logic:notEqual value="-" name="inter"
+														property="order_document_path">
+
+														<a href="./${inter.order_document_path}"
+															class="btn btn-sm btn-info" target="_new">
+															${inter.order_details}-${inter.order_no}</a>
+													</logic:notEqual>
 												</logic:notEmpty></td>
 										</tr>
 									</logic:iterate>
@@ -525,9 +530,14 @@ body {
 											<td>${order.order_details}</td>
 											<td><logic:notEmpty name="order"
 													property="order_document_path">
+													
+													<logic:notEqual value="-" name="inter"
+														property="order_document_path">
+														
 													<a href="./${order.order_document_path}"
 														class="btn btn-sm btn-info" target="">
 														${order.order_details}-${order.order_no}</a>
+														</logic:notEqual>
 												</logic:notEmpty></td>
 										</tr>
 									</logic:iterate>
@@ -566,16 +576,17 @@ body {
 											<td>${activities.inserted_by}</td>
 											<td>${activities.assigned_to}</td>
 											<td>${activities.remarks }</td>
-											<td><logic:notEmpty name="activities"
+											<td>
+											<logic:notEmpty name="activities"
 													property="uploaded_doc_path">
 
-													<logic:notEqual value="---" name="activities"
+													<logic:notEqual value="-" name="activities"
 														property="uploaded_doc_path">
-
+ 
 														<a href='${activities.uploaded_doc_path}' target='_new'
 															class="btn btn-sm btn-info">View Uploaded File</a>
 													</logic:notEqual>
-													
+
 												</logic:notEmpty></td>
 										</tr>
 									</logic:iterate>
@@ -900,7 +911,7 @@ body {
 							<button class="btn btn-md btn-primary" type="submit"
 								name="update" onclick="return sendbackFn();">Send Back</button>
 						</logic:present>
-						
+
 						<logic:empty name="STATUSUPDATEBTN">
 							<button class="btn btn-md btn-success" type="submit"
 								name="update" onclick="return updateCaseDetails();">Update
@@ -1111,13 +1122,7 @@ body {
 											}
 										});
 
-						$("#appealFiled").change(function() {
-							if ($("#appealFiled").val() == "Yes") {
-								$(".appealuploaddiv").show();
-							} else {
-								$(".appealuploaddiv").hide();
-							}
-						});
+						
 
 						$("#parawiseRemarksSubmitted").change(function() {
 							if ($("#parawiseRemarksSubmitted").val() == "Yes") {
@@ -1134,7 +1139,15 @@ body {
 								$(".parawiseRemarksapproveddiv").hide();
 							}
 						});
-
+						
+						$("#appealFiled").change(function() {
+							if ($("#appealFiled").val() == "Yes") {
+								$(".appealuploaddiv").show();
+							} else {
+								$(".appealuploaddiv").hide();
+							}
+						});
+						
 						$("#counterFiled")
 								.change(
 										function() {

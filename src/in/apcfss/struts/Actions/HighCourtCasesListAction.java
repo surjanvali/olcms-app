@@ -18,6 +18,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 
+import com.sun.mail.imap.Utility.Condition;
+
 import in.apcfss.struts.Forms.CommonForm;
 import in.apcfss.struts.commons.AjaxModels;
 import in.apcfss.struts.commons.CommonModels;
@@ -93,6 +95,9 @@ public class HighCourtCasesListAction extends DispatchAction {
 			// trim(upper(designation_name_en))<>'MINISTER' order by designation_id::int4
 			// desc ", con));
 			
+			String condition1="";
+			String condition2="";
+			
 			String src = CommonModels.checkStringObject(request.getParameter("src"));
 			
 			if(!src.equals("dashBoard")) {
@@ -133,7 +138,7 @@ public class HighCourtCasesListAction extends DispatchAction {
 			}
 			
 			
-			if(!roleId.equals("2")) { //District Nodal Officer
+			if(!roleId.equals("2") && !roleId.equals("6")) { //District Nodal Officer
 				sqlCondition +=" and dept_code='" + deptCode + "' ";
 			}
 			
@@ -151,7 +156,14 @@ public class HighCourtCasesListAction extends DispatchAction {
 				sqlCondition +=" and (case_status is null or case_status in (1, 2))";
 			}
 			
-			sql = "select a.*, b.orderpaths from ecourts_case_data a left join"
+			
+			else if(roleId.equals("6") ) {//MLO & Sect. Dept.
+				condition1 =" inner join ecourts_mst_gp_dept_map emgd on (a.dept_code=emgd.dept_code) ";
+				condition2 =" and case_status is null or case_status=2 ";
+			}
+			
+			
+			sql = "select a.*, b.orderpaths from ecourts_case_data a "+condition1+" left join"
 					+ " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from "
@@ -163,7 +175,7 @@ public class HighCourtCasesListAction extends DispatchAction {
 					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
 					+ " on (a.cino=b.cino) where coalesce(assigned,'f')='f' "
 					+ sqlCondition
-					+ " and coalesce(ecourts_case_status,'')!='Closed'";
+					+ " and coalesce(ecourts_case_status,'')!='Closed'  "+condition2+" ";
 
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
