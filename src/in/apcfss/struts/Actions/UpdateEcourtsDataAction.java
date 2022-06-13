@@ -1305,9 +1305,9 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		String decryptedRespStr = "";
 		String sql = "";
 		resp = resp.trim();
-		//System.out.println("processPDForderResponse RESP:" + resp);
+		System.out.println("processPDForderResponse RESP:" + resp);
 		if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_TOKEN"))
-				&& (!resp.contains("RECORD_NOT_FOUND"))) {
+				&& (!resp.contains("RECORD_NOT_FOUND")) && !resp.contains("Causelist Not Uploaded")) {
 			JSONObject jObj = new JSONObject(resp);
 			response_str = jObj.getString("response_str").toString();
 			// System.out.println("response_str::"+response_str);
