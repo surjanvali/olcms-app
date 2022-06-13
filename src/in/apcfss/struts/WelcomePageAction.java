@@ -157,7 +157,9 @@ public class WelcomePageAction extends DispatchAction{
 						request.setAttribute("deptwise", data);
 					request.setAttribute("showReport1", "showReport1");
 					
-					sql="select count(*)  from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls ad1 on (ad.ack_no=ad1.ack_no) where ack_type='NEW' and dept_code='"+deptCode+"' ";
+					sql="select count(*)  from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls ad1 on (ad.ack_no=ad1.ack_no) "
+							+ "inner join dept_new d on (ad.dept_code=d.dept_code)  "
+							+ "where ack_type='NEW' and (reporting_dept_code='"+deptCode+"' or ad.dept_code='"+deptCode+"') and respondent_slno=1  ";
 					System.out.println("ACK SQL:"+sql);
 					request.setAttribute("NEWCASES", DatabasePlugin.getStringfromQuery(sql, con));
 					
@@ -398,7 +400,8 @@ public class WelcomePageAction extends DispatchAction{
 					sql="select count(*) From ecourts_olcms_case_details a "
 							+ "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  "
 							+ "inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code) "
-							+ "inner join ecourts_mst_gp_dept_map ad on (ad.dept_code =ecd.dept_code ) where counter_filed='Yes' and coalesce(counter_approved_gp,'NO')='NO' and ecd.case_status='6' "
+							+ "inner join ecourts_mst_gp_dept_map ad on (ad.dept_code =ecd.dept_code ) "
+							+ "where counter_filed='Yes' and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6' "
 							+ "and emgd.gp_id='"+userid+"'";
 					System.out.println("COUNTERS SQL:"+sql);
 					request.setAttribute("counterFileCount", DatabasePlugin.getStringfromQuery(sql, con));
@@ -406,7 +409,8 @@ public class WelcomePageAction extends DispatchAction{
 					sql="select count(*) From ecourts_olcms_case_details a "
 							+ "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  "
 							+ "inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code) "
-							+ "inner join ecourts_mst_gp_dept_map ad on (ad.dept_code =ecd.dept_code ) where pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'NO')='NO' and ecd.case_status='6' "
+							+ "inner join ecourts_mst_gp_dept_map ad on (ad.dept_code =ecd.dept_code ) "
+							+ "where pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'No')='No' and ecd.case_status='6' "
 							+ "and emgd.gp_id='"+userid+"'  ";
 					System.out.println("PARAWISE COUNT SQL:"+sql);
 					request.setAttribute("parawiseCount", DatabasePlugin.getStringfromQuery(sql, con));

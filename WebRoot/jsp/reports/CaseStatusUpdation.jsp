@@ -531,7 +531,7 @@ body {
 											<td><logic:notEmpty name="order"
 													property="order_document_path">
 													
-													<logic:notEqual value="-" name="inter"
+													<logic:notEqual value="-" name="order"
 														property="order_document_path">
 														
 													<a href="./${order.order_document_path}"

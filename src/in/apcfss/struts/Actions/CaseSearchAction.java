@@ -91,7 +91,7 @@ public class CaseSearchAction extends DispatchAction {
 			if (cinNo!=null && !cinNo.equals("") && !cinNo.equals("0")) {
 				
 				
-				String barCodeFilePath = gpoAct.generateAckBarCodePdf(cinNo, cform);
+				String barCodeFilePath = gpoAct.generateAckBarCodePdf128(cinNo, cform);
 				int a=0;
 				if (barCodeFilePath != null) {
 					sql = "update ecourts_case_data set barcode_file_path='" + barCodeFilePath + "' where cino='"

@@ -9,7 +9,7 @@
 %>
 <!-- PAGE LEVEL STYLES
 -->
-<style type="text/css" data-genuitec-lp-enabled="false" data-genuitec-file-id="wc1-501" data-genuitec-path="/apolcms/WebRoot/jsp/registration/GPOAck.jsp">
+<style type="text/css">
 label {
 	font-weight: bold;
 }
@@ -110,13 +110,13 @@ label {
 														id="removeResp" /></span></th>
 											</tr>
 											<tr>
-												<th style="width: 10%;">Sl No.</th>
-												<th style="width: 60%;" >Respondent Department</th>
-												<th  style="width: 30%;">Service Type</th>
-												<!-- <th style="width: 20%;">Designation</th>
+												<th style="width: 3%;">Sl No.</th>
+												<th style="width: 20%;">Respondent Department</th>
+												<th style="width: 15%;">Service Type</th>
+												<th style="width: 20%;">Designation</th>
 												<th style="width: 20%;">District</th>
 												<th style="width: 20%;">Mandal</th>
-												<th style="width: 20%;">Village</th> -->
+												<th style="width: 20%;">Village</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -124,26 +124,14 @@ label {
 												<td>1.</td>
 												<td><html:select styleId="deptId1"
 														property="dynaForm(deptId1)" styleClass="select2Class"
-														style="width: 100%;" onchange="showRevenueClassification(1);">
+														style="width: 100%;">
 														<html:option value="0">---SELECT---</html:option>
 														<logic:notEmpty name="CommonForm"
 															property="dynaForm(deptList)">
 															<html:optionsCollection name="CommonForm"
 																property="dynaForm(deptList)" />
 														</logic:notEmpty>
-													</html:select>
-													
-													<html:select styleId="deptCategory1"
-														property="dynaForm(deptCategory1)" styleClass="form-control"
-														style="width: 100%;display : none;" >
-														<html:option value="0">---SELECT---</html:option>
-														<html:option value="General">General</html:option>
-														<html:option value="Assignment">Assignment</html:option>
-														<html:option value="Land Acquisition">Land Acquisition</html:option>
-														
-													</html:select>
-													
-													</td>
+													</html:select></td>
 												<td><html:select property="dynaForm(serviceType1)"
 														styleClass="select2Class" style="width: 100%;"
 														styleId="serviceType1">
@@ -155,7 +143,7 @@ label {
 														</logic:notEmpty>
 													</html:select></td>
 
-												<%-- <td><html:select styleId="designation1"
+												<td><html:select styleId="designation1"
 														property="dynaForm(designation1)" styleClass="select2Class"
 														style="width: 100%;">
 														<html:option value="0">---SELECT---</html:option>
@@ -195,7 +183,7 @@ label {
 															<html:optionsCollection name="CommonForm"
 																property="dynaForm(vilList)" />
 														</logic:notEmpty>
-													</html:select></td> --%>
+													</html:select></td>
 											</tr>
 										</tbody>
 									</table>
@@ -204,7 +192,7 @@ label {
 						</div>
 
 						<div class="row">
-							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<%-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 								<div class="form-group">
 									<label> District <bean:message key="mandatory" />
 									</label>
@@ -218,7 +206,7 @@ label {
 										</logic:notEmpty>
 									</html:select>
 								</div>
-							</div>
+							</div> --%>
 							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 								<div class="form-group">
 									<label> Petitioner Name <bean:message key="mandatory" />
@@ -572,19 +560,6 @@ label {
 
 <script type="text/javascript">
 
-
-	function showRevenueClassification(val){
-		if($("#deptId"+val).val()=="REV01-L"){
-			// show Clasification Select box
-				$("#deptCategory"+val).show();
-		}
-		else{
-			// nothing
-			$("#deptCategory"+val).hide();
-			$("#deptCategory"+val).val("0");
-		}
-	}
-
 	function backFn() {
 		document.forms[0].mode.value = "unspecified";
 		document.forms[0].submit();
@@ -618,42 +593,31 @@ label {
 			  let rowCount2 = rowCount+1;
 			  let prevVal=$("#deptId"+rowCount).val();
 			  let service=$("#serviceType"+rowCount).val();
-			  
-			  /*let design=$("#designation"+rowCount).val();
+			  let design=$("#designation"+rowCount).val();
 			  let dist=$("#distId"+rowCount).val();
 			  let mandal=$("#mandalId"+rowCount).val();
-			  let village=$("#villageId"+rowCount).val();*/
+			  let village=$("#villageId"+rowCount).val();
 			  
 			 // alert("prevVal--"+prevVal);
 			  if( (prevVal != null && prevVal != "" && prevVal!="0") && (service != null && service != "" && service!="0")
-					 // && (design != null && design != "" && design!="0" ) && (dist != null && dist != "" && dist!="0" ) 
-					  // && (mandal != null && mandal != "" && mandal!="0" ) && (village != null && village != "" && village!="0" )
-					  )
+					  && (design != null && design != "" && design!="0" ) && (dist != null && dist != "" && dist!="0" ) 
+					  && (mandal != null && mandal != "" && mandal!="0" ) && (village != null && village != "" && village!="0" ) )
 			  {
 				  //console.log("rowCount:"+rowCount);
 				 // console.log("rowCount2:"+rowCount2);
 			
 				  $('tbody', rowfyable).append("<tr id='"+rowCount2+"'><td>"+rowCount2+".</td><td>"
-				  		+ "<select name='dynaForm(deptId"+rowCount2+")' id='deptId"+rowCount2+"' style='width: 100%;'></select>"
-				  		+ "<select name='dynaForm(deptCategory"+rowCount2+")' id='deptCategory"+rowCount2+"' style='width:100%;display:none;' class='form-control'><option value='0'>---SELECT---</option><option value='General'>General</option><option value='Assignment'>Assignment</option><option value='Land Acquisition'>Land Acquisition</option></select>"
-				  		+"</td>"
-				  		+ "<td><select name='dynaForm(serviceType"+rowCount2+")' id='serviceType"+rowCount2+"' style='width: 100%;' ></select></td></tr>"
-				  
-				  /*+"<td><select name='dynaForm(designation"+rowCount2+")' id='designation"+rowCount2+"' style='width: 100%;' ></select></td>"
-					 +"<td><select name='dynaForm(distId"+rowCount2+")' id='distId"+rowCount2+"' style='width: 100%;' ></select></td>"
-					 +"<td><select name='dynaForm(mandalId"+rowCount2+")' id='mandalId"+rowCount2+"' style='width: 100%;' ></select></td>"
-					 +"<td><select name='dynaForm(villageId"+rowCount2+")' id='villageId"+rowCount2+"' style='width: 100%;' ></select></td></tr>" */
-					    + "");
+				  		+"<select name='dynaForm(deptId"+rowCount2+")' id='deptId"+rowCount2+"' style='width: 100%;' ></select></td>"
+				  +"<td><select name='dynaForm(serviceType"+rowCount2+")' id='serviceType"+rowCount2+"' style='width: 100%;' ></select></td>"
+				  +"<td><select name='dynaForm(designation"+rowCount2+")' id='designation"+rowCount2+"' style='width: 100%;' ></select></td>"
+		 +"<td><select name='dynaForm(distId"+rowCount2+")' id='distId"+rowCount2+"' style='width: 100%;' ></select></td>"
+	 +"<td><select name='dynaForm(mandalId"+rowCount2+")' id='mandalId"+rowCount2+"' style='width: 100%;' ></select></td>"
+	 +"<td><select name='dynaForm(villageId"+rowCount2+")' id='villageId"+rowCount2+"' style='width: 100%;' ></select></td></tr>");
 				  
 				  
 				  $("#deptId"+rowCount+" option").clone().appendTo("#deptId"+rowCount2);
 				  $("#deptId"+rowCount2).select2();
 				  $("#deptId"+rowCount2).select2("val", "0");
-				  $("#deptId"+rowCount2).change(function(){showRevenueClassification(rowCount2);});
-				  
-				  /*$("#deptCategory"+rowCount+" option").clone().appendTo("#deptCategory"+rowCount2);
-				  $("#deptCategory"+rowCount2).select2();
-				  $("#deptCategory"+rowCount2).select2("val", "0");*/
 				  
 				  $("#serviceType"+rowCount+" option").clone().appendTo("#serviceType"+rowCount2);
 				  $("#serviceType"+rowCount2).select2();
@@ -661,7 +625,7 @@ label {
 				 
 				  
 				  
-				  /*$("#designation"+rowCount+" option").clone().appendTo("#designation"+rowCount2);
+				  $("#designation"+rowCount+" option").clone().appendTo("#designation"+rowCount2);
 				  $("#designation"+rowCount2).select2();
 				  $("#designation"+rowCount2).select2("val", "0");
 				  
@@ -677,7 +641,7 @@ label {
 				  
 				  $("#villageId"+rowCount+" option").clone().appendTo("#villageId"+rowCount2);
 				  $("#villageId"+rowCount2).select2();
-				  $("#villageId"+rowCount2).select2("val", "0"); */
+				  $("#villageId"+rowCount2).select2("val", "0"); 
 				
 				  $("#deptId"+rowCount2+" option[value="+prevVal+"]").remove();
 				 // $("#serviceType"+rowCount2+" option[value="+service+"]").remove();
@@ -695,12 +659,6 @@ label {
 			  	alert("Select Respondant Department.");
 			  	$("#deptId"+rowCount).focus();
 			  }
-			  if(prevVal=="REV01-L" && ($("#deptCategory"+rowCount).val=="" || $("#deptCategory"+rowCount).val=="0"))
-			  {
-				 // alert("else prevVal--"+prevVal);
-			  	alert("Select Department Category.");
-			  	$("#deptCategory"+rowCount).focus();
-			  }
 			  
 			  if(  ( service=="0") )
 			  {
@@ -708,13 +666,13 @@ label {
 			  	$("#serviceType"+rowCount).focus();
 			  }
 			  
-			  /*  if( ( design=="0" ) )
+			  if( ( design=="0" ) )
 			  {
 			  	alert("Select Designation");
 			  	$("#designation"+rowCount).focus();
 			  }
 			  
-			 if(  ( dist=="0" ) )
+			  if(  ( dist=="0" ) )
 			  {
 			  	alert("Select District");
 			  	$("#distId"+rowCount).focus();
@@ -732,7 +690,7 @@ label {
 				alert("Select Village");
 			  	$("#villageId"+rowCount).focus();
 			  
-			  }*/
+			  }
 			  
 		});
 		$("#removeResp").click(function(){

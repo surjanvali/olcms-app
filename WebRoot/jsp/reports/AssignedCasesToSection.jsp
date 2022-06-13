@@ -95,7 +95,7 @@ body {
 								<th>Purpose</th>
 								<th>Respondents</th>
 								<th>Orders</th>
-								<th style="width: 150px !important;">Action</th>
+								<th style="width: 150px !important;">Action / Status</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -138,18 +138,19 @@ body {
 										<td>${map.purpose_name }</td>
 										<td>${map.res_name }</td>
 										<td style="text-align: center;">${map.orderpaths }</td>
-										<td style="min-width: 150px !important;"><logic:notEqual
+										<td style="min-width: 150px !important;color: navy;"><logic:notEqual
 												value="-" name="map" property="counter_approved_gp">
 												<b>${map.casestatus1 } <br />${map.casestatus2 }<br />
 													${map.casestatus3 } <br />${map.casestatus4 }
 												</b>
-											</logic:notEqual> <logic:equal value="-" name="map"
+											</logic:notEqual> <logic:notEqual value="T" name="map"
 												property="counter_approved_gp">
+												<br />
 
 												<button class="btn btn-sm btn-primary"
 													onclick="caseStatusUpdate('${map.cino}');">Update
 													Status</button>
-											</logic:equal></td>
+											</logic:notEqual></td>
 								</logic:iterate>
 							</logic:notEmpty>
 						</tbody>

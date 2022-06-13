@@ -148,7 +148,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<logic:notEmpty name="parawiseCount">
 					<logic:greaterThan value="0" name="parawiseCount">
 						<div class="col-lg-3 col-md-6">
-							<a href="./AssignedCasesToSection.do?mode=unspecified&pr_countr_flag=PR">
+							<a href="./AssignedCasesToSection.do?mode=unspecified&pwCounterFlag=PR">
 								<div class="ibox bg-danger color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${parawiseCount }</h2>
@@ -167,7 +167,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<logic:notEmpty name="counterFileCount">
 					<logic:greaterThan value="0" name="counterFileCount">
 						<div class="col-lg-3 col-md-6">
-							<a href="./AssignedCasesToSection.do?mode=unspecified&pr_countr_flag=COUNTER">
+							<a href="./AssignedCasesToSection.do?mode=unspecified&pwCounterFlag=COUNTER">
 								<div class="ibox bg-danger color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${counterFileCount }</h2>

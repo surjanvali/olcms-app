@@ -325,14 +325,16 @@ public class GPOAcknowledgementAction extends DispatchAction {
 				
 				int distId = 0;
 				String deptId="";
+				distId = Integer.parseInt(cform.getDynaForm("distId").toString());
+				 
 				for(int respondentId=1; respondentId <= respondentIds; respondentId++) {
 					
-					 distId = Integer.parseInt(cform.getDynaForm("distId"+respondentId).toString());
-					  deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"+respondentId));
+					 //distId = Integer.parseInt(cform.getDynaForm("distId"+respondentId).toString());
+					 deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"+respondentId));
 				}
 				
 				System.out.println("distId===="+distId);
-				System.out.println("deptId===="+deptId);
+				//System.out.println("deptId===="+deptId);
 				
 				// != null ? Integer.parseInt(cform.getDynaForm("distId").toString()) : 0;
 				//System.out.println("deptIds:"+cform.getDeptId());
@@ -360,7 +362,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					sql = "insert into ecourts_gpo_ack_dtls (ack_no, distid, petitioner_name, advocatename ,advocateccno ,casetype , maincaseno , remarks ,  " //casetype
 							+ "inserted_by , inserted_ip , ack_type, reg_year, reg_no)"  //,designation,mandalid,villageid
 							+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";//,?,?,?    , ?, ?
-System.out.println("sql--"+sql);
+					System.out.println("sql--"+sql);
 					ps = con.prepareStatement(sql);
 					ps.setString(i, ackNo);
 					ps.setInt(++i, distId);
@@ -387,7 +389,11 @@ System.out.println("sql--"+sql);
 					if(respondentIds > 0) {
 						
 						ps.close();
-						sql="insert into ecourts_gpo_ack_depts (ack_no, dept_code, respondent_slno,designation,mandalid,villageid,servicetpye) values (?,?,?,?,?,?,?)";
+						sql="insert into ecourts_gpo_ack_depts (ack_no, dept_code, respondent_slno, servicetpye, dept_category"
+								// + ",designation,mandalid,villageid"
+								+ ") values (?,?,?,?,?"
+								// + ",?,?,?"
+								+ ")";
 						ps = con.prepareStatement(sql);
 						
 						for(int respondentId=1; respondentId <= respondentIds; respondentId++) {
@@ -396,10 +402,12 @@ System.out.println("sql--"+sql);
 								ps.setString(i, ackNo);
 								ps.setString(++i, cform.getDynaForm("deptId"+respondentId).toString());
 								ps.setInt(++i, respondentId);
-								ps.setString(++i, cform.getDynaForm("designation"+respondentId).toString());
+								/*ps.setString(++i, cform.getDynaForm("designation"+respondentId).toString());
 								ps.setString(++i, cform.getDynaForm("mandalId"+respondentId).toString());
 								ps.setString(++i, cform.getDynaForm("villageId"+respondentId).toString());
+								*/
 								ps.setString(++i, cform.getDynaForm("serviceType"+respondentId).toString());
+								ps.setString(++i, cform.getDynaForm("deptCategory"+respondentId).toString());
 								ps.addBatch();
 							}
 						}
@@ -445,7 +453,7 @@ System.out.println("sql--"+sql);
 						}
 						
 						String ackPath = generateAckPdf(ackNo, cform);
-						String barCodeFilePath = generateAckBarCodePdf(ackNo, cform);
+						String barCodeFilePath = generateAckBarCodePdf128(ackNo, cform);
 						System.out.println("ackPath::"+ackPath);
 						System.out.println("barCodeFilePath::"+barCodeFilePath);
 						
@@ -711,7 +719,7 @@ System.out.println("sql--"+sql);
 					cform.setDynaForm("serviceNonService", ackData.get("services_flag").toString());
 				}
 				
-				System.out.println("ACK BAR CODE PATH:"+generateAckBarCodePdf(ackNo, cform));
+				System.out.println("ACK BAR CODE PATH:"+generateAckBarCodePdf128(ackNo, cform));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -877,21 +885,74 @@ System.out.println("sql--"+sql);
 		return pdfFilePath;
 	}
 	
-	public String generateAckBarCodePdf(String ackNo,CommonForm cform){
-		//uploads/letters/Invoice
+	public static void main(String[] args) {
+		// generateAckBarCodePdf("REV01-L1820220613115422600", null);
+		generateAckBarCodePdf128("REV01-L1820220613115422600", null);
+	}
+	
+	public static String generateAckBarCodePdf128(String ackNo, CommonForm cform) {
+		// uploads/letters/Invoice
 		Document document = null;
 		PdfWriter writer = null;
-		String pdfFilePath ="";
-		try{
-			String fileName = ackNo+"_barCode.pdf";
+		String pdfFilePath = "", filepath = "";
+		try {
+			String fileName = ackNo + "_barCode-A1.pdf";
 			pdfFilePath = ApplicationVariables.ackPath + fileName;
 
 			document = new Document(PageSize.A6.rotate());
-			// document.setMargins(30, 30, 30, 30);
+			document.setMargins(10,10,10,10);
 			document.setPageSize(PageSize.A6);
-			writer = PdfWriter.getInstance(document, new FileOutputStream(ApplicationVariables.contextPath+pdfFilePath));
-			//BaseFont bf_courier = BaseFont.createFont(BaseFont.HELVETICA, "Cp1252", false);
 
+			// filepath = "E:\\Apache Software Foundation\\Tomcat 9.0\\webapps\\apolcms\\" + pdfFilePath;
+			filepath = ApplicationVariables.contextPath+pdfFilePath;
+			// System.out.println("filepath:" + filepath);
+			writer = PdfWriter.getInstance(document, new FileOutputStream(filepath));
+			document.open();
+			// System.out.println("WIDTH A6:" + PageSize.A6.getWidth());
+			// System.out.println("HEIGHT A6:" + PageSize.A6.getHeight());
+
+			PdfContentByte cb = writer.getDirectContent();
+			Barcode128 barcode128 = new Barcode128();
+			barcode128.setCode(ackNo);
+			Image code128Image = barcode128.createImageWithBarcode(cb, null, null);
+			code128Image.scaleToFit(250f, 250f);
+			code128Image.scaleAbsoluteHeight(50f);
+			
+			// System.out.println("--"+code128Image.getScaledHeight());
+			// System.out.println("--"+code128Image.getScaledWidth());
+			
+			document.add(code128Image);
+			// System.out.println("BAR CODE pdfFilePath:" + pdfFilePath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (document != null)
+				document.close();
+		}
+		return pdfFilePath;
+	}
+	
+	
+	public static String generateAckBarCodePdf1(String ackNo,CommonForm cform){
+		//uploads/letters/Invoice
+		Document document = null;
+		PdfWriter writer = null;
+		String pdfFilePath ="", filepath="";
+		try{
+			String fileName = ackNo+"_barCode-A1.pdf";
+			pdfFilePath = ApplicationVariables.ackPath + fileName;
+
+			document = new Document(PageSize.A6.rotate());
+			//document.setMargins(20, 40, 60, 80);
+			document.setPageSize(PageSize.A6);
+			
+			// writer = PdfWriter.getInstance(document, new FileOutputStream(ApplicationVariables.contextPath+pdfFilePath));
+			filepath = "E:\\Apache Software Foundation\\Tomcat 9.0\\webapps\\apolcms\\"+pdfFilePath;
+			// filepath = ApplicationVariables.contextPath+pdfFilePath;
+			System.out.println("filepath:"+filepath);
+					
+			writer = PdfWriter.getInstance(document, new FileOutputStream(filepath));
+			//BaseFont bf_courier = BaseFont.createFont(BaseFont.HELVETICA, "Cp1252", false);
 			/*
 			HeaderFooter footer = new HeaderFooter(new Phrase("Page No.:"+document.getPageNumber(), new Font(bf_courier, 8, Font.NORMAL)), true);
 			footer.setBorder(Rectangle.NO_BORDER);
@@ -900,14 +961,14 @@ System.out.println("sql--"+sql);
 			*/
 
 			document.open();
-			 System.out.println("WIDTH A7:"+PageSize.A6.getWidth());
-			 System.out.println("HEIGHT A7:"+PageSize.A6.getHeight());
+			System.out.println("WIDTH A6:"+PageSize.A6.getWidth());
+			System.out.println("HEIGHT A6:"+PageSize.A6.getHeight());
 			
 			PdfContentByte cb = writer.getDirectContent();
 			
 			Barcode39 barcode39 = new Barcode39();
 			barcode39.setCode(ackNo);
-			System.out.println(""+pdfFilePath);
+			// System.out.println(""+pdfFilePath);
 			// barcode39.setCode(pdfFilePath);
 			//barcode39.setCode("https://apolcms.ap.gov.in/uploads/acks/AGC0114202203070354959.pdf");
 			Image code39Image = barcode39.createImageWithBarcode(cb, null, null);
@@ -921,10 +982,13 @@ System.out.println("sql--"+sql);
 			Image code39Image = barcode39.createImageWithBarcode(cb, null, null);
 			*/
 			//code39Image.setAbsolutePosition( ( PageSize.A9.getWidth()/2  - 100) , (float) (PageSize.A9.getHeight()/2)+50);
-			code39Image.scalePercent(100, 100);
-			//code39Image.scaleToFit(100f, 100f);
+			//code39Image.scalePercent(125, 125);
+			//System.out.println("125:"+pdfFilePath);
+			code39Image.scaleToFit(250f, 250f);
+			code39Image.scaleAbsoluteHeight(50f);
+			//code39Image.setWidthPercentage(100);
 			//code39Image.setAbsolutePosition(10, 100);
-			//code39Image.scalePercent(100);
+			// code39Image.scalePercent(100);
 			code39Image.setAlignment(1);
 			
 			

@@ -78,36 +78,47 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 			
 			
 			if(roleId!=null && roleId.equals("4")) { // MLO
-				condition=" and dept_code='"+deptCode+"' and a.case_status=2";
+				condition=" and a.dept_code='"+deptCode+"' and a.case_status=2";
 			}
 			else if(roleId!=null && roleId.equals("5")) { // NO
-				condition=" and dept_code='"+deptCode+"' and a.case_status=4";
+				condition=" and a.dept_code='"+deptCode+"' and a.case_status=4";
 			}
 			else if(roleId!=null && roleId.equals("8")) { // SECTION OFFICER - SECT. DEPT
-				condition=" and dept_code='"+deptCode+"' and a.case_status=5 and assigned_to='"+userId+"'";
+				condition=" and a.dept_code='"+deptCode+"' and a.case_status=5 and a.assigned_to='"+userId+"'";
 			}
 			else if(roleId!=null && roleId.equals("11")) { // SECTION OFFICER - HOD
-				condition=" and dept_code='"+deptCode+"' and a.case_status=9 and assigned_to='"+userId+"'";
+				condition=" and a.dept_code='"+deptCode+"' and a.case_status=9 and a.assigned_to='"+userId+"'";
 			}
 			else if(roleId!=null && roleId.equals("12")) { // SECTION OFFICER - DISTRICT
-				condition=" and dept_code='"+deptCode+"' and dist_id='"+distId+"' and a.case_status=10 and assigned_to='"+userId+"'";
+				condition=" and a.dept_code='"+deptCode+"' and dist_id='"+distId+"' and a.case_status=10 and a.assigned_to='"+userId+"'";
 			}
 			
 			
 			else if(roleId!=null && roleId.equals("3")) { // SECT DEPT
-				condition=" and dept_code='"+deptCode+"' and a.case_status=1";
+				condition=" and a.dept_code='"+deptCode+"' and a.case_status=1";
 			}
 			else if(roleId!=null && roleId.equals("9")) { // HOD
-				condition=" and dept_code='"+deptCode+"' and a.case_status=3";
+				condition=" and a.dept_code='"+deptCode+"' and a.case_status=3";
 			}
 			else if(roleId!=null && roleId.equals("2")) { // DC
 				condition=" and a.case_status=7 and dist_id='"+distId+"'";
 			}
 			else if(roleId!=null && roleId.equals("10")) { // DC-NO
-				condition=" and dept_code='"+deptCode+"' and a.case_status=8 and dist_id='"+distId+"'";
+				condition=" and a.dept_code='"+deptCode+"' and a.case_status=8 and a.dist_id='"+distId+"'";
 			}
 			else if(roleId!=null && roleId.equals("6")) { // GPO
-				condition=" and a.case_status=6";
+				
+				String counter_pw_flag = CommonModels.checkStringObject(request.getParameter("pwCounterFlag"));
+				
+				condition=" and a.case_status=6 and e.gp_id='"+userId+"' ";
+				
+				if(counter_pw_flag.equals("PW")) {
+					condition+=" and pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'No')='No'";
+				}
+				if(counter_pw_flag.equals("COUNTER")) {
+					condition+=" and counter_filed='Yes' and coalesce(counter_approved_gp,'F')='F'";
+				}
+				
 			}
 			
 			sql = "select a.*, b.orderpaths , od.pwr_uploaded, od.counter_filed, od.pwr_approved_gp, coalesce(od.counter_approved_gp,'-') as counter_approved_gp "
@@ -128,7 +139,8 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					+ " on (a.cino=b.cino) "
 					+ " "
 					+ " left join ecourts_olcms_case_details od on (a.cino=od.cino)"
-					+ " "
+					+ " left join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) "
+					
 					+ " where assigned=true "+condition
 					+ " and coalesce(a.ecourts_case_status,'')!='Closed' "
 					+ " order by a.cino";
@@ -826,7 +838,7 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 								+ cform.getDynaForm("parawiseRemarksSubmitted") + "', pwr_submitted_date=to_date('"
 								+ CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksDt"))
 								+ "','dd/mm/yyyy'), pwr_received_date=to_date('"
-								+ CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksDt")) + "','dd/mm/yyyy'),pwr_approved_gp='"
+								+ CommonModels.checkStringObject(cform.getDynaForm("dtPRReceiptToGP")) + "','dd/mm/yyyy'),pwr_approved_gp='"
 								+ cform.getDynaForm("pwr_gp_approved") + "',"
 								+ " pwr_gp_approved_date=to_date('" + CommonModels.checkStringObject(cform.getDynaForm("dtPRApprovedToGP"))
 								+ "','dd/mm/yyyy'), action_to_perfom='"+cform.getDynaForm("actionToPerform")  + "' where cino='" + cIno + "'";
@@ -845,7 +857,7 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 								+ cform.getDynaForm("parawiseRemarksSubmitted") + "'," 
 								
 								+ " to_date('" + CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksDt")) + "','dd/mm/yyyy'), " 
-								+ " to_date('" + CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksDt")) + "','dd/mm/yyyy'), '"
+								+ " to_date('" + CommonModels.checkStringObject(cform.getDynaForm("dtPRReceiptToGP")) + "','dd/mm/yyyy'), '"
 								+ cform.getDynaForm("pwr_gp_approved") + "'," 
 								
 								+ " to_date('" + cform.getDynaForm("dtPRApprovedToGP") + "','dd/mm/yyyy'), '" 
@@ -1204,27 +1216,54 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 				
 				msg = "Case details ("+cIno+") updated successfully.";
 				
+				sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"'";
+				a += DatabasePlugin.executeUpdate(sql, con);
+				
 				if(cform.getDynaForm("actionToPerform").toString().equals("Parawise Remarks")) {
-					sql="update ecourts_case_data set pwr_approved='T' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
+					/*sql="update ecourts_case_data set pwr_approved='T' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
 					System.out.println("SQL:"+sql);
-					a = DatabasePlugin.executeUpdate(sql, con);
+					a = DatabasePlugin.executeUpdate(sql, con);*/
+					
+					sql="update ecourts_olcms_case_details set pwr_approved_gp='Yes',pwr_gp_approved_date=current_date  where cino='"+cIno+"'";
+					a += DatabasePlugin.executeUpdate(sql, con);
 					
 					msg = "Parawise Remarks Approved successfully for Case ("+cIno+").";
 				}
 				else if(cform.getDynaForm("actionToPerform").toString().equals("Counter Affidavit")) {
-					sql="update ecourts_case_data set counter_approved='T' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
+					/*sql="update ecourts_case_data set counter_approved='T' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
+					System.out.println("SQL:"+sql);
+					a = DatabasePlugin.executeUpdate(sql, con);*/
+					
+					msg = "Counter Affidavit Approved successfully for Case ("+cIno+").";
+					
+					sql="update ecourts_olcms_case_details set counter_approved_gp='T',counter_approved_date=current_date, counter_approved_by='"+userId+"' where cino='"+cIno+"'";
+					a += DatabasePlugin.executeUpdate(sql, con);
+				}
+				
+				else if (CommonModels.checkStringObject(cform.getDynaForm("counterFiled")).equals("Yes")) {
+					/*sql="update ecourts_case_data set pwr_approved='T', counter_approved='T' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
 					System.out.println("SQL:"+sql);
 					a = DatabasePlugin.executeUpdate(sql, con);
 					
+					*/
+					sql="update ecourts_olcms_case_details set counter_approved_gp='T',counter_approved_date=current_date, counter_approved_by='"+userId+"' where cino='"+cIno+"'";
+					a += DatabasePlugin.executeUpdate(sql, con);
 					msg = "Counter Affidavit Approved successfully for Case ("+cIno+").";
+					
 				}
-				
-				
-				sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"'";
-				a += DatabasePlugin.executeUpdate(sql, con);
-				
-				sql="update ecourts_olcms_case_details set counter_approved_gp='T',counter_approved_date=current_date, counter_approved_by='"+userId+"' where cino='"+cIno+"'";
-				a += DatabasePlugin.executeUpdate(sql, con);
+				else if (CommonModels.checkStringObject(cform.getDynaForm("counterFiled")).equals("No") && CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksSubmitted")).equals("Yes")) {
+					
+					/*sql="update ecourts_case_data set pwr_approved='T' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
+					System.out.println("SQL:"+sql);
+					a = DatabasePlugin.executeUpdate(sql, con);
+					*/
+					
+					sql="update ecourts_olcms_case_details set pwr_approved_gp='Yes',pwr_gp_approved_date=current_date  where cino='"+cIno+"'";
+					a += DatabasePlugin.executeUpdate(sql, con);
+					
+					msg = "Parawise Remarks Approved successfully for Case ("+cIno+").";
+					
+				}
 				
 				if (a > 0) {
 					sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks) "
@@ -1242,6 +1281,7 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 			}
 		} catch (Exception e) {
 			con.rollback();
+			request.removeAttribute("successMsg");
 			request.setAttribute("errorMsg", "Error while filing Counter for Cino :" + cIno);
 			e.printStackTrace();
 		} finally {
@@ -1301,46 +1341,67 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					System.out.println("distCodeC::"+distCodeC);
 					if(deptCodeC.contains("01") && (distCodeC.equals("") || distCodeC.equals("0"))) {//SECTION SECT DEPT
 						newStatus="5";
-						
+						sql="select inserted_by from ecourts_case_activities where cino='"+cIno+"' and action_type='CASE FORWARDED' and assigned_to in (select emailid from mlo_details where user_id='"+deptCodeC+"') order by inserted_on desc limit 1";
 						msg = "Returned Case to Section Officer (Sect. Dept.)";
 					}
 					else if(!deptCodeC.contains("01") && (distCodeC.equals("") || distCodeC.equals("0"))) {//SECTION HOD
 						newStatus="9";
 						msg = "Returned Case to Section Officer (HOD)";
+						sql="select inserted_by from ecourts_case_activities where cino='"+cIno+"' and action_type='CASE FORWARDED' "
+								+ "and assigned_to in (select emailid from nodal_officer_details where dept_id='"+deptCodeC+"'  and coalesce(dist_id,0) = 0) order by inserted_on desc limit 1";
+						
 					}
 					else if(!distCodeC.equals("") && !distCodeC.equals("0")) {//SECTION DIST
 						newStatus="10";
 						msg = "Returned Case to Section Officer (District)";
+						sql="select inserted_by from ecourts_case_activities where cino='"+cIno+"' and action_type='CASE FORWARDED' "
+								+ "and assigned_to in (select emailid from nodal_officer_details where dept_id='"+deptCodeC+"' and coalesce(dist_id,0) > 0) order by inserted_on desc limit 1";
+						
 					}
 					
-					sql="select inserted_by from ecourts_case_activities where cino='"+cIno+"' and action_type='CASE FORWARDED' and assigned_to in (select emailid from nodal_officer_details where dept_id='"+deptCodeC+"') order by inserted_on desc limit 1";
 					System.out.println("assigned2Emp::"+sql);
 					assigned2Emp = DatabasePlugin.getSingleValue(con, sql);
 				}
 				
 				if(cform.getDynaForm("actionToPerform").toString().equals("Parawise Remarks")) {
-					
-					sql="update ecourts_case_data set pwr_approved='F', case_status="+newStatus+", assigned_to='"+assigned2Emp+"' "
+					//pwr_approved='F',
+					sql="update ecourts_case_data set  case_status="+newStatus+", assigned_to='"+assigned2Emp+"' "
 							+ ",section_officer_updated=null, mlo_no_updated=null where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
 					System.out.println("SQL:"+sql);
 					a = DatabasePlugin.executeUpdate(sql, con);
 					
-					msg = "Parawise Remarks Returned for Case ("+cIno+").";
+					//msg = "Parawise Remarks Returned for Case ("+cIno+").";
 				}
 				else if(cform.getDynaForm("actionToPerform").toString().equals("Counter Affidavit")) {
-					sql="update ecourts_case_data set counter_approved='F',case_status="+newStatus+",assigned_to='"+assigned2Emp+"',section_officer_updated=null , mlo_no_updated=null "
+					// counter_approved='F',
+					sql="update ecourts_case_data set case_status="+newStatus+",assigned_to='"+assigned2Emp+"',section_officer_updated=null , mlo_no_updated=null "
 							+ "where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
 					System.out.println("SQL:"+sql);
 					a = DatabasePlugin.executeUpdate(sql, con);
 					
-					msg = "Counter Affidavit Returned for Case ("+cIno+").";
+					//msg = "Counter Affidavit Returned for Case ("+cIno+").";
+				}
+				else if (CommonModels.checkStringObject(cform.getDynaForm("counterFiled")).equals("Yes")) {
+					//pwr_approved='F', counter_approved='F',
+					sql="update ecourts_case_data set  case_status="+newStatus+", assigned_to='"+assigned2Emp+"' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
+					System.out.println("SQL:"+sql);
+					a = DatabasePlugin.executeUpdate(sql, con);
+					//msg = "Counter Affidavit Returned for Case ("+cIno+").";
+					
+					sql="update ecourts_olcms_case_details set counter_approved_gp='F' where cino='"+cIno+"'";
+					a += DatabasePlugin.executeUpdate(sql, con);
+					
+				}
+				else if (CommonModels.checkStringObject(cform.getDynaForm("counterFiled")).equals("No") && CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksSubmitted")).equals("Yes")) {
+					//pwr_approved='F',
+					sql="update ecourts_case_data set  case_status="+newStatus+", assigned_to='"+assigned2Emp+"' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
+					System.out.println("SQL:"+sql);
+					a = DatabasePlugin.executeUpdate(sql, con);
+					
+					//msg = "Parawise Remarks Returned for Case ("+cIno+").";
 				}
 				
-				
 				sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"'";
-				a += DatabasePlugin.executeUpdate(sql, con);
-				
-				sql="update ecourts_olcms_case_details set counter_approved_gp='T',counter_approved_date=current_date, counter_approved_by='"+userId+"' where cino='"+cIno+"'";
 				a += DatabasePlugin.executeUpdate(sql, con);
 				
 				if (a > 0) {
@@ -1359,6 +1420,7 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 			}
 		} catch (Exception e) {
 			con.rollback();
+			request.removeAttribute("successMsg");
 			request.setAttribute("errorMsg", "Error while filing Counter for Cino :" + cIno);
 			e.printStackTrace();
 		} finally {

@@ -22,7 +22,7 @@ public class HighCourtCasesDataSchedular implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
 		System.out.println("Print Print Struts 1.3 + Quartz 2.1.5 integration example ~");
-		// updateData(context);
+		updateData(context);
 	}
 	
 	public synchronized void updateData(JobExecutionContext context) throws JobExecutionException {
