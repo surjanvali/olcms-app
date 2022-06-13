@@ -150,15 +150,23 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	$(document).ready(function() {
 		$("#causelist_date").attr("autocomplete", "off");
 		// $('#HighCourtCauseList').disableAutoFill();
+		
+		var endDateNew = new Date();
+		endDateNew.setDate(endDateNew.getDate()+1);
+	    
+		$('.datepicker').datepicker({
+			uiLibrary : 'bootstrap4',
+			format : 'mm/dd/yyyy',
+			startDate : new Date("2022-01-24"), // Set min Date
+			endDate : endDateNew
+		// Set max Date
+		});
+		
+		
+	   
 	});
 
-	$('.datepicker').datepicker({
-		uiLibrary : 'bootstrap4',
-		format : 'mm/dd/yyyy',
-		startDate : new Date("2022-01-24"), // Set min Date
-		endDate : new Date()
-	// Set max Date
-	});
+	
 </script>
 <script>
 	function showCauseList() {
