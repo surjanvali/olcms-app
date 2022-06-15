@@ -174,6 +174,18 @@ public class CaseSearchAction extends DispatchAction {
 					+ "case_full_name,a.ack_file_path, services_id, services_flag, inserted_time, a.barcode_file_path, reg_year, reg_no "
 					+ "order by inserted_time desc";
 			
+			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
+					+ " upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag,"
+					+ " STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description||'-'||servicetpye||case when coalesce(gd.dept_category,'0')!='0' then '-'||gd.dept_category else '' end ,', ') as dept_descs,a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date,STRING_AGG(gd.servicetpye,',')  as servicetpye,STRING_AGG(gd.designation,',')  as designation "
+					+ " , mode_filing from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
+					+ " left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
+					+ " left join (select ack_no,dm.dept_code,dm.description, respondent_slno,servicetpye,designation, coalesce(dept_category,'Normal') as dept_category from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code) order by ack_no, respondent_slno) gd on (a.ack_no=gd.ack_no)"
+					+ " where a.inserted_by='"+session.getAttribute("userid")
+					+"' and a.delete_status is false and ack_type='"+ackType+"' and inserted_time::date=current_date"
+					+ " group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name,"
+					+ " case_full_name,a.ack_file_path, services_id,services_flag, inserted_time,a.barcode_file_path, reg_year, reg_no, ack_type, a.mode_filing "
+					+ " order by district_name, inserted_time";
+			
 			System.out.println("SQL:"+sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			System.out.println("data=" + data);

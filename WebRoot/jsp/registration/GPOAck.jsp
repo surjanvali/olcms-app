@@ -9,7 +9,9 @@
 %>
 <!-- PAGE LEVEL STYLES
 -->
-<style type="text/css" data-genuitec-lp-enabled="false" data-genuitec-file-id="wc1-501" data-genuitec-path="/apolcms/WebRoot/jsp/registration/GPOAck.jsp">
+<style type="text/css" data-genuitec-lp-enabled="false"
+	data-genuitec-file-id="wc1-501"
+	data-genuitec-path="/apolcms/WebRoot/jsp/registration/GPOAck.jsp">
 label {
 	font-weight: bold;
 }
@@ -111,8 +113,8 @@ label {
 											</tr>
 											<tr>
 												<th style="width: 10%;">Sl No.</th>
-												<th style="width: 60%;" >Respondent Department</th>
-												<th  style="width: 30%;">Service Type</th>
+												<th style="width: 60%;">Respondent Department</th>
+												<th style="width: 30%;">Service Type</th>
 												<!-- <th style="width: 20%;">Designation</th>
 												<th style="width: 20%;">District</th>
 												<th style="width: 20%;">Mandal</th>
@@ -124,26 +126,24 @@ label {
 												<td>1.</td>
 												<td><html:select styleId="deptId1"
 														property="dynaForm(deptId1)" styleClass="select2Class"
-														style="width: 100%;" onchange="showRevenueClassification(1);">
+														style="width: 100%;"
+														onchange="showRevenueClassification(1);">
 														<html:option value="0">---SELECT---</html:option>
 														<logic:notEmpty name="CommonForm"
 															property="dynaForm(deptList)">
 															<html:optionsCollection name="CommonForm"
 																property="dynaForm(deptList)" />
 														</logic:notEmpty>
-													</html:select>
-													
-													<html:select styleId="deptCategory1"
-														property="dynaForm(deptCategory1)" styleClass="form-control"
-														style="width: 100%;display : none;" >
+													</html:select> <html:select styleId="deptCategory1"
+														property="dynaForm(deptCategory1)"
+														styleClass="form-control"
+														style="width: 100%;display : none;">
 														<html:option value="0">---SELECT---</html:option>
 														<html:option value="General">General</html:option>
 														<html:option value="Assignment">Assignment</html:option>
 														<html:option value="Land Acquisition">Land Acquisition</html:option>
-														
-													</html:select>
-													
-													</td>
+
+													</html:select></td>
 												<td><html:select property="dynaForm(serviceType1)"
 														styleClass="select2Class" style="width: 100%;"
 														styleId="serviceType1">
@@ -151,7 +151,8 @@ label {
 														<html:option value="NON-SERVICES">NON-SERVICES</html:option>
 														<logic:notEmpty property="dynaForm(serviceTypesList)"
 															name="CommonForm">
-															<html:optionsCollection property="dynaForm(serviceTypesList)" name="CommonForm" />
+															<html:optionsCollection
+																property="dynaForm(serviceTypesList)" name="CommonForm" />
 														</logic:notEmpty>
 													</html:select></td>
 
@@ -266,9 +267,17 @@ label {
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 								<div class="form-group">
-									<label> Main Case No. (WP/WA/AS/CRP Nos.) </label>
-									<html:text styleId="mainCaseNo" styleClass="form-control"
-										property="dynaForm(mainCaseNo)" maxlength="25" />
+									<label for="sel1">Mode of Filing <bean:message
+											key="mandatory" />
+									</label>
+									<html:select property="dynaForm(filingMode)"
+										styleClass="select2Class" style="width: 100%;"
+										styleId="filingMode">
+										<html:option value="0">---SELECT---</html:option>
+										<html:option value="Normal">Normal</html:option>
+										<html:option value="Lunch Motion">Lunch Motion</html:option>
+										<html:option value="Fair Listing">Fair Listing</html:option>
+									</html:select>
 								</div>
 							</div>
 						</div>
@@ -355,6 +364,13 @@ label {
 						<div class="row">
 							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 								<div class="form-group">
+									<label> Main Case No. (WP/WA/AS/CRP Nos.) </label>
+									<html:text styleId="mainCaseNo" styleClass="form-control"
+										property="dynaForm(mainCaseNo)" maxlength="25" />
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group">
 									<label> Remarks </label>
 									<html:textarea styleId="remarks" styleClass="form-control"
 										property="dynaForm(remarks)" rows="5" cols="50" />
@@ -373,7 +389,7 @@ label {
 										<input type="button" name="Submit" value="Submit"
 											class="btn btn-success pull-right" onclick="saveAck();" />
 									</logic:equal>
-									
+
 									<logic:equal value="UPDATE" name="saveAction">
 
 										<input type="button" name="Submit" value="Update"
@@ -431,7 +447,7 @@ label {
 
 
 												<td>${map.remarks }</td>
-												<td style="text-align: center;" nowrap="nowrap">
+												<td>
 													<%-- <button type="button" class="btn btn-sm btn-warning"
 														title="Edit Acknowledgement"
 														onclick="editAck('${map.ack_no}')">
@@ -445,12 +461,12 @@ label {
 														<a href="./${map.ack_file_path}" target="_new"
 															title="Print Acknowledgement" class="btn btn-sm btn-info">
 															<i class="fa fa-save"></i> <span>Acknowledgement</span> <!-- <span>Download</span> -->
-														</a>
+														</a><br />
 													</logic:present> <logic:present name="map" property="barcode_file_path">
 														<a href="./${map.barcode_file_path}" target="_new"
 															title="Print Barcode" class="btn btn-sm btn-info"> <i
 															class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
-														</a>
+														</a><br />
 													</logic:present> <a
 													href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 													target="_new" title="Print Barcode"
@@ -526,17 +542,17 @@ label {
 
 
 												<%-- <td>${map.remarks }</td> --%>
-												<td style="text-align: center;" nowrap="nowrap"><logic:present
+												<td style="text-align: left;"><logic:present
 														name="map" property="ack_file_path">
 														<a href="./${map.ack_file_path}" target="_new"
 															title="Print Acknowledgement" class="btn btn-sm btn-info">
 															<i class="fa fa-save"></i> <span>Acknowledgement</span> <!-- <span>Download</span> -->
-														</a>
+														</a><br />
 													</logic:present> <logic:present name="map" property="barcode_file_path">
 														<a href="./${map.barcode_file_path}" target="_new"
 															title="Print Barcode" class="btn btn-sm btn-info"> <i
 															class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
-														</a>
+														</a><br />
 													</logic:present> <a
 													href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 													target="_new" title="Print Barcode"
@@ -618,6 +634,7 @@ label {
 			  let rowCount2 = rowCount+1;
 			  let prevVal=$("#deptId"+rowCount).val();
 			  let service=$("#serviceType"+rowCount).val();
+			  let deptCat=$("#deptCategory"+rowCount).val();
 			  
 			  /*let design=$("#designation"+rowCount).val();
 			  let dist=$("#distId"+rowCount).val();
@@ -679,7 +696,7 @@ label {
 				  $("#villageId"+rowCount2).select2();
 				  $("#villageId"+rowCount2).select2("val", "0"); */
 				
-				  $("#deptId"+rowCount2+" option[value="+prevVal+"]").remove();
+				  // $("#deptId"+rowCount2+" option[value="+prevVal+"]").remove();
 				 // $("#serviceType"+rowCount2+" option[value="+service+"]").remove();
 				 // $("#designation"+rowCount2+" option[value="+service+"]").remove();
 				  //$("#distId"+rowCount2+" option[value="+service+"]").remove();
@@ -695,7 +712,7 @@ label {
 			  	alert("Select Respondant Department.");
 			  	$("#deptId"+rowCount).focus();
 			  }
-			  if(prevVal=="REV01-L" && ($("#deptCategory"+rowCount).val=="" || $("#deptCategory"+rowCount).val=="0"))
+			  if(prevVal=="REV01-L" && (deptCat=="" || deptCat=="0"))
 			  {
 				 // alert("else prevVal--"+prevVal);
 			  	alert("Select Department Category.");
@@ -779,15 +796,23 @@ label {
 	});
 
 	function saveAck() {
-		/* if ($("#distId").val() == null || $("#distId").val() == "" || $("#distId").val() == "0") {
-			alert("District Required");
-			$("#distId").focus();
-			return false;
-		} else  */if ($("#deptId1").val() == null || $("#deptId1").val() == "" || $("#deptId1").val() == "0") {
+		if ($("#deptId1").val() == null || $("#deptId1").val() == "" || $("#deptId1").val() == "0") {
 			alert("Department Required");
 			$("#deptId1").focus();
 			return false;
-		}else if ($("#petitionerName").val() == null || $("#petitionerName").val() == "" || $("#petitionerName").val() == "0") {
+		}else if($("#deptId1").val()=="REV01-L" && ($("#deptCategory1").val()=="" || $("#deptCategory1").val()=="0"))
+		  {
+		  	alert("Select Department Category.");
+		  	$("#deptCategory1").focus();
+		  } else if ($("#serviceType1").val() == null || $("#serviceType1").val() == "" || $("#serviceType1").val() == "0") {
+			alert("Service Type Required");
+			$("#serviceType1").focus();
+			return false;
+		}else if ($("#distId").val() == null || $("#distId").val() == "" || $("#distId").val() == "0") {
+			alert("District Required");
+			$("#distId").focus();
+			return false;
+		} else if ($("#petitionerName").val() == null || $("#petitionerName").val() == "" || $("#petitionerName").val() == "0") {
 			alert("Petitioner Name Required");
 			$("#petitionerName").focus();
 			return false;
@@ -803,7 +828,14 @@ label {
 			alert("Case Type (Nature of Petition) Required");
 			$("#caseType").focus();
 			return false;
-		} else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
+		} 
+
+		else if ($("#filingMode").val() == null || $("#filingMode").val() == "" || $("#filingMode").val() == "0") {
+			alert("Mode of Filing Required");
+			$("#filingMode").focus();
+			return false;
+		}  
+		else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
 			alert("Main Case No. Required");
 			$("#mainCaseNo").focus();
 			return false;

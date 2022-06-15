@@ -171,7 +171,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			}
 
 			sql += "group by a.dept_code,d.dept_code ,reporting_dept_code,a.cino ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code)"
-					+ "group by x.reporting_dept_code, d1.description,x.cino order by 1 limit 25";
+					+ "group by x.reporting_dept_code, d1.description,x.cino order by 1 ";
 
 			request.setAttribute("HEADING", "Sect. Dept. Wise High Court Cases Abstract Report");
 
