@@ -381,7 +381,7 @@ public class WelcomePageAction extends DispatchAction{
 					
 					sql="select reg_year,count(*) as casescount from ecourts_case_data a "
 							+ "inner join dept_new d on (a.dept_code=d.dept_code)   inner join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) "
-							+ "where reg_year > 0 and d.display = true  and e.gp_id='gp-home@ap.gov.in' "
+							+ "where reg_year > 0 and d.display = true  and e.gp_id='"+userid+"' "
 							+ "group by reg_year order by reg_year desc";
 					System.out.println("YEARLY COUNT SQL:"+sql);
 					request.setAttribute("YEARWISECASES", DatabasePlugin.executeQuery(con, sql));

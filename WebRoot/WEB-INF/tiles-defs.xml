@@ -272,7 +272,7 @@
 	</definition>
 
 	<definition name="gpsReport" extends="UserLayoutNew">
-		<put name="content" value="/jsp/reports/GsReportP.jsp" />
+		<put name="content" value="/jsp/reports/GPsReport.jsp" />
 	</definition>
 
 </tiles-definitions>

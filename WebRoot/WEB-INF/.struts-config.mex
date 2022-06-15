@@ -49,6 +49,7 @@
   <StrutsActivity path="/AssignmentAndNewCases.do" location="3050,2250" dimension="334,96" />
   <StrutsActivity path="/AssignedNewCasesToEmp.do" location="3050,750" dimension="333,96" />
   <StrutsActivity path="/HighCourtCasesCategoryUpdation.do" location="3050,3350" dimension="381,96" />
+  <StrutsActivity path="/GPReport.do" location="1550,450" dimension="245,96" />
   <StrutsActivity path="Login;6" location="350,1750" dimension="92,81" />
   <StrutsActivity path="Logout;6" location="50,650" dimension="203,87" />
   <StrutsActivity path="Welcome;6" location="950,1450" dimension="107,81" />
@@ -56,6 +57,7 @@
   <StrutsActivity path="sessionExpired;6" location="1550,1750" dimension="123,81" />
   <StrutsActivity path="UserLayout" location="950,650" dimension="97,53" />
   <StrutsActivity path="UserLayoutNew" location="2150,350" dimension="113,51" />
+  <StrutsActivity path="gpdashboard" location="950,3450" dimension="100,51" />
   <StrutsActivity path="/FrontPage.jsp" location="650,650" dimension="116,53" />
   <StrutsActivity path="/jsp/BaseLayout/Login.jsp" location="650,1850" dimension="168,51" />
   <StrutsActivity path="page.logout" location="950,1850" dimension="94,51" />
@@ -107,6 +109,7 @@
   <StrutsActivity path="AssignedNewCasesToEmp" location="3050,2950" dimension="168,51" />
   <StrutsActivity path="caseStatusUpdationEmpl" location="350,3950" dimension="161,51" />
   <StrutsActivity path="HighCourtCasesCategoryUpdation" location="650,3950" dimension="213,51" />
+  <StrutsActivity path="gpsReport" location="1250,3450" dimension="84,51" />
   <StrutsActivity path="districtreport" location="2150,2650" dimension="98,51" />
   <StrutsActivity path="benchreport" location="50,2750" dimension="95,51" />
   <StrutsActivity path="HomePage;6" location="950,1050" dimension="116,81" />
@@ -130,9 +133,6 @@
   <StrutsActivity path="closedcasesreport" location="2450,2350" dimension="124,51" />
   <StrutsActivity path="mlologinstatusreport" location="650,2950" dimension="141,51" />
   <StrutsActivity path="/form/eofficeEmployeeReport.jsp" location="350,3450" dimension="207,51" />
-  <StrutsActivity path="gpdashboard" location="950,3450" dimension="100,51" />
-  <StrutsActivity path="/GPReport.do" />
-  <StrutsActivity path="gpsReport" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,598" />
@@ -161,6 +161,16 @@
       <AbsolutePoint location="650,1675" />
     </AutomaticBendpoints>
   </StrutsTransition>
+  <StrutsTransition id="/Welcome.do,gpDashboard,gpdashboard,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="470,754" />
+      <AbsolutePoint location="470,816" />
+      <AbsolutePoint location="-160,816" />
+      <AbsolutePoint location="-160,3416" />
+      <AbsolutePoint location="1000,3416" />
+      <AbsolutePoint location="1000,3450" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
   <StrutsTransition id="/Logout.do,success,page.logout,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,72" />
@@ -174,16 +184,6 @@
       <AbsolutePoint location="2826,3401" />
       <AbsolutePoint location="2826,3416" />
       <AbsolutePoint location="2519,3416" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
-  <StrutsTransition id="/Welcome.do,gpDashboard,gpdashboard,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="470,754" />
-      <AbsolutePoint location="470,816" />
-      <AbsolutePoint location="-160,816" />
-      <AbsolutePoint location="-160,3416" />
-      <AbsolutePoint location="1000,3416" />
-      <AbsolutePoint location="1000,3450" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/HCCaseDocsUploadAbstract.do,success,hccasedocsupload,1" routingType="0">
