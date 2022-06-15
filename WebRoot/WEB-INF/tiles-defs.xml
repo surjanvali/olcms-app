@@ -255,16 +255,24 @@
 		extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/AssignedNewCasesToEmp.jsp" />
 	</definition>
-	
-	<definition name="caseStatusUpdationEmpl" extends="UserLayoutNew">
+
+	<definition name="caseStatusUpdationEmpl"
+		extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/CaseStatusUpdationEmp.jsp" />
 	</definition>
-	
-	
-	<definition name="HighCourtCasesCategoryUpdation" extends="UserLayoutNew">
+
+	<definition name="HighCourtCasesCategoryUpdation"
+		extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/registration/HighCourtCasesCategoryUpdation.jsp" />
 	</definition>
 
+	<definition name="gpdashboard" extends="UserLayoutNew">
+		<put name="content" value="/jsp/BaseLayoutNew/GPContent.jsp" />
+	</definition>
+
+	<definition name="gpsReport" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/GsReportP.jsp" />
+	</definition>
 
 </tiles-definitions>

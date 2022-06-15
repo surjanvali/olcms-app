@@ -111,7 +111,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					+"' and a.delete_status is false and ack_type='"+ackType+"' and inserted_time::date=current_date"
 					+ " group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name,"
 					+ " case_full_name,a.ack_file_path, services_id,services_flag, inserted_time,a.barcode_file_path, reg_year, reg_no, ack_type, a.mode_filing "
-					+ " order by district_name, inserted_time";
+					+ " order by inserted_time desc";
 			
 			System.out.println("SQL:"+sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

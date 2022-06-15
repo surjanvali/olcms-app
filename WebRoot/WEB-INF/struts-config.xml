@@ -79,6 +79,7 @@
 			scope="request">
 			<forward name="UserWelcomePage" path="UserLayout"></forward>
 			<forward name="UserWelcomePageNew" path="UserLayoutNew"></forward>
+			<forward name="gpDashboard" path="gpdashboard"></forward>
 		</action>
 
 		<action path="/sessionExpired" forward="/Login.do" />
@@ -396,6 +397,13 @@
 			type="in.apcfss.struts.Actions.HighCourtCasesCategoryUpdationAction"
 			parameter="mode" scope="request">
 			<forward name="success" path="HighCourtCasesCategoryUpdation"></forward>
+		</action>
+		
+		<action path="/GPReport"
+			name="CommonForm"
+			type="in.apcfss.struts.reports.GPReportAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="gpsReport"></forward>
 		</action>
 
 	</action-mappings>

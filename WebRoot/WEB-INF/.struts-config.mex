@@ -130,6 +130,9 @@
   <StrutsActivity path="closedcasesreport" location="2450,2350" dimension="124,51" />
   <StrutsActivity path="mlologinstatusreport" location="650,2950" dimension="141,51" />
   <StrutsActivity path="/form/eofficeEmployeeReport.jsp" location="350,3450" dimension="207,51" />
+  <StrutsActivity path="gpdashboard" location="950,3450" dimension="100,51" />
+  <StrutsActivity path="/GPReport.do" />
+  <StrutsActivity path="gpsReport" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,598" />
@@ -171,6 +174,16 @@
       <AbsolutePoint location="2826,3401" />
       <AbsolutePoint location="2826,3416" />
       <AbsolutePoint location="2519,3416" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/Welcome.do,gpDashboard,gpdashboard,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="470,754" />
+      <AbsolutePoint location="470,816" />
+      <AbsolutePoint location="-160,816" />
+      <AbsolutePoint location="-160,3416" />
+      <AbsolutePoint location="1000,3416" />
+      <AbsolutePoint location="1000,3450" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/HCCaseDocsUploadAbstract.do,success,hccasedocsupload,1" routingType="0">
@@ -479,6 +492,12 @@
       <AbsolutePoint location="650,2598" />
       <AbsolutePoint location="391,2598" />
       <AbsolutePoint location="391,2750" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/GPReport.do,success,gpsReport,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="0,0" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/WPAffidavit.do,DEPT_WP_FORM,wpaffidavitpage,1" routingType="0">

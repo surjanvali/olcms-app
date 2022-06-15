@@ -346,7 +346,51 @@ public class WelcomePageAction extends DispatchAction{
 					// request.setAttribute("SHOWABSTRACTS", "SHOWABSTRACTS");
 				}
 				
-				else if(roleId.equals("6")) { // GPO
+				else if(roleId.equals("6")) { // GP NEW CODE
+					
+					// LEGACY CASES DATA
+					sql="select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases  from ("
+							+ "select a.dept_code , case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,count(*) as total_cases, "
+							+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
+							+ "sum(case when (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withmlo, "
+							+ "sum(case when case_status=3  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withhod, "
+							+ "sum(case when case_status=4  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withnodal, "
+							+ "sum(case when case_status=5 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsection, "
+							+ "sum(case when case_status=7  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdc, "
+							+ "sum(case when case_status=8  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withdistno, "
+							+ "sum(case when case_status=9 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectionhod, "
+							+ "sum(case when case_status=10 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectiondist, "
+							+ "sum(case when case_status=6 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withgpo, "
+							+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases "
+							+ "from ecourts_case_data a "
+							+ "inner join dept_new d on (a.dept_code=d.dept_code) "
+							+ " inner join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) "
+							+ "where d.display = true  and e.gp_id='"+userid+"' ";
+					
+						sql+= "group by a.dept_code,d.dept_code ,reporting_dept_code ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code)"
+							+ "group by x.reporting_dept_code, d1.description order by 1";
+					
+					request.setAttribute("HEADING", "High Court Cases Abstract Report");
+
+					System.out.println("SQL:" + sql);
+					List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+					// System.out.println("data=" + data);
+					if (data != null && !data.isEmpty() && data.size() > 0)
+						request.setAttribute("secdeptwise", data);
+					request.setAttribute("showReport1", "showReport1");
+					
+					sql="select reg_year,count(*) as casescount from ecourts_case_data a "
+							+ "inner join dept_new d on (a.dept_code=d.dept_code)   inner join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) "
+							+ "where reg_year > 0 and d.display = true  and e.gp_id='gp-home@ap.gov.in' "
+							+ "group by reg_year order by reg_year desc";
+					System.out.println("YEARLY COUNT SQL:"+sql);
+					request.setAttribute("YEARWISECASES", DatabasePlugin.executeQuery(con, sql));
+					
+					target = "gpDashboard";
+				}
+				
+				
+				else if(roleId.equals("61")) { // GPO OLD CODE
 					
 					// LEGACY CASES DATA
 					sql="select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases  from ("
@@ -451,7 +495,7 @@ public class WelcomePageAction extends DispatchAction{
 					// List<Map<Object, String>> dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					// request.setAttribute("dashboardCounts", dashboardCounts);
 					
-					target = "UserWelcomePage";
+					target = "UserWelcomePageNew";
 				}
 				
 				// sql="select * from ecourts_case_activities where inserted_by='"+userid+"' order by inserted_on desc limit 10 ";
