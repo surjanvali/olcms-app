@@ -33,11 +33,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 </div>
 <div class="page-content fade-in-up">
-	<html:form method="post" action="/AcksReport"
+	<html:form method="post" action="/GPReport"
 		styleId="HighCourtCasesListForm">
 		<html:hidden styleId="mode" property="mode" />
-		<html:hidden styleId="selectedCaseIds"
-			property="dynaForm(selectedCaseIds)" />
+		<html:hidden styleId="selectedCaseIds" property="dynaForm(selectedCaseIds)" />
 
 		<div class="container-fluid">
 			<div class="row">
@@ -87,6 +86,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Case Type</th>
 										<th>Case No.</th>
 										<th>Registered Date</th>
+										<th>Status</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -95,13 +95,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td>${i+1 }.</td>
 											<td>${map.type_name_reg}</td>
 											<%-- <td>${map.reg_no}</td> --%>
-											<td>
-											
-											<a href="./GPReport.do?mode=viewCaseDetails&caseType=${map.type_name_reg}&caseNo=${map.reg_no}&caseYear=${map.reg_year}" class="btn btn-info btn-md">
-											${map.type_name_reg} ${map.reg_no}/${map.reg_year}
-											</a>
-											</td>
+											<td><a
+												href="./GPReport.do?mode=viewCaseData&caseType=${map.type_name_reg}&caseNo=${map.reg_no}&caseYear=${map.reg_year}"
+												class="btn btn-info btn-md"> ${map.type_name_reg}
+													${map.reg_no}/${map.reg_year} </a></td>
 											<td style="text-align: center;">${map.dt_regis }</td>
+											<td style="text-align: center;">Pending</td>
 											<%-- 
 												<td><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}">${map.ack_date }</a></td>
 												<td style="text-align: right;">${map.total}</td>
@@ -113,7 +112,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</tbody>
 								<tfoot>
 									<tR>
-										<td colspan="4" style="text-align: center;">&nbsp;</td>
+										<td colspan="5" style="text-align: center;">&nbsp;</td>
 									</tR>
 								</tfoot>
 							</table>

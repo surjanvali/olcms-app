@@ -274,5 +274,8 @@
 	<definition name="gpsReport" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/GPsReport.jsp" />
 	</definition>
+	<definition name="viewCaseDataPage" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/GPcaseView.jsp" />
+	</definition>
 
 </tiles-definitions>

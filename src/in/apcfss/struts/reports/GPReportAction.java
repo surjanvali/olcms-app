@@ -115,4 +115,11 @@ public class GPReportAction extends DispatchAction {
 		return mapping.findForward("success");
 	}
 	
+	public ActionForward viewCaseData(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+	
+		
+		
+		return mapping.findForward("viewCaseData");
+	}
 }

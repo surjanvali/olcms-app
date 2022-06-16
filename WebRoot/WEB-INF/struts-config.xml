@@ -404,6 +404,7 @@
 			type="in.apcfss.struts.reports.GPReportAction"
 			parameter="mode" scope="request">
 			<forward name="success" path="gpsReport"></forward>
+			<forward name="viewCaseData" path="viewCaseDataPage"></forward>
 		</action>
 
 	</action-mappings>
