@@ -104,13 +104,13 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ " upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag,"
 					+ " STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description||'-'||servicetpye||case when coalesce(gd.dept_category,'0')!='0' then '-'||gd.dept_category else '' end ,', ') as dept_descs,a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date,STRING_AGG(gd.servicetpye,',')  as servicetpye,STRING_AGG(gd.designation,',')  as designation "
-					+ " , mode_filing from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
+					+ " , mode_filing, case_category from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
 					+ " left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
 					+ " left join (select ack_no,dm.dept_code,dm.description, respondent_slno,servicetpye,designation, coalesce(dept_category,'0') as dept_category from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code) order by ack_no, respondent_slno) gd on (a.ack_no=gd.ack_no)"
 					+ " where a.inserted_by='"+session.getAttribute("userid")
 					+"' and a.delete_status is false and ack_type='"+ackType+"' and inserted_time::date=current_date"
 					+ " group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name,"
-					+ " case_full_name,a.ack_file_path, services_id,services_flag, inserted_time,a.barcode_file_path, reg_year, reg_no, ack_type, a.mode_filing "
+					+ " case_full_name,a.ack_file_path, services_id,services_flag, inserted_time,a.barcode_file_path, reg_year, reg_no, ack_type, a.mode_filing, a.case_category "
 					+ " order by inserted_time desc";
 			
 			System.out.println("SQL:"+sql);
@@ -145,15 +145,17 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			con = DatabasePlugin.connect();
 			String ackType = CommonModels.checkStringObject(request.getParameter("ackType"));
 			String ackDate=request.getParameter("ackDate").toString();
-					//cform.getDynaForm("ackType") !=null && !cform.getDynaForm("ackType").equals("0") ? cform.getDynaForm("ackType").toString() : "NEW";
+			// cform.getDynaForm("ackType") !=null && !cform.getDynaForm("ackType").equals("0") ? cform.getDynaForm("ackType").toString() : "NEW";
 
 			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ " upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id,services_flag,"
-					+ " STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description||'-'||servicetpye||case when coalesce(gd.dept_category,'0')!='0' then '-'||gd.dept_category else '' end ,', ') as dept_descs, a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date, reg_year, reg_no, ack_type,STRING_AGG(gd.servicetpye,',')  as servicetpye,STRING_AGG(gd.designation,',')  as designation "
-					+ " from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
+					+ " STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description||'-'||servicetpye||case when coalesce(gd.dept_category,'0')!='0' then '-'||gd.dept_category else '' end ,', ') as dept_descs,"
+					+ " a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date, reg_year, reg_no, ack_type,STRING_AGG(gd.servicetpye,',')  as servicetpye,STRING_AGG(gd.designation,',')  as designation "
+					+ " , mode_filing, case_category from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
 					+ " left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
 					//+ "left join (select ack_no,dm.dept_code,dm.description,servicetpye,designation, coalesce(dept_category,'Normal') as dept_category from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code)) gd on (a.ack_no=gd.ack_no)"
-					+ " left join (select ack_no,dm.dept_code,dm.description, respondent_slno,servicetpye,designation, coalesce(dept_category,'Normal') as dept_category from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code) order by ack_no, respondent_slno) gd on (a.ack_no=gd.ack_no)"
+					+ " left join (select ack_no,dm.dept_code,dm.description, respondent_slno,servicetpye,designation, coalesce(dept_category,'Normal') as dept_category from ecourts_gpo_ack_depts "
+					+ " inner join dept_new dm using (dept_code) order by ack_no, respondent_slno) gd on (a.ack_no=gd.ack_no)"
 					+ " where a.inserted_by='"+session.getAttribute("userid")
 					+"' and a.delete_status is false";
 			
@@ -162,7 +164,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			
 			sql+=" and to_char(inserted_time::date,'dd-mm-yyyy')='"+ackDate+"'"
 					+ "group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name,"
-					+ "case_full_name,a.ack_file_path, services_id, services_flag, inserted_time, a.barcode_file_path, reg_year, reg_no, ack_type,a.mode_filing "
+					+ "case_full_name,a.ack_file_path, services_id, services_flag, inserted_time, a.barcode_file_path, reg_year, reg_no, ack_type,a.mode_filing,a.case_category "
 					+ "order by inserted_time desc";
 			
 			System.out.println("SQL:"+sql);
@@ -372,8 +374,8 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 					int i = 1;
 					sql = "insert into ecourts_gpo_ack_dtls (ack_no, distid, petitioner_name, advocatename ,advocateccno ,casetype , maincaseno , remarks ,  " //casetype
-							+ "inserted_by , inserted_ip , ack_type, reg_year, reg_no, mode_filing)"  //,designation,mandalid,villageid
-							+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";//,?,?,?    , ?, ?
+							+ "inserted_by , inserted_ip , ack_type, reg_year, reg_no, mode_filing, case_category)"  //,designation,mandalid,villageid
+							+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";//,?,?,?    , ?, ?
 					System.out.println("sql--"+sql);
 					ps = con.prepareStatement(sql);
 					ps.setString(i, ackNo);
@@ -395,6 +397,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					//ps.setString(++i, CommonModels.checkStringObject(cform.getDynaForm("villageId1")));
 					ps.setString(++i, CommonModels.checkStringObject(cform.getDynaForm("regNo")));
 					ps.setString(++i, CommonModels.checkStringObject(cform.getDynaForm("filingMode")));
+					ps.setString(++i, CommonModels.checkStringObject(cform.getDynaForm("caseCategory")));
 					
 					int a = ps.executeUpdate();
 					
@@ -432,13 +435,13 @@ public class GPOAcknowledgementAction extends DispatchAction {
 						sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 								+ " upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag,"
 								+ " STRING_AGG(gd.dept_code,',') as dept_codes, STRING_AGG(gd.description||'-'||servicetpye||case when coalesce(gd.dept_category,'0')!='0' then '-'||gd.dept_category else '' end ,', ') as dept_descs, to_char(inserted_time,'dd-mm-yyyy') as generated_date,STRING_AGG(gd.servicetpye,',')  as servicetpye,STRING_AGG(gd.designation,',')  as designation "
-								+ " , mode_filing from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
+								+ " , mode_filing, case_category from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
 								+ " left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
 								+ " left join (select ack_no,dm.dept_code,dm.description, respondent_slno,servicetpye,designation, coalesce(dept_category,'Normal') as dept_category from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code) order by ack_no, respondent_slno) gd on (a.ack_no=gd.ack_no)"
 								+ " where a.inserted_by='"+session.getAttribute("userid")
 								+"' and a.delete_status is false and a.ack_no='"+ackNo+"'"
 								+ " group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name,"
-								+ " case_full_name,a.ack_file_path, services_id,services_flag, inserted_time, a.mode_filing "
+								+ " case_full_name,a.ack_file_path, services_id,services_flag, inserted_time, a.mode_filing, a.case_category "
 								+ " order by district_name, inserted_time";
 						
 						System.out.println("SQL:" + sql);

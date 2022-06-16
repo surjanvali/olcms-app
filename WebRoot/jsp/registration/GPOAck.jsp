@@ -235,7 +235,7 @@ label {
 									<label> Advocate CC No. <bean:message key="mandatory" />
 									</label>
 									<html:text styleId="advocateCCno" styleClass="form-control"
-										property="dynaForm(advocateCCno)" maxlength="25" />
+										property="dynaForm(advocateCCno)" maxlength="10" />
 								</div>
 							</div>
 
@@ -245,6 +245,24 @@ label {
 									</label>
 									<html:text styleId="advocateName" styleClass="form-control"
 										property="dynaForm(advocateName)" maxlength="150" />
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<div>
+										<label class="ui-radio ui-radio-inline"> 
+											<html:radio property="dynaForm(caseCategory)" styleId="caseCategory" value="Arbitration"> <span class="input-span"></span><strong>Arbitration</strong></html:radio> 
+										</label> 
+										<label class="ui-radio ui-radio-inline"> 
+											<html:radio property="dynaForm(caseCategory)" styleId="caseCategory" value="Appeal"> <span class="input-span"></span><strong>Appeal</strong></html:radio>
+										</label> 
+										<label class="ui-radio ui-radio-inline"> 
+											<html:radio property="dynaForm(caseCategory)" styleId="caseCategory" value="Others"> <span class="input-span"></span><strong>Others</strong></html:radio>
+										</label>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -274,9 +292,13 @@ label {
 										styleClass="select2Class" style="width: 100%;"
 										styleId="filingMode">
 										<html:option value="0">---SELECT---</html:option>
-										<html:option value="Normal">Normal</html:option>
-										<html:option value="Lunch Motion">Lunch Motion</html:option>
-										<html:option value="Fair Listing">Fair Listing</html:option>
+										<html:option value="Normal">NORMAL</html:option>
+										<html:option value="Lunch Motion">LUNCH MOTION</html:option>
+										<html:option value="Fair List Case">FAIR LIST CASE</html:option>
+
+										<html:option value="Tomorrow Normal">TOMORROW NORMAL</html:option>
+										<html:option value="Tomorrow Lunch Motion">TOMORROW LUNCH MOTION</html:option>
+										<html:option value="Tomorrow Fair List Case">TOMORROW FAIR LIST CASE</html:option>
 									</html:select>
 								</div>
 							</div>
@@ -416,11 +438,13 @@ label {
 											<th>Case Type</th>
 											<logic:present name="DISPLAYOLD">
 												<th>Case Year</th>
-												<th>Case Reg No.</th>
+												<th>Case Reg. No.</th>
 											</logic:present>
 											<th>Main Case No.</th>
 											<th>Advocate CC No.</th>
 											<th>Advocate Name</th>
+											
+											<th>Mode of Filing</th>
 
 											<th>Remarks</th>
 											<th>Download / Print</th>
@@ -444,6 +468,8 @@ label {
 												<td>${map.maincaseno }</td>
 												<td>${map.advocateccno }</td>
 												<td>${map.advocatename }</td>
+												
+												<td>${map.mode_filing }</td>
 
 
 												<td>${map.remarks }</td>
@@ -461,12 +487,14 @@ label {
 														<a href="./${map.ack_file_path}" target="_new"
 															title="Print Acknowledgement" class="btn btn-sm btn-info">
 															<i class="fa fa-save"></i> <span>Acknowledgement</span> <!-- <span>Download</span> -->
-														</a><br />
+														</a>
+														<br />
 													</logic:present> <logic:present name="map" property="barcode_file_path">
 														<a href="./${map.barcode_file_path}" target="_new"
 															title="Print Barcode" class="btn btn-sm btn-info"> <i
 															class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
-														</a><br />
+														</a>
+														<br />
 													</logic:present> <a
 													href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 													target="_new" title="Print Barcode"
@@ -488,10 +516,10 @@ label {
 									<tfoot>
 										<tR>
 											<logic:present name="DISPLAYOLD">
-												<td colspan="13">
+												<td colspan="14">
 											</logic:present>
 											<logic:notPresent name="DISPLAYOLD">
-												<td colspan="11">
+												<td colspan="12">
 											</logic:notPresent>
 
 
@@ -542,17 +570,19 @@ label {
 
 
 												<%-- <td>${map.remarks }</td> --%>
-												<td style="text-align: left;"><logic:present
-														name="map" property="ack_file_path">
+												<td style="text-align: left;"><logic:present name="map"
+														property="ack_file_path">
 														<a href="./${map.ack_file_path}" target="_new"
 															title="Print Acknowledgement" class="btn btn-sm btn-info">
 															<i class="fa fa-save"></i> <span>Acknowledgement</span> <!-- <span>Download</span> -->
-														</a><br />
+														</a>
+														<br />
 													</logic:present> <logic:present name="map" property="barcode_file_path">
 														<a href="./${map.barcode_file_path}" target="_new"
 															title="Print Barcode" class="btn btn-sm btn-info"> <i
 															class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
-														</a><br />
+														</a>
+														<br />
 													</logic:present> <a
 													href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 													target="_new" title="Print Barcode"
@@ -609,7 +639,10 @@ label {
 	$(document).ready(function() {
 		$(".servicesDiv").hide();
 		$("#OLDCASEDIV").hide();
-
+	
+		//$('#caseCategory [value="Others"]').prop('checked', true);
+		$('input[id=caseCategory][value="Others"]').prop('checked', true);
+		// $("input[name=type][value=" + value + "]").prop('checked', true);
 		
 		if($("#ackType").val()=="OLD"){
 			$("#OLDCASEDIV").show();			
