@@ -51,7 +51,7 @@
   <StrutsActivity path="/HighCourtCasesCategoryUpdation.do" location="3050,3350" dimension="381,96" />
   <StrutsActivity path="/GPReport.do" location="1250,3450" dimension="245,96" />
   <StrutsActivity path="/AdvocateRegistation.do" location="2150,3550" dimension="304,96" />
-  <StrutsActivity path="/HighCourtCasesCategoryUpdationReport.do" location="950,3650" dimension="413,96" />
+  <StrutsActivity path="/HighCourtCasesCategoryUpdationReport.do" location="2750,3550" dimension="413,96" />
   <StrutsActivity path="Login;6" location="350,1750" dimension="92,81" />
   <StrutsActivity path="Logout;6" location="50,650" dimension="203,87" />
   <StrutsActivity path="Welcome;6" location="950,1450" dimension="107,81" />
@@ -113,10 +113,10 @@
   <StrutsActivity path="HighCourtCasesCategoryUpdation" location="650,3950" dimension="213,51" />
   <StrutsActivity path="gpsReport" location="1550,3450" dimension="84,51" />
   <StrutsActivity path="viewCaseDataPage" location="1850,3450" dimension="129,51" />
-  <StrutsActivity path="/jsp/BaseLayout/AdvocateRegistration.jsp" location="2750,3550" dimension="251,51" />
-  <StrutsActivity path="casedetailsview1" location="50,4250" dimension="117,51" />
-  <StrutsActivity path="HighCourtCasesCategoryUpdationReport" location="350,4250" dimension="248,51" />
-  <StrutsActivity path="casedetailspopupview1" location="650,4250" dimension="152,51" />
+  <StrutsActivity path="/jsp/BaseLayout/AdvocateRegistration.jsp" location="1550,4150" dimension="251,51" />
+  <StrutsActivity path="casedetailsview1" location="2150,4150" dimension="117,51" />
+  <StrutsActivity path="HighCourtCasesCategoryUpdationReport" location="2450,4150" dimension="248,51" />
+  <StrutsActivity path="casedetailspopupview1" location="2750,4150" dimension="152,51" />
   <StrutsActivity path="districtreport" location="2150,2650" dimension="98,51" />
   <StrutsActivity path="benchreport" location="50,2750" dimension="95,51" />
   <StrutsActivity path="HomePage;6" location="950,1050" dimension="116,81" />
@@ -274,12 +274,8 @@
   </StrutsTransition>
   <StrutsTransition id="/AdvocateRegistation.do,regSuccess,/Login.do,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="2150,3616" />
-      <AbsolutePoint location="613,3616" />
-      <AbsolutePoint location="613,1916" />
-      <AbsolutePoint location="1145,1916" />
-      <AbsolutePoint location="1145,102" />
-      <AbsolutePoint location="593,102" />
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="471,102" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/NodalOfficerChangeReq.do,success,noChangeReq,1" routingType="0">
@@ -292,8 +288,8 @@
   </StrutsTransition>
   <StrutsTransition id="/AdvocateRegistation.do,success,/jsp/BaseLayout/AdvocateRegistration.jsp,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="2454,3575" />
-      <AbsolutePoint location="2750,3575" />
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="0,0" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/OfficersRegistered.do,success,officersreport,1" routingType="0">
@@ -589,8 +585,8 @@
     <AutomaticBendpoints>
       <AbsolutePoint location="442,1790" />
       <AbsolutePoint location="1115,1790" />
-      <AbsolutePoint location="1115,132" />
-      <AbsolutePoint location="593,132" />
+      <AbsolutePoint location="1115,102" />
+      <AbsolutePoint location="593,102" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/Welcome.do,UserWelcomePage,UserLayout,1" routingType="0">

@@ -3,6 +3,10 @@ package in.apcfss.struts.commons;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class TestingClass {
 
@@ -16,6 +20,14 @@ public class TestingClass {
 			//SendSMSAction.sendSMS("9618048663", "Mobile OTP for Login into CFMS helpdesk:45678", "1007713986799127731", null);
 			String deptCode="AGC02";
 			System.out.println(deptCode.substring(3,5));
+			
+			
+			LocalDate newDate1 =  LocalDate.now().plusDays(1);  
+			System.out.println(newDate1);
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+	        System.out.println(formatter.format(newDate1));			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

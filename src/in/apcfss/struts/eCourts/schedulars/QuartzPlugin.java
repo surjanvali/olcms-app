@@ -25,28 +25,24 @@ public class QuartzPlugin implements PlugIn {
 			throws ServletException {
 
 		// JobDetail job = JobBuilder.newJob(SchedulerJob.class).withIdentity("anyJobName", "group1").build();
-		JobDetail job = JobBuilder.newJob(HighCourtCasesDataSchedular.class).withIdentity("HighCourtCasesDataSchedular", "group2").build();
+		JobDetail job_CASESDATAUPDATE = JobBuilder.newJob(HighCourtCasesDataSchedular.class).withIdentity("HighCourtCasesDataSchedular", "group1").build();
+		JobDetail job_SMSALERTS = JobBuilder.newJob(HighCourtCasesDataSchedular.class).withIdentity("SMSAlertsJob", "group2").build();
+		JobDetail job_CAUSELIST = JobBuilder.newJob(HighCourtCasesDataSchedular.class).withIdentity("HighCourtCasesDataSchedular", "group3").build();
 
 		try {
 
-			Trigger trigger = TriggerBuilder.newTrigger().withIdentity("anyTriggerName", "group1").withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?")).build();
+			Trigger trigger_CASESDATAUPDATE = TriggerBuilder.newTrigger().withIdentity("CASESDATAUPDATE", "group1").withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?")).build();
+			Trigger trigger_SMSALERTS = TriggerBuilder.newTrigger().withIdentity("SMSALERTS", "group2").withSchedule(CronScheduleBuilder.cronSchedule("0 18 * * * ?")).build();
+			Trigger trigger_CAUSELIST = TriggerBuilder.newTrigger().withIdentity("CAUSELIST", "group3").withSchedule(CronScheduleBuilder.cronSchedule("0 21 ? * SUN-THU")).build();//30 9 ? * MON-FRI
 
 			Scheduler scheduler = new StdSchedulerFactory().getScheduler();
 			scheduler.start();
-			scheduler.scheduleJob(job, trigger);
-			
-			
-			/*Trigger trigger2 = TriggerBuilder.newTrigger().withIdentity("anyTriggerName", "group2").withSchedule(CronScheduleBuilder.cronSchedule("0/1 * * * * ?")).build();
-
-			Scheduler scheduler2 = new StdSchedulerFactory().getScheduler();
-			scheduler2.start();
-			scheduler2.scheduleJob(job2, trigger2);
-			*/
+			scheduler.scheduleJob(job_CASESDATAUPDATE, trigger_CASESDATAUPDATE);
+			scheduler.scheduleJob(job_SMSALERTS, trigger_SMSALERTS);
+			scheduler.scheduleJob(job_CAUSELIST, trigger_CAUSELIST);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }

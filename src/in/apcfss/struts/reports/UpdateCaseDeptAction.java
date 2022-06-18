@@ -41,9 +41,11 @@ public class UpdateCaseDeptAction extends DispatchAction {
 			}
 			con = DatabasePlugin.connect();
 
-			sql = "select dept_name, dept_code, count(*), trim(regexp_replace(dept_name, '\\W', '', 'g')) as rowid from ecourts_cinos_new "
-					+ "where inserted_time::date = current_date"
+			sql = " select dept_name, dept_code, count(*), trim(regexp_replace(dept_name, '\\W', '', 'g')) as rowid from ecourts_cinos_new "
+					+ " where inserted_time::date = current_date "
 					+ " group by dept_name,dept_code order by 2 desc,3 desc";
+			
+			System.out.println("SQL:"+sql);
 			request.setAttribute("HEADING", "Update Case Department");
 
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

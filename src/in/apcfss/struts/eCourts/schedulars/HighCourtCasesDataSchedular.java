@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Date;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -21,7 +22,7 @@ public class HighCourtCasesDataSchedular implements Job {
 	
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
-		System.out.println("Print Print Struts 1.3 + Quartz 2.1.5 integration example ~");
+		System.out.println("Print Print Struts 1.3 + Quartz 2.1.5 integration example ~:"+new Date());
 		updateData(context);
 	}
 	
@@ -38,7 +39,7 @@ public class HighCourtCasesDataSchedular implements Job {
 			con = DatabasePlugin.connect();
 			String opVal = ECourtAPIs.getSelectParam(1);
 			String cino = "";// cform.getDynaForm("cino").toString();
-			sql = "select cino from ecourts_case_data a where last_updated_ecourts<=now()::date - integer '2' order by last_updated_ecourts asc limit 250";
+			sql = "select cino from ecourts_case_data a where last_updated_ecourts <= now()::date - integer '2' order by last_updated_ecourts asc limit 250";
 			// sql="select cino from ecourts_case_data where cino='APHC010183002019'";
 			System.out.println("SQLLLLLLLLLLLLLL:::::::" + sql);
 			st = con.createStatement();

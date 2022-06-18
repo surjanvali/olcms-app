@@ -20,8 +20,9 @@ public class ApplicationVariables {
 	// public static final String ackBarCodePath = "uploads"+filesepartor+"acksbarcodes"+filesepartor;
 	//public static final String masterPassword = "39c9f399b436881ffabcb89a6c6ec9a4"; //aprcrp@2017
 
-	
-	/*
-	 * public static void main(String[] args) { }
-	 */
+	// Production Database Details.
+	static final String apolcmsDataBase = "jdbc:postgresql://10.96.54.54:6432/apolcms";
+	static final String apolcmsUserName = "apolcms";
+	static final String apolcmsPassword = "@p0l(m$";
+
 }
