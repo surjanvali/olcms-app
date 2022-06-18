@@ -49,7 +49,7 @@ implements Filter
 		/* List usrServices = (List)session.getAttribute("usrServices");*/
 		
 
-		if (actionFile != null && (actionFile.equalsIgnoreCase("Login") || actionFile.equalsIgnoreCase("Logout"))) {
+		if (actionFile != null && (actionFile.equalsIgnoreCase("Login") || actionFile.equalsIgnoreCase("Logout") || actionFile.equalsIgnoreCase("AdvocateRegistation") || actionFile.equalsIgnoreCase("AjaxModels") )) {
 			filterChain.doFilter(servletrequest, servletresponse);
 		}
 

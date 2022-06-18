@@ -261,10 +261,9 @@
 		<put name="content" value="/jsp/reports/CaseStatusUpdationEmp.jsp" />
 	</definition>
 
-	<definition name="HighCourtCasesCategoryUpdation"
-		extends="UserLayoutNew">
+<definition name="HighCourtCasesCategoryUpdation" extends="UserLayoutNew">
 		<put name="content"
-			value="/jsp/registration/HighCourtCasesCategoryUpdation.jsp" />
+			value="/jsp/reports/HighCourtCasesCategoryUpdation.jsp" />
 	</definition>
 
 	<definition name="gpdashboard" extends="UserLayoutNew">
@@ -277,5 +276,36 @@
 	<definition name="viewCaseDataPage" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/GPcaseView.jsp" />
 	</definition>
+	
+	
+	
+	
+	
+	
+	<definition name="HighCourtCasesCategoryUpdationReport" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/HighCourtCasesCategoryUpdationReport.jsp" />
+	</definition>
+	
+	
+	<definition name="CategoryUpdationViewData"
+		extends="modalLayout">
+		<put name="content"
+			value="/jsp/reports/CategoryUpdationView.jsp" />
+	</definition>
+	
+	<definition name="casedetailsview1"
+		extends="modalLayout">
+		<put name="content"
+			value="/jsp/reports/CategoryUpdationView.jsp" />
+	</definition>
+	
+	<definition name="casedetailspopupview1"
+		extends="modalLayout">
+		<put name="content"
+			value="/jsp/reports/CategoryUpdationView.jsp" />
+	</definition>
+	
+	
 
 </tiles-definitions>

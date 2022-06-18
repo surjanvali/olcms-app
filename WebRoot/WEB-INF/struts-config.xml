@@ -392,9 +392,10 @@
 		</action>
 
 
+	
 		<action path="/HighCourtCasesCategoryUpdation"
 			name="CommonForm"
-			type="in.apcfss.struts.Actions.HighCourtCasesCategoryUpdationAction"
+			type="in.apcfss.struts.reports.HighCourtCasesCategoryUpdationAction"
 			parameter="mode" scope="request">
 			<forward name="success" path="HighCourtCasesCategoryUpdation"></forward>
 		</action>
@@ -406,6 +407,31 @@
 			<forward name="success" path="gpsReport"></forward>
 			<forward name="viewCaseData" path="viewCaseDataPage"></forward>
 		</action>
+		
+		
+		<action path="/AdvocateRegistation" name="CommonForm"
+			type="in.apcfss.struts.reports.AdvocateRegistationAction"
+			parameter="mode" scope="request">
+			<forward name="success"
+				path="/jsp/BaseLayout/AdvocateRegistration.jsp"></forward>
+			<forward name="regSuccess" path="/Login.do"></forward>
+		</action>
+		
+		
+		
+		<action path="/HighCourtCasesCategoryUpdationReport"
+			name="CommonForm"
+			type="in.apcfss.struts.reports.HighCourtCasesCategoryUpdationReportAction"
+			parameter="mode" scope="request">
+			<forward name="success"
+				path="HighCourtCasesCategoryUpdationReport"></forward>
+			 <forward name="caseview1" path="casedetailsview1"></forward>
+			<forward name="casepopupview1" path="casedetailspopupview1"></forward>
+			<forward name="filecounter" path="filecounter"></forward>
+			<forward name="casestatusupdate" path="casestatusupdate"></forward>
+		</action>
+		
+		
 
 	</action-mappings>
 
