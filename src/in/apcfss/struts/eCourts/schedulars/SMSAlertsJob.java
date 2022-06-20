@@ -73,7 +73,7 @@ public class SMSAlertsJob implements Job{
 					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text) "
 					+ " inner join dept_new dn on (b.dept_code=dn.dept_code) "
 					+ " inner join mlo_details mlo on (mlo.user_id=b.dept_code) "
-					+ " where a.inserted_time::date = current_date-4  and a.casetype='4' "
+					+ " where a.inserted_time::date = current_date  and a.casetype='4' "
 					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,mlo.mobileno,a.inserted_time::date  order by b.dept_code,ctm.sno "
 					+ "";
 			System.out.println("SQL:"+sql);
@@ -86,7 +86,7 @@ public class SMSAlertsJob implements Job{
 					+ "select district_name,ctm.sno,casetype,ctm.case_short_name,dm.mobile_no,a.inserted_time::date,count(*) as casescount from  ecourts_gpo_ack_dtls a   "
 					+ "inner join case_type_master ctm on (a.casetype=ctm.sno::text)  "
 					+ "inner join district_mst dm on (a.distid=dm.district_id)  "
-					+ "where a.inserted_time::date = current_date-4  and a.casetype='4' "
+					+ "where a.inserted_time::date = current_date  and a.casetype='4' "
 					+ "group by ctm.sno,casetype,ctm.case_short_name,dm.mobile_no,a.inserted_time::date,district_name "
 					+ "";
 			System.out.println("SQL:"+sql);
@@ -100,7 +100,7 @@ public class SMSAlertsJob implements Job{
 					+ "inner join case_type_master ctm on (a.casetype=ctm.sno::text)  "
 					+ "inner join dept_new dn on (b.dept_code=dn.dept_code)  "
 					+ "inner join nodal_officer_details nd on (nd.dept_id=b.dept_code and nd.dist_id=0)  "
-					+ "where a.inserted_time::date = current_date-4  and a.casetype='4'  "
+					+ "where a.inserted_time::date = current_date  and a.casetype='4'  "
 					+ "group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,nd.mobileno,a.inserted_time::date  order by b.dept_code,ctm.sno  "
 					+ "";
 			System.out.println("SQL:"+sql);
@@ -115,7 +115,7 @@ public class SMSAlertsJob implements Job{
 					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
 					+ " inner join dept_new dn on (b.dept_code=dn.dept_code)"
 					+ " inner join nodal_officer_details nd on (nd.dept_id=b.dept_code and nd.dist_id=b.dist_id)"
-					+ " where a.inserted_time::date = current_date-3  and a.casetype='4'"
+					+ " where a.inserted_time::date = current_date  and a.casetype='4'"
 					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,nd.mobileno,a.inserted_time::date order by b.dept_code,ctm.sno"
 					+ " ";
 
@@ -136,7 +136,7 @@ public class SMSAlertsJob implements Job{
 					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text) "
 					+ " inner join dept_new dn on (b.dept_code=dn.dept_code) "
 					+ " inner join mlo_details mlo on (mlo.user_id=b.dept_code) "
-					+ " where a.inserted_time::date = current_date-4  "
+					+ " where a.inserted_time::date = current_date  "
 					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,mlo.mobileno,a.inserted_time::date  order by b.dept_code,ctm.sno "
 					+ " ) x group by description, mobileno, inserted_time "
 					+ "";
@@ -153,7 +153,7 @@ public class SMSAlertsJob implements Job{
 					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
 					+ " inner join dept_new dn on (b.dept_code=dn.dept_code)"
 					+ " inner join nodal_officer_details nd on (nd.dept_id=b.dept_code and nd.dist_id=0)"
-					+ " where a.inserted_time::date = current_date-3 "
+					+ " where a.inserted_time::date = current_date "
 					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,nd.mobileno,a.inserted_time::date order by b.dept_code,ctm.sno "
 					+ " ) x group by description, mobileno, inserted_time";
 			System.out.println("SQL:"+sql);
@@ -169,7 +169,7 @@ public class SMSAlertsJob implements Job{
 					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
 					+ " inner join dept_new dn on (b.dept_code=dn.dept_code)"
 					+ " inner join nodal_officer_details nd on (nd.dept_id=b.dept_code and nd.dist_id=b.dist_id)"
-					+ " where a.inserted_time::date = current_date-3 "
+					+ " where a.inserted_time::date = current_date "
 					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,nd.mobileno,a.inserted_time::date order by b.dept_code,ctm.sno"
 					+ " ) x group by description, mobileno, inserted_time";
 			System.out.println("SQL:"+sql);
@@ -184,7 +184,7 @@ public class SMSAlertsJob implements Job{
 					+ "select district_name,ctm.sno,casetype,ctm.case_short_name,dm.mobile_no,a.inserted_time::date,count(*) as cases from  ecourts_gpo_ack_dtls a   "
 					+ "inner join case_type_master ctm on (a.casetype=ctm.sno::text)  "
 					+ "inner join district_mst dm on (a.distid=dm.district_id)  "
-					+ "where a.inserted_time::date = current_date-4   "
+					+ "where a.inserted_time::date = current_date   "
 					+ "group by ctm.sno,casetype,ctm.case_short_name,dm.mobile_no,a.inserted_time::date,district_name "
 					+ ") x group by mobile_no, inserted_time, district_name";
 			System.out.println("SQL:"+sql);
@@ -210,13 +210,19 @@ public class SMSAlertsJob implements Job{
 		{
 			mobileNo = CommonModels.checkStringObject(rs.getString("mobileno"));
 			String casesReport = CommonModels.checkStringObject(rs.getString("report"));
-			String report1="", report2="";
+			String report1 = "", report2 = "";
 			if(casesReport.length() <= 150) {
-				report1 = casesReport.substring(0, casesReport.lastIndexOf(","));
-				report2 = casesReport.substring(casesReport.lastIndexOf(",")+1);
+				if(casesReport.contains(",")) {
+					report1 = casesReport.substring(0, casesReport.lastIndexOf(","));
+					report2 = casesReport.substring(casesReport.lastIndexOf(",")+1);
+				}
+				else {
+					report1 = casesReport;
+					report2 = "-";
+				}
 			}
 			if(mobileNo!=null && !mobileNo.equals("")) {
-				smsText="Daily Cases Report (DCR) "
+				smsText="Daily Cases Report (DCR) : "
 						+ report1 + " and "+report2
 						+ " registered in APOLCMS on "+CommonModels.checkStringObject(rs.getString("inserted_time"))
 						+ " Department :"+CommonModels.checkStringObject(rs.getString("description"))+" "
@@ -234,7 +240,7 @@ public class SMSAlertsJob implements Job{
 		{
 			mobileNo = CommonModels.checkStringObject(rs.getString("mobileno"));
 			if(mobileNo!=null && !mobileNo.equals("")) {
-				smsText="CONTEMPT CASE "+
+				smsText="CONTEMPT CASE : "+
 						CommonModels.checkStringObject(rs.getString("casescount"))+ " No.of CC registered in APOLCMS on "+CommonModels.checkStringObject(rs.getString("inserted_time"))
 						+" Department :"+CommonModels.checkStringObject(rs.getString("description"))+" Please visit https://apolcms.ap.gov.in for details. -APOLCMS Team, GOVTAP";
 				
@@ -252,11 +258,18 @@ public class SMSAlertsJob implements Job{
 			String casesReport = CommonModels.checkStringObject(rs.getString("report"));
 			String report1="", report2="";
 			if(casesReport.length() <= 150) {
-				report1 = casesReport.substring(0, casesReport.lastIndexOf(","));
-				report2 = casesReport.substring(casesReport.lastIndexOf(",")+1);
+				if(casesReport.contains(",")) {
+					report1 = casesReport.substring(0, casesReport.lastIndexOf(","));
+					report2 = casesReport.substring(casesReport.lastIndexOf(",")+1);
+				}
+				else {
+					report1 = casesReport;
+					report2 = "-";
+				}
 			}
+			
 			if(mobileNo!=null && !mobileNo.equals("")) {
-			smsText="Daily Cases Report (DCR) "
+			smsText="Daily Cases Report (DCR) : "
 					+ report1 + " and "+report2
 					+ " registered in APOLCMS on "+CommonModels.checkStringObject(rs.getString("inserted_time"))
 					+ " Department : ALL and District :"+CommonModels.checkStringObject(rs.getString("district_name"))+" "
@@ -274,7 +287,7 @@ public class SMSAlertsJob implements Job{
 		{
 			mobileNo = CommonModels.checkStringObject(rs.getString("mobileno"));
 			if(mobileNo!=null && !mobileNo.equals("")) {
-				smsText="CONTEMPT CASE "+
+				smsText="CONTEMPT CASE : "+
 						CommonModels.checkStringObject(rs.getString("casescount"))+ " No.of CC registered in APOLCMS on "+CommonModels.checkStringObject(rs.getString("inserted_time"))
 						+" Department : ALL and District :"+CommonModels.checkStringObject(rs.getString("district_name"))+" Please visit https://apolcms.ap.gov.in for details. -APOLCMS Team, GOVTAP";
 				

@@ -41,6 +41,7 @@ import in.apcfss.struts.eCourt.apis.EHighCourtAPI;
 import in.apcfss.struts.eCourt.apis.HASHHMACJava;
 import in.apcfss.struts.eCourt.apis.HighCourtCauseListAPI;
 import in.apcfss.struts.eCourt.apis.HighCourtCauseListBenchAPI;
+import in.apcfss.struts.eCourts.schedulars.SMSAlertsJob;
 import plugins.DatabasePlugin;
 
 public class UpdateEcourtsDataAction extends DispatchAction {
@@ -363,7 +364,6 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		return mapping.findForward("success");
 		// return showCaseWise(mapping, cform, request, response);
 	}
-
 	
 	public ActionForward importNewCinosData(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -467,6 +467,166 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		return mapping.findForward("success");
 		// return showCaseWise(mapping, cform, request, response);
 	}
+
+	
+	public ActionForward sendSMSalerts(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Connection con = null;
+		Statement st =null; ResultSet rs = null;
+		String sql="";
+		try {
+			con = DatabasePlugin.connect();		
+			
+			/* CONTEMPT CASES SMS
+			// 1. TO ALL District Collectors
+			 * 2. TO ALL Secretaries
+			 * 3. TO ALL MLOS
+			 * 4. TO ALL NOS
+			smsText="CONTEMPT CASE : 4 No. of CC registered in APOLCMS on 16-06-2022 "
+					+ "District: "
+					+ "Please visit https://apolcms.ap.gov.in for details. -APOLCMS Team, GOVTAP";
+			System.out.println("smsText:"+smsText);
+			System.out.println("mobileNo:"+mobileNo);
+			mobileNo = "9618048663"; 
+			SendSMSAction.sendSMS(mobileNo, smsText, templateIdCC, con);
+			*/
+			
+			/* DIALY CASE REPORT OF ALLCASE TYPES- SMS
+			// 1. TO ALL District Collectors
+			 * 2. TO ALL Secretaries
+			 * 3. TO ALL MLOS
+			 * 4. TO ALL NOS
+			 * 5. TO ALL DIST. NODAL OFFICERS
+			*/
+			// MLO CCs SMS 
+			sql="select b.dept_code,dn.description,ctm.sno,casetype,ctm.case_short_name,mlo.mobileno,a.inserted_time::date,count(*) as casescount from  ecourts_gpo_ack_dtls a  "
+					+ " inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no) "
+					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text) "
+					+ " inner join dept_new dn on (b.dept_code=dn.dept_code) "
+					+ " inner join mlo_details mlo on (mlo.user_id=b.dept_code) "
+					+ " where a.inserted_time::date = current_date  and a.casetype='4' "
+					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,mlo.mobileno,a.inserted_time::date  order by b.dept_code,ctm.sno "
+					+ "";
+			System.out.println("MLO CC SQL:"+sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			SMSAlertsJob.sendDialyCCReport(rs, con);
+			
+			/*District Collectors CC cases Report*/
+			sql=" "
+					+ "select district_name,ctm.sno,casetype,ctm.case_short_name,dm.mobile_no as mobileno,a.inserted_time::date,count(*) as casescount from  ecourts_gpo_ack_dtls a   "
+					+ "inner join case_type_master ctm on (a.casetype=ctm.sno::text)  "
+					+ "inner join district_mst dm on (a.distid=dm.district_id)  "
+					+ "where a.inserted_time::date = current_date  and a.casetype='4' "
+					+ "group by ctm.sno,casetype,ctm.case_short_name,dm.mobile_no,a.inserted_time::date,district_name "
+					+ "";
+			System.out.println("DC-CC - SQL:"+sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			SMSAlertsJob.sendDialyCCReportDC(rs, con);
+			
+			// Nodal Officer CC Count
+			sql="select b.dept_code,dn.description,ctm.sno,casetype,ctm.case_short_name,nd.mobileno,a.inserted_time::date,count(*) as casescount from  ecourts_gpo_ack_dtls a   "
+					+ "inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no)  "
+					+ "inner join case_type_master ctm on (a.casetype=ctm.sno::text)  "
+					+ "inner join dept_new dn on (b.dept_code=dn.dept_code)  "
+					+ "inner join nodal_officer_details nd on (nd.dept_id=b.dept_code and nd.dist_id=0)  "
+					+ "where a.inserted_time::date = current_date  and a.casetype='4'  "
+					+ "group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,nd.mobileno,a.inserted_time::date  order by b.dept_code,ctm.sno  "
+					+ "";
+			System.out.println("NO CC SQL:"+sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			SMSAlertsJob.sendDialyCCReport(rs, con);
+			
+			/*Dist Nodal Officer CC Count*/
+			sql=""
+					+ " select b.dept_code,dn.description,ctm.sno,casetype,ctm.case_short_name,nd.mobileno,a.inserted_time::date,count(*) as casescount from  ecourts_gpo_ack_dtls a "
+					+ " inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no)"
+					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
+					+ " inner join dept_new dn on (b.dept_code=dn.dept_code)"
+					+ " inner join nodal_officer_details nd on (nd.dept_id=b.dept_code and nd.dist_id=b.dist_id)"
+					+ " where a.inserted_time::date = current_date and a.casetype='4'"
+					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,nd.mobileno,a.inserted_time::date order by b.dept_code,ctm.sno"
+					+ " ";
+			System.out.println("DNO CC SQL:"+sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			SMSAlertsJob.sendDialyCCReport(rs, con);
+			
+			
+			/*ALL MLOs SQL*/
+			sql="select description,mobileno,to_char(inserted_time,'dd-mm-yyyy') as inserted_time,  string_agg(case_short_name||'('||cases||')'  ,',') as report "
+					+ " from ( "
+					+ " select b.dept_code,dn.description,ctm.sno,casetype,ctm.case_short_name,mlo.mobileno,a.inserted_time::date,count(*) as cases from  ecourts_gpo_ack_dtls a  "
+					+ " inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no) "
+					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text) "
+					+ " inner join dept_new dn on (b.dept_code=dn.dept_code) "
+					+ " inner join mlo_details mlo on (mlo.user_id=b.dept_code) "
+					+ " where a.inserted_time::date = current_date  "
+					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,mlo.mobileno,a.inserted_time::date  order by b.dept_code,ctm.sno "
+					+ " ) x group by description, mobileno, inserted_time "
+					+ "";
+			System.out.println("MLO ALL TYPES SQL:"+sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			SMSAlertsJob.sendDialyCasesReport(rs, con);
+			
+			/*State LEVEL NOS SQL*/
+			sql="select description,mobileno,to_char(inserted_time,'dd-mm-yyyy') as inserted_time,  string_agg(case_short_name||'('||cases||')'  ,',')  as report "
+					+ " from ("
+					+ " select b.dept_code,dn.description,ctm.sno,casetype,ctm.case_short_name,nd.mobileno,a.inserted_time::date,count(*) as cases from  ecourts_gpo_ack_dtls a "
+					+ " inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no)"
+					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
+					+ " inner join dept_new dn on (b.dept_code=dn.dept_code)"
+					+ " inner join nodal_officer_details nd on (nd.dept_id=b.dept_code and nd.dist_id=0)"
+					+ " where a.inserted_time::date = current_date "
+					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,nd.mobileno,a.inserted_time::date order by b.dept_code,ctm.sno "
+					+ " ) x group by description, mobileno, inserted_time";
+			System.out.println("State LEVEL NOS SQL:"+sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			SMSAlertsJob.sendDialyCasesReport(rs, con);
+			
+			/*District Nodal Officers SMS SQL*/
+			sql="select description,mobileno,to_char(inserted_time,'dd-mm-yyyy') as inserted_time,  string_agg(case_short_name||'('||cases||')'  ,',')  as report"
+					+ " from ("
+					+ " select b.dept_code,dn.description,ctm.sno,casetype,ctm.case_short_name,nd.mobileno,a.inserted_time::date,count(*) as cases from  ecourts_gpo_ack_dtls a "
+					+ " inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no)"
+					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
+					+ " inner join dept_new dn on (b.dept_code=dn.dept_code)"
+					+ " inner join nodal_officer_details nd on (nd.dept_id=b.dept_code and nd.dist_id=b.dist_id)"
+					+ " where a.inserted_time::date = current_date "
+					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,nd.mobileno,a.inserted_time::date order by b.dept_code,ctm.sno"
+					+ " ) x group by description, mobileno, inserted_time";
+			System.out.println("DNO SMS SQL:"+sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			SMSAlertsJob.sendDialyCasesReport(rs, con);
+			
+			/*District Collectors all cases Report*/
+			sql="select district_name,mobile_no as mobileno,to_char(inserted_time,'dd-mm-yyyy') as inserted_time,  string_agg(case_short_name||'('||cases||')'  ,',') as report "
+					+ "from (  "
+					+ "select district_name,ctm.sno,casetype,ctm.case_short_name,dm.mobile_no,a.inserted_time::date,count(*) as cases from  ecourts_gpo_ack_dtls a   "
+					+ "inner join case_type_master ctm on (a.casetype=ctm.sno::text)  "
+					+ "inner join district_mst dm on (a.distid=dm.district_id)  "
+					+ "where a.inserted_time::date = current_date   "
+					+ "group by ctm.sno,casetype,ctm.case_short_name,dm.mobile_no,a.inserted_time::date,district_name "
+					+ ") x group by mobile_no, inserted_time, district_name";
+			System.out.println("DC SQL:"+sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			SMSAlertsJob.sendDialyCasesReportDC(rs, con);
+			request.setAttribute("successMsg", "SMS alerts sent Successfully.");
+		} catch (Exception e) {
+			request.setAttribute("errorMsg", "Error-3 Error while sending SMS alerts.");
+			e.printStackTrace();
+		} finally {
+			DatabasePlugin.closeConnection(con);
+		}
+		return mapping.findForward("success");
+	}
+	
 	
 	//EXCE LUPLOAD METHOD
 	public ActionForward uploadandRetrieveEcourtsData(ActionMapping mapping, ActionForm form, HttpServletRequest request,

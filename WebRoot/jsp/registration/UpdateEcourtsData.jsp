@@ -204,8 +204,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-
-
 					<div class="ibox">
 						<div class="ibox-head">
 							<div class="ibox-title">Import/Update e-Courts Cause List
@@ -238,6 +236,29 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+					<div class="ibox">
+						<div class="ibox-head">
+							<div class="ibox-title">Send SMS Alerts to All</div>
+						</div>
+						<div class="ibox-body">
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<input type="button" name="sendSMSalerts"
+										value="Send Alerts" class="btn btn-success"
+										onclick="return fnSendSMSalerts();" />
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+
 			<logic:notEmpty name="CASEWISEACKS">
 				<div class="ibox">
 					<div class="ibox-body">
@@ -347,6 +368,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	function fnUploadandRetrieve() {
 		$("#mode").val("uploadandRetrieveEcourtsData");
+		$("#updateEcourtsDataFormId").submit();
+		//return true;
+	}
+
+	function fnSendSMSalerts() {
+		$("#mode").val("sendSMSalerts");
 		$("#updateEcourtsDataFormId").submit();
 		//return true;
 	}
