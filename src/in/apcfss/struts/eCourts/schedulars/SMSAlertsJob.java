@@ -43,6 +43,8 @@ public class SMSAlertsJob implements Job{
 			// Class.forName("org.postgresql.Driver");
 			// con = DriverManager.getConnection(apolcmsDataBase, apolcmsUserName, apolcmsPassword);		
 			con = DatabasePlugin.connect();		
+			int schedularId = Integer.parseInt(DatabasePlugin.selectString("select max(coalesce(slno,0))+1 from ecourts_schedulars", con));
+			DatabasePlugin.executeUpdate("insert into ecourts_schedulars (slno, schedular_name, schedular_start_time ) values ('"+schedularId+"','SMSAlertsJobSchedular', now())", con);
 			
 			/* CONTEMPT CASES SMS
 			// 1. TO ALL District Collectors
@@ -189,6 +191,8 @@ public class SMSAlertsJob implements Job{
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
 			sendDialyCasesReportDC(rs, con);
+			
+			DatabasePlugin.executeUpdate("update ecourts_schedulars set schedular_end_time=now() where slno='"+schedularId+"')", con);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

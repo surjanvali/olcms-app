@@ -46,6 +46,9 @@ public class HighCourtCauseListSchedular implements Job {
 		int totalCount = 0;
 		try {
 			con = DatabasePlugin.connect();
+			int schedularId = Integer.parseInt(DatabasePlugin.selectString("select max(coalesce(slno,0))+1 from ecourts_schedulars", con));
+			DatabasePlugin.executeUpdate("insert into ecourts_schedulars (slno, schedular_name, schedular_start_time ) values ('"+schedularId+"','HighCourtCauseListSchedular', now())", con);
+			
 			con.setAutoCommit(false);
 
 			String opVal = ECourtAPIs.getSelectParam(11);
@@ -78,7 +81,7 @@ public class HighCourtCauseListSchedular implements Job {
 				UpdateEcourtsDataAction.retrieveCauseList(estCode, causelistDate, con);
 				con.commit();
 			}
-
+			DatabasePlugin.executeUpdate("update ecourts_schedulars set schedular_end_time=now() where slno='"+schedularId+"')", con);
 			System.out.println("CAUSE LIST BENCH END");
 		} catch (Exception e) {
 			con.rollback();

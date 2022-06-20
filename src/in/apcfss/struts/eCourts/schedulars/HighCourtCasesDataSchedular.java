@@ -37,16 +37,17 @@ public class HighCourtCasesDataSchedular implements Job {
 		String request_token = "", requeststring = "";
 		try {
 			con = DatabasePlugin.connect();
+			
+			int schedularId = Integer.parseInt(DatabasePlugin.selectString("select max(coalesce(slno,0))+1 from ecourts_schedulars", con));
+			DatabasePlugin.executeUpdate("insert into ecourts_schedulars (slno, schedular_name, schedular_start_time ) values ('"+schedularId+"','HighCourtCasesDataSchedular', now())", con);
+			
 			String opVal = ECourtAPIs.getSelectParam(1);
 			String cino = "";// cform.getDynaForm("cino").toString();
 			sql = "select cino from ecourts_case_data a where last_updated_ecourts <= now()::date - integer '2' order by last_updated_ecourts asc limit 250";
-			// sql="select cino from ecourts_case_data where cino='APHC010183002019'";
-			System.out.println("SQLLLLLLLLLLLLLL:::::::" + sql);
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
 
 			while (rs.next()) {
-				// if (cino != null) {
 				cino = rs.getString("cino").toString().trim();
 				totalCount++;
 				inputStr = "cino=" + cino;// ECourtAPIs.getInputStringValue(opVal);
@@ -71,6 +72,7 @@ public class HighCourtCasesDataSchedular implements Job {
 					boolean b = UpdateEcourtsDataAction.processCNRsearchResponse(resp, opVal, con, cino);
 				}
 			}
+			DatabasePlugin.executeUpdate("update ecourts_schedulars set schedular_end_time=now() where slno='"+schedularId+"')", con);
 			System.out.println("FINAL END : Records fetched:" + totalCount);
 		} catch (Exception e) {
 			e.printStackTrace();
