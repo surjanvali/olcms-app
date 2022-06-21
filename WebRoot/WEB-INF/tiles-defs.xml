@@ -56,8 +56,6 @@
 		<put name="content" value="/jsp/registration/AssignCase.jsp" />
 	</definition>
 
-
-
 	<definition name="assignedhccases" extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/registration/HighCourtAssignedCasesList.jsp" />
@@ -261,7 +259,8 @@
 		<put name="content" value="/jsp/reports/CaseStatusUpdationEmp.jsp" />
 	</definition>
 
-<definition name="HighCourtCasesCategoryUpdation" extends="UserLayoutNew">
+	<definition name="HighCourtCasesCategoryUpdation"
+		extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/reports/HighCourtCasesCategoryUpdation.jsp" />
 	</definition>
@@ -273,39 +272,29 @@
 	<definition name="gpsReport" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/GPsReport.jsp" />
 	</definition>
+	
 	<definition name="viewCaseDataPage" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/GPcaseView.jsp" />
 	</definition>
-	
-	
-	
-	
-	
-	
-	<definition name="HighCourtCasesCategoryUpdationReport" extends="UserLayoutNew">
+
+	<definition name="HighCourtCasesCategoryUpdationReport"
+		extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/reports/HighCourtCasesCategoryUpdationReport.jsp" />
 	</definition>
-	
-	
+
 	<definition name="CategoryUpdationViewData"
 		extends="modalLayout">
-		<put name="content"
-			value="/jsp/reports/CategoryUpdationView.jsp" />
+		<put name="content" value="/jsp/reports/CategoryUpdationView.jsp" />
 	</definition>
-	
-	<definition name="casedetailsview1"
-		extends="modalLayout">
-		<put name="content"
-			value="/jsp/reports/CategoryUpdationView.jsp" />
+
+	<definition name="casedetailsview1" extends="modalLayout">
+		<put name="content" value="/jsp/reports/CategoryUpdationView.jsp" />
 	</definition>
-	
+
 	<definition name="casedetailspopupview1"
 		extends="modalLayout">
-		<put name="content"
-			value="/jsp/reports/CategoryUpdationView.jsp" />
+		<put name="content" value="/jsp/reports/CategoryUpdationView.jsp" />
 	</definition>
-	
-	
 
 </tiles-definitions>

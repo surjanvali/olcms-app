@@ -14,7 +14,7 @@ import plugins.DatabasePlugin;
 
 public class HighCourtCauseListBenchAPI {
 
-	static final String apolcmsDataBase = "jdbc:postgresql://172.16.98.2:9432/apolcms";
+	static final String apolcmsDataBase = "jdbc:postgresql://localhost:5432/apolcms";
 	static final String apolcmsUserName = "apolcms";
 	static final String apolcmsPassword = "apolcms";
 

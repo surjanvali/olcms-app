@@ -102,6 +102,12 @@ body {
 							class="d-block d-sm-none"><i class="fas fa-cog"></i></span> <span
 							class="d-none d-sm-block">Parawise Remarks</span>
 					</a></li>
+					<li class="nav-item"><a class="nav-link" id="counter-tab"
+						data-toggle="tab" href="#counter" role="tab"
+						aria-controls="counter" aria-selected="false"> <span
+							class="d-block d-sm-none"><i class="fas fa-cog"></i></span> <span
+							class="d-none d-sm-block">Counter Details</span>
+					</a></li>
 					<li class="nav-item"><a class="nav-link" id="setting-tab"
 						data-toggle="tab" href="#setting" role="tab"
 						aria-controls="setting" aria-selected="false"> <span
@@ -114,12 +120,12 @@ body {
 							class="d-block d-sm-none"><i class="fas fa-cog"></i></span> <span
 							class="d-none d-sm-block">Case History</span>
 					</a></li>
-					
+
 					<li class="nav-item"><a class="nav-link" id="final-tab"
-						data-toggle="tab" href="#final" role="tab"
-						aria-controls="final" aria-selected="false"> <span
-							class="d-block d-sm-none"><i class="fas fa-cog"></i></span> <span
-							class="d-none d-sm-block">Final Orders</span>
+						data-toggle="tab" href="#final" role="tab" aria-controls="final"
+						aria-selected="false"> <span class="d-block d-sm-none"><i
+								class="fas fa-cog"></i></span> <span class="d-none d-sm-block">Final
+								Orders</span>
 					</a></li>
 				</ul>
 				<div class="tab-content">
@@ -1197,9 +1203,6 @@ body {
 											<td>2022-04-08</td>
 											<td>FOR DISMISSAL</td>
 											<td>DAILY LIST</td>
-
-
-
 										</tr>
 
 										<tr>
@@ -1210,9 +1213,6 @@ body {
 											<td>2022-04-22</td>
 											<td>FOR DISMISSAL</td>
 											<td>DAILY LIST</td>
-
-
-
 										</tr>
 
 										<tr>
@@ -1223,9 +1223,6 @@ body {
 											<td>2022-05-06</td>
 											<td>FINAL HEARING</td>
 											<td>DAILY LIST</td>
-
-
-
 										</tr>
 
 									</tbody>
@@ -1237,18 +1234,14 @@ body {
 						</div>
 
 					</div>
-					
+
 					<div class="tab-pane" id="final" role="tabpanel"
-						aria-labelledby="final-tab">
-						
-						
-						</div>
-						
+						aria-labelledby="final-tab"></div>
+
 					<div class="tab-pane" id="parawise" role="tabpanel"
-						aria-labelledby="parawise-tab">
-						
-						
-						</div>	
+						aria-labelledby="parawise-tab"></div>
+					<div class="tab-pane" id="counter" role="tabpanel"
+						aria-labelledby="counter-tab"></div>
 				</div>
 
 			</div>

@@ -45,10 +45,10 @@ public class WelcomePageAction extends DispatchAction{
 			String distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
 
 			String sql = "SELECT service_name,target,show_icon as icon,has_childs as has_child,parent_id,a.service_id,display_id FROM services a inner join role_services b on (a.service_id=b.service_id) where b.role_id=?  "
-					+ ""
+					+ " "
 					+ " union "
 					+ " SELECT service_name,target,show_icon as icon,has_childs as has_child,parent_id,a1.service_id,display_id FROM services a1 inner join user_services b1 on (a1.service_id=b1.service_id) where b1.user_id=? "
-					+ ""
+					+ " "
 					+ " order by 7,5,6";
 
 			System.out.println("in WelcomePageAction sql ............ " + sql);
