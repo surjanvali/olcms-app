@@ -33,7 +33,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<logic:iterate id="innerData" name="YEARWISECASES">
 
 						<div class="col-lg-2 col-md-3">
-							<a href="./GPReport.do?mode=yearWiseCases&yearId=${innerData.reg_year}">
+							<a
+								href="./GPReport.do?mode=yearWiseCases&yearId=${innerData.reg_year}">
 								<div class="ibox bg-primary color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${innerData.reg_year }</h2>
@@ -52,6 +53,73 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 			</logic:present>
 
+			<div class="row">
+				<logic:notEmpty name="NEWCASES">
+					<logic:greaterThan value="0" name="NEWCASES">
+						<div class="col-lg-2 col-md-3">
+							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
+
+							<a href="./AcksAbstractReport.do">
+								<div class="ibox bg-danger color-white widget-stat">
+									<div class="ibox-body">
+										<h2 class="m-b-5 font-strong">${NEWCASES }</h2>
+										<div class="m-b-5">New Cases Registered</div>
+										<i class="fa fa-file-text-o widget-stat-icon"></i>
+										<div>
+											<small> &nbsp;</small>
+										</div>
+
+									</div>
+								</div>
+							</a>
+						</div>
+					</logic:greaterThan>
+
+				</logic:notEmpty>
+
+				<logic:notEmpty name="parawiseCount">
+					<logic:greaterThan value="0" name="parawiseCount">
+						<div class="col-lg-2 col-md-3">
+							<a
+								href="./GPReport.do?mode=viewGPCases&pwCounterFlag=PR">
+								<div class="ibox bg-danger color-white widget-stat">
+									<div class="ibox-body">
+										<h2 class="m-b-5 font-strong">${parawiseCount }</h2>
+										<div class="m-b-5">Parawise Remarks Pending for Approval</div>
+										<i class="fa fa-file-text-o widget-stat-icon"></i>
+										<div>
+											<small> &nbsp;</small>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</logic:greaterThan>
+				</logic:notEmpty>
+
+				<logic:notEmpty name="counterFileCount">
+					<logic:greaterThan value="0" name="counterFileCount">
+						<div class="col-lg-2 col-md-3">
+							<a
+								href="./GPReport.do?mode=viewGPCases&pwCounterFlag=COUNTER">
+								<div class="ibox bg-danger color-white widget-stat">
+									<div class="ibox-body">
+										<h2 class="m-b-5 font-strong">${counterFileCount }</h2>
+										<div class="m-b-5">Counter Filed and Pending for
+											Approval</div>
+
+										<i class="fa fa-file-text-o widget-stat-icon"></i>
+										<div>
+											<small> &nbsp;</small>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</logic:greaterThan>
+
+				</logic:notEmpty>
+			</div>
 
 			<logic:present name="showReport1">
 				<div class="row">

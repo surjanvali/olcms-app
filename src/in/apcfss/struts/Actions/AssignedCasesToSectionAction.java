@@ -112,13 +112,14 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 				
 				condition=" and a.case_status=6 and e.gp_id='"+userId+"' ";
 				
-				if(counter_pw_flag.equals("PW")) {
-					condition+=" and pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'No')='No'";
+				if(counter_pw_flag.equals("PR")) {
+					// pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6'
+					condition+=" and pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' )";
 				}
 				if(counter_pw_flag.equals("COUNTER")) {
-					condition+=" and counter_filed='Yes' and coalesce(counter_approved_gp,'F')='F'";
+					//pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6'
+					condition+=" and pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F'";
 				}
-				
 			}
 			
 			sql = "select a.*, b.orderpaths , od.pwr_uploaded, od.counter_filed, od.pwr_approved_gp, coalesce(od.counter_approved_gp,'-') as counter_approved_gp "

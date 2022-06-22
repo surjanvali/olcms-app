@@ -238,8 +238,7 @@ public class HighCourtCasesListAction extends DispatchAction {
 
 	public ActionForward assignCase2EmpPage(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		System.out.println(
-				"HighCourtCasesListAction..............................................................................assignCase2EmpPage()");
+		System.out.println("HighCourtCasesListAction..............................................................................assignCase2EmpPage()");
 		Connection con = null;
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
@@ -628,7 +627,7 @@ public class HighCourtCasesListAction extends DispatchAction {
 						
 						System.out.println(mobileNo+""+smsText+""+templateId);
 						if(mobileNo!=null && !mobileNo.equals("")) {
-							// mobileNo = "9618048663";
+							mobileNo = "9618048663";
 							System.out.println("mobileNo::"+mobileNo);
 							SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
 						}

@@ -95,10 +95,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td>${i+1 }.</td>
 											<td>${map.type_name_reg}</td>
 											<%-- <td>${map.reg_no}</td> --%>
-											<td><a
-												href="./GPReport.do?mode=viewCaseData&caseType=${map.type_name_reg}&caseNo=${map.reg_no}&caseYear=${map.reg_year}"
-												class="btn btn-info btn-md"> ${map.type_name_reg}
-													${map.reg_no}/${map.reg_year} </a></td>
+											<%-- <td><a href="./GPReport.do?mode=caseStatusUpdate&caseType=${map.type_name_reg}&caseNo=${map.reg_no}&caseYear=${map.reg_year}" class="btn btn-info btn-md"> ${map.type_name_reg} ${map.reg_no}/${map.reg_year} </a></td> --%>
+											<td><a href="./GPReport.do?mode=caseStatusUpdate&caseCiNo=${map.cino}" class="btn btn-info btn-md"> ${map.type_name_reg} ${map.reg_no}/${map.reg_year} </a></td>
 											<td style="text-align: center;">${map.dt_regis }</td>
 											<td style="text-align: center;">Pending</td>
 											<%-- 

@@ -386,6 +386,24 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("YEARLY COUNT SQL:"+sql);
 					request.setAttribute("YEARWISECASES", DatabasePlugin.executeQuery(con, sql));
 					
+					
+					sql="select count(*) From ecourts_olcms_case_details a "
+							+ "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  "
+							+ "inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code and ecd.assigned_to=emgd.gp_id) "
+							+ "where pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6' "
+							+ "and emgd.gp_id='"+userid+"'";
+					System.out.println("COUNTERS SQL:"+sql);
+					request.setAttribute("counterFileCount", DatabasePlugin.getStringfromQuery(sql, con));
+					
+					//System.out.println("counterFile--"+sql);
+					sql="select count(*) From ecourts_olcms_case_details a "
+							+ "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  "
+							+ "inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code and ecd.assigned_to=emgd.gp_id) "
+							+ "where pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6' "
+							+ "and emgd.gp_id='"+userid+"'  ";
+					System.out.println("PARAWISE COUNT SQL:"+sql);
+					request.setAttribute("parawiseCount", DatabasePlugin.getStringfromQuery(sql, con));
+					
 					target = "gpDashboard";
 				}
 				
