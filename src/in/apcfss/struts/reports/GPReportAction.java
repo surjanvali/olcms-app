@@ -44,7 +44,7 @@ public class GPReportAction extends DispatchAction {
 				
 				int yearId = CommonModels.checkIntObject(request.getParameter("yearId"));
 				
-				sql = "select type_name_reg,reg_no,reg_year, to_char(dt_regis,'dd-mm-yyyy') as dt_regis from ecourts_case_data a "
+				sql = "select type_name_reg,reg_no,reg_year, to_char(dt_regis,'dd-mm-yyyy') as dt_regis, cino from ecourts_case_data a "
 						+ " inner join dept_new d on (a.dept_code=d.dept_code)   inner join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) "
 						+ " where reg_year > 0 and d.display = true  and e.gp_id='"+userId+"' ";
 				if(yearId > 0)
@@ -113,7 +113,7 @@ public class GPReportAction extends DispatchAction {
 				}
 			}
 			
-			sql = "select type_name_reg,reg_no,reg_year, to_char(dt_regis,'dd-mm-yyyy') as dt_regis,a.cino from ecourts_case_data a "
+			sql = "select type_name_reg, reg_no, reg_year, to_char(dt_regis,'dd-mm-yyyy') as dt_regis, a.cino, case when length(scanned_document_path) > 10 then scanned_document_path else '-' end as scanned_document_path from ecourts_case_data a "
 					+ " left join ecourts_olcms_case_details od on (a.cino=od.cino)"
 					+ " left join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) "
 					+ " inner join dept_new d on (a.dept_code=d.dept_code) "
@@ -159,7 +159,7 @@ public class GPReportAction extends DispatchAction {
 				String caseNo = CommonModels.checkStringObject(request.getParameter("caseNo"));
 				int caseYear = CommonModels.checkIntObject(request.getParameter("caseYear"));
 				
-				sql = "select type_name_reg,reg_no,reg_year, to_char(dt_regis,'dd-mm-yyyy') as dt_regis,cino from ecourts_case_data a "
+				sql = "select type_name_reg,reg_no,reg_year, to_char(dt_regis,'dd-mm-yyyy') as dt_regis,cino , case when length(scanned_document_path) > 10 then scanned_document_path else '-' end as scanned_document_path  from ecourts_case_data a "
 						+ " inner join dept_new d on (a.dept_code=d.dept_code)   inner join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) "
 						+ " where reg_year > 0 and d.display = true  and e.gp_id='"+userId+"' ";
 				if(caseYear > 0)

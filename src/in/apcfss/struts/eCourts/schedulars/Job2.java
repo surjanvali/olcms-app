@@ -6,13 +6,13 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class SchedulerJob implements Job {
+public class Job2 implements Job{
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		
 		
 		Date d1 = new Date();
 		
-		System.out.println("Print Print Struts 1.3 + Quartz 2.1.5 integration example ~:"+d1);
+		System.out.println("Print Print Struts 1.3 + Quartz 2.1.5 integration example ---JOB2 :"+d1);
 
 	}
 }

@@ -26,14 +26,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 body {
 	overflow-y: auto;
 }
-.nav-tabs .nav-item{
-margin-bottom: -1px;
-    background: #5a79c1;
-    color: #fff;
-    border-left: 1px solid #fff;}
-    
-    
-   .nav-tabs active {background: #0b379b;}
+
+.nav-tabs .nav-item {
+	margin-bottom: -1px;
+	background: #5a79c1;
+	color: #fff;
+	border-left: 1px solid #fff;
+}
+
+.nav-tabs active {
+	background: #0b379b;
+}
 </style>
 <!-- START PAGE CONTENT-->
 <div class="page-content fade-in-up">
@@ -84,7 +87,7 @@ margin-bottom: -1px;
 								class="fas fa-home"></i></span> <span class="d-none d-sm-block">Case
 								Details</span>
 					</a></li>
-					<li class="nav-item"><a class="nav-link" id="petitoner-tab"
+					<!-- <li class="nav-item"><a class="nav-link" id="petitoner-tab"
 						data-toggle="tab" href="#petitoner" role="tab"
 						aria-controls="petitoner" aria-selected="true"> <span
 							class="d-block d-sm-none"><i class="fas fa-user"></i></span> <span
@@ -95,7 +98,7 @@ margin-bottom: -1px;
 						aria-controls="profile" aria-selected="true"> <span
 							class="d-block d-sm-none"><i class="fas fa-user"></i></span> <span
 							class="d-none d-sm-block">Respondents</span>
-					</a></li>
+					</a></li> -->
 					<li class="nav-item"><a class="nav-link" id="message-tab"
 						data-toggle="tab" href="#message" role="tab"
 						aria-controls="message" aria-selected="false"> <span
@@ -124,7 +127,7 @@ margin-bottom: -1px;
 						data-toggle="tab" href="#linkcases" role="tab"
 						aria-controls="linkcases" aria-selected="false"> <span
 							class="d-block d-sm-none"><i class="fas fa-cog"></i></span> <span
-							class="d-none d-sm-block">Link Cases</span>
+							class="d-none d-sm-block">Tagged along Cases</span>
 					</a></li>
 					<li class="nav-item"><a class="nav-link" id="objections-tab"
 						data-toggle="tab" href="#objections" role="tab"
@@ -308,9 +311,9 @@ margin-bottom: -1px;
 
 								</logic:present>
 								<hr />
-								<logic:present name="actlist">
-									<div class="row">
-										<div class="col-md-12">
+								<div class="row">
+									<logic:present name="actlist">
+										<div class="col-md-6">
 											<table class="table table-striped table-bordered table-hover"
 												cellspacing="0" width="100%">
 												<thead>
@@ -337,15 +340,67 @@ margin-bottom: -1px;
 												</tbody>
 											</table>
 										</div>
-									</div>
-								</logic:present>
-
-
+									</logic:present>
+									<logic:present name="PETEXTRAPARTYLIST">
+										<div class="col-md-6">
+											<table class="table table-striped table-bordered table-hover"
+												cellspacing="0" width="100%">
+												<thead>
+													<tr>
+														<th colspan="3">Petetioner's List</th>
+													</tr>
+													<tr>
+														<th>Sl No.</th>
+														<th>Party No</th>
+														<th>Party Name</th>
+													</tr>
+												</thead>
+												<tbody>
+													<logic:iterate id="pet" name="PETEXTRAPARTYLIST"
+														indexId="i">
+														<tr>
+															<td>${i+1}</td>
+															<td>${pet.party_no}</td>
+															<td>${pet.party_name}</td>
+														</tr>
+													</logic:iterate>
+												</tbody>
+											</table>
+										</div>
+									</logic:present>
+									<logic:present name="RESEXTRAPARTYLIST">
+										<div class="col-md-6">
+											<table class="table table-striped table-bordered table-hover"
+												cellspacing="0" width="100%">
+												<thead>
+													<tr>
+														<th colspan="3">Respondent List</th>
+													</tr>
+													<tr>
+														<th>Sl No.</th>
+														<th>Party No</th>
+														<th>Party Name</th>
+													</tr>
+												</thead>
+												<tbody>
+													<logic:iterate id="res" name="RESEXTRAPARTYLIST"
+														indexId="i">
+														<tr>
+															<td>${i+1}</td>
+															<td>${res.party_no}</td>
+															<td>${res.party_name}</td>
+														</tr>
+													</logic:iterate>
+												</tbody>
+											</table>
+										</div>
+									</logic:present>
+								</div>
 							</div>
 						</div>
 					</div>
 
-					<div class="tab-pane" id="petitoner" role="tabpanel"
+					<%-- <div class="tab-pane" id="petitoner" role="tabpanel"
 						aria-labelledby="petitoner-tab">
 						<logic:present name="PETEXTRAPARTYLIST">
 							<div class="row">
@@ -408,7 +463,7 @@ margin-bottom: -1px;
 							</div>
 						</logic:present>
 
-					</div>
+					</div> --%>
 					<div class="tab-pane" id="message" role="tabpanel"
 						aria-labelledby="message-tab">
 						<logic:present name="IAFILINGLIST">
@@ -481,8 +536,8 @@ margin-bottom: -1px;
 							</div>
 						</logic:present>
 					</div>
-					
-					
+
+
 					<div class="tab-pane" id="objections" role="tabpanel"
 						aria-labelledby="objections-tab">
 						<logic:present name="OBJECTIONSLIST">
@@ -614,429 +669,429 @@ margin-bottom: -1px;
 					</div>
 
 
-				<div class="tab-pane" id="final" role="tabpanel"
-					aria-labelledby="final-tab">
+					<div class="tab-pane" id="final" role="tabpanel"
+						aria-labelledby="final-tab">
 
-					<logic:present name="orderlist">
-						<div class="row">
-							<div class="col-md-12">
-								<table class="table table-striped table-bordered table-hover"
-									cellspacing="0" width="100%">
-									<thead>
-										<tr>
-											<th colspan="6">Final Order Details</th>
-										</tr>
-										<tr>
-											<th>Sl No.</th>
-											<th>Sr No</th>
-											<th>Order NO</th>
-											<th>Order Date</th>
-											<th>Order Details</th>
-											<th>Order Document</th>
-										</tr>
-									</thead>
-									<tbody>
-										<logic:iterate id="order" name="orderlist" indexId="i">
+						<logic:present name="orderlist">
+							<div class="row">
+								<div class="col-md-12">
+									<table class="table table-striped table-bordered table-hover"
+										cellspacing="0" width="100%">
+										<thead>
 											<tr>
-												<td>${i+1}</td>
-												<td>${order.sr_no}</td>
-												<td>${order.order_no}</td>
-												<td>${order.order_date}</td>
-												<td>${order.order_details}</td>
-												<td><logic:notEmpty name="order"
-														property="order_document_path">
-
-														<logic:notEqual value="-" name="order"
+												<th colspan="6">Final Order Details</th>
+											</tr>
+											<tr>
+												<th>Sl No.</th>
+												<th>Sr No</th>
+												<th>Order NO</th>
+												<th>Order Date</th>
+												<th>Order Details</th>
+												<th>Order Document</th>
+											</tr>
+										</thead>
+										<tbody>
+											<logic:iterate id="order" name="orderlist" indexId="i">
+												<tr>
+													<td>${i+1}</td>
+													<td>${order.sr_no}</td>
+													<td>${order.order_no}</td>
+													<td>${order.order_date}</td>
+													<td>${order.order_details}</td>
+													<td><logic:notEmpty name="order"
 															property="order_document_path">
 
-															<a href="./${order.order_document_path}"
-																class="btn btn-sm btn-info" target="">
-																${order.order_details}-${order.order_no}</a>
-														</logic:notEqual>
-													</logic:notEmpty></td>
-											</tr>
-										</logic:iterate>
-									</tbody>
-								</table>
+															<logic:notEqual value="-" name="order"
+																property="order_document_path">
+
+																<a href="./${order.order_document_path}"
+																	class="btn btn-sm btn-info" target="">
+																	${order.order_details}-${order.order_no}</a>
+															</logic:notEqual>
+														</logic:notEmpty></td>
+												</tr>
+											</logic:iterate>
+										</tbody>
+									</table>
+								</div>
 							</div>
-						</div>
-					</logic:present>
+						</logic:present>
 
-				</div>
+					</div>
 
 
-				<div class="tab-pane" id="activities" role="tabpanel"
-					aria-labelledby="activities-tab">
-					<logic:present name="ACTIVITIESDATA">
-						<div class="row">
-							<div class="col-md-12">
-								<table class="table table-striped table-bordered table-hover"
-									cellspacing="0" width="100%">
-									<thead>
-										<tr>
-											<th colspan="7">Case Activities</th>
-										</tr>
-										<tr>
-											<th>Sl No.</th>
-											<th>Date</th>
-											<th>Activity</th>
-											<th>Updated By</th>
-											<th>Assigned to</th>
-											<th>Remarks</th>
-											<th>Uploaded Document</th>
-										</tr>
-									</thead>
-									<tbody>
-										<logic:iterate id="activities" name="ACTIVITIESDATA"
-											indexId="i">
+					<div class="tab-pane" id="activities" role="tabpanel"
+						aria-labelledby="activities-tab">
+						<logic:present name="ACTIVITIESDATA">
+							<div class="row">
+								<div class="col-md-12">
+									<table class="table table-striped table-bordered table-hover"
+										cellspacing="0" width="100%">
+										<thead>
 											<tr>
-												<td>${i+1}</td>
-												<td>${activities.inserted_on}</td>
-												<td>${activities.action_type}</td>
-												<td>${activities.inserted_by}</td>
-												<td>${activities.assigned_to}</td>
-												<td>${activities.remarks }</td>
-												<td><logic:notEmpty name="activities"
-														property="uploaded_doc_path">
-
-														<logic:notEqual value="-" name="activities"
+												<th colspan="7">Case Activities</th>
+											</tr>
+											<tr>
+												<th>Sl No.</th>
+												<th>Date</th>
+												<th>Activity</th>
+												<th>Updated By</th>
+												<th>Assigned to</th>
+												<th>Remarks</th>
+												<th>Uploaded Document</th>
+											</tr>
+										</thead>
+										<tbody>
+											<logic:iterate id="activities" name="ACTIVITIESDATA"
+												indexId="i">
+												<tr>
+													<td>${i+1}</td>
+													<td>${activities.inserted_on}</td>
+													<td>${activities.action_type}</td>
+													<td>${activities.inserted_by}</td>
+													<td>${activities.assigned_to}</td>
+													<td>${activities.remarks }</td>
+													<td><logic:notEmpty name="activities"
 															property="uploaded_doc_path">
 
-															<a href='${activities.uploaded_doc_path}' target='_new'
-																class="btn btn-sm btn-info">View Uploaded File</a>
-														</logic:notEqual>
+															<logic:notEqual value="-" name="activities"
+																property="uploaded_doc_path">
 
-													</logic:notEmpty></td>
-											</tr>
-										</logic:iterate>
-									</tbody>
+																<a href='${activities.uploaded_doc_path}' target='_new'
+																	class="btn btn-sm btn-info">View Uploaded File</a>
+															</logic:notEqual>
 
-								</table>
+														</logic:notEmpty></td>
+												</tr>
+											</logic:iterate>
+										</tbody>
+
+									</table>
+								</div>
 							</div>
-						</div>
-					</logic:present>
-				</div>
-				
-				<div class="tab-pane" id="parawise" role="tabpanel"
-					aria-labelledby="parawise-tab">
-
-
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
-							<label>Upload Petition <bean:message key="mandatory" /></label>
-							<html:file styleClass="form-control" styleId="petitionDocument"
-								property="dynaForm(petitionDocument)" />
-							<span class="help-block"><bean:message
-									key="upload.document.validation.msg" /></span>
-
-							<logic:notEmpty name="CommonForm"
-								property="dynaForm(petitionDocumentOld)">
-								<a
-									href='<bean:write name="CommonForm" property="dynaForm(petitionDocumentOld)"/>'
-									target='_new' class="btn btn-sm btn-info">View Uploaded
-									File</a>
-							</logic:notEmpty>
-
-						</div>
-
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>Case Status <bean:message key="mandatory" />
-								</label>
-								<html:select styleId="ecourtsCaseStatus"
-									property="dynaForm(ecourtsCaseStatus)"
-									styleClass="form-control">
-									<html:option value="0">---SELECT---</html:option>
-									<html:option value="Pending">Pending</html:option>
-									<html:option value="Closed">Closed</html:option>
-								</html:select>
-							</div>
-						</div>
+						</logic:present>
 					</div>
 
+					<div class="tab-pane" id="parawise" role="tabpanel"
+						aria-labelledby="parawise-tab">
 
-					<div class="row">
-						<div class="col-sm-6 form-group casecloseddiv">
-							<label>Upload Judgement Order <bean:message
-									key="mandatory" /></label>
 
-							<html:file styleClass="form-control" styleId="judgementOrder"
-								property="dynaForm(judgementOrder)" />
-							<span class="help-block"><bean:message
-									key="upload.document.validation.msg" /></span>
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
+								<label>Upload Petition <bean:message key="mandatory" /></label>
+								<html:file styleClass="form-control" styleId="petitionDocument"
+									property="dynaForm(petitionDocument)" />
+								<span class="help-block"><bean:message
+										key="upload.document.validation.msg" /></span>
 
-							<logic:notEmpty name="CommonForm"
-								property="dynaForm(judgementOrderOld)">
-								<a
-									href='<bean:write name="CommonForm" property="dynaForm(judgementOrderOld)"/>'
-									target='_new' class="btn btn-sm btn-info">View Uploaded
-									File</a>
-							</logic:notEmpty>
+								<logic:notEmpty name="CommonForm"
+									property="dynaForm(petitionDocumentOld)">
+									<a
+										href='<bean:write name="CommonForm" property="dynaForm(petitionDocumentOld)"/>'
+										target='_new' class="btn btn-sm btn-info">View Uploaded
+										File</a>
+								</logic:notEmpty>
 
+							</div>
+
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label>Case Status <bean:message key="mandatory" />
+									</label>
+									<html:select styleId="ecourtsCaseStatus"
+										property="dynaForm(ecourtsCaseStatus)"
+										styleClass="form-control">
+										<html:option value="0">---SELECT---</html:option>
+										<html:option value="Pending">Pending</html:option>
+										<html:option value="Closed">Closed</html:option>
+									</html:select>
+								</div>
+							</div>
 						</div>
-						<div class="col-sm-6 form-group casecloseddiv">
-							<label>Action Taken Order <bean:message key="mandatory" /></label>
 
-							<html:file styleClass="form-control" styleId="actionTakenOrder"
-								property="dynaForm(actionTakenOrder)" />
-							<span class="help-block"><bean:message
-									key="upload.document.validation.msg" /></span>
 
-							<logic:notEmpty name="CommonForm"
-								property="dynaForm(actionTakenOrderOld)">
-								<a
-									href='<bean:write name="CommonForm" property="dynaForm(actionTakenOrderOld)"/>'
-									target='_new' class="btn btn-sm btn-info">View Uploaded
-									File</a>
-							</logic:notEmpty>
+						<div class="row">
+							<div class="col-sm-6 form-group casecloseddiv">
+								<label>Upload Judgement Order <bean:message
+										key="mandatory" /></label>
 
+								<html:file styleClass="form-control" styleId="judgementOrder"
+									property="dynaForm(judgementOrder)" />
+								<span class="help-block"><bean:message
+										key="upload.document.validation.msg" /></span>
+
+								<logic:notEmpty name="CommonForm"
+									property="dynaForm(judgementOrderOld)">
+									<a
+										href='<bean:write name="CommonForm" property="dynaForm(judgementOrderOld)"/>'
+										target='_new' class="btn btn-sm btn-info">View Uploaded
+										File</a>
+								</logic:notEmpty>
+
+							</div>
+							<div class="col-sm-6 form-group casecloseddiv">
+								<label>Action Taken Order <bean:message key="mandatory" /></label>
+
+								<html:file styleClass="form-control" styleId="actionTakenOrder"
+									property="dynaForm(actionTakenOrder)" />
+								<span class="help-block"><bean:message
+										key="upload.document.validation.msg" /></span>
+
+								<logic:notEmpty name="CommonForm"
+									property="dynaForm(actionTakenOrderOld)">
+									<a
+										href='<bean:write name="CommonForm" property="dynaForm(actionTakenOrderOld)"/>'
+										target='_new' class="btn btn-sm btn-info">View Uploaded
+										File</a>
+								</logic:notEmpty>
+
+							</div>
 						</div>
-					</div>
 
-					<div class="parawiseRemarksdiv">
+						<div class="parawiseRemarksdiv">
+							<div class="row">
+								<div class="col-sm-6 form-group">
+									<label>Parawise Remarks Submitted</label>
+									<html:select styleId="parawiseRemarksSubmitted"
+										property="dynaForm(parawiseRemarksSubmitted)"
+										styleClass="form-control">
+										<html:option value="0">---SELECT---</html:option>
+										<html:option value="No">No</html:option>
+										<html:option value="Yes">Yes</html:option>
+									</html:select>
+								</div>
+
+								<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
+									<label for="sel1"> Date of Submission of Parawise
+										Remarks to GP/SC <font color="red">*</font>
+									</label>
+									<div class="input-group date">
+										<span class="input-group-addon bg-white"><i
+											class="fa fa-calendar"></i></span>
+										<html:text styleId="parawiseRemarksDt"
+											property="dynaForm(parawiseRemarksDt)"
+											styleClass="form-control datepicker" />
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
+									<label>Upload Parawise Remarks</label>
+									<html:file styleClass="form-control"
+										styleId="parawiseRemarksCopy"
+										property="dynaForm(parawiseRemarksCopy)" />
+
+
+									<span class="help-block"><bean:message
+											key="upload.document.validation.msg" /></span>
+
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(parawiseRemarksCopyOld)">
+										<a
+											href='<bean:write name="CommonForm" property="dynaForm(parawiseRemarksCopyOld)"/>'
+											target='_new' class="btn btn-sm btn-info">View Uploaded
+											File</a>
+									</logic:notEmpty>
+
+								</div>
+
+								<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
+									<label for="sel1"> Parawise Remarks Approved by GP<font
+										color="red">*</font></label>
+									<html:select property="dynaForm(pwr_gp_approved)"
+										styleId="pwr_gp_approved" styleClass="form-control">
+										<html:option value="0">---SELECT---</html:option>
+										<html:option value="No">No</html:option>
+										<html:option value="Yes">Yes</html:option>
+									</html:select>
+
+								</div>
+
+							</div>
+
+							<div class="row parawiseRemarksapproveddiv">
+								<div class="col-xs-12 col-sm-6 form-group ">
+									<label class="font-bold">Date of Approval of Parawise
+										Remarks by GP/SC <font color="red">*</font>
+									</label>
+									<div class="input-group date">
+										<span class="input-group-addon bg-white"><i
+											class="fa fa-calendar"></i></span>
+										<html:text styleId="dtPRApprovedToGP"
+											property="dynaForm(dtPRApprovedToGP)"
+											styleClass="form-control datepicker" />
+									</div>
+								</div>
+
+								<div class="col-xs-12 col-sm-6 form-group">
+									<label class="font-bold">Date of Receipt of Approved
+										Parawise Remarks from GP/SC <font color="red">*</font>
+									</label>
+									<div class="input-group date">
+										<span class="input-group-addon bg-white"><i
+											class="fa fa-calendar"></i></span>
+										<html:text styleId="dtPRReceiptToGP"
+											property="dynaForm(dtPRReceiptToGP)"
+											styleClass="form-control datepicker" />
+									</div>
+								</div>
+
+							</div>
+						</div>
+
 						<div class="row">
 							<div class="col-sm-6 form-group">
-								<label>Parawise Remarks Submitted</label>
-								<html:select styleId="parawiseRemarksSubmitted"
-									property="dynaForm(parawiseRemarksSubmitted)"
-									styleClass="form-control">
-									<html:option value="0">---SELECT---</html:option>
-									<html:option value="No">No</html:option>
-									<html:option value="Yes">Yes</html:option>
+								<label>Action <bean:message key="mandatory" />
+								</label>
+								<html:select styleId="actionToPerform"
+									property="dynaForm(actionToPerform)" styleClass="form-control">
+									<html:option value="Parawise Remarks">Parawise Remarks</html:option>
+
 								</html:select>
 							</div>
-
-							<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
-								<label for="sel1"> Date of Submission of Parawise
-									Remarks to GP/SC <font color="red">*</font>
-								</label>
-								<div class="input-group date">
-									<span class="input-group-addon bg-white"><i
-										class="fa fa-calendar"></i></span>
-									<html:text styleId="parawiseRemarksDt"
-										property="dynaForm(parawiseRemarksDt)"
-										styleClass="form-control datepicker" />
-								</div>
-							</div>
+							<div class="col-sm-6 form-group"></div>
 						</div>
 
 						<div class="row">
-							<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
-								<label>Upload Parawise Remarks</label>
-								<html:file styleClass="form-control"
-									styleId="parawiseRemarksCopy"
-									property="dynaForm(parawiseRemarksCopy)" />
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								<div class="form-group">
+									<label for="sel1" id="remaeksTextId">Remarks: </label>
 
-
-								<span class="help-block"><bean:message
-										key="upload.document.validation.msg" /></span>
-
-								<logic:notEmpty name="CommonForm"
-									property="dynaForm(parawiseRemarksCopyOld)">
-									<a
-										href='<bean:write name="CommonForm" property="dynaForm(parawiseRemarksCopyOld)"/>'
-										target='_new' class="btn btn-sm btn-info">View Uploaded
-										File</a>
-								</logic:notEmpty>
-
-							</div>
-
-							<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
-									<label for="sel1"> Parawise Remarks Approved by GP<font
-									color="red">*</font></label>
-								<html:select property="dynaForm(pwr_gp_approved)"
-									styleId="pwr_gp_approved" styleClass="form-control">
-									<html:option value="0">---SELECT---</html:option>
-									<html:option value="No">No</html:option>
-									<html:option value="Yes">Yes</html:option>
-								</html:select>
-
-							</div>
-
-						</div>
-
-						<div class="row parawiseRemarksapproveddiv">
-							<div class="col-xs-12 col-sm-6 form-group ">
-								<label class="font-bold">Date of Approval of Parawise
-									Remarks by GP/SC <font color="red">*</font>
-								</label>
-								<div class="input-group date">
-									<span class="input-group-addon bg-white"><i
-										class="fa fa-calendar"></i></span>
-									<html:text styleId="dtPRApprovedToGP"
-										property="dynaForm(dtPRApprovedToGP)"
-										styleClass="form-control datepicker" />
+									<html:textarea cols="600" styleId="remarks"
+										property="dynaForm(remarks)"
+										style="width: 1000px; height: 250px;">
+									</html:textarea>
 								</div>
 							</div>
+						</div>
 
-							<div class="col-xs-12 col-sm-6 form-group">
-								<label class="font-bold">Date of Receipt of Approved
-									Parawise Remarks from GP/SC <font color="red">*</font>
-								</label>
-								<div class="input-group date">
-									<span class="input-group-addon bg-white"><i
-										class="fa fa-calendar"></i></span>
-									<html:text styleId="dtPRReceiptToGP"
-										property="dynaForm(dtPRReceiptToGP)"
-										styleClass="form-control datepicker" />
+
+						<button class="btn btn-md btn-success" type="button"
+							name="forward" onclick="return gpApprove();">Approve</button>
+
+						<button class="btn btn-md btn-danger" type="button" name="forward"
+							onclick="return gpReject();">Return</button>
+
+					</div>
+
+
+					<div class="tab-pane" id="counter" role="tabpanel"
+						aria-labelledby="counter-tab">
+						<div class="appealfileddiv">
+							<div class="row">
+								<div class="col-sm-6 form-group ">
+									<label>Appeal Filed</label>
+									<html:select styleId="appealFiled"
+										property="dynaForm(appealFiled)" styleClass="form-control">
+										<html:option value="0">---SELECT---</html:option>
+										<html:option value="No">No</html:option>
+										<html:option value="Yes">Yes</html:option>
+									</html:select>
+								</div>
+								<div class="col-sm-6 form-group appealuploaddiv">
+									<label>Upload Appeal Copy</label>
+
+									<html:file styleClass="form-control" styleId="appealFileCopy"
+										property="dynaForm(appealFileCopy)" />
+									<span class="help-block"><bean:message
+											key="upload.document.validation.msg" /></span>
+
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(appealFileCopyOld)">
+										<a
+											href='<bean:write name="CommonForm" property="dynaForm(appealFileCopyOld)"/>'
+											target='_new' class="btn btn-sm btn-info">View Uploaded
+											File</a>
+									</logic:notEmpty>
+
+								</div>
+								<div class="col-sm-6 form-group appealuploaddiv">
+									<label>Appeal Date</label>
+
+									<div class="input-group date">
+										<span class="input-group-addon bg-white"><i
+											class="fa fa-calendar"></i></span>
+										<html:text styleId="appealFiledDt"
+											property="dynaForm(appealFiledDt)"
+											styleClass="form-control datepicker" />
+									</div>
 								</div>
 							</div>
-
 						</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label>Action <bean:message key="mandatory" />
-							</label>
-							<html:select styleId="actionToPerform"
-								property="dynaForm(actionToPerform)" styleClass="form-control">
-								<html:option value="Parawise Remarks">Parawise Remarks</html:option>
+						<div class="counterfileddiv">
+							<div class="row">
+								<div class="col-sm-6 form-group ">
+									<label>Counter Filed</label>
+									<html:select styleId="counterFiled"
+										property="dynaForm(counterFiled)" styleClass="form-control">
+										<html:option value="0">---SELECT---</html:option>
+										<html:option value="No">No</html:option>
+										<html:option value="Yes">Yes</html:option>
+									</html:select>
+								</div>
+								<div class="col-sm-6 form-group counteruploaddiv">
+									<label>Counter File Upload</label>
 
-							</html:select>
-						</div>
-						<div class="col-sm-6 form-group"></div>
-					</div>
+									<html:file styleClass="form-control" styleId="counterFileCopy"
+										property="dynaForm(counterFileCopy)" />
+									<span class="help-block"><bean:message
+											key="upload.document.validation.msg" /></span>
 
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<div class="form-group">
-								<label for="sel1" id="remaeksTextId">Remarks: </label>
-								
-								<html:textarea cols="600" styleId="remarks"
-									property="dynaForm(remarks)"
-									style="width: 1000px; height: 250px;">
-								</html:textarea>
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(counterFileCopyOld)">
+										<a
+											href='<bean:write name="CommonForm" property="dynaForm(counterFileCopyOld)"/>'
+											target='_new' class="btn btn-sm btn-info">View Uploaded
+											File</a>
+									</logic:notEmpty>
+
+								</div>
 							</div>
 						</div>
-					</div>
 
 
-					<button class="btn btn-md btn-success" type="button" name="forward"
-						onclick="return gpApprove();">Approve</button>
-
-					<button class="btn btn-md btn-danger" type="button" name="forward"
-						onclick="return gpReject();">Return</button>
-
-				</div>
-				
-				
-				<div class="tab-pane" id="counter" role="tabpanel"
-					aria-labelledby="counter-tab">
-					<div class="appealfileddiv">
 						<div class="row">
-							<div class="col-sm-6 form-group ">
-								<label>Appeal Filed</label>
-								<html:select styleId="appealFiled"
-									property="dynaForm(appealFiled)" styleClass="form-control">
-									<html:option value="0">---SELECT---</html:option>
-									<html:option value="No">No</html:option>
-									<html:option value="Yes">Yes</html:option>
-								</html:select>
-							</div>
-							<div class="col-sm-6 form-group appealuploaddiv">
-								<label>Upload Appeal Copy</label>
-
-								<html:file styleClass="form-control" styleId="appealFileCopy"
-									property="dynaForm(appealFileCopy)" />
-								<span class="help-block"><bean:message
-										key="upload.document.validation.msg" /></span>
-
-								<logic:notEmpty name="CommonForm"
-									property="dynaForm(appealFileCopyOld)">
-									<a
-										href='<bean:write name="CommonForm" property="dynaForm(appealFileCopyOld)"/>'
-										target='_new' class="btn btn-sm btn-info">View Uploaded
-										File</a>
-								</logic:notEmpty>
-
-							</div>
-							<div class="col-sm-6 form-group appealuploaddiv">
-								<label>Appeal Date</label>
-
-								<div class="input-group date">
-									<span class="input-group-addon bg-white"><i
-										class="fa fa-calendar"></i></span>
-									<html:text styleId="appealFiledDt"
-										property="dynaForm(appealFiledDt)"
-										styleClass="form-control datepicker" />
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="counterfileddiv">
-						<div class="row">
-							<div class="col-sm-6 form-group ">
-								<label>Counter Filed</label>
-								<html:select styleId="counterFiled"
-									property="dynaForm(counterFiled)" styleClass="form-control">
-									<html:option value="0">---SELECT---</html:option>
-									<html:option value="No">No</html:option>
-									<html:option value="Yes">Yes</html:option>
-								</html:select>
-							</div>
-							<div class="col-sm-6 form-group counteruploaddiv">
-								<label>Counter File Upload</label>
-
-								<html:file styleClass="form-control" styleId="counterFileCopy"
-									property="dynaForm(counterFileCopy)" />
-								<span class="help-block"><bean:message
-										key="upload.document.validation.msg" /></span>
-
-								<logic:notEmpty name="CommonForm"
-									property="dynaForm(counterFileCopyOld)">
-									<a
-										href='<bean:write name="CommonForm" property="dynaForm(counterFileCopyOld)"/>'
-										target='_new' class="btn btn-sm btn-info">View Uploaded
-										File</a>
-								</logic:notEmpty>
-
-							</div>
-						</div>
-					</div>
-
-
-					<div class="row">
-						<div class="col-sm-6 form-group">
-							<label>Action <bean:message key="mandatory" />
-							</label>
-							<html:select styleId="actionToPerform"
-								property="dynaForm(actionToPerform)" styleClass="form-control">
-								<html:option value="Counter Affidavit">Counter Affidavit</html:option>
-								<%-- <html:option value="Interim Orders">Interim Orders</html:option>
+							<div class="col-sm-6 form-group">
+								<label>Action <bean:message key="mandatory" />
+								</label>
+								<html:select styleId="actionToPerform"
+									property="dynaForm(actionToPerform)" styleClass="form-control">
+									<html:option value="Counter Affidavit">Counter Affidavit</html:option>
+									<%-- <html:option value="Interim Orders">Interim Orders</html:option>
 							<html:option value="Appeal">Appeal</html:option>
 							<html:option value="Contempt">Contempt</html:option>
 							<html:option value="Judgement">Judgement</html:option> --%>
-							</html:select>
+								</html:select>
+							</div>
+							<div class="col-sm-6 form-group"></div>
 						</div>
-						<div class="col-sm-6 form-group"></div>
-					</div>
 
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<div class="form-group">
-								<label for="sel1" id="remaeksTextId">Remarks: </label>
-								
-								<html:textarea cols="600" styleId="remarks2"
-									property="dynaForm(remarks2)"
-									style="width: 1000px; height: 250px;">
-								</html:textarea>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								<div class="form-group">
+									<label for="sel1" id="remaeksTextId">Remarks: </label>
+
+									<html:textarea cols="600" styleId="remarks2"
+										property="dynaForm(remarks2)"
+										style="width: 1000px; height: 250px;">
+									</html:textarea>
+								</div>
 							</div>
 						</div>
+						<button class="btn btn-md btn-success" type="button"
+							name="forward" onclick="return gpApprove();">Approve</button>
+
+						<button class="btn btn-md btn-danger" type="button" name="forward"
+							onclick="return gpReject();">Return</button>
+
 					</div>
-					<button class="btn btn-md btn-success" type="button" name="forward"
-						onclick="return gpApprove();">Approve</button>
-
-					<button class="btn btn-md btn-danger" type="button" name="forward"
-						onclick="return gpReject();">Return</button>
-
 				</div>
+
 			</div>
-
 		</div>
-</div>
 
-</html:form>
+	</html:form>
 </div>
 <script type="text/javascript"
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -1045,24 +1100,22 @@ margin-bottom: -1px;
 <script
 	src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js'></script>
 <script type="text/javascript" src="js/nicEdit-latest.js"></script>
-								<script type="text/javascript">
-									bkLib.onDomLoaded(function() {
-										new nicEditor({
-											fullPanel : true
-										}).panelInstance('remarks');
-									});
-									bkLib.onDomLoaded(function() {
-										new nicEditor({
-											fullPanel : true
-										}).panelInstance('remarks2');
-									});
-								</script>
+<script type="text/javascript">
+	bkLib.onDomLoaded(function() {
+		new nicEditor({
+			fullPanel : true
+		}).panelInstance('remarks');
+	});
+	bkLib.onDomLoaded(function() {
+		new nicEditor({
+			fullPanel : true
+		}).panelInstance('remarks2');
+	});
+</script>
 <script>
 	$('.datepicker').datepicker({
 		uiLibrary : 'bootstrap4'
 	});
-	
-	
 </script>
 <script>
 	function sendbackFn() {

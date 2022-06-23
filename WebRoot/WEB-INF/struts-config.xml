@@ -432,6 +432,30 @@
 		</action>
 		
 		
+		
+		<action path="/EcourtsDeptInstruction"
+			name="CommonForm"
+			type="in.apcfss.struts.reports.EcourtsDeptInstructionAction"
+			parameter="mode" scope="request">
+			<forward name="success"
+				path="EcourtsDeptInstruction"></forward>
+			 <forward name="caseview1" path="casedetailsview2"></forward>
+			<forward name="casepopupview1" path="casedetailspopupview2"></forward>
+		</action>
+		
+		
+		
+		<action path="/DailyStatusEntry"
+			name="CommonForm"
+			type="in.apcfss.struts.reports.DailyStatusEntryAction"
+			parameter="mode" scope="request">
+			<forward name="success"
+				path="DailyStatusEntry"></forward>
+			 <forward name="caseview1" path="casedetailsview3"></forward>
+			<forward name="casepopupview1" path="casedetailspopupview3"></forward>
+		</action>
+		
+		
 
 	</action-mappings>
 
@@ -444,6 +468,8 @@
 		<set-property property="definitions-parser-validate"
 			value="false" />
 	</plug-in>
+	
 	<plug-in className="plugins.DatabasePlugin"></plug-in>
-	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPlugin" />  -->
+	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPluginTest" /> -->
+	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPlugin" /> --> 
 </struts-config>

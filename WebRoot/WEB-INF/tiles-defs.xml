@@ -296,5 +296,40 @@
 		extends="modalLayout">
 		<put name="content" value="/jsp/reports/CategoryUpdationView.jsp" />
 	</definition>
+	
+	
+	<definition name="EcourtsDeptInstruction"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/EcourtsDeptInstruction.jsp" />
+	</definition>
+	
+		 <definition name="casedetailsview2" extends="modalLayout">
+		<put name="content" value="/jsp/reports/EcourtsDeptInstructionView.jsp" />
+	</definition>
+
+	<definition name="casedetailspopupview2"
+		extends="modalLayout">
+		<put name="content" value="/jsp/reports/EcourtsDeptInstructionView.jsp" />
+	</definition>
+	
+	
+	<definition name="DailyStatusEntry"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/DailyStatusEntry.jsp" />
+	</definition>
+	
+	
+	<definition name="casedetailsview3" extends="modalLayout">
+		<put name="content" value="/jsp/reports/DailyStatusEntryView.jsp" />
+	</definition>
+
+	<definition name="casedetailspopupview3"
+		extends="modalLayout">
+		<put name="content" value="/jsp/reports/DailyStatusEntryView.jsp" />
+	</definition>
+	
+	
 
 </tiles-definitions>
