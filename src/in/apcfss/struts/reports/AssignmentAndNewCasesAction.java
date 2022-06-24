@@ -139,13 +139,20 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 				cform.setDynaForm("toDate", request.getParameter("toDate"));
 			}
 
-			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2"))) {
-					sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='"+deptCode+"') ";
+
+			
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("3"))) {
+					// sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='"+deptCode+"') ";
+					sqlCondition += " and dmt.dept_code='" + deptCode + "' ";
 			}
 			
 			if (roleId.equals("2")) {//District Collector
 				sqlCondition += " and (case_status is null or a.case_status=7) and a.distid='" + distCode + "' ";
 				cform.setDynaForm("districtId", distCode);
+			}
+			
+			if (roleId.equals("3")) {//Secretariat Department
+				sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='"+deptCode+"') ";
 			}
 			
 			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
@@ -217,8 +224,6 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 		}
 		return mapping.findForward("success");
 	}
-	
-	
 	
 	public ActionForward getCasesList(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -723,7 +728,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 						
 						System.out.println(mobileNo+""+smsText+""+templateId);
 						if(mobileNo!=null && !mobileNo.equals("")) {
-							mobileNo = "9618048663";
+							// mobileNo = "9618048663";
 							System.out.println("mobileNo::"+mobileNo);
 							SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
 						}
@@ -799,29 +804,28 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 					selectedCaseIds = selectedCaseIds.substring(0,selectedCaseIds.length()-1);
 				}
 				String successMsg="";
-				String assign2deptId = DatabasePlugin.getStringfromQuery("select dept_id from dept_new where dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))+"'", con);
-				
+				// String assign2deptId = DatabasePlugin.getStringfromQuery("select dept_id from dept_new where dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))+"'", con);
+				// int a = 0;
 				if(officerType.equals("DC")) {
 					
 					//sql = "update ecourts_case_data set dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))+"', dept_id='"+assign2deptId+"', dist_id='"+CommonModels.checkIntObject(cform.getDynaForm("caseDist"))
 					//------------------- +"',dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))
 					//+"',case_status=7  where cino in (" + selectedCaseIds + ") ";
 					
-					
 					sql=" INSERT INTO apolcms.ecourts_gpo_ack_depts_log(ack_no, dept_code, respondent_slno, assigned, assigned_to, case_status, dist_id) "
 							+ " SELECT ack_no, dept_code, respondent_slno, assigned, assigned_to, case_status, dist_id "
 							+ "    FROM apolcms.ecourts_gpo_ack_depts  where ack_no in (" + selectedCaseIds + ") ";
 
 					System.out.println("INSERT SQL:"+sql);
-					//a += DatabasePlugin.executeUpdate(sql, con);
+					DatabasePlugin.executeUpdate(sql, con);
 					
-					sql = "update ecourts_gpo_ack_depts set dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))+"', dist_id='"+CommonModels.checkIntObject(cform.getDynaForm("caseDist"))+"', assigned=true,case_status=7 "
+					sql = "update ecourts_gpo_ack_depts set "
+							// + "dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))+"', dist_id='"+CommonModels.checkIntObject(cform.getDynaForm("caseDist"))+"', "
+									+ "assigned=true,case_status=7 "
 							//+ " assigned_to='"+emailId+"',case_status="+newStatusCode+", dist_id="+distCode+" "
 									+ " where ack_no in (" + selectedCaseIds + ") and dept_code='"+login_deptId+"' ";
 					System.out.println("UPDATE SQL:"+sql);
-				//	a += DatabasePlugin.executeUpdate(sql, con);
-					
-					
+					DatabasePlugin.executeUpdate(sql, con);
 					
 					successMsg = "Case/Cases successfully moved to selected District Collector Login";
 					
@@ -837,17 +841,19 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 							+ "    FROM apolcms.ecourts_gpo_ack_depts where ack_no in (" + selectedCaseIds + ")) ";
 					System.out.println("INSERT SQL:"+sql);
 					
+					DatabasePlugin.executeUpdate(sql, con);
+					
 					sql = "update ecourts_gpo_ack_depts set dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))+"',dist_id='"+CommonModels.checkIntObject(cform.getDynaForm("caseDist"))+"', assigned=true,case_status=8 "
 							//+ " assigned_to='"+emailId+"',case_status="+newStatusCode+", dist_id="+distCode+" "
 									+ " where ack_no in (" + selectedCaseIds + ") and dept_code='"+login_deptId+"' ";
-					
+					DatabasePlugin.executeUpdate(sql, con);
 					successMsg="Case/Cases successfully moved to selected District Nodal Officer Login";
 				}
 				
 				
 				System.out.println("UPDATE SQL:"+sql);
 				
-				DatabasePlugin.executeUpdate(sql, con);
+				// DatabasePlugin.executeUpdate(sql, con);
 				con.commit();
 				request.setAttribute("successMsg", successMsg);
 				
