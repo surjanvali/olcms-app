@@ -593,11 +593,23 @@ public class GPOAcknowledgementAction extends DispatchAction {
 				return mapping.findForward("Logout");
 			}
 			con = DatabasePlugin.connect();
+			con.setAutoCommit(false);
+			
 			String ackNo = cform.getDynaForm("ackId") != null ? cform.getDynaForm("ackId").toString() : "";
 
 			if (ackNo != null && !ackNo.contentEquals("")) {
 				int i = 1;
-				sql = "update ecourts_gpo_ack_dtls set delete_status=true where ack_no=?";
+				// sql = "update ecourts_gpo_ack_dtls set delete_status=true where ack_no=?";
+				
+				sql="insert into ecourts_gpo_ack_depts_log select * from ecourts_gpo_ack_depts where ack_no=?";
+				
+				sql="insert into ecourts_gpo_ack_dtls_log select * from ecourts_gpo_ack_dtls where ack_no=?";
+				
+				sql="delete from ecourts_gpo_ack_depts where ack_no=?";
+				
+				sql="delete from ecourts_gpo_ack_dtls where ack_no=?";
+				
+				
 				ps = con.prepareStatement(sql);
 				ps.setString(i, ackNo);
 				int a = ps.executeUpdate();
