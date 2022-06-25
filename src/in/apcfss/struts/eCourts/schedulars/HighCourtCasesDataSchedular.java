@@ -72,7 +72,7 @@ public class HighCourtCasesDataSchedular implements Job {
 					boolean b = UpdateEcourtsDataAction.processCNRsearchResponse(resp, opVal, con, cino);
 				}
 			}
-			DatabasePlugin.executeUpdate("update ecourts_schedulars set schedular_end_time=now() where slno='"+schedularId+"')", con);
+			DatabasePlugin.executeUpdate("update ecourts_schedulars set schedular_end_time=now() where slno='"+schedularId+"'", con);
 			System.out.println("FINAL END : Records fetched:" + totalCount);
 		} catch (Exception e) {
 			e.printStackTrace();
