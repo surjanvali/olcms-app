@@ -25,21 +25,21 @@ public class QuartzPlugin implements PlugIn {
 			throws ServletException {
 
 		// JobDetail job = JobBuilder.newJob(SchedulerJob.class).withIdentity("anyJobName", "group1").build();
-		// JobDetail job_CASESDATAUPDATE = JobBuilder.newJob(HighCourtCasesDataSchedular.class).withIdentity("HighCourtCasesDataSchedularJob", "group1").build();
-		JobDetail job_SMSALERTS = JobBuilder.newJob(SMSAlertsJob.class).withIdentity("SMSAlertsJob", "group2").build();
-		JobDetail job_CAUSELIST = JobBuilder.newJob(HighCourtCauseListSchedular.class).withIdentity("HighCourtCauseListSchedularJob", "group3").build();
+		JobDetail job_CASESDATAUPDATE = JobBuilder.newJob(HighCourtCasesDataSchedular.class).withIdentity("HighCourtCasesDataSchedularJob", "group1").build();
+		// JobDetail job_SMSALERTS = JobBuilder.newJob(SMSAlertsJob.class).withIdentity("SMSAlertsJob", "group2").build();
+		// JobDetail job_CAUSELIST = JobBuilder.newJob(HighCourtCauseListSchedular.class).withIdentity("HighCourtCauseListSchedularJob", "group3").build();
 
 		try {
 
-			//Trigger trigger_CASESDATAUPDATE = TriggerBuilder.newTrigger().withIdentity("casesdataupdateTrigger", "group1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/5 * * * ?")).build();
-			Trigger trigger_SMSALERTS = TriggerBuilder.newTrigger().withIdentity("smsalertsTrigger", "group2").withSchedule(CronScheduleBuilder.cronSchedule("0 15 21 * 1-6 ?")).build();
-			Trigger trigger_CAUSELIST = TriggerBuilder.newTrigger().withIdentity("causelistTrigger", "group3").withSchedule(CronScheduleBuilder.cronSchedule("0 30 21 * 1-6 ?")).build();//30 9 ? * MON-FRI
+			Trigger trigger_CASESDATAUPDATE = TriggerBuilder.newTrigger().withIdentity("casesdataupdateTrigger", "group1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/5 * * * ?")).build();
+			// Trigger trigger_SMSALERTS = TriggerBuilder.newTrigger().withIdentity("smsalertsTrigger", "group2").withSchedule(CronScheduleBuilder.cronSchedule("0 15 21 * 1-6 ?")).build();
+			// Trigger trigger_CAUSELIST = TriggerBuilder.newTrigger().withIdentity("causelistTrigger", "group3").withSchedule(CronScheduleBuilder.cronSchedule("0 30 21 * 1-6 ?")).build();//30 9 ? * MON-FRI
 
 			Scheduler scheduler = new StdSchedulerFactory().getScheduler();
 			scheduler.start();
-			// scheduler.scheduleJob(job_CASESDATAUPDATE, trigger_CASESDATAUPDATE);
-			scheduler.scheduleJob(job_SMSALERTS, trigger_SMSALERTS);
-			scheduler.scheduleJob(job_CAUSELIST, trigger_CAUSELIST);
+			scheduler.scheduleJob(job_CASESDATAUPDATE, trigger_CASESDATAUPDATE);
+			// scheduler.scheduleJob(job_SMSALERTS, trigger_SMSALERTS);
+			// scheduler.scheduleJob(job_CAUSELIST, trigger_CAUSELIST);
 
 		} catch (Exception e) {
 			e.printStackTrace();
