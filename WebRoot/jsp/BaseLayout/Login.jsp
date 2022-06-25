@@ -53,7 +53,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="col-xs-9 col-sm-9 col-md-5 col-lg-5">
 						<div class="title">
 							<h4>
-								ONLINE LEGAL CASE MONITORING SYSTEM<br> <span>GOVERNMENT
+								ONLINE LEGAL CASE MANAGEMENT SYSTEM<br> <span>GOVERNMENT
 									OF ANDHRA PRADESH</span>
 							</h4>
 						</div>
@@ -95,7 +95,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
 				<div class="row">
 					<h3 class="fonthead main_heading">
-						Andhra Pradesh Online Legal<br>Case Monitoring<br>System
+						Andhra Pradesh Online Legal<br>Case Management<br>System
 						(APOLCMS)
 					</h3>
 					<div class="msg_board">
@@ -163,7 +163,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 
 						<div class="form-group">
-							<a href="./AdvocateRegistation.do" class="btn btn-md btn-primary border-0">Advocate Registration</a>
+							<!-- <a href="./AdvocateRegistation.do" class="btn btn-md btn-primary border-0">Advocate Registration</a> -->
 							
 							<input type="submit" class="btn btn-md btn-success border-0 pull-right"
 								id="login" onclick="return LoginChecking();" value="LOGIN">
@@ -185,7 +185,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="col-xs-9 col-sm-9 col-md-7 col-lg-7">
 						<div class="title">
 							<h4>
-								ANDHRA PRADESH ONLINE LEGAL CASE MONITORING SYSTEM<br>
+								ANDHRA PRADESH ONLINE LEGAL CASE Management SYSTEM<br>
 								<span>GOVERNMENT OF ANDHRA PRADESH</span>
 							</h4>
 						</div>
@@ -225,7 +225,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
 				<div class="row">
 					<h3 class="fonthead main_heading">
-						Andhra Pradesh Online Legal<br>Case Monitoring<br>System (APOLCMS)
+						Andhra Pradesh Online Legal<br>Case Management<br>System (APOLCMS)
 					</h3>
 					<div class="msg_board">
 						<ul class="nav nav-tabs">
@@ -277,10 +277,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<div class="col-sm-5">
 					<div class="about-cont">
 						<h1 class="fonthead main_head2">
-							About Andhra Pradesh Online Legal<br> Case Monitoring<br>
+							About Andhra Pradesh Online Legal<br> Case Management<br>
 							System
 						</h1>
-						<p>AP Online Legal Case Monitoring System (APOLCMS)
+						<p>AP Online Legal Case Management System (APOLCMS)
 							facilitates departments / officers to manage and monitor court
 							cases of any type pending in different courts. It can provide
 							latest information about any pending case of any point of time.

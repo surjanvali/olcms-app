@@ -16,7 +16,7 @@ String path = request.getContextPath();
         <!-- App favicon -->
         <link rel="shortcut icon" href="assets/images/favicon.ico">
         <!-- App title -->
-        <title>AP CORPORATION FOR OUTSOURCED SERVICES</title>
+        <title>APOLCMS</title>
 
         <!-- App css -->
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
