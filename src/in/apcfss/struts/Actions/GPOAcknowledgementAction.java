@@ -599,28 +599,31 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 			if (ackNo != null && !ackNo.contentEquals("")) {
 				int i = 1;
-				// sql = "update ecourts_gpo_ack_dtls set delete_status=true where ack_no=?";
 				
-				sql="insert into ecourts_gpo_ack_depts_log select * from ecourts_gpo_ack_depts where ack_no=?";
+				sql="insert into ecourts_gpo_ack_depts_log select * from ecourts_gpo_ack_depts where ack_no='"+ackNo+"'";
+				int a = DatabasePlugin.executeUpdate(sql, con);
 				
-				sql="insert into ecourts_gpo_ack_dtls_log select * from ecourts_gpo_ack_dtls where ack_no=?";
+				sql="insert into ecourts_gpo_ack_dtls_log select * from ecourts_gpo_ack_dtls  where ack_no='"+ackNo+"'";
+				a += DatabasePlugin.executeUpdate(sql, con);
 				
-				sql="delete from ecourts_gpo_ack_depts where ack_no=?";
+				sql="delete from ecourts_gpo_ack_depts  where ack_no='"+ackNo+"'";
+				a += DatabasePlugin.executeUpdate(sql, con);
 				
-				sql="delete from ecourts_gpo_ack_dtls where ack_no=?";
+				sql="delete from ecourts_gpo_ack_dtls  where ack_no='"+ackNo+"'";
+				a += DatabasePlugin.executeUpdate(sql, con);
 				
-				
-				ps = con.prepareStatement(sql);
-				ps.setString(i, ackNo);
-				int a = ps.executeUpdate();
 				if (a > 0) {
+					con.commit();
 					request.setAttribute("successMsg", "Ack No.:" + ackNo + " deleted successfully.");
-				} else
+				} else {
+					con.rollback();
 					request.setAttribute("errorMsg", "Error in deleting Ack No.:" + ackNo);
+				}
 			} else {
 				request.setAttribute("errorMsg", "Invalid Acknowledgement No. Kindly try again.");
 			}
 		} catch (Exception e) {
+			con.rollback();
 			request.setAttribute("errorMsg", "Exception Occurred while deletion.");
 			e.printStackTrace();
 		} finally {

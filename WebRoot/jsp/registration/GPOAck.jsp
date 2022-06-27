@@ -253,14 +253,24 @@ label {
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<div class="form-group">
 									<div>
-										<label class="ui-radio ui-radio-inline"> 
-											<html:radio property="dynaForm(caseCategory)" styleId="caseCategory" value="Arbitration"> <span class="input-span"></span><strong>Arbitration</strong></html:radio> 
-										</label> 
-										<label class="ui-radio ui-radio-inline"> 
-											<html:radio property="dynaForm(caseCategory)" styleId="caseCategory" value="Appeal"> <span class="input-span"></span><strong>Appeal</strong></html:radio>
-										</label> 
-										<label class="ui-radio ui-radio-inline"> 
-											<html:radio property="dynaForm(caseCategory)" styleId="caseCategory" value="Others"> <span class="input-span"></span><strong>Others</strong></html:radio>
+										<label class="ui-radio ui-radio-inline"> <html:radio
+												property="dynaForm(caseCategory)" styleId="caseCategory"
+												value="Arbitration">
+												<span class="input-span"></span>
+												<strong>Arbitration</strong>
+											</html:radio>
+										</label> <label class="ui-radio ui-radio-inline"> <html:radio
+												property="dynaForm(caseCategory)" styleId="caseCategory"
+												value="Appeal">
+												<span class="input-span"></span>
+												<strong>Appeal</strong>
+											</html:radio>
+										</label> <label class="ui-radio ui-radio-inline"> <html:radio
+												property="dynaForm(caseCategory)" styleId="caseCategory"
+												value="Others">
+												<span class="input-span"></span>
+												<strong>Others</strong>
+											</html:radio>
 										</label>
 									</div>
 								</div>
@@ -443,11 +453,14 @@ label {
 											<th>Main Case No.</th>
 											<th>Advocate CC No.</th>
 											<th>Advocate Name</th>
-											
+
 											<th>Mode of Filing</th>
 
 											<th>Remarks</th>
 											<th>Download / Print</th>
+											<logic:notPresent name="DISPLAYOLD">
+												<th>Action</th>
+											</logic:notPresent>
 										</tr>
 									</thead>
 									<tbody>
@@ -468,7 +481,7 @@ label {
 												<td>${map.maincaseno }</td>
 												<td>${map.advocateccno }</td>
 												<td>${map.advocatename }</td>
-												
+
 												<td>${map.mode_filing }</td>
 
 
@@ -478,10 +491,6 @@ label {
 														title="Edit Acknowledgement"
 														onclick="editAck('${map.ack_no}')">
 														<i class="fa fa-edit"></i><span>Edit</span>
-													</button> --%> <%-- <button type="button" class="btn btn-sm btn-danger"
-														title="Delete Acknowledgement"
-														onclick="deleteAck('${map.ack_no}')">
-														<i class="fa fa-trash"></i><span>Delete</span>
 													</button> --%> <logic:present name="map"
 														property="ack_file_path">
 														<a href="./${map.ack_file_path}" target="_new"
@@ -510,6 +519,14 @@ label {
 														<i class="fa fa-save"></i> <span>Download 2</span>
 													</button>  --%>
 												</td>
+												<logic:notPresent name="DISPLAYOLD">
+													<td><button type="button"
+															class="btn btn-sm btn-danger"
+															title="Delete Acknowledgement"
+															onclick="deleteAck('${map.ack_no}')">
+															<i class="fa fa-trash"></i><span>Delete</span>
+														</button></td>
+												</logic:notPresent>
 											</tr>
 										</logic:iterate>
 									</tbody>
@@ -519,7 +536,7 @@ label {
 												<td colspan="14">
 											</logic:present>
 											<logic:notPresent name="DISPLAYOLD">
-												<td colspan="12">
+												<td colspan="13">
 											</logic:notPresent>
 
 
