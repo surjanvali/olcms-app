@@ -386,7 +386,7 @@ public class HighCourtCasesListAction extends DispatchAction {
 							
 							System.out.println(mobileNo+""+smsText+""+templateId);
 							if(mobileNo!=null && !mobileNo.equals("")) {
-								mobileNo = "9618048663";
+								// mobileNo = "9618048663";
 								SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
 							}
 							con.commit();
@@ -627,7 +627,7 @@ public class HighCourtCasesListAction extends DispatchAction {
 						
 						System.out.println(mobileNo+""+smsText+""+templateId);
 						if(mobileNo!=null && !mobileNo.equals("")) {
-							mobileNo = "9618048663";
+							// mobileNo = "9618048663";
 							System.out.println("mobileNo::"+mobileNo);
 							SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
 						}
@@ -707,9 +707,11 @@ public class HighCourtCasesListAction extends DispatchAction {
 				
 				if(officerType.equals("DC")) {
 					
-					sql = "update ecourts_case_data set dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))+"', dept_id='"+assign2deptId+"', dist_id='"+CommonModels.checkIntObject(cform.getDynaForm("caseDist"))
-					// +"',dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))
-					+"',case_status=7  where cino in (" + selectedCaseIds + ") ";
+					sql = "update ecourts_case_data set "
+							//+ "dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))+"', dept_id='"+assign2deptId+"',"
+							+ " dist_id='"+CommonModels.checkIntObject(cform.getDynaForm("caseDist"))
+							// +"',dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))
+							+"',case_status=7  where cino in (" + selectedCaseIds + ") ";
 					successMsg = "Case/Cases successfully moved to selected District Collector Login";
 					
 				}

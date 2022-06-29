@@ -664,7 +664,9 @@ public class HighCourtCasesListActionLaw extends DispatchAction {
 
 				if (officerType.equals("DC")) {
 
-					sql = "update ecourts_case_data set dept_id='" + assign2deptId + "', dist_id='"
+					sql = "update ecourts_case_data set "
+							// + "dept_id='" + assign2deptId + "', "
+							+ "dist_id='"
 							+ CommonModels.checkIntObject(cform.getDynaForm("caseDist"))
 							// +"',dept_code='"+CommonModels.checkStringObject(cform.getDynaForm("distDept"))
 							+ "',case_status=7  where cino in (" + selectedCaseIds + ") ";
