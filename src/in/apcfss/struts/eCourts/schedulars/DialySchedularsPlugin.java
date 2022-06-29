@@ -29,8 +29,8 @@ public class DialySchedularsPlugin implements PlugIn {
 
 		try {
 
-			Trigger trigger_SMSALERTS = TriggerBuilder.newTrigger().withIdentity("smsalertsTrigger", "group2").withSchedule(CronScheduleBuilder.cronSchedule("0 15 16 * 1-6 ?")).build();
-			Trigger trigger_CAUSELIST = TriggerBuilder.newTrigger().withIdentity("causelistTrigger", "group3").withSchedule(CronScheduleBuilder.cronSchedule("0 30 21 * 1-6 ?")).build();//30 9 ? * MON-FRI
+			Trigger trigger_SMSALERTS = TriggerBuilder.newTrigger().withIdentity("smsalertsTrigger", "group2").withSchedule(CronScheduleBuilder.cronSchedule("0 10 21 * 1-6 ?")).build();
+			Trigger trigger_CAUSELIST = TriggerBuilder.newTrigger().withIdentity("causelistTrigger", "group3").withSchedule(CronScheduleBuilder.cronSchedule("0 15 21 * 1-6 ?")).build();//30 9 ? * MON-FRI
 
 			Scheduler scheduler = new StdSchedulerFactory().getScheduler();
 			scheduler.start();

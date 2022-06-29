@@ -344,7 +344,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 				for(int respondentId=1; respondentId <= respondentIds; respondentId++) {
 					
 					 //distId = Integer.parseInt(cform.getDynaForm("distId"+respondentId).toString());
-					 deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"+respondentId));
+					 deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"+1));
 				}
 				
 				System.out.println("distId===="+distId);
@@ -598,7 +598,6 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			String ackNo = cform.getDynaForm("ackId") != null ? cform.getDynaForm("ackId").toString() : "";
 
 			if (ackNo != null && !ackNo.contentEquals("")) {
-				int i = 1;
 				
 				sql="insert into ecourts_gpo_ack_depts_log select * from ecourts_gpo_ack_depts where ack_no='"+ackNo+"'";
 				int a = DatabasePlugin.executeUpdate(sql, con);

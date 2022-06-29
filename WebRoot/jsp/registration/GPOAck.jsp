@@ -885,11 +885,11 @@ label {
 			$("#filingMode").focus();
 			return false;
 		}  
-		else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
+		/*else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
 			alert("Main Case No. Required");
 			$("#mainCaseNo").focus();
 			return false;
-		} /* *//*  else if ($("#serviceNonService").val() == null || $("#serviceNonService").val() == "" || $("#serviceNonService").val() == "0") {
+		} /*  else if ($("#serviceNonService").val() == null || $("#serviceNonService").val() == "" || $("#serviceNonService").val() == "0") {
 			alert("Service / Non-Service Required");
 			$("#serviceNonService").focus();
 			return false;

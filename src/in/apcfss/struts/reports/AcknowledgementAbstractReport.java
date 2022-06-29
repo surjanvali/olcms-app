@@ -237,6 +237,18 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14") || roleId.equals("6"))) {
 					sqlCondition += " and (dm.dept_code='" + deptCode + "' or dm.reporting_dept_code='"+deptCode+"') ";
 			}
+			
+			/*if (roleId.equals("4") || roleId.equals("5")  || roleId.equals("9")  || roleId.equals("10")) {
+				sqlCondition += " and dm.dept_code='" + deptCode + "'";
+			}
+			else if (roleId.equals("3")) {
+				sqlCondition += " and (dm.dept_code='" + deptCode + "' or dm.reporting_dept_code='"+deptCode+"') ";
+			}
+			else if (roleId.equals("1") || roleId.equals("7")) {
+				sqlCondition += " and respondent_slno=1 and (dm.dept_code='" + deptCode + "' or dm.reporting_dept_code='"+deptCode+"') ";
+			}*/
+				
+			
 			System.out.println("roleId---"+roleId);
 			
 			String condition="";
