@@ -214,6 +214,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 									<th>Pending With GPO</th>
 									<th>Closed Cases</th>
+									<th>GoI</th>
+									<th>PSU</th>
+									<th>Private</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -225,6 +228,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<bean:define id="sectionTotals" value="0"></bean:define>
 								<bean:define id="gpoTotals" value="0"></bean:define>
 								<bean:define id="closedcases" value="0"></bean:define>
+								<bean:define id="goiTotals" value="0"></bean:define>
+								<bean:define id="psuTotals" value="0"></bean:define>
+								<bean:define id="privateTotals" value="0"></bean:define>
 
 								<bean:define id="hodSecTotals" value="0"></bean:define>
 								<bean:define id="dcTotals" value="0"></bean:define>
@@ -264,6 +270,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withGP');">${map.withgpo }</a></td>
 										<td style="text-align: right;"><a
 											href="javascript:showCasesWise('${map.deptcode}','${map.description }','closed');">${map.closedcases }</a></td>
+										<td style="text-align: right;"><a
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','goi');">${map.goi }</a></td>
+										<td style="text-align: right;"><a
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','psu');">${map.psu }</a></td>
+										<td style="text-align: right;"><a
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','Private');">${map.privatetot }</a></td>
 
 									</tr>
 									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
@@ -280,6 +292,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 									<bean:define id="closedcases"
 										value="${closedcases + map.closedcases }"></bean:define>
+										<bean:define id="goiTotals"
+										value="${goiTotals + map.goi }"></bean:define>
+										<bean:define id="psuTotals"
+										value="${psuTotals + map.psu }"></bean:define>
+										<bean:define id="privateTotals"
+										value="${privateTotals + map.privatetot }"></bean:define>
 
 									<bean:define id="hodSecTotals"
 										value="${hodSecTotals + map.withsectionhod }"></bean:define>
@@ -311,6 +329,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 									<td colspan="1" style="text-align: right;">${gpoTotals }</td>
 									<td colspan="1" style="text-align: right;">${closedcases }</td>
+									<td colspan="1" style="text-align: right;">${goiTotals }</td>
+									<td colspan="1" style="text-align: right;">${psuTotals }</td>
+									<td colspan="1" style="text-align: right;">${privateTotals }</td>
+									
 								</tR>
 							</tfoot>
 
@@ -340,6 +362,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 									<th>Pending With GPO</th>
 									<th>Closed Cases</th>
+									<th>GoI</th>
+									<th>PSU</th>
+									<th>Private</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -351,6 +376,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<bean:define id="sectionTotals" value="0"></bean:define>
 								<bean:define id="gpoTotals" value="0"></bean:define>
 								<bean:define id="closedcases" value="0"></bean:define>
+								<bean:define id="goiTotals" value="0"></bean:define>
+								<bean:define id="psuTotals" value="0"></bean:define>
+								<bean:define id="privateTotals" value="0"></bean:define>
 
 								<bean:define id="hodSecTotals" value="0"></bean:define>
 								<bean:define id="dcTotals" value="0"></bean:define>
@@ -404,6 +432,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withGP');">${map.withgpo }</a></td>
 										<td style="text-align: right;"><a
 											href="javascript:showCasesWise('${map.deptcode}','${map.description }','closed');">${map.closedcases }</a></td>
+										<td style="text-align: right;"><a
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','goi');">${map.goi }</a></td>
+										<td style="text-align: right;"><a
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','psu');">${map.psu }</a></td>
+										<td style="text-align: right;"><a
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','Private');">${map.privatetot }</a></td>
 
 									</tr>
 									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
@@ -420,6 +454,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 									<bean:define id="closedcases"
 										value="${closedcases + map.closedcases }"></bean:define>
+										<bean:define id="goiTotals"
+										value="${goiTotals + map.goi }"></bean:define>
+										<bean:define id="psuTotals"
+										value="${psuTotals + map.psu }"></bean:define>
+										<bean:define id="privateTotals"
+										value="${privateTotals + map.privatetot }"></bean:define>
 
 									<bean:define id="hodSecTotals"
 										value="${hodSecTotals + map.withsectionhod }"></bean:define>
@@ -451,6 +491,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 									<td colspan="1" style="text-align: right;">${gpoTotals }</td>
 									<td colspan="1" style="text-align: right;">${closedcases }</td>
+									<td colspan="1" style="text-align: right;">${goiTotals }</td>
+									<td colspan="1" style="text-align: right;">${psuTotals }</td>
+									<td colspan="1" style="text-align: right;">${privateTotals }</td>
 								</tR>
 							</tfoot>
 
@@ -468,6 +511,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Sl.No</th>
 									<th>CINo</th>
 									<th>Scanned Affidavit</th>
+									<th>Assigned to</th>
 									<th>Date of Filing</th>
 									<th>Case Type</th>
 									<th>Reg.No.</th>
@@ -508,6 +552,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 															Affidavit</span></a>
 												</logic:notEqual>
 											</logic:notEmpty></td>
+											<td nowrap="nowrap">${map.globalorgname}<br />
+												${map.fullname} - ${map.designation} <br />
+												${map.mobile} - ${map.email}
+											</td>
 										<td><logic:notEmpty name="map" property="date_of_filing">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_of_filing">

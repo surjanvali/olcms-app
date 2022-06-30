@@ -78,7 +78,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 				}
 
-				sql = "select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases  from ("
+				sql = "select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases, sum(goi) as goi, sum(psu) as psu, sum(privatetot) as privatetot  from ("
 						+ "select a.dept_code , case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,count(*) as total_cases, "
 						+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
 						+ "sum(case when (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withmlo, "
@@ -90,7 +90,10 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 						+ "sum(case when case_status=9 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectionhod, "
 						+ "sum(case when case_status=10 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectiondist, "
 						+ "sum(case when case_status=6 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withgpo, "
-						+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases "
+						+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases, "
+						+ "sum(case when case_status=96 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as goi, "
+						+ "sum(case when case_status=97 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as psu, "
+						+ "sum(case when case_status=98 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as privatetot "
 						+ "from ecourts_case_data a " + "inner join dept_new d on (a.dept_code=d.dept_code) "
 						+ "where d.display = true " + sqlCondition;
 
@@ -239,7 +242,10 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					+ "sum(case when case_status=9 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectionhod, "
 					+ "sum(case when case_status=10 and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectiondist, "
 					+ "sum(case when case_status=6 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withgpo, "
-					+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases "
+					+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases, "
+					+ "sum(case when case_status=96 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as goi, "
+					+ "sum(case when case_status=97 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as psu, "
+					+ "sum(case when case_status=98 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as privatetot "
 					+ "from ecourts_case_data a " + "inner join dept_new d on (a.dept_code=d.dept_code) "
 					+ "where d.display = true and (d.reporting_dept_code='" + deptId + "' or a.dept_code='" + deptId
 					+ "') " + sqlCondition + "group by a.dept_code , d.description order by 1";
@@ -366,6 +372,18 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					sqlCondition = " and case_status=99 or coalesce(ecourts_case_status,'')='Closed' ";
 					heading += " All Closed Cases ";
 				}
+				if (caseStatus.equals("goi")) {
+					sqlCondition = " and case_status=96 and coalesce(ecourts_case_status,'')='Closed' ";
+					heading += " Pending at Govt. of India ";
+				}
+				if (caseStatus.equals("psu")) {
+					sqlCondition = " and case_status=97 and coalesce(ecourts_case_status,'')='Closed' ";
+					heading += " Pending at PSU ";
+				}
+				if (caseStatus.equals("Private")) {
+					sqlCondition = " and case_status=98 and coalesce(ecourts_case_status,'')='Closed' ";
+					heading += " Pending at Private ";
+				}
 			}
 
 			if (cform.getDynaForm("dofFromDate") != null
@@ -391,8 +409,6 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					&& CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
 				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
 			}
-
-
 
 
 			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
@@ -441,7 +457,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			
 			
 
-			sql = "select a.*,coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths from ecourts_case_data a left join"
+			sql = "select a.*, n.global_org_name as globalorgname, n.fullname_en as fullname, n.designation_name_en as designation, n.mobile1 as mobile, n.email as email, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths from ecourts_case_data a inner join nic_data n on (a.assigned_to=n.email) left join"
 					+ " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from "
@@ -577,6 +593,18 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 				if (caseStatus.equals("closed")) {
 					sqlCondition = " and case_status=99 or coalesce(ecourts_case_status,'')='Closed' ";
 					heading += " All Closed Cases ";
+				}
+				if (caseStatus.equals("goi")) {
+					sqlCondition = " and case_status=96 and coalesce(ecourts_case_status,'')='Closed' ";
+					heading += " Pending at Govt. of India ";
+				}
+				if (caseStatus.equals("psu")) {
+					sqlCondition = " and case_status=97 and coalesce(ecourts_case_status,'')='Closed' ";
+					heading += " Pending at PSU ";
+				}
+				if (caseStatus.equals("Private")) {
+					sqlCondition = " and case_status=98 and coalesce(ecourts_case_status,'')='Closed' ";
+					heading += " Pending at Private ";
 				}
 			}
 
@@ -808,6 +836,18 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 				if (caseStatus.equals("closed")) {
 					sqlCondition = " and case_status=99 or coalesce(ecourts_case_status,'')='Closed' ";
 					heading += " All Closed Cases ";
+				}
+				if (caseStatus.equals("goi")) {
+					sqlCondition = " and case_status=96 and coalesce(ecourts_case_status,'')='Closed' ";
+					heading += " Pending at Govt. of India ";
+				}
+				if (caseStatus.equals("psu")) {
+					sqlCondition = " and case_status=97 and coalesce(ecourts_case_status,'')='Closed' ";
+					heading += " Pending at PSU ";
+				}
+				if (caseStatus.equals("Private")) {
+					sqlCondition = " and case_status=98 and coalesce(ecourts_case_status,'')='Closed' ";
+					heading += " Pending at Private ";
 				}
 			}
 
