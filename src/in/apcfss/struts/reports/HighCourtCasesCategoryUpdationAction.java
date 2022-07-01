@@ -27,7 +27,7 @@ public class HighCourtCasesCategoryUpdationAction extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql = null, sqlCondition = "";
+		String userId = null, roleId = null, sql = null, sqlCondition = "",dept_code="";
 		CommonForm cform = (CommonForm) form;
 		try {
 			System.out.println( "HCCaseStatusAbstractReport..............................................................................unspecified()");
@@ -35,6 +35,7 @@ public class HighCourtCasesCategoryUpdationAction extends DispatchAction {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			dept_code = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
@@ -78,7 +79,9 @@ public class HighCourtCasesCategoryUpdationAction extends DispatchAction {
 					sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 				}
 
-				sql = "select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases  from ("
+				sql = "select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,"
+						+ "sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod,"
+						+ " sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases  from ("
 						+ "select a.dept_code , case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,count(*) as total_cases, "
 						+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
 						+ "sum(case when (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withmlo, "
@@ -106,20 +109,31 @@ public class HighCourtCasesCategoryUpdationAction extends DispatchAction {
 				sql += " group by a.dept_code,d.dept_code ,reporting_dept_code ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code)"
 						+ " group by x.reporting_dept_code, d1.description order by 1";
 				
+				String str1="";
 				
+				if ( (roleId.equals("4") || roleId.equals("5")) && dept_code.equals("FIN01") ) {
+					
+					 str1=" ";
+				}else {
+					
+					 str1=" where b.dept_code='"+dept_code+"' ";
+				}
+				
+				
+				if ( roleId.equals("1") || roleId.equals("7") ) 
+					str1=" ";
+					
 				
 				sql=" select c.dept_code as deptcode,upper(c.description) as description, "
-						+ " count (case  when a.finance_category='A1' then 1 end) as A1 ,"
-						+ "count (case  when a.finance_category='A2' then 1 end) as A2 ,"
-						+ "count (case  when a.finance_category='B1' then 1 end) as B1 ,"
-						+ "count (case  when a.finance_category='B2' then 1 end) as B2 ,"
-						+ "count (case  when a.finance_category='C1' then 1 end) as C1 ,"
-						+ "count (case  when a.finance_category='C2' then 1 end) as C2 "
+						+ " coalesce(sum (case  when a.finance_category='A1' then 1 end),'0') as A1 ,"
+						+ "coalesce(sum (case  when a.finance_category='A2' then 1 end),'0') as A2 ,"
+						+ "coalesce(sum (case  when a.finance_category='B1' then 1 end),'0') as B1 ,"
+						+ "coalesce(sum (case  when a.finance_category='B2' then 1 end),'0') as B2 ,"
+						+ "coalesce(sum (case  when a.finance_category='C1' then 1 end),'0') as C1 ,"
+						+ "coalesce(sum (case  when a.finance_category='C2' then 1 end),'0') as C2 "
 						+ " from ecourts_case_category_wise_data a  inner join ecourts_case_data b on (a.cino=b.cino)       "
-						+ " inner join dept_new c on (b.dept_code=c.dept_code) group by description,c.dept_code order    by c.description";
+						+ " inner join dept_new c on (b.dept_code=c.dept_code)   "+str1+" group by description,c.dept_code order by c.description";
 							
-				
-				
 
 				request.setAttribute("HEADING", "Sect. Dept. Wise High Court Cases Abstract Report");
 
@@ -260,15 +274,14 @@ public class HighCourtCasesCategoryUpdationAction extends DispatchAction {
 					+ "') " + sqlCondition + "group by a.dept_code , d.description order by 1";
 			
 sql=" select c.dept_code as deptcode,upper(c.description) as description, "
-		+ " count (case  when a.finance_category='A1' then 1 end) as A1 ,"
-		+ "count (case  when a.finance_category='A2' then 1 end) as A2 ,"
-		+ "count (case  when a.finance_category='B1' then 1 end) as B1 ,"
-		+ "count (case  when a.finance_category='B2' then 1 end) as B2 ,"
-		+ "count (case  when a.finance_category='C1' then 1 end) as C1 ,"
-		+ "count (case  when a.finance_category='C2' then 1 end) as C2 "
+		+ " coalesce(sum (case  when a.finance_category='A1' then 1 end),'0') as A1 ,"
+		+ "coalesce(sum (case  when a.finance_category='A2' then 1 end),'0') as A2 ,"
+		+ "coalesce(sum (case  when a.finance_category='B1' then 1 end),'0') as B1 ,"
+		+ "coalesce(sum (case  when a.finance_category='B2' then 1 end),'0') as B2 ,"
+		+ "coalesce(sum (case  when a.finance_category='C1' then 1 end),'0') as C1 ,"
+		+ "coalesce(sum (case  when a.finance_category='C2' then 1 end),'0') as C2 "
 		+ " from ecourts_case_category_wise_data a  inner join ecourts_case_data b on (a.cino=b.cino)       "
-		+ " inner join dept_new c on (b.dept_code=c.dept_code) group by description,c.dept_code order by c.description";
-			
+		+ " inner join dept_new c on (b.dept_code=c.dept_code) where ( c.reporting_dept_code='" + request.getParameter("deptId").toString() +"' or b.dept_code='" + request.getParameter("deptId").toString() +"' )  group by description,c.dept_code order by c.description";
 			
 
 			request.setAttribute("HEADING", "HOD Wise High Court Cases Abstract Report for " + deptName);
@@ -475,11 +488,20 @@ sql=" select c.dept_code as deptcode,upper(c.description) as description, "
 
 			sql += sqlCondition;
 			
+			if(!request.getParameter("reportType").toString().equals("All")) {
+			
 			sql="SELECT d.cino,date_of_filing,type_name_fil,fil_no,fil_year,reg_no,reg_year,bench_name,coram,dist_name,purpose_name,res_name,pet_name,pet_adv,res_adv,"
 					+ " d.finance_category,d.work_name,d.est_cost,d.admin_sanction,d.grant_val,d.cfms_bill,d.bill_status,d.bill_amount "
 					+ " FROM  ecourts_case_data a right join ecourts_case_category_wise_data d    on (a.cino=d.cino) inner join dept_new c on (a.dept_code=c.dept_code) "
-					+ " where d.finance_category='"+request.getParameter("reportType").toString()+"'  "+sqlCondition+"   ";
-
+					+ " where d.finance_category='"+request.getParameter("reportType").toString()+"' and a.dept_code='"+request.getParameter("deptId").toString()+"' "+sqlCondition+"  ORDER BY d.finance_category ";
+			
+			}else {
+				
+				sql="SELECT d.cino,date_of_filing,type_name_fil,fil_no,fil_year,reg_no,reg_year,bench_name,coram,dist_name,purpose_name,res_name,pet_name,pet_adv,res_adv,"
+						+ " d.finance_category,d.work_name,d.est_cost,d.admin_sanction,d.grant_val,d.cfms_bill,d.bill_status,d.bill_amount "
+						+ " FROM  ecourts_case_data a right join ecourts_case_category_wise_data d    on (a.cino=d.cino) inner join dept_new c on (a.dept_code=c.dept_code) "
+						+ " where  1=1 and a.dept_code='"+request.getParameter("deptId").toString()+"' "+sqlCondition+"  ORDER BY d.finance_category ";
+			}
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			// System.out.println("data=" + data);

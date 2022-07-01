@@ -12,9 +12,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.apache.struts.upload.FormFile;
 
 import in.apcfss.struts.Forms.CommonForm;
 import in.apcfss.struts.commons.CommonModels;
+import in.apcfss.struts.commons.FileUploadUtilities;
 import plugins.DatabasePlugin;
 
 public class GPReportAction extends DispatchAction {
@@ -324,7 +326,7 @@ public class GPReportAction extends DispatchAction {
 				System.out.println("ecourts SQL:" + sql);
 				
 				
-				sql="select cino,action_type,inserted_by,inserted_on,assigned_to,remarks as remarks, coalesce(uploaded_doc_path,'-') as uploaded_doc_path from ecourts_case_activities where cino = '"+cIno+"' order by inserted_on";
+				sql="select cino,action_type,inserted_by,to_char(inserted_on,'dd-Mon-yyyy hh24:mi:ss PM') as inserted_on,assigned_to,remarks as remarks, coalesce(uploaded_doc_path,'-') as uploaded_doc_path from ecourts_case_activities where cino = '"+cIno+"' order by inserted_on desc";
 				System.out.println("ecourts activities SQL:" + sql);
 				data = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("ACTIVITIESDATA", data);
@@ -347,7 +349,7 @@ public class GPReportAction extends DispatchAction {
 						+ " last_updated_by, last_updated_on, counter_filed, remarks, ecourts_case_status, corresponding_gp, "
 						+ " pwr_uploaded, to_char(pwr_submitted_date,'dd/mm/yyyy') as pwr_submitted_date, to_char(pwr_received_date,'dd/mm/yyyy') as pwr_received_date, "
 						+ " pwr_approved_gp, to_char(pwr_gp_approved_date,'dd/mm/yyyy') as pwr_gp_approved_date, appeal_filed, "
-						+ " appeal_filed_copy, to_char(appeal_filed_date,'dd/mm/yyyy') as appeal_filed_date, pwr_uploaded_copy, action_to_perfom "
+						+ " appeal_filed_copy, to_char(appeal_filed_date,'dd/mm/yyyy') as appeal_filed_date, pwr_uploaded_copy, action_to_perfom, counter_approved_gp "
 						+ " FROM apolcms.ecourts_olcms_case_details where cino='" + cIno + "'";
 				System.out.println("SQL:"+sql);
 				data = DatabasePlugin.executeQuery(sql, con);
@@ -385,10 +387,57 @@ public class GPReportAction extends DispatchAction {
 					cform.setDynaForm("appealFiledDt" , caseData1.get("appeal_filed_date"));
 					cform.setDynaForm("actionToPerform" , caseData1.get("action_to_perfom"));
 					
+					System.out.println("actionToPerform:"+cform.getDynaForm("actionToPerform"));
+					// 1. View old Parawise Remarks & Enable to Upload Parawise Remarks and send to Department and disable Counter Update.
+					if(cform.getDynaForm("actionToPerform").equals("Parawise Remarks")) {
+						//a. APPROVED
+						if(cform.getDynaForm("pwr_gp_approved").equals("Yes")) {
+							// disable Submission
+							request.setAttribute("pwrsuccessMsg", "Parawise Remarks was submitted and approved.");
+							request.setAttribute("PWRSUBMITION", "DISABLE");
+							
+						}
+						//b. NOT APPROVED
+						else if(cform.getDynaForm("pwr_gp_approved").equals("No")) {
+							// enable upload & entry.
+							request.setAttribute("PWRSUBMITION", "ENABLE");
+						}
+					}
+					// 2. View Counter uploaded by Dept. and Disable Parawise Remarks Updation and enable Counter Upload by GP.
+					else if(cform.getDynaForm("actionToPerform").equals("Counter Affidavit")) {
+						//a. PWR NOT APPROVED
+						if(cform.getDynaForm("pwr_gp_approved").equals("No")) {
+							request.setAttribute("countererrorMsg", "Parawise Remarks was not submitted/approved.");
+							request.setAttribute("COUNTERSUBMITION", "DISABLE");
+						}
+						//b. PWR APPROVED COUNTER NOT APPROVED
+						else if(cform.getDynaForm("pwr_gp_approved").equals("Yes") && !cform.getDynaForm("counter_approved_gp").equals("T")) {
+							request.setAttribute("COUNTERSUBMITION", "ENABLE");
+						}
+						//c. COUNTER APPROVED
+						if(cform.getDynaForm("pwr_gp_approved").equals("Yes") && cform.getDynaForm("counter_approved_gp").equals("T")) {
+							request.setAttribute("countersuccessMsg", "Counter was already submitted and Approved.");
+							request.setAttribute("COUNTERSUBMITION", "DISABLE");
+						}
+					}
+					
 					request.setAttribute("STATUSUPDATEBTN", "STATUSUPDATEBTN");
 					
-				}				
-				request.setAttribute("HEADING", " Case NO. :" + cIno);
+				}
+				
+				// Dept. Instructions
+				sql = "select instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time from ecourts_dept_instructions ";//where cino='" + cIno + "'  order by 1 ";
+				System.out.println("Dept INstructions sql--" + sql);
+				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
+				request.setAttribute("DEPTNSTRUCTIONS", existData);
+				
+				// Daily Case Status Updates by GP
+				sql = "select status_remarks, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time from ecourts_gpo_daily_status ";//where cino='" + cIno + "'  order by 1 ";
+				System.out.println("sql--" + sql);
+				existData = DatabasePlugin.executeQuery(sql, con);
+				request.setAttribute("GPDAILYSTATUS", existData);
+				
+				request.setAttribute("HEADING", " Details for the Case No. :" + cIno);
 			} else {
 				request.setAttribute("errorMsg", "Invalid Cino. / No Records Found to display.");
 			}
@@ -401,11 +450,253 @@ public class GPReportAction extends DispatchAction {
 		return mapping.findForward("viewCaseData");
 	}
 	
-	public ActionForward viewCaseData(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	public ActionForward gpApprove(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		CommonForm cform = (CommonForm) form;
+		Connection con = null;
+		HttpSession session = null;
+		String userId = null, roleId = null, deptId = null, deptCode = null, sql = null, empId = null, empSection = null, empPost = null, cIno = null;
+		int a=0;
+		try {
+			session = request.getSession();
+			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			deptId = CommonModels.checkStringObject(session.getAttribute("dept_id"));
+			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+
+			empId = CommonModels.checkStringObject(session.getAttribute("empId"));
+			empSection = CommonModels.checkStringObject(session.getAttribute("empSection"));
+			empPost = CommonModels.checkStringObject(session.getAttribute("empPost"));
+
+			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
+				return mapping.findForward("Logout");
+			}
+
+			cIno = CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
+			String msg="";
+			
+			if (cIno != null && !cIno.equals("")) {
+				// System.out.println("counterRemarks::" + cform.getDynaForm("ecourtsCaseStatus"));
+				con = DatabasePlugin.connect();
+				con.setAutoCommit(false);
+				FileUploadUtilities fuu = new FileUploadUtilities();
+				String petition_document = "",filePath="", newFileName="", counter_filed_document="", action_taken_order="", judgement_order="", appeal_filed_copy="", pwr_uploaded_copy="";
+				
+				FormFile myDoc;
+				String updateSql="";
+				String remarks = "";
+				String actionPerformed="";
+				actionPerformed = !CommonModels.checkStringObject(cform.getDynaForm("actionToPerform")).equals("") && !CommonModels.checkStringObject(cform.getDynaForm("actionToPerform")).equals("0") ?  cform.getDynaForm("actionToPerform").toString()+" Approved"  : "CASE DETAILS UPDATED";
+				
+				msg = "Case details ("+cIno+") updated successfully.";
+				
+				sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"'";
+				a += DatabasePlugin.executeUpdate(sql, con);
+				
+				if(cform.getDynaForm("actionToPerform").toString().equals("Parawise Remarks")) {
+					
+					if(cform.getDynaForm("parawiseRemarksCopy")!=null  && !cform.getDynaForm("parawiseRemarksCopy").toString().equals("")) {
+						myDoc = (FormFile)cform.getDynaForm("parawiseRemarksCopy");
+						filePath = "uploads/parawiseremarks/";
+						newFileName = "parawiseremarks_"+CommonModels.randomTransactionNo();
+						pwr_uploaded_copy = fuu.saveFile(myDoc, filePath, newFileName);
+						
+						sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
+								+ "values ('" + cIno + "','Uploaded Parawise Remarks','"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"', '"+pwr_uploaded_copy+"')";
+						DatabasePlugin.executeUpdate(sql, con);
+					}
+					
+					sql="update ecourts_olcms_case_details set pwr_approved_gp='Yes',pwr_gp_approved_date=current_date"
+							+", remarks='" + remarks
+							+ "', last_updated_by='" + userId + "', last_updated_on=now() " + ", pwr_uploaded_copy='"+pwr_uploaded_copy+"'"
+							+ "  where cino='"+cIno+"'";
+					a += DatabasePlugin.executeUpdate(sql, con);
+					
+					msg = "Parawise Remarks Approved successfully for Case ("+cIno+").";
+				}
+				else if(cform.getDynaForm("actionToPerform").toString().equals("Counter Affidavit")) {
+					
+					if(cform.getDynaForm("counterFileCopy")!=null  && !cform.getDynaForm("counterFileCopy").toString().equals("")) {
+						myDoc = (FormFile)cform.getDynaForm("counterFileCopy");
+						filePath="uploads/counters/";
+						newFileName="counter_"+CommonModels.randomTransactionNo();
+						counter_filed_document = fuu.saveFile(myDoc, filePath, newFileName);
+						
+						sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
+								+ "values ('" + cIno + "','Uploaded Counter','"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"', '"+counter_filed_document+"')";
+						DatabasePlugin.executeUpdate(sql, con);
+					}
+					
+					msg = "Counter Affidavit Approved successfully for Case ("+cIno+").";
+					
+					sql = "update ecourts_olcms_case_details set counter_approved_gp='T',counter_approved_date=current_date, counter_approved_by='"
+							+ userId + "', remarks='" + remarks + "', last_updated_by='" + userId
+							+ "', last_updated_on=now()" + ", counter_filed_document='" + counter_filed_document + "'"
+							+ " where cino='" + cIno + "'";
+					a += DatabasePlugin.executeUpdate(sql, con);
+				}
+				
+				if (a > 0) {
+					sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks) "
+							+ " values ('" + cIno + "','"+actionPerformed+"', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("remarks")+"')";
+					DatabasePlugin.executeUpdate(sql, con);
+					
+					request.setAttribute("successMsg", msg);
+					con.commit();
+				} else {
+					con.rollback();
+					request.setAttribute("errorMsg", "Error while forwarding the case details ("+cIno+").");
+				}
+			} else {
+				request.setAttribute("errorMsg", "Invalid Cino :" + cIno);
+			}
+		} catch (Exception e) {
+			con.rollback();
+			request.removeAttribute("successMsg");
+			request.setAttribute("errorMsg", "Error while filing Counter for Cino :" + cIno);
+			e.printStackTrace();
+		} finally {
+			DatabasePlugin.closeConnection(con);
+		}
+		return unspecified(mapping, cform, request, response);
+	}
 	
-		
-		
-		return mapping.findForward("viewCaseData");
+	public ActionForward gpReject(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		CommonForm cform = (CommonForm) form;
+		Connection con = null;
+		HttpSession session = null;
+		String userId = null, roleId = null, deptId = null, deptCode = null, sql = null, empId = null, empSection = null, empPost = null, cIno = null;
+		int a=0;
+		try {
+			session = request.getSession();
+			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			deptId = CommonModels.checkStringObject(session.getAttribute("dept_id"));
+			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+
+			empId = CommonModels.checkStringObject(session.getAttribute("empId"));
+			empSection = CommonModels.checkStringObject(session.getAttribute("empSection"));
+			empPost = CommonModels.checkStringObject(session.getAttribute("empPost"));
+
+			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
+				return mapping.findForward("Logout");
+			}
+
+			cIno = CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
+			String msg="";
+			
+			if (cIno != null && !cIno.equals("")) {
+				// System.out.println("counterRemarks::" + cform.getDynaForm("ecourtsCaseStatus"));
+				con = DatabasePlugin.connect();
+				con.setAutoCommit(false);
+				
+				String actionPerformed="";
+				actionPerformed = !CommonModels.checkStringObject(cform.getDynaForm("actionToPerform")).equals("") ?  cform.getDynaForm("actionToPerform").toString()+" Returned"  : "CASE DETAILS UPDATED";
+				
+				msg = "Case details ("+cIno+") updated successfully.";
+				
+				// get case data
+				
+				//send back to section if returned / not approved
+				sql="select dept_code,dist_id from ecourts_case_data where cino='"+cIno+"'";
+				String deptCodeC="", distCodeC="", newStatus="", assigned2Emp="";
+				
+				List<Map> caseData = DatabasePlugin.executeQuery(con, sql);
+				
+				if(caseData!=null) {
+					Map datainner = (Map)caseData.get(0);
+					deptCodeC = CommonModels.checkStringObject(datainner.get("dept_code"));
+					distCodeC = CommonModels.checkStringObject(datainner.get("dist_id"));
+					System.out.println("deptCodeC::"+deptCodeC);
+					System.out.println("distCodeC::"+distCodeC);
+					if(deptCodeC.contains("01") && (distCodeC.equals("") || distCodeC.equals("0"))) {//SECTION SECT DEPT
+						newStatus="5";
+						sql="select inserted_by from ecourts_case_activities where cino='"+cIno+"' and action_type='CASE FORWARDED' and assigned_to in (select emailid from mlo_details where user_id='"+deptCodeC+"') order by inserted_on desc limit 1";
+						msg = "Returned Case to Section Officer (Sect. Dept.)";
+					}
+					else if(!deptCodeC.contains("01") && (distCodeC.equals("") || distCodeC.equals("0"))) {//SECTION HOD
+						newStatus="9";
+						msg = "Returned Case to Section Officer (HOD)";
+						sql="select inserted_by from ecourts_case_activities where cino='"+cIno+"' and action_type='CASE FORWARDED' "
+								+ "and assigned_to in (select emailid from nodal_officer_details where dept_id='"+deptCodeC+"'  and coalesce(dist_id,0) = 0) order by inserted_on desc limit 1";
+						
+					}
+					else if(!distCodeC.equals("") && !distCodeC.equals("0")) {//SECTION DIST
+						newStatus="10";
+						msg = "Returned Case to Section Officer (District)";
+						sql="select inserted_by from ecourts_case_activities where cino='"+cIno+"' and action_type='CASE FORWARDED' "
+								+ "and assigned_to in (select emailid from nodal_officer_details where dept_id='"+deptCodeC+"' and coalesce(dist_id,0) > 0) order by inserted_on desc limit 1";
+						
+					}
+					
+					System.out.println("assigned2Emp::"+sql);
+					assigned2Emp = DatabasePlugin.getSingleValue(con, sql);
+				}
+				
+				if(cform.getDynaForm("actionToPerform").toString().equals("Parawise Remarks")) {
+					//pwr_approved='F',
+					sql="update ecourts_case_data set  case_status="+newStatus+", assigned_to='"+assigned2Emp+"' "
+							+ ",section_officer_updated=null, mlo_no_updated=null where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
+					System.out.println("SQL:"+sql);
+					a = DatabasePlugin.executeUpdate(sql, con);
+					
+					//msg = "Parawise Remarks Returned for Case ("+cIno+").";
+				}
+				else if(cform.getDynaForm("actionToPerform").toString().equals("Counter Affidavit")) {
+					// counter_approved='F',
+					sql="update ecourts_case_data set case_status="+newStatus+",assigned_to='"+assigned2Emp+"',section_officer_updated=null , mlo_no_updated=null "
+							+ "where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
+					System.out.println("SQL:"+sql);
+					a = DatabasePlugin.executeUpdate(sql, con);
+					
+					//msg = "Counter Affidavit Returned for Case ("+cIno+").";
+				}
+				else if (CommonModels.checkStringObject(cform.getDynaForm("counterFiled")).equals("Yes")) {
+					//pwr_approved='F', counter_approved='F',
+					sql="update ecourts_case_data set  case_status="+newStatus+", assigned_to='"+assigned2Emp+"' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
+					System.out.println("SQL:"+sql);
+					a = DatabasePlugin.executeUpdate(sql, con);
+					//msg = "Counter Affidavit Returned for Case ("+cIno+").";
+					
+					sql="update ecourts_olcms_case_details set counter_approved_gp='F' where cino='"+cIno+"'";
+					a += DatabasePlugin.executeUpdate(sql, con);
+					
+				}
+				else if (CommonModels.checkStringObject(cform.getDynaForm("counterFiled")).equals("No") && CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksSubmitted")).equals("Yes")) {
+					//pwr_approved='F',
+					sql="update ecourts_case_data set  case_status="+newStatus+", assigned_to='"+assigned2Emp+"' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' ";
+					System.out.println("SQL:"+sql);
+					a = DatabasePlugin.executeUpdate(sql, con);
+					
+					//msg = "Parawise Remarks Returned for Case ("+cIno+").";
+				}
+				
+				sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"'";
+				a += DatabasePlugin.executeUpdate(sql, con);
+				
+				if (a > 0) {
+					sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, assigned_to) "
+							+ " values ('" + cIno + "','"+actionPerformed+"', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("remarks")+"','"+assigned2Emp+"')";
+					DatabasePlugin.executeUpdate(sql, con);
+					
+					request.setAttribute("successMsg", msg);
+					con.commit();
+				} else {
+					con.rollback();
+					request.setAttribute("errorMsg", "Error while forwarding the case details ("+cIno+").");
+				}
+			} else {
+				request.setAttribute("errorMsg", "Invalid Cino :" + cIno);
+			}
+		} catch (Exception e) {
+			con.rollback();
+			request.removeAttribute("successMsg");
+			request.setAttribute("errorMsg", "Error while filing Counter for Cino :" + cIno);
+			e.printStackTrace();
+		} finally {
+			DatabasePlugin.closeConnection(con);
+		}
+		return unspecified(mapping, cform, request, response);
 	}
 }

@@ -102,6 +102,7 @@
   <StrutsActivity path="uploadeofficedata" location="2750,2350" dimension="126,51" />
   <StrutsActivity path="searchcase" location="2750,2950" dimension="87,51" />
   <StrutsActivity path="acksreport" location="650,3550" dimension="85,51" />
+  <StrutsActivity path="acksabstractView" location="3350,1450" dimension="120,51" />
   <StrutsActivity path="acksabstract" location="1250,3250" dimension="95,51" />
   <StrutsActivity path="hccasedocsupload" location="1550,3250" dimension="128,51" />
   <StrutsActivity path="hcordersissuedreport" location="1850,3250" dimension="141,51" />
@@ -167,6 +168,12 @@
     <AutomaticBendpoints>
       <AbsolutePoint location="1308,2146" />
       <AbsolutePoint location="1308,2350" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/AcksAbstractReport.do,caseview1,acksabstractView,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="219,3198" />
+      <AbsolutePoint location="0,0" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/RetrieveNicData.do,success,changereqabstract,1" routingType="0">

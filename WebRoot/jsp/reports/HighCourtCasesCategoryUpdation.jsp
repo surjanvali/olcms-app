@@ -73,7 +73,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<thead>
 										<tr>
 											<th>Sl.No</th>
-											<th>Sect.Department Code</th>
+											<!-- <th>Sect.Department Code</th> -->
 											<th>Department Name</th>
 											<th>A1</th>
 											<th>A2</th>
@@ -93,15 +93,29 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<logic:iterate id="map" name="secdeptwise" indexId="i">
 											<tr>
 												<td>${i+1 }</td>
-												<td>${map.deptcode }</td>
+												<%-- <td>${map.deptcode }</td> --%>
 												<td><a
 													href="javascript:ShowHODWise('${map.deptcode}','${map.description }');">${map.description }</a></td>
-												<td style="text-align: right;">${map.a1 }</td>
+												
+												<%-- <td style="text-align: right;">${map.a1 }</td>
 												<td style="text-align: right;">${map.a2 }</td>
 												<td style="text-align: right;">${map.b1 }</td>
 												<td style="text-align: right;">${map.b2 }</td>
 												<td style="text-align: right;">${map.c1 }</td>
-												<td style="text-align: right;">${map.c2 }</td>
+												<td style="text-align: right;">${map.c2 }</td> --%>
+												
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','A1');">${map.a1 }</a></td>
+													<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','A2');">${map.a2 }</a></td>
+													<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','B1');">${map.b1 }</a></td>
+													<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','B2');">${map.b2 }</a></td>
+													<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','C1');">${map.c1 }</a></td>
+													<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','C2');">${map.c2 }</a></td>
 												
 												
 												<bean:define id="A1" value="${A1 + map.a1 }"></bean:define>
@@ -118,7 +132,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 									<tfoot>
 										<tR>
-											<td colspan="3">Totals</td>
+											<td colspan="2">Totals</td>
 											<td colspan="1" style="text-align: right;">${A1 }</td>
 											<td colspan="1" style="text-align: right;">${A2 }</td>
 											<td colspan="1" style="text-align: right;">${B1 }</td>
@@ -139,8 +153,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<thead>
 										<tr>
 											<th>Sl.No</th>
-											<th>Department Code</th>
-											<th>Department Name</th>
+											<!-- <th>Department Code</th> -->
+											<th>HOD</th>
 											<th>A1</th>
 											<th>A2</th>
 											<th>B1</th>
@@ -161,8 +175,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<logic:iterate id="map" name="deptwise" indexId="i">
 											<tr>
 												<td>${i+1 }</td>
-												<td>${map.deptcode }</td>
-												<td>${map.description }</td>
+												<%-- <td>${map.deptcode }</td> --%>
+												<td><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','All');">${map.description }</a></td>
 												
 												
 												<td style="text-align: right;"><a
@@ -192,7 +207,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 									<tfoot>
 										<tR>
-											<td colspan="3">Totals</td>
+											<td colspan="2">Totals</td>
 											<td colspan="1" style="text-align: right;">${A1 }</td>
 											<td colspan="1" style="text-align: right;">${A2 }</td>
 											<td colspan="1" style="text-align: right;">${B1 }</td>
@@ -215,6 +230,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<tr>
 											<th>Sl.No</th>
 											<th>CINo</th>
+											<th>Finance Category</th>
+											<th>Work Name</th>
+											<th>Estimated Cost (In laksh)</th>
+											<th>Administrative Sanction</th>
+											<th>Grant Value</th>
+											<th>CFMS Bill Id</th>
+											<th>CFMS Bill status</th>
+											<th>CFMS Bill Amount</th>
 											<th>Date of Filing</th>
 											<th>Case Type</th>
 											<th>Reg.No.</th>
@@ -230,18 +253,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<th>Respondents</th>
 											<th>Petitioner Advocate</th>
 											<th>Respondent Advocate</th>
-											<th>Finance Category</th>
-											<th>Work Name</th>
-											<th>Estimated Cost (In laksh)</th>
-											<th>Administrative Sanction</th>
-											<th>Grant Value</th>
-											<th>CFMS Bill Id</th>
-											<th>CFMS Bill status</th>
-											<th>CFMS Bill Amount</th>
+											
 										</tr>
 									</thead>
 									<tbody>
-
+										<bean:define id="est_cost_tot" value="0"></bean:define>
+										<bean:define id="bill_amount_tot" value="0"></bean:define>
 										<logic:iterate id="map" name="CASESLIST" indexId="i">
 											<tr>
 												<td>${i+1 }.</td>
@@ -251,6 +268,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
 
 												</td>
+												<td style="text-align: center;">${map.finance_category }</td>
+												<td style="text-align: center;">${map.work_name}</td>
+												<td style="text-align: center;">${map.est_cost}</td>
+												<td style="text-align: center;">${map.admin_sanction }</td>
+												<td style="text-align: center;">${map.grant_val }</td>
+												<td style="text-align: center;">${map.cfms_bill }</td>
+												<td style="text-align: center;">${map.bill_status }</td>
+												<td style="text-align: center;">${map.bill_amount}</td>
 												<td><logic:notEmpty name="map"
 														property="date_of_filing">
 														<logic:notEqual value="0001-01-01" name="map"
@@ -279,23 +304,25 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 												<td>${map.pet_adv }</td>
 												<td>${map.res_adv }</td>
-												<td style="text-align: center;">${map.finance_category }</td>
-												<td style="text-align: center;">${map.work_name }</td>
-												<td style="text-align: center;">${map.est_cost }</td>
-												<td style="text-align: center;">${map.admin_sanction }</td>
-												<td style="text-align: center;">${map.grant_val }</td>
-												<td style="text-align: center;">${map.cfms_bill }</td>
-												<td style="text-align: center;">${map.bill_status }</td>
-												<td style="text-align: center;">${map.bill_amount }</td>
+												
+												<bean:define id="est_cost_tot" value="${est_cost_tot + map.est_cost}"></bean:define>
+												<bean:define id="bill_amount_tot" value="${bill_amount_tot + map.bill_amount}"></bean:define>
+												
 											</tr>
 
 										</logic:iterate>
 									</tbody>
 									<tfoot>
 										<tR>
-											<td colspan="26">&nbsp;</td>
+											<td colspan="4">Totals</td>
+											<td colspan="1" style="text-align: right;">${est_cost_tot}</td>
+											<td colspan="4" style="text-align: right;"></td>
+											<td colspan="1" style="text-align: right;">${bill_amount_tot}</td>
+											<td colspan="20" style="text-align: right;"></td>
+											
 										</tR>
 									</tfoot>
+
 								</table>
 							</logic:present>
 

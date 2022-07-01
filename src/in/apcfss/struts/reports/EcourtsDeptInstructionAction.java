@@ -1,13 +1,9 @@
 package in.apcfss.struts.reports;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -21,14 +17,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-
 import in.apcfss.struts.Forms.CommonForm;
-import in.apcfss.struts.commons.AjaxModels;
-import in.apcfss.struts.commons.ApplicationVariables;
 import in.apcfss.struts.commons.CommonModels;
-import in.apcfss.struts.commons.SendSMSAction;
-import in.apcfss.struts.eCourt.apis.ECourtsCryptoHelper;
 import plugins.DatabasePlugin;
 
 public class EcourtsDeptInstructionAction extends DispatchAction {
@@ -36,8 +26,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 	@Override
 	public ActionForward unspecified(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		System.out.println(
-				"HighCourtCasesListAction..............................................................................unspecified()");
+		System.out.println("HighCourtCasesListAction..............................................................................unspecified()");
 		Connection con = null;
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
@@ -241,23 +230,16 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 		String sql = null;//, cIno=null;
 		CommonForm cform = (CommonForm) form;
 		HttpSession session = request.getSession();
-		String userId=null;
+		String userId=null;int a=0;String cIno = null,uploadedFilePath=null;
 		try {
-
 			con = DatabasePlugin.connect();
 			//con.setAutoCommit(false);
 			request.setAttribute("HEADING", "Instructions Entry");
 			System.out.println("in assign2DeptHOD --- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
-			userId = (String)request.getSession().getAttribute("userid");
-			String cIno = CommonModels.checkStringObject(request.getParameter("cino"));
-			String cInoo = CommonModels.checkStringObject(cform.getDynaForm("cino"));
-			System.out.println("cIno---"+cIno+cInoo);
-			String  ip = InetAddress.getLocalHost().toString();
-			//int x=0;
-			int i = 1;
-
-			int a=0;
-
+			userId = CommonModels.checkStringObject(request.getSession().getAttribute("userid"));
+			// String cIno = CommonModels.checkStringObject(request.getParameter("cino"));
+			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
+			System.out.println("cIno---"+cIno);
 
 			/*String fileSeperator=ApplicationVariables.filesepartor;
 			String destinationPath = ApplicationVariables.contextPath + "HighCourtsCaseOrders"+fileSeperator;
@@ -275,17 +257,17 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 			 * 
 			 * System.out.println("pdfFile--"+pdfFile);
 			 */		
-			sql = "insert into dept_instruction_mst (cino,instrucions , upload_fileno,dept_code ,dist_code,insert_by,insert_time ) "
-					+ " values (?,?, ?, ?, ?, ?,now())";
+			sql = "insert into ecourts_dept_instructions (cino, instructions , upload_fileno,dept_code ,dist_code,insert_by ) "
+					+ " values (?,?, ?, ?, ?, ?)";
 
 			ps = con.prepareStatement(sql);
-			ps.setString(i, cInoo != null ? cInoo : "");
-
+			int i = 1;
+			ps.setString(i, cIno);
 			ps.setString(++i, cform.getDynaForm("instructions") != null ? cform.getDynaForm("instructions").toString() : "");
-			ps.setObject(++i, "No" != null ? "No" : "");
-			ps.setString(++i, (String)request.getSession().getAttribute("dept_code") != null ? (String)request.getSession().getAttribute("dept_code") : "");
-			ps.setString(++i, (String)request.getSession().getAttribute("dist_id") != null ? (String)request.getSession().getAttribute("dist_id") : "");
-			ps.setString(++i, (String)request.getSession().getAttribute("userid") != null ? (String)request.getSession().getAttribute("userid") : "");
+			ps.setObject(++i, uploadedFilePath);
+			ps.setString(++i, CommonModels.checkStringObject(session.getAttribute("dept_code")));
+			ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
+			ps.setString(++i, userId);
 
 
 			System.out.println("sql--"+sql);
@@ -294,33 +276,21 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 
 			System.out.println("a--->"+a);
 			if(a>0) {
-				request.setAttribute("successMsg", "Data submitted successfully.");
+				request.setAttribute("successMsg", "Instructions data saved successfully.");
 			}else {
 				request.setAttribute("errorMsg", "Error in submission. Kindly try again.");
 			}
-			/*}else {
-					System.out.println("File Already exist.");
-
-				}*/
-			//}
 
 		} catch (Exception e) {
 			//con.rollback();
 			request.setAttribute("errorMsg", "Error in Submission. Kindly try again.");
 			e.printStackTrace();
 		} finally {
-
-			cform.setDynaForm("districtId", cform.getDynaForm("districtId") != null ? cform.getDynaForm("districtId").toString() : "0");
-			cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate") != null ? cform.getDynaForm("dofFromDate").toString() : "");
-			cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate") != null ? cform.getDynaForm("dofToDate").toString() : "");
-			cform.setDynaForm("purpose", cform.getDynaForm("purpose") != null ? cform.getDynaForm("purpose").toString() : "0");
-			cform.setDynaForm("regYear", cform.getDynaForm("regYear") != null ? cform.getDynaForm("regYear").toString() : "0");
-			cform.setDynaForm("filingYear", cform.getDynaForm("filingYear") != null ? cform.getDynaForm("filingYear").toString() : "0");
-
-			//DatabasePlugin.close(con, ps, null);
+			cform.setDynaForm("instructions","");
+			cform.setDynaForm("fileCino", cIno);
+			DatabasePlugin.close(con, ps, null);
 		}
-		//return mapping.findForward("success");
-		return getReport(mapping, cform, request, response);
+		return getCino(mapping, cform, request, response);
 	}
 
 	public ActionForward getCino(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -328,62 +298,39 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql = null, cIno = null, viewDisplay=null, target="caseview1";
-
+		String userId = null, roleId = null, sql = null, cIno = null, viewDisplay = null, target = "casepopupview1";
 		System.out.println("getCino");
 
 		try {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-
 			viewDisplay = CommonModels.checkStringObject(request.getParameter("SHOWPOPUP"));
 
-			System.out.println("viewDisplay--"+viewDisplay);
+			System.out.println("viewDisplay--" + viewDisplay);
 
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			}
 
-			if(!viewDisplay.equals("") && viewDisplay.equals("SHOWPOPUP")) {
-				target = "casepopupview1";
-				cIno = CommonModels.checkStringObject(request.getParameter("cino"));
-			}
-			else {
-				cIno = CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
-			}
+			cIno = CommonModels.checkStringObject(request.getParameter("cino"));
+			cIno = cIno!=null && !cIno.equals("") ? cIno : CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
 
-			System.out.println("cIno"+cIno);
-
+			System.out.println("cIno" + cIno);
 
 			if (cIno != null && !cIno.equals("")) {
+				
+				cform.setDynaForm("cino", cIno);
+				
 				con = DatabasePlugin.connect();
 
-				sql = "select * from ecourts_case_data where cino='" + cIno +"'";
-				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+				sql = "select instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time from ecourts_dept_instructions where cino='" + cIno + "'  order by 1 ";
+				System.out.println("sql--" + sql);
+				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
+				request.setAttribute("existData", existData);
 
-				if (data != null && !data.isEmpty() && data.size() > 0) {
-					request.setAttribute("USERSLIST", data);
-
-				}
-
-				sql = "select * from ecourts_case_category_wise_data where cino='" + cIno +
-						"'"; List<Map<String, Object>> dataUpdate = DatabasePlugin.executeQuery(sql,
-								con);
-
-						if (dataUpdate != null && !dataUpdate.isEmpty() && dataUpdate.size() > 0) {
-							request.setAttribute("USERSLIST", dataUpdate);
-
-						}
-
-						sql="select * from dept_instruction_mst  where cino='" +cIno+ "'  order by 1 ";
-						System.out.println("sql--"+sql);
-						List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
-						request.setAttribute("existData", existData);
-
-						request.setAttribute("HEADING", "Instructions Details for CINO : " + cIno);
-			}
-			else {
+				request.setAttribute("HEADING", "Submit Instructions for CINO : " + cIno);
+			} else {
 				request.setAttribute("errorMsg", "Invalid Cino.");
 			}
 
@@ -394,42 +341,5 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 		}
 		return mapping.findForward(target);
 	}
-	public ActionForward getReport(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		CommonForm cform = (CommonForm) form;
-		Connection con = null;
-		HttpSession session = null;
-		String userId = null, roleId = null, sql = null, cIno = null, viewDisplay=null, target="caseview1";
-
-		System.out.println("getCino");
-
-		try {
-			session = request.getSession();
-			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
-			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-
-
-			con = DatabasePlugin.connect();
-
-			sql = "select * from ecourts_case_category_wise_data where cino='" + cIno + "'";
-			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-
-			if (data != null && !data.isEmpty() && data.size() > 0) {
-				request.setAttribute("CASESLIST", data);
-
-			}
-
-			sql="select * from dept_instruction_mst  where cino='" +cIno+ "' order by 1 ";
-			System.out.println("sql--"+sql);
-			List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
-			request.setAttribute("existData", existData);
-
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			DatabasePlugin.closeConnection(con);
-		}
-		return mapping.findForward(target);
-	}
+	
 }

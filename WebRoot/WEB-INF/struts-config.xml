@@ -332,6 +332,7 @@
 			type="in.apcfss.struts.reports.AcknowledgementAbstractReport"
 			parameter="mode" scope="request">
 			<forward name="success" path="acksabstract"></forward>
+			<forward name="caseview1" path="acksabstractView"></forward>
 		</action>
 
 		<action path="/HCCaseDocsUploadAbstract" name="CommonForm"
@@ -437,21 +438,18 @@
 			name="CommonForm"
 			type="in.apcfss.struts.reports.EcourtsDeptInstructionAction"
 			parameter="mode" scope="request">
-			<forward name="success"
-				path="EcourtsDeptInstruction"></forward>
-			 <forward name="caseview1" path="casedetailsview2"></forward>
+			<forward name="success" path="EcourtsDeptInstruction"></forward>
+			 <!-- <forward name="caseview1" path="casedetailsview2"></forward> -->
 			<forward name="casepopupview1" path="casedetailspopupview2"></forward>
 		</action>
 		
 		
 		
-		<action path="/DailyStatusEntry"
-			name="CommonForm"
+		<action path="/DailyStatusEntry" name="CommonForm"
 			type="in.apcfss.struts.reports.DailyStatusEntryAction"
 			parameter="mode" scope="request">
-			<forward name="success"
-				path="DailyStatusEntry"></forward>
-			 <forward name="caseview1" path="casedetailsview3"></forward>
+			<forward name="success" path="DailyStatusEntry"></forward>
+			 <!-- <forward name="caseview1" path="casedetailsview3"></forward> -->
 			<forward name="casepopupview1" path="casedetailspopupview3"></forward>
 		</action>
 		

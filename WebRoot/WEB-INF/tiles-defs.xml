@@ -211,6 +211,11 @@
 		<put name="content" value="/jsp/reports/AcksAbstractReport.jsp" />
 	</definition>
 
+	<definition name="acksabstractView" extends="modalLayout">
+		<put name="content"
+			value="/jsp/reports/AcksAbstractReportView.jsp" />
+	</definition>
+
 	<definition name="hccasedocsupload" extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/reports/HCCaseDocsUploadAbstractReport.jsp" />
@@ -272,7 +277,7 @@
 	<definition name="gpsReport" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/GPsReport.jsp" />
 	</definition>
-	
+
 	<definition name="viewCaseDataPage" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/GPcaseView.jsp" />
 	</definition>
@@ -296,31 +301,31 @@
 		extends="modalLayout">
 		<put name="content" value="/jsp/reports/CategoryUpdationView.jsp" />
 	</definition>
-	
-	
+
+
 	<definition name="EcourtsDeptInstruction"
 		extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/reports/EcourtsDeptInstruction.jsp" />
 	</definition>
-	
-		 <definition name="casedetailsview2" extends="modalLayout">
-		<put name="content" value="/jsp/reports/EcourtsDeptInstructionView.jsp" />
+
+	<definition name="casedetailsview2" extends="modalLayout">
+		<put name="content"
+			value="/jsp/reports/EcourtsDeptInstructionView.jsp" />
 	</definition>
 
 	<definition name="casedetailspopupview2"
 		extends="modalLayout">
-		<put name="content" value="/jsp/reports/EcourtsDeptInstructionView.jsp" />
-	</definition>
-	
-	
-	<definition name="DailyStatusEntry"
-		extends="UserLayoutNew">
 		<put name="content"
-			value="/jsp/reports/DailyStatusEntry.jsp" />
+			value="/jsp/reports/EcourtsDeptInstructionView.jsp" />
 	</definition>
-	
-	
+
+
+	<definition name="DailyStatusEntry" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/DailyStatusEntry.jsp" />
+	</definition>
+
+
 	<definition name="casedetailsview3" extends="modalLayout">
 		<put name="content" value="/jsp/reports/DailyStatusEntryView.jsp" />
 	</definition>
@@ -329,7 +334,7 @@
 		extends="modalLayout">
 		<put name="content" value="/jsp/reports/DailyStatusEntryView.jsp" />
 	</definition>
-	
-	
+
+
 
 </tiles-definitions>

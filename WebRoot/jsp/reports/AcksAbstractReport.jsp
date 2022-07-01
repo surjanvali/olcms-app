@@ -143,19 +143,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="row">
 						<div class="col-md-12 col-xs-12">
 							<input type="button" name="showcases" value="Show Cases"
-								class="btn btn-success" onclick="return fnShowCases();" /> 
-								<input
+								class="btn btn-success" onclick="return fnShowCases();" /> <input
 								type="button" name="showcases2" value="Show Department Wise"
-								class="btn btn-success" onclick="return fnShowDeptWise();" /> 
-								<input
+								class="btn btn-success" onclick="return fnShowDeptWise();" /> <input
 								type="button" name="showcases3" value="Show District Wise"
 								class="btn btn-success" onclick="return fnShowDistWise();" />
-								
-								<logic:present name="SHOWUSERWISE">
-									<input
-									type="button" name="showcases4" value="Show User Wise"
+
+							<logic:present name="SHOWUSERWISE">
+								<input type="button" name="showcases4" value="Show User Wise"
 									class="btn btn-success" onclick="return fnShowUserWise();" />
-								</logic:present>
+							</logic:present>
 						</div>
 					</div>
 				</div>
@@ -260,7 +257,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<logic:iterate id="map" name="USERWISEACKS" indexId="i">
 										<tr>
 											<td>${i+1 }.</td>
-											<td><a href="javascript:showUserWise('${map.inserted_by}');">
+											<td><a
+												href="javascript:showUserWise('${map.inserted_by}');">
 													${map.inserted_by } </a></td>
 											<td style="text-align: right;">${map.acks }</td>
 										</tr>
@@ -312,29 +310,34 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td nowrap="nowrap">${map.dept_descs }</td>
 											<td>${map.advocateccno }</td>
 											<td>${map.advocatename }</td>
-											
+
 
 
 											<%-- <td>${map.remarks }</td> --%>
-											<td style="text-align: center;" nowrap="nowrap">
-											<logic:present
+											<td style="text-align: center;" nowrap="nowrap"><logic:present
 													name="map" property="ack_file_path">
 													<a href="./${map.ack_file_path}" target="_new"
 														title="Print Acknowledgement" class="btn btn-sm btn-info">
 														<i class="fa fa-save"></i> <span>Acknowledgement</span> <!-- <span>Download</span> -->
 													</a>
-												</logic:present>
-												 <logic:present name="map" property="barcode_file_path">
+												</logic:present> <logic:present name="map" property="barcode_file_path">
 													<a href="./${map.barcode_file_path}" target="_new"
 														title="Print Barcode" class="btn btn-sm btn-info"> <i
 														class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
 													</a>
-												</logic:present> <a
-												href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
+												</logic:present> <!-- //id="btnShowPopup"  --> <input type="button"
+												id="btnShowPopup" value="Scanned Affidavit"
+												class="btn btn-sm btn-info waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup('${map.ack_no}');" />
+
+												<logic:present name="ack_nooo" scope="request">
+													<div id="pdf_view" class="btn btn-sm btn-info"></div>
+												</logic:present> <%-- <logic:present name="ack_nooo" scope="request">
+													 <a href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 												target="_new" title="Print Barcode"
 												class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-													<span>Scanned Affidavit</span> <!-- <span>Download</span> -->
-											</a></td>
+													<span>Scanned Affidavit</span> 
+											</a></logic:present> --%></td>
 										</tr>
 									</logic:iterate>
 								</tbody>
@@ -355,11 +358,40 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 			</logic:notEmpty>
-
-
 		</div>
 	</html:form>
 </div>
+
+<div id="MyPopup" class="modal fade" role="dialog"
+	style="padding-top:200px;">
+	<div class="modal-dialog modal-lg">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header"
+				style="background-color: #3498db;color: #fff;">
+				<button type="button" class="close" data-dismiss="modal">
+					&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<!-- <div class="row">
+					<div class="col-sm-12" style="margin:0px 0px 0px 0px;"> -->
+						<iframe src="" id="pdf_view" name="model_window"
+							style="width:100%;min-height:600px;border:0px;"> </iframe>
+					<!-- </div>
+				</div> -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- <div id="header"></div>
+	<div id="pdf_view"></div>
+		<div class="col-sm-10" style="margin:20px 0px 20px 0px;"></div>
+	
+	<div id="footer"></div> -->
 
 
 <script type="text/javascript"
@@ -371,7 +403,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 <script src="./assetsnew/vendors/select2/dist/js/select2.full.min.js"
 	type="text/javascript"></script>
-<!-- <script src="https://apbudget.apcfss.in/js/select2.js"></script> -->
+
+
+
 <script>
 	$('.datepicker').datepicker({
 		uiLibrary : 'bootstrap4'
@@ -383,6 +417,25 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			format : "dd-mm-yyyy"
 		});
 	});
+
+	function viewCaseDetailsPopup(ack_no) {
+		var heading = "View Case Details for ACK No : " + ack_no;
+		var srclink = "";
+		if (ack_no != null && ack_no != "" && ack_no != "0") {
+			srclink = "./AcksAbstractReport.do?mode=getAck_no&SHOWPOPUP=SHOWPOPUP&cino="
+					+ ack_no;
+			// alert("LINK:"+srclink);
+			if (srclink != "") {
+				$("#MyPopup .modal-title").html(heading);
+				$("#pdf_view").prop("src", srclink)
+
+				//$("#MyPopup .modal-body").html(body);
+				$("#MyPopup").modal("show");
+			}
+			;
+		}
+		;
+	};
 
 	function fnShowDistWise() {
 		$("#mode").val("showDistWise");
