@@ -155,14 +155,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<th>Sect.Department Code</th>
 											<th>Department Name</th>
 											<th>Total Cases</th>
+											<th>Interim Orders Cases</th>
 											<th>Interim Orders Issued</th>
+											<th>Final Orders Cases</th>
 											<th>Final Orders Issued</th>
 										</tr>
 									</thead>
 									<tbody>
 										<bean:define id="Totals" value="0"></bean:define>
-										<bean:define id="sdeptTotals" value="0"></bean:define>
-										<bean:define id="Mlototals" value="0"></bean:define>
+										<bean:define id="interimOrdersCasesTot" value="0"></bean:define>
+										<bean:define id="interimOrdersTot" value="0"></bean:define>
+										<bean:define id="finalOrdersCasesTot" value="0"></bean:define>
+										<bean:define id="finalOrdersTot" value="0"></bean:define>
+										
 										<logic:iterate id="map" name="secdeptwise" indexId="i">
 											<tr>
 												<td>${i+1 }</td>
@@ -171,16 +176,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													href="javascript:ShowHODWise('${map.deptcode}','${map.description }');">${map.description }</a></td>
 												<td style="text-align: right;">${map.total_cases }</td>
 												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','IO','SD');">${map.interim_order_cases }</a></td>
+												<td style="text-align: right;"><a
 													href="javascript:showCasesWise('${map.deptcode}','${map.description }','IO','SD');">${map.interim_orders }</a></td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','FO','SD');">${map.final_order_cases }</a></td>
 												<td style="text-align: right;"><a
 													href="javascript:showCasesWise('${map.deptcode}','${map.description }','FO','SD');">${map.final_orders }</a></td>
 
 											</tr>
 											<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
-											<bean:define id="sdeptTotals"
-												value="${sdeptTotals + map.interim_orders }"></bean:define>
-											<bean:define id="Mlototals"
-												value="${Mlototals + map.final_orders }"></bean:define>
+											
+											<bean:define id="interimOrdersCasesTot" value="${interimOrdersCasesTot + map.interim_order_cases }"></bean:define>
+											<bean:define id="interimOrdersTot" value="${interimOrdersTot + map.interim_orders }"></bean:define>
+											<bean:define id="finalOrdersCasesTot" value="${finalOrdersCasesTot + map.final_order_cases }"></bean:define>
+											<bean:define id="finalOrdersTot" value="${finalOrdersTot + map.final_orders }"></bean:define>
+											
 										</logic:iterate>
 									</tbody>
 
@@ -188,8 +199,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<tR>
 											<td colspan="3">Totals</td>
 											<td colspan="1" style="text-align: right;">${Totals }</td>
-											<td colspan="1" style="text-align: right;">${sdeptTotals }</td>
-											<td colspan="1" style="text-align: right;">${Mlototals }</td>
+											<td colspan="1" style="text-align: right;">${interimOrdersCasesTot }</td>
+											<td colspan="1" style="text-align: right;">${interimOrdersTot }</td>
+											<td colspan="1" style="text-align: right;">${finalOrdersCasesTot }</td>
+											<td colspan="1" style="text-align: right;">${finalOrdersTot }</td>
 										</tR>
 									</tfoot>
 
@@ -206,31 +219,41 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<th>Department Code</th>
 											<th>Department Name</th>
 											<th>Total Cases</th>
+											<th>Interim Orders Cases</th>
 											<th>Interim Orders Issued</th>
+											<th>Final Orders Cases</th>
 											<th>Final Orders Issued</th>
 										</tr>
 									</thead>
 									<tbody>
 										<bean:define id="Totals" value="0"></bean:define>
-										<bean:define id="sdeptTotals" value="0"></bean:define>
-										<bean:define id="Mlototals" value="0"></bean:define>
+										<bean:define id="interimOrdersCasesTot" value="0"></bean:define>
+										<bean:define id="interimOrdersTot" value="0"></bean:define>
+										<bean:define id="finalOrdersCasesTot" value="0"></bean:define>
+										<bean:define id="finalOrdersTot" value="0"></bean:define>
+										
 										<logic:iterate id="map" name="deptwise" indexId="i">
 											<tr>
 												<td>${i+1 }</td>
 												<td>${map.deptcode }</td>
-												<td>${map.description }</td>
-												<td style="text-align: right;">${map.total_cases }</td>
+												<td>${map.total_cases }</td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','IO','HOD');">${map.interim_order_cases }</a></td>
 												<td style="text-align: right;"><a
 													href="javascript:showCasesWise('${map.deptcode}','${map.description }','IO','HOD');">${map.interim_orders }</a></td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','FO','HOD');">${map.final_order_cases }</a></td>
 												<td style="text-align: right;"><a
 													href="javascript:showCasesWise('${map.deptcode}','${map.description }','FO','HOD');">${map.final_orders }</a></td>
 
 											</tr>
 											<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
-											<bean:define id="sdeptTotals"
-												value="${sdeptTotals + map.interim_orders }"></bean:define>
-											<bean:define id="Mlototals"
-												value="${Mlototals + map.final_orders }"></bean:define>
+											
+											<bean:define id="interimOrdersCasesTot" value="${interimOrdersCasesTot + map.interim_order_cases }"></bean:define>
+											<bean:define id="interimOrdersTot" value="${interimOrdersTot + map.interim_orders }"></bean:define>
+											<bean:define id="finalOrdersCasesTot" value="${finalOrdersCasesTot + map.final_order_cases }"></bean:define>
+											<bean:define id="finalOrdersTot" value="${finalOrdersTot + map.final_orders }"></bean:define>
+											
 										</logic:iterate>
 									</tbody>
 
@@ -238,8 +261,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<tR>
 											<td colspan="3">Totals</td>
 											<td colspan="1" style="text-align: right;">${Totals }</td>
-											<td colspan="1" style="text-align: right;">${sdeptTotals }</td>
-											<td colspan="1" style="text-align: right;">${Mlototals }</td>
+											<td colspan="1" style="text-align: right;">${interimOrdersCasesTot }</td>
+											<td colspan="1" style="text-align: right;">${interimOrdersTot }</td>
+											<td colspan="1" style="text-align: right;">${finalOrdersCasesTot }</td>
+											<td colspan="1" style="text-align: right;">${finalOrdersTot }</td>
 										</tR>
 									</tfoot>
 

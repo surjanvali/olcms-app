@@ -59,7 +59,16 @@ public class HCOrdersIssuedReport extends DispatchAction {
 						+ "left join (select distinct cino from ecourts_case_interimorder where 1=1 "+sqlCondition+") io on (a.cino=io.cino) "
 						+ "left join (select distinct cino from ecourts_case_finalorder  where 1=1 "+sqlCondition+") fo on (a.cino=fo.cino) "
 						+ "where d.display = true ";
-
+				
+				sql="select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases, sum(interim_order_cases) as interim_order_cases, sum(final_order_cases) as final_order_cases,  "
+						+ " sum(interim_orders)  as interim_orders, sum(final_orders) as final_orders from "
+						+ "(select a.dept_code , case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,"
+						+ " count(*) as total_cases, count(distinct io.cino) as interim_order_cases, count(distinct fo.cino) as final_order_cases,sum(coalesce(interim_orders,'0')::int4)  as interim_orders, sum(coalesce(final_orders,'0')::int4) as final_orders "
+						+ " from ecourts_case_data a inner join dept_new d on (a.dept_code=d.dept_code) "
+						+ " left join (select cino, count(*) as interim_orders from ecourts_case_interimorder where 1=1 "+sqlCondition+" group by cino) io on (a.cino=io.cino) "
+						+ " left join (select cino, count(*) as final_orders from ecourts_case_finalorder  where 1=1 "+sqlCondition+" group by cino) fo on (a.cino=fo.cino) "
+						+ " where d.display = true ";
+				
 				if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
 					sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or a.dept_code='"
 							+ session.getAttribute("dept_code") + "')";
@@ -67,8 +76,8 @@ public class HCOrdersIssuedReport extends DispatchAction {
 					sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
 				}
 
-				sql += "group by a.dept_code,d.dept_code ,reporting_dept_code ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code)"
-						+ "group by x.reporting_dept_code, d1.description order by 1";
+				sql += " group by a.dept_code,d.dept_code ,reporting_dept_code ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code)"
+						+ " group by x.reporting_dept_code, d1.description order by 1";
 
 				request.setAttribute("HEADING", "Sect. Dept. Wise High Court Cases Abstract Report");
 
@@ -141,12 +150,19 @@ public class HCOrdersIssuedReport extends DispatchAction {
 					+ "left join (select distinct cino from ecourts_case_finalorder  where 1=1 "+sqlCondition+") fo on (a.cino=fo.cino) "
 					+ "where d.display = true ";
 
-				sql += " and (reporting_dept_code='" + deptId + "' or a.dept_code='" + deptId + "')";
+			sql="select a.dept_code as deptcode , d.description,count(*) as total_cases, "
+					+ " count(distinct io.cino) as interim_order_cases, count(distinct fo.cino) as final_order_cases,sum(coalesce(interim_orders,'0')::int4)  as interim_orders, sum(coalesce(final_orders,'0')::int4) as final_orders "
+					+ " from ecourts_case_data a inner join dept_new d on (a.dept_code=d.dept_code) "
+					+ " left join (select cino,count(*) as interim_orders from ecourts_case_interimorder where 1=1 "+sqlCondition+" group by cino) io on (a.cino=io.cino) "
+					+ " left join (select cino,count(*) as final_orders from ecourts_case_finalorder  where 1=1 "+sqlCondition+" group by cino) fo on (a.cino=fo.cino) "
+					+ " where d.display = true ";
+			
+				sql += " and (reporting_dept_code='" + deptId + "' or a.dept_code='" + deptId + "') ";
 				if(roleId.equals("2")){
-					sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
+					sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"' ";
 				}
 				
-			sql += "group by a.dept_code,d.description order by 1";
+			sql += " group by a.dept_code,d.description order by 1";
 
 			request.setAttribute("HEADING", "HOD Wise High Court Orders Issued Report for "+deptName);
 			System.out.println("SQL:" + sql);
