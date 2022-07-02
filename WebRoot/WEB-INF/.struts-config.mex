@@ -120,12 +120,12 @@
   <StrutsActivity path="casedetailsview1" location="2150,4150" dimension="117,51" />
   <StrutsActivity path="HighCourtCasesCategoryUpdationReport" location="2450,4150" dimension="248,51" />
   <StrutsActivity path="casedetailspopupview1" location="2750,4150" dimension="152,51" />
-  <StrutsActivity path="casedetailsview2" location="3350,1850" dimension="117,51" />
   <StrutsActivity path="EcourtsDeptInstruction" location="3350,2050" dimension="151,51" />
   <StrutsActivity path="casedetailspopupview2" location="3350,2450" dimension="152,51" />
-  <StrutsActivity path="casedetailsview3" location="3350,2650" dimension="117,51" />
   <StrutsActivity path="DailyStatusEntry" location="3350,2850" dimension="115,51" />
   <StrutsActivity path="casedetailspopupview3" location="3350,3050" dimension="152,51" />
+  <StrutsActivity path="casedetailsview2" location="3350,1850" dimension="117,51" />
+  <StrutsActivity path="casedetailsview3" location="3350,2650" dimension="117,51" />
   <StrutsActivity path="districtreport" location="2150,2650" dimension="98,51" />
   <StrutsActivity path="benchreport" location="50,2750" dimension="95,51" />
   <StrutsActivity path="HomePage;6" location="950,1050" dimension="116,81" />
@@ -439,14 +439,6 @@
       <AbsolutePoint location="2577,2550" />
     </AutomaticBendpoints>
   </StrutsTransition>
-  <StrutsTransition id="/EcourtsDeptInstruction.do,caseview1,casedetailsview2,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="3666,498" />
-      <AbsolutePoint location="3801,498" />
-      <AbsolutePoint location="3801,1875" />
-      <AbsolutePoint location="3467,1875" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
   <StrutsTransition id="/ContemptCasesAbstract.do,success,contemptcasesreport,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="650,3298" />
@@ -732,13 +724,6 @@
       <AbsolutePoint location="2299,1846" />
       <AbsolutePoint location="2299,2175" />
       <AbsolutePoint location="1639,2175" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
-  <StrutsTransition id="/DailyStatusEntry.do,caseview1,casedetailsview3,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="3547,1346" />
-      <AbsolutePoint location="3547,2675" />
-      <AbsolutePoint location="3467,2675" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/AcksAbstractReport.do,success,acksabstract,1" routingType="0">

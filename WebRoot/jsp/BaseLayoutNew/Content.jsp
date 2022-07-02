@@ -264,8 +264,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<div class="col-lg-3 col-md-6">
 							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
 
-							<a
-								href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=IO">
+							<!-- <a href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=IO"> -->
+								<a href="./HCOrdersIssuedReport.do">
 								<div class="ibox bg-info color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${INTERIMCASES}</h2>
@@ -283,8 +283,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<logic:notEmpty name="INTERIMORDERS">
 					<logic:greaterThan value="0" name="INTERIMORDERS">
 						<div class="col-lg-3 col-md-6">
-							<a
-								href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=IO">
+							<!-- <a href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=IO"> -->
+							<a href="./HCOrdersIssuedReport.do">
 								<div class="ibox bg-info color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${INTERIMORDERS}</h2>
@@ -303,8 +303,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<logic:greaterThan value="0" name="FINALORDERS">
 						<div class="col-lg-3 col-md-6">
 							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
-							<a
-								href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=FO">
+							<!-- <a href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=FO"> -->
+							<a href="./HCOrdersIssuedReport.do">
 								<div class="ibox bg-success color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${FINALORDERS}</h2>
