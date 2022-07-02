@@ -9,7 +9,11 @@ import in.apcfss.struts.commons.Itext_pdf_setting;
 import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -333,7 +337,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 				con = DatabasePlugin.connect();
 				con.setAutoCommit(false);
-				
+				String hcAckNo=null;
 				String ackNo = null;//generateNewAckNo();
 				int respondentIds = CommonModels.checkIntObject(cform.getDynaForm("respondentIds"));
 				
@@ -347,6 +351,8 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					 deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"+1));
 				}
 				
+				
+				
 				System.out.println("distId===="+distId);
 				//System.out.println("deptId===="+deptId);
 				
@@ -359,8 +365,11 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					sql="select '"+deptId+"'||lpad('"+distId+"'::text,2,'0')||to_char(now(),'yyyyMMddhhmiSSms')";
 					ackNo = DatabasePlugin.getStringfromQuery(sql, con);
 				// ackNo = DatabasePlugin.getStringfromQuery("select sdeptcode||deptcode||lpad('"+distId+"'::text,2,'0')||to_char(now(),'yyyyMMddmmssms') from dept where dept_id='"+deptId+"'", con);
+				
+					sql="select '"+deptId.substring(0, 5)+"'||LPAD(nextval ('ecourts_gpo_hc_ack_gen_seq')::TEXT, 7,'0')";
+					hcAckNo = DatabasePlugin.getStringfromQuery(sql, con);
 				}
-				System.out.println("ackNo--"+ackNo);
+				System.out.println("ackNo--"+ackNo+hcAckNo);
 				/*
 				 * String designation =
 				 * CommonModels.checkStringObject(cform.getDynaForm("deptId1")); if(distId>0 &&
@@ -374,8 +383,8 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 					int i = 1;
 					sql = "insert into ecourts_gpo_ack_dtls (ack_no, distid, petitioner_name, advocatename ,advocateccno ,casetype , maincaseno , remarks ,  " //casetype
-							+ "inserted_by , inserted_ip , ack_type, reg_year, reg_no, mode_filing, case_category)"  //,designation,mandalid,villageid
-							+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";//,?,?,?    , ?, ?
+							+ "inserted_by , inserted_ip , ack_type, reg_year, reg_no, mode_filing, case_category,hc_ack_no)"  //,designation,mandalid,villageid
+							+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";//,?,?,?    , ?, ?
 					System.out.println("sql--"+sql);
 					ps = con.prepareStatement(sql);
 					ps.setString(i, ackNo);
@@ -398,6 +407,8 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					ps.setString(++i, CommonModels.checkStringObject(cform.getDynaForm("regNo")));
 					ps.setString(++i, CommonModels.checkStringObject(cform.getDynaForm("filingMode")));
 					ps.setString(++i, CommonModels.checkStringObject(cform.getDynaForm("caseCategory")));
+					ps.setString(++i, hcAckNo);
+					
 					
 					int a = ps.executeUpdate();
 					
@@ -470,7 +481,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 						}
 						
 						String ackPath = generateAckPdf(ackNo, cform);
-						String barCodeFilePath = generateAckBarCodePdf128(ackNo, cform);
+						String barCodeFilePath = generateAckBarCodePdf128(hcAckNo, cform);
 						System.out.println("ackPath::"+ackPath);
 						System.out.println("barCodeFilePath::"+barCodeFilePath);
 						
@@ -750,7 +761,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					cform.setDynaForm("serviceNonService", ackData.get("services_flag").toString());
 				}
 				
-				System.out.println("ACK BAR CODE PATH:"+generateAckBarCodePdf128(ackNo, cform));
+				//System.out.println("ACK BAR CODE PATH:"+generateAckBarCodePdf128(ackNo, cform));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -872,12 +883,12 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			
 			document.add(pdfsetting.para("",para,Paragraph.ALIGN_JUSTIFIED,8,10));
 			document.add(pdfsetting.para("____________________________________________________________________________",subhead,Paragraph.ALIGN_CENTER,0,2));
-			/*pdfsetting.border = 0;
-			table = pdfsetting.table(5,100);
-			table.addCell(pdfsetting.cell("M. Maheshwara Reddy",5,Element.ALIGN_RIGHT,para,Font.NORMAL));
-			table.addCell(pdfsetting.cell("Executive Director",5,Element.ALIGN_RIGHT,para,Font.NORMAL));
-			table.addCell(pdfsetting.cell("APCOS",5,Element.ALIGN_RIGHT,para,Font.NORMAL));
-			document.add(table);*/
+//			/*pdfsetting.border = 0;
+//			table = pdfsetting.table(5,100);
+//			table.addCell(pdfsetting.cell("M. Maheshwara Reddy",5,Element.ALIGN_RIGHT,para,Font.NORMAL));
+//			table.addCell(pdfsetting.cell("Executive Director",5,Element.ALIGN_RIGHT,para,Font.NORMAL));
+//			table.addCell(pdfsetting.cell("APCOS",5,Element.ALIGN_RIGHT,para,Font.NORMAL));
+//			document.add(table);*/
 			
 			PdfContentByte cb = writer.getDirectContent();
 			
@@ -918,7 +929,11 @@ public class GPOAcknowledgementAction extends DispatchAction {
 	
 	public static void main(String[] args) {
 		// generateAckBarCodePdf("REV01-L1820220613115422600", null);
-		generateAckBarCodePdf128("REV01-L1820220613115422600", null);
+		// generateAckBarCodePdf128("REV01-L1820220613115422600", null);
+		//Date todaysDate = new Date();
+		//DateFormat df = new SimpleDateFormat("dd-Mon-yyyy HH:mm:ss:am");
+		//String testDateString = df.format(todaysDate);
+		
 	}
 	
 	public static String generateAckBarCodePdf128(String ackNo, CommonForm cform) {
@@ -929,7 +944,21 @@ public class GPOAcknowledgementAction extends DispatchAction {
 		try {
 			String fileName = ackNo + "_barCode-A1.pdf";
 			pdfFilePath = ApplicationVariables.ackPath + fileName;
-
+			
+			/*
+			 * Date todaysDate = new Date(); DateFormat df = new
+			 * SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); String testDateString =
+			 * df.format(todaysDate);
+			 */
+			
+			LocalDateTime da_ti2 = LocalDateTime.now();
+	        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm:ss a");
+	        String testDateString = da_ti2.format(dtf1);
+			
+			
+			Itext_pdf_setting pdfsetting = new Itext_pdf_setting();
+			int subhead = 8;
+			
 			document = new Document(PageSize.A6.rotate());
 			document.setMargins(10,10,10,10);
 			document.setPageSize(PageSize.A6);
@@ -945,6 +974,8 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			PdfContentByte cb = writer.getDirectContent();
 			Barcode128 barcode128 = new Barcode128();
 			barcode128.setCode(ackNo);
+			document.add(pdfsetting.para("Acknowledgement No.:",subhead,Paragraph.ALIGN_LEFT,0,2));
+			
 			Image code128Image = barcode128.createImageWithBarcode(cb, null, null);
 			code128Image.scaleToFit(250f, 250f);
 			code128Image.scaleAbsoluteHeight(50f);
@@ -953,6 +984,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			// System.out.println("--"+code128Image.getScaledWidth());
 			
 			document.add(code128Image);
+			document.add(pdfsetting.para(testDateString+",APOLCMS",subhead,Paragraph.ALIGN_RIGHT,0,1));
 			// System.out.println("BAR CODE pdfFilePath:" + pdfFilePath);
 		} catch (Exception e) {
 			e.printStackTrace();
