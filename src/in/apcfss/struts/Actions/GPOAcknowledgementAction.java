@@ -1,17 +1,9 @@
 package in.apcfss.struts.Actions;
 
-import in.apcfss.struts.Forms.CommonForm;
-import in.apcfss.struts.commons.ApplicationVariables;
-import in.apcfss.struts.commons.CommonModels;
-import in.apcfss.struts.commons.FileUploadUtilities;
-import in.apcfss.struts.commons.Itext_pdf_setting;
-
 import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -27,9 +19,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
-import org.apache.struts.upload.FormFile;
-
-import plugins.DatabasePlugin;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
@@ -47,6 +36,12 @@ import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+
+import in.apcfss.struts.Forms.CommonForm;
+import in.apcfss.struts.commons.ApplicationVariables;
+import in.apcfss.struts.commons.CommonModels;
+import in.apcfss.struts.commons.Itext_pdf_setting;
+import plugins.DatabasePlugin;
 
 public class GPOAcknowledgementAction extends DispatchAction {
 
@@ -379,11 +374,11 @@ public class GPOAcknowledgementAction extends DispatchAction {
 				 * DatabasePlugin.getStringfromQuery(sql, con); }
 				 */
 				
-				if (ackNo != null && !ackNo.contentEquals("")) {
+				if (ackNo != null && !ackNo.contentEquals("") && hcAckNo != null && !hcAckNo.contentEquals("")) {
 
 					int i = 1;
 					sql = "insert into ecourts_gpo_ack_dtls (ack_no, distid, petitioner_name, advocatename ,advocateccno ,casetype , maincaseno , remarks ,  " //casetype
-							+ "inserted_by , inserted_ip , ack_type, reg_year, reg_no, mode_filing, case_category,hc_ack_no)"  //,designation,mandalid,villageid
+							+ "inserted_by , inserted_ip , ack_type, reg_year, reg_no, mode_filing, case_category, hc_ack_no)"  //,designation,mandalid,villageid
 							+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";//,?,?,?    , ?, ?
 					System.out.println("sql--"+sql);
 					ps = con.prepareStatement(sql);
@@ -984,7 +979,8 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			// System.out.println("--"+code128Image.getScaledWidth());
 			
 			document.add(code128Image);
-			document.add(pdfsetting.para(testDateString+",APOLCMS",subhead,Paragraph.ALIGN_RIGHT,0,1));
+			document.add(pdfsetting.para(testDateString ,subhead,Paragraph.ALIGN_LEFT,2,2));
+			document.add(pdfsetting.para("APOLCMS",subhead,Paragraph.ALIGN_RIGHT,0,2));
 			// System.out.println("BAR CODE pdfFilePath:" + pdfFilePath);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -426,13 +426,13 @@ public class GPReportAction extends DispatchAction {
 				}
 				
 				// Dept. Instructions
-				sql = "select instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time from ecourts_dept_instructions ";//where cino='" + cIno + "'  order by 1 ";
+				sql = "select instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time from ecourts_dept_instructions where cino='" + cIno + "'  order by 1 ";
 				System.out.println("Dept INstructions sql--" + sql);
 				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("DEPTNSTRUCTIONS", existData);
 				
 				// Daily Case Status Updates by GP
-				sql = "select status_remarks, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time from ecourts_gpo_daily_status ";//where cino='" + cIno + "'  order by 1 ";
+				sql = "select status_remarks, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time from ecourts_gpo_daily_status where cino='" + cIno + "'  order by 1 ";
 				System.out.println("sql--" + sql);
 				existData = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("GPDAILYSTATUS", existData);
