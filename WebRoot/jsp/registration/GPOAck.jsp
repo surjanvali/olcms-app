@@ -467,7 +467,15 @@ label {
 										<logic:iterate id="map" name="ACKDATA" indexId="i">
 											<tr>
 												<td>${i+1 }</td>
-												<td>${map.ack_no }</td>
+												<td>${map.ack_no }
+												<br />
+												<logic:present name="map" property="hc_ack_no">
+												
+												<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
+												
+												</logic:present>
+												
+												</td>
 												<td nowrap="nowrap">${map.generated_date }</td>
 												<td>${map.district_name }</td>
 												<td>${map.dept_descs }</td>
