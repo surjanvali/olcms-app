@@ -319,6 +319,12 @@
 		<put name="content"
 			value="/jsp/reports/EcourtsDeptInstructionView.jsp" />
 	</definition>
+	
+	<definition name="casedetailspopupview4"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/EcourtsDeptInstructionView.jsp" />
+	</definition>
 
 
 	<definition name="DailyStatusEntry" extends="UserLayoutNew">

@@ -151,9 +151,25 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 				<logic:notEmpty name="NEWCASESCOUNTS">
 					<logic:iterate id="innerCases" name="NEWCASESCOUNTS">
+
+						<logic:greaterThan value="0" name="innerCases" property="assigned">
+							<div class="col-lg-3 col-md-6">
+								<a href="./AssignedNewCasesToEmp.do">
+									<div class="ibox bg-danger color-white widget-stat">
+										<div class="ibox-body">
+											<h2 class="m-b-5 font-strong">${innerCases.assigned }</h2>
+											<div class="m-b-5">Assigned New Cases</div>
+											<i class="fa fa-file-text-o widget-stat-icon"></i>
+											<div>
+												<small> &nbsp;</small>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+						</logic:greaterThan>
 						
-						<logic:greaterThan value="0" name="innerCases"
-							property="total">
+						<logic:greaterThan value="0" name="innerCases" property="total">
 							<div class="col-lg-3 col-md-6">
 								<a href="./AcksAbstractReport.do">
 									<div class="ibox bg-primary color-white widget-stat">
@@ -164,13 +180,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<div>
 												<small> &nbsp;</small>
 											</div>
-
 										</div>
 									</div>
 								</a>
 							</div>
 						</logic:greaterThan>
-						
+
 						<logic:greaterThan value="0" name="innerCases"
 							property="assignment_pending">
 							<div class="col-lg-3 col-md-6">
@@ -183,13 +198,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<div>
 												<small> &nbsp;</small>
 											</div>
-
 										</div>
 									</div>
 								</a>
 							</div>
 						</logic:greaterThan>
-						
+
 						<logic:greaterThan value="0" name="innerCases"
 							property="approval_pending">
 							<div class="col-lg-3 col-md-6">
@@ -202,7 +216,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<div>
 												<small> &nbsp;</small>
 											</div>
-
 										</div>
 									</div>
 								</a>
@@ -212,7 +225,24 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</logic:iterate>
 				</logic:notEmpty>
 
-
+				<logic:notEmpty name="instructions">
+					<logic:greaterThan value="0" name="instructions">
+						<div class="col-lg-3 col-md-6">
+							<a href="./EcourtsDeptInstruction.do">
+								<div class="ibox bg-danger color-white widget-stat">
+									<div class="ibox-body">
+										<h2 class="m-b-5 font-strong">${instructions }</h2>
+										<div class="m-b-5">Instructions Count</div>
+										<i class="fa fa-file-text-o widget-stat-icon"></i>
+										<div>
+											<small> &nbsp;</small>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</logic:greaterThan>
+				</logic:notEmpty>
 
 				<logic:notEmpty name="parawiseCount">
 					<logic:greaterThan value="0" name="parawiseCount">
@@ -265,7 +295,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
 
 							<!-- <a href="./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus=IO"> -->
-								<a href="./HCOrdersIssuedReport.do">
+							<a href="./HCOrdersIssuedReport.do">
 								<div class="ibox bg-info color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${INTERIMCASES}</h2>

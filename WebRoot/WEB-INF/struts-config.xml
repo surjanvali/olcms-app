@@ -441,6 +441,7 @@
 			<forward name="success" path="EcourtsDeptInstruction"></forward>
 			 <!-- <forward name="caseview1" path="casedetailsview2"></forward> -->
 			<forward name="casepopupview1" path="casedetailspopupview2"></forward>
+			<forward name="casepopupreport" path="/jsp/reports/EcourtsDeptInstructionView.jsp"></forward>
 		</action>
 		
 		

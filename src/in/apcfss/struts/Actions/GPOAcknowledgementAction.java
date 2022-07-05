@@ -925,7 +925,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 	
 	public static void main(String[] args) {
 		// generateAckBarCodePdf("REV01-L1820220613115422600", null);
-		// generateAckBarCodePdf128("REV01-L1820220613115422600", null);
+		//generateAckBarCodePdf128("FIN010000672", null);
 		//Date todaysDate = new Date();
 		//DateFormat df = new SimpleDateFormat("dd-Mon-yyyy HH:mm:ss:am");
 		//String testDateString = df.format(todaysDate);
@@ -938,7 +938,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 		PdfWriter writer = null;
 		String pdfFilePath = "", filepath = "";
 		try {
-			String fileName = ackNo + "_barCode-A1.pdf";
+			String fileName = ackNo + "_barCode.pdf";
 			pdfFilePath = ApplicationVariables.ackPath + fileName;
 			
 			/*
@@ -959,9 +959,10 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			document.setMargins(10,10,10,10);
 			document.setPageSize(PageSize.A6);
 
-			// filepath = "E:\\Apache Software Foundation\\Tomcat 9.0\\webapps\\apolcms\\" + pdfFilePath;
-			filepath = ApplicationVariables.contextPath+pdfFilePath;
-			// System.out.println("filepath:" + filepath);
+			//filepath = "E:\\Apache Software Foundation\\Tomcat 9.0\\webapps\\apolcms\\" + pdfFilePath;
+			//filepath ="D:\\"+fileName;
+			 filepath = ApplicationVariables.contextPath+pdfFilePath;
+			System.out.println("filepath:" + filepath);
 			writer = PdfWriter.getInstance(document, new FileOutputStream(filepath));
 			document.open();
 			// System.out.println("WIDTH A6:" + PageSize.A6.getWidth());
@@ -980,8 +981,8 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			// System.out.println("--"+code128Image.getScaledWidth());
 			
 			document.add(code128Image);
-			document.add(pdfsetting.para(testDateString ,subhead,Paragraph.ALIGN_LEFT,2,2));
-			document.add(pdfsetting.para("APOLCMS",subhead,Paragraph.ALIGN_RIGHT,0,2));
+			document.add(pdfsetting.para(testDateString+"                                      "+"APOLCMS" ,subhead,Paragraph.ALIGN_LEFT,2,2));
+			//document.add(pdfsetting.para("APOLCMS",subhead,Paragraph.ALIGN_RIGHT,0,2));
 			// System.out.println("BAR CODE pdfFilePath:" + pdfFilePath);
 		} catch (Exception e) {
 			e.printStackTrace();

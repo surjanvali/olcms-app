@@ -46,7 +46,8 @@ body {
 				</div>
 			</div>
 		</div>
-
+<logic:notPresent name="existData">
+<logic:empty name="existDataDeptWise">
 		<div class="ibox">
 			<div class="ibox-head">
 				<div class="ibox-title">
@@ -78,6 +79,8 @@ body {
 				</div>
 			</div>
 		</div>
+		</logic:empty>
+		</logic:notPresent>
 
 		<logic:present name="existData">
 			<div class="ibox">
@@ -111,6 +114,52 @@ body {
 				</div>
 			</div>
 		</logic:present>
+		
+		<logic:notEmpty name="existDataDeptWise">
+				<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">Submitted Instructions </div>
+				</div>
+					<div class="ibox-body">
+						<div class="table-responsive">
+
+							<table id="example" class="table table-striped table-bordered"
+								style="width:100%">
+								<thead>
+									<tr>
+										<th>Sl.No</th>
+										<th>Department Code</th>
+										<th>CIN no</th>
+										<th>Total Instructions</th>
+
+									</tr>
+								</thead>
+								<tbody>
+
+									<logic:iterate id="map" name="existDataDeptWise" indexId="i">
+										<tr>
+											<td>${i+1}.</td>
+											<td>${map.dept_code }</td>
+											<td>${map.cino }</td>
+											<td>${map.instructions}</td>
+
+										</tr>
+
+									</logic:iterate>
+								</tbody>
+								<tfoot>
+									<tR>
+										<td colspan="14">&nbsp;</td>
+									</tR>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+				
+
+			</logic:notEmpty>
+		
 
 
 	</html:form>

@@ -139,6 +139,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</html:select>
 							</div>
 						</div>
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Advocate Name</label>
+								<html:text styleId="advcteName" property="dynaForm(advcteName)"
+									styleClass="form-control" />
+							</div>
+						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-12 col-xs-12">
@@ -302,7 +309,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<logic:iterate id="map" name="CASEWISEACKS" indexId="i">
 										<tr>
 											<td>${i+1 }</td>
-											<td>${map.ack_no }</td>
+											<td>${map.ack_no }
+											<logic:present name="map" property="hc_ack_no">
+												
+												<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
+												
+												</logic:present>
+											</td>
 											<td nowrap="nowrap">${map.generated_date }</td>
 											<td>${map.district_name }</td>
 											<td>${map.case_full_name }</td>
@@ -325,19 +338,32 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 														title="Print Barcode" class="btn btn-sm btn-info"> <i
 														class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
 													</a>
-												</logic:present> <!-- //id="btnShowPopup"  --> <input type="button"
+												</logic:present> <!-- //id="btnShowPopup"  --> <%-- <input type="button"
 												id="btnShowPopup" value="Scanned Affidavit"
 												class="btn btn-sm btn-info waves-effect waves-light"
-												onclick="javascript:viewCaseDetailsPopup('${map.ack_no}');" />
+												onclick="javascript:viewCaseDetailsPopup('${map.ack_no}');" /> --%>
 
-												<logic:present name="ack_nooo" scope="request">
-													<div id="pdf_view" class="btn btn-sm btn-info"></div>
-												</logic:present> <%-- <logic:present name="ack_nooo" scope="request">
-													 <a href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
-												target="_new" title="Print Barcode"
-												class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-													<span>Scanned Affidavit</span> 
-											</a></logic:present> --%></td>
+												<logic:present name="map" property="ack_no">
+
+													<logic:notEmpty name="map" property="hc_ack_no">
+														<a
+															href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
+															target="_new" title="Print Barcode"
+															class="btn btn-sm btn-info">
+													</logic:notEmpty>
+													<logic:empty name="map" property="hc_ack_no">
+														<a
+															href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
+															target="_new" title="Print Barcode"
+															class="btn btn-sm btn-info">
+													</logic:empty>
+
+
+
+													<i class="fa fa-save"></i>
+													<span>Scanned Affidavit</span>
+													</a>
+												</logic:present></td>
 										</tr>
 									</logic:iterate>
 								</tbody>
@@ -376,9 +402,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="modal-body">
 				<!-- <div class="row">
 					<div class="col-sm-12" style="margin:0px 0px 0px 0px;"> -->
-						<iframe src="" id="pdf_view" name="model_window"
-							style="width:100%;min-height:600px;border:0px;"> </iframe>
-					<!-- </div>
+				<iframe src="" id="pdf_view" name="model_window"
+					style="width:100%;min-height:600px;border:0px;"> </iframe>
+				<!-- </div>
 				</div> -->
 			</div>
 			<div class="modal-footer">

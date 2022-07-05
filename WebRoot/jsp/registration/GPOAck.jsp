@@ -512,12 +512,35 @@ label {
 															class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
 														</a>
 														<br />
-													</logic:present> <a
+													</logic:present> 
+													
+													<%-- <a
 													href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 													target="_new" title="Print Barcode"
 													class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-														<span>Scanned Affidavit</span> <!-- <span>Download</span> -->
-												</a> <%-- <logic:notPresent name="map" property="ack_file_path">
+														<span>Scanned Affidavit</span>
+												</a> 
+												 --%>
+												<logic:present name="map" property="ack_no">
+													<logic:notEmpty name="map" property="hc_ack_no">
+														<a
+															href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
+															target="_new" title="Print Barcode"
+															class="btn btn-sm btn-info">
+													</logic:notEmpty>
+													<logic:empty name="map" property="hc_ack_no">
+														<a
+															href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
+															target="_new" title="Print Barcode"
+															class="btn btn-sm btn-info">
+													</logic:empty>
+													<i class="fa fa-save"></i>
+													<span>Scanned Affidavit</span>
+													</a>
+												</logic:present>
+												
+												
+												<%-- <logic:notPresent name="map" property="ack_file_path">
 														<button type="button" class="btn btn-sm btn-info"
 															onclick="downloadAck('${map.ack_no}')">
 															<i class="fa fa-save"></i> <span>Download</span>

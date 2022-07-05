@@ -355,6 +355,15 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("NEWCASESCOUNTS:"+sql);
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
+					
+					
+					sql="select count(*) from ecourts_dept_instructions where dept_code='"+deptCode+"'";
+					System.out.println("instruction SQL:"+sql);
+					request.setAttribute("instructions", DatabasePlugin.getStringfromQuery(sql, con));
+					
+					
+					
+					
 				}
 				else  if(roleId.equals("5")) { // NODAL OFFICER
 					// sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=4 and coalesce(ecourts_case_status,'')!='Closed'";
@@ -483,6 +492,14 @@ public class WelcomePageAction extends DispatchAction{
 							+ "group by reg_year order by reg_year desc";
 					System.out.println("YEARLY COUNT SQL:"+sql);
 					request.setAttribute("YEARWISECASES", DatabasePlugin.executeQuery(con, sql));
+					
+					/*
+					 * sql="select count(*) from ecourts_dept_instructions where insert_by='"+userid
+					 * +"'"; System.out.println("instruction SQL:"+sql);
+					 * request.setAttribute("INSTRUCTIONSCOUNT", DatabasePlugin.executeQuery(con,
+					 * sql));
+					 */
+					
 					
 					
 					sql="select count(*) From ecourts_olcms_case_details a "

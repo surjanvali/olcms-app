@@ -240,6 +240,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			</logic:notEmpty>
 		</div>
+		
+		
 
 	</html:form>
 </div>

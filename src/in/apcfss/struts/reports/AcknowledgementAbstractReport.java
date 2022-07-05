@@ -122,6 +122,9 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and inserted_time::date <= to_date('" + cform.getDynaForm("toDate")
 						+ "','dd-mm-yyyy') ";
 			}
+			if (cform.getDynaForm("advcteName") != null && !cform.getDynaForm("advcteName").toString().contentEquals("")) {
+				sqlCondition += " and replace(replace(advocatename,' ',''),'.','') ilike  '%"+cform.getDynaForm("advcteName")+"%'";
+			}
 
 			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))) {
 				sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='" + deptCode
@@ -196,6 +199,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
 			cform.setDynaForm("fromDate", cform.getDynaForm("fromDate"));
 			cform.setDynaForm("toDate", cform.getDynaForm("toDate"));
+			cform.setDynaForm("advcteName", cform.getDynaForm("advcteName"));
 			DatabasePlugin.close(con, ps, null);
 		}
 		return mapping.findForward("success");
@@ -238,6 +242,15 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and ad.inserted_time::date <= to_date('" + cform.getDynaForm("toDate")
 						+ "','dd-mm-yyyy') ";
 			}
+			if (cform.getDynaForm("advcteName") != null && !cform.getDynaForm("advcteName").toString().contentEquals("")) {
+				sqlCondition += " and replace(replace(advocatename,' ',''),'.','') ilike  '%"+cform.getDynaForm("advcteName")+"%'";
+			}
+			
+			if ((roleId.equals("1") || roleId.equals("7"))) {
+				sqlCondition += " and respondent_slno=1 ";
+			}
+			
+			
 
 			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14")
 					|| roleId.equals("6"))) {
@@ -263,7 +276,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 
 			sql = "select d.dept_code,upper(description) as description,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad  inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) "
 					+ "inner join dept_new dm on (d.dept_code=dm.dept_code) " + condition + " "
-					+ " where ack_type='NEW' and respondent_slno=1 " + sqlCondition
+					+ " where ack_type='NEW'  " + sqlCondition
 					+ " group by d.dept_code,description " + " order by d.dept_code,description";
 
 			System.out.println("SQL:showDeptWise" + sql);
@@ -317,6 +330,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
 			cform.setDynaForm("fromDate", cform.getDynaForm("fromDate"));
 			cform.setDynaForm("toDate", cform.getDynaForm("toDate"));
+			cform.setDynaForm("advcteName", cform.getDynaForm("advcteName"));
 			DatabasePlugin.close(con, ps, null);
 		}
 		return mapping.findForward("success");
@@ -358,6 +372,10 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			if (cform.getDynaForm("toDate") != null && !cform.getDynaForm("toDate").toString().contentEquals("")) {
 				sqlCondition += " and ad.inserted_time::date <= to_date('" + cform.getDynaForm("toDate")
 						+ "','dd-mm-yyyy') ";
+			}
+			
+			if (cform.getDynaForm("advcteName") != null && !cform.getDynaForm("advcteName").toString().contentEquals("")) {
+				sqlCondition += " and replace(replace(advocatename,' ',''),'.','') ilike  '%"+cform.getDynaForm("advcteName")+"%'";
 			}
 
 			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))) {
@@ -431,6 +449,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
 			cform.setDynaForm("fromDate", cform.getDynaForm("fromDate"));
 			cform.setDynaForm("toDate", cform.getDynaForm("toDate"));
+			cform.setDynaForm("advcteName", cform.getDynaForm("advcteName"));
 			DatabasePlugin.close(con, ps, null);
 		}
 		return mapping.findForward("success");
@@ -479,6 +498,9 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and a.inserted_time::date <= to_date('" + cform.getDynaForm("toDate")
 						+ "','dd-mm-yyyy') ";
 			}
+			if (cform.getDynaForm("advcteName") != null && !cform.getDynaForm("advcteName").toString().contentEquals("")) {
+				sqlCondition += " and replace(replace(advocatename,' ',''),'.','') ilike  '%"+cform.getDynaForm("advcteName")+"%'";
+			}
 
 			if (request.getParameter("districtId") != null
 					&& !CommonModels.checkStringObject(request.getParameter("districtId")).contentEquals("")
@@ -504,6 +526,16 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and a.inserted_time::date <= to_date('" + request.getParameter("toDate")
 						+ "','dd-mm-yyyy') ";
 				cform.setDynaForm("toDate", request.getParameter("toDate"));
+			}
+			
+			if (request.getParameter("advcteName") != null
+					&& !CommonModels.checkStringObject(request.getParameter("advcteName")).contentEquals("")) {
+				sqlCondition += " and replace(replace(advocatename,' ',''),'.','') ilike  '%"+cform.getDynaForm("advcteName")+"%'";
+				cform.setDynaForm("advcteName", request.getParameter("advcteName"));
+			}
+			
+			if ((roleId.equals("1") || roleId.equals("7"))) {
+				sqlCondition += " and respondent_slno=1 ";
 			}
 
 			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14")
@@ -532,10 +564,10 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and a.inserted_by='" + inserted_by + "' ";
 			}
 
-			sql = "select a.slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
+			sql = "select distinct a.slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
-					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_desc(a.ack_no) as dept_descs "
-					+ "from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no and respondent_slno=1) "
+					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_desc(a.ack_no) as dept_descs,inserted_time "
+					+ "from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
 					+ "inner join district_mst dm on (a.distid=dm.district_id) "
 					+ "inner join dept_new dmt on (ad.dept_code=dmt.dept_code)  " + condition + " "
 					+ "inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
@@ -593,6 +625,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			cform.setDynaForm("districtId", cform.getDynaForm("districtId"));
 			cform.setDynaForm("fromDate", cform.getDynaForm("fromDate"));
 			cform.setDynaForm("toDate", cform.getDynaForm("toDate"));
+			cform.setDynaForm("advcteName", cform.getDynaForm("advcteName"));
 
 			DatabasePlugin.close(con, ps, null);
 		}
