@@ -156,12 +156,10 @@ public class HighCourtCasesCategoryUpdationReportAction extends DispatchAction {
 					+ " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from "
-					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1"
+					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0 and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1"
 					+ " union"
-					+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
-					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
+					+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0 and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
+					
 					+ " on (a.cino=b.cino) where coalesce(assigned,'f')='f' "
 					+ sqlCondition
 					+ " and coalesce(ecourts_case_status,'')!='Closed'";
@@ -237,6 +235,7 @@ public class HighCourtCasesCategoryUpdationReportAction extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		HttpSession session = request.getSession();
 		String userId=null;
+		String cIno = null;
 		try {
 
 			con = DatabasePlugin.connect();
@@ -244,9 +243,9 @@ public class HighCourtCasesCategoryUpdationReportAction extends DispatchAction {
 
 			System.out.println("in assign2DeptHOD --- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
 			userId = (String)request.getSession().getAttribute("userid");
-			String cIno = CommonModels.checkStringObject(request.getParameter("cino"));
-			String cInoo = CommonModels.checkStringObject(cform.getDynaForm("cino"));
-			System.out.println("cIno---"+cIno+cInoo);
+			// String cIno = CommonModels.checkStringObject(request.getParameter("cino"));
+			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
+			System.out.println("cIno---"+cIno);
 			String  ip = InetAddress.getLocalHost().toString();
 			//int x=0;
 			int respondentIds = CommonModels.checkIntObject(cform.getDynaForm("respondentIds"));
@@ -258,99 +257,104 @@ public class HighCourtCasesCategoryUpdationReportAction extends DispatchAction {
 				billAmount = CommonModels.checkStringObject(cform.getDynaForm("billAmount"+1));
 				status = CommonModels.checkStringObject(cform.getDynaForm("status"+1));
 			}
-
-
 			int i = 1;
 			//	sql = "update ecourts_case_data set finance_category='"+cform.getDynaForm("fin_category"+i).toString()+"' where cino='"+cform.getDynaForm("cino"+i).toString()+"' ";
-
-
 			//sql="select * from ecourts_case_category_wise_data  where cino='" +cInoo+ "' ";
 			//List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 
-			System.out.println("data---"+cInoo);
-			
-			if (cInoo != null && !cInoo.isEmpty() ) {
+			System.out.println("data---"+cIno);
 
-				sql=" INSERT INTO apolcms.ecourts_case_category_wise_data( cino, finance_category, work_name, est_cost, admin_sanction, grant_val, "
-						+ " cfms_bill, bill_status, bill_amount, efile_com_no, bill_remarks, submit_date, ip_addrs) "
-						+ "     VALUES( ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, now(), ?)" ;
-				ps = con.prepareStatement(sql);
-
-
-				ps.setString(i, cInoo != null ? cInoo : "");
-				ps.setString(++i, cform.getDynaForm("fin_category") != null ? cform.getDynaForm("fin_category").toString() : "");
-				ps.setString(++i, cform.getDynaForm("nameOfwork") != null ? cform.getDynaForm("nameOfwork").toString() : "");
-				ps.setString(++i, cform.getDynaForm("estCost") != null ? cform.getDynaForm("estCost").toString() : "");
-				ps.setString(++i, cform.getDynaForm("adminSanction") != null ? cform.getDynaForm("adminSanction").toString() : "");
-				ps.setString(++i, cform.getDynaForm("grant") != null ? cform.getDynaForm("grant").toString() : "");
-				ps.setString(++i, cform.getDynaForm("cfmsBill") != null ? cform.getDynaForm("cfmsBill").toString() : "");
-				ps.setString(++i, cform.getDynaForm("status") != null ? cform.getDynaForm("status").toString() : "");
-				ps.setString(++i, cform.getDynaForm("billAmount") != null ? cform.getDynaForm("billAmount").toString() : "");
-				ps.setString(++i, cform.getDynaForm("fileComNo") != null ? cform.getDynaForm("fileComNo").toString() : "");
-				ps.setString(++i, cform.getDynaForm("remarks") != null ? cform.getDynaForm("remarks").toString() : "");
-				ps.setString(++i, ip!= null ? ip : "");
-
+			if (cIno != null && !cIno.isEmpty() ) {
+				sql="select count(*) from ecourts_case_category_wise_data where cino='"+cIno+"' ";
+				int caseData = Integer.parseInt(DatabasePlugin.getSingleValue(con, sql));
+				
+				
+				if(caseData > 0) {
+					sql=" update apolcms.ecourts_case_category_wise_data set finance_category=?, work_name=?, est_cost=?, admin_sanction=?, grant_val=?, "
+							+ " cfms_bill=?, bill_status=?, bill_amount=?, efile_com_no=?, bill_remarks=?, submit_date=now(), ip_addrs=? "
+							+ "     where cino=?" ;
+					ps = con.prepareStatement(sql);
+					i = 1;
+					ps.setString(i, cform.getDynaForm("fin_category") != null ? cform.getDynaForm("fin_category").toString() : "");
+					ps.setString(++i, cform.getDynaForm("nameOfwork") != null ? cform.getDynaForm("nameOfwork").toString() : "");
+					ps.setString(++i, cform.getDynaForm("estCost") != null ? cform.getDynaForm("estCost").toString() : "");
+					ps.setString(++i, cform.getDynaForm("adminSanction") != null ? cform.getDynaForm("adminSanction").toString() : "");
+					ps.setString(++i, cform.getDynaForm("grant") != null ? cform.getDynaForm("grant").toString() : "");
+					ps.setString(++i, cform.getDynaForm("cfmsBill") != null ? cform.getDynaForm("cfmsBill").toString() : "");
+					ps.setString(++i, cform.getDynaForm("status") != null ? cform.getDynaForm("status").toString() : "");
+					ps.setString(++i, cform.getDynaForm("billAmount") != null ? cform.getDynaForm("billAmount").toString() : "");
+					ps.setString(++i, cform.getDynaForm("fileComNo") != null ? cform.getDynaForm("fileComNo").toString() : "");
+					ps.setString(++i, cform.getDynaForm("remarks") != null ? cform.getDynaForm("remarks").toString() : "");
+					ps.setString(++i, ip!= null ? ip : "");
+					ps.setString(++i, cIno != null ? cIno : "");
+				}
+				else {
+					sql=" INSERT INTO apolcms.ecourts_case_category_wise_data( cino, finance_category, work_name, est_cost, admin_sanction, grant_val, "
+							+ " cfms_bill, bill_status, bill_amount, efile_com_no, bill_remarks, submit_date, ip_addrs) "
+							+ "     VALUES( ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, now(), ?)" ;
+					ps = con.prepareStatement(sql);
+					i = 1;
+					ps.setString(i, cIno != null ? cIno : "");
+					ps.setString(++i, cform.getDynaForm("fin_category") != null ? cform.getDynaForm("fin_category").toString() : "");
+					ps.setString(++i, cform.getDynaForm("nameOfwork") != null ? cform.getDynaForm("nameOfwork").toString() : "");
+					ps.setString(++i, cform.getDynaForm("estCost") != null ? cform.getDynaForm("estCost").toString() : "");
+					ps.setString(++i, cform.getDynaForm("adminSanction") != null ? cform.getDynaForm("adminSanction").toString() : "");
+					ps.setString(++i, cform.getDynaForm("grant") != null ? cform.getDynaForm("grant").toString() : "");
+					ps.setString(++i, cform.getDynaForm("cfmsBill") != null ? cform.getDynaForm("cfmsBill").toString() : "");
+					ps.setString(++i, cform.getDynaForm("status") != null ? cform.getDynaForm("status").toString() : "");
+					ps.setString(++i, cform.getDynaForm("billAmount") != null ? cform.getDynaForm("billAmount").toString() : "");
+					ps.setString(++i, cform.getDynaForm("fileComNo") != null ? cform.getDynaForm("fileComNo").toString() : "");
+					ps.setString(++i, cform.getDynaForm("remarks") != null ? cform.getDynaForm("remarks").toString() : "");
+					ps.setString(++i, ip!= null ? ip : "");
+				}
 				int a = ps.executeUpdate();
 
 				respondentIds = CommonModels.checkIntObject(cform.getDynaForm("respondentIds"));
-				
+
 				System.out.println("respondentIds--"+respondentIds);
-				if(respondentIds > 0) {
-
+				if (respondentIds > 0) {
 					ps.close();
-
-					sql=" INSERT INTO apolcms.cfms_bill_data_mst( cino, cfms_bill_id,cfms_bill_status,cfms_bill_amount) "
-							+ "     VALUES( ?, ?, ?, ?)" ;
+					sql = "select count(*) from cfms_bill_data_mst where cino='" + cIno + "' ";
+					int caseBillsData = Integer.parseInt(DatabasePlugin.getSingleValue(con, sql));
+					if (caseBillsData > 0) {
+						sql = "delete from cfms_bill_data_mst where cino='" + cIno + "'";
+						DatabasePlugin.executeUpdate(sql, con);
+					}
+					sql = " INSERT INTO apolcms.cfms_bill_data_mst( cino, cfms_bill_id,cfms_bill_status,cfms_bill_amount) "
+							+ "     VALUES( ?, ?, ?, ?)";
 
 					ps = con.prepareStatement(sql);
 
-					for(int respondentId=1; respondentId <= respondentIds; respondentId++) {
-						i=1;
-						if(respondentId > 0) {
+					for (int respondentId = 1; respondentId <= respondentIds; respondentId++) {
+						i = 1;
+						if (respondentId > 0) {
 
-							ps.setString(i, cInoo != null ? cInoo : "");
-							ps.setString(++i, cform.getDynaForm("cfmsBill"+respondentId).toString());
-							ps.setString(++i, cform.getDynaForm("status"+respondentId).toString());
-							ps.setString(++i, cform.getDynaForm("billAmount"+respondentId).toString());
+							ps.setString(i, cIno != null ? cIno : "");
+							ps.setString(++i, cform.getDynaForm("cfmsBill" + respondentId).toString());
+							ps.setString(++i, cform.getDynaForm("status" + respondentId).toString());
+							ps.setString(++i, cform.getDynaForm("billAmount" + respondentId).toString());
 							ps.addBatch();
-							System.out.println("sql--"+sql);
-
+							System.out.println("sql--" + sql);
 						}
-
+						ps.executeBatch();
 					}
-					
-				ps.executeBatch();
 				}
-				
 				if(a>0 ) {
-
-					request.setAttribute("successMsg", "Data submitted successfully.");
+					request.setAttribute("successMsg", "Case category data saved successfully.");
 				} else {
 					request.setAttribute("errorMsg", "Error in submission. Kindly try again.");
 				}
-
 			}
-		//	request.setAttribute("errorMsg", "invalid data. Kindly try again.");
-
 		}
 		catch (Exception e) {
 			//con.rollback();
 			request.setAttribute("errorMsg", "Error in Updating. Kindly try again.");
 			e.printStackTrace();
 		} finally {
-
-			cform.setDynaForm("districtId", cform.getDynaForm("districtId") != null ? cform.getDynaForm("districtId").toString() : "0");
-			cform.setDynaForm("dofFromDate", cform.getDynaForm("dofFromDate") != null ? cform.getDynaForm("dofFromDate").toString() : "");
-			cform.setDynaForm("dofToDate", cform.getDynaForm("dofToDate") != null ? cform.getDynaForm("dofToDate").toString() : "");
-			cform.setDynaForm("purpose", cform.getDynaForm("purpose") != null ? cform.getDynaForm("purpose").toString() : "0");
-			cform.setDynaForm("regYear", cform.getDynaForm("regYear") != null ? cform.getDynaForm("regYear").toString() : "0");
-			cform.setDynaForm("filingYear", cform.getDynaForm("filingYear") != null ? cform.getDynaForm("filingYear").toString() : "0");
-
-			//DatabasePlugin.close(con, ps, null);
+			cform.setDynaForm("fileCino", cIno);
+			DatabasePlugin.close(con, ps, null);
 		}
-
-		//return mapping.findForward("assignCase2EmpPage");
-		return getReport(mapping, cform, request, response);
+		return getCino(mapping, cform, request, response);
 	}
 	public ActionForward getCino(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -388,6 +392,7 @@ public class HighCourtCasesCategoryUpdationReportAction extends DispatchAction {
 			if (cIno != null && !cIno.equals("")) {
 				con = DatabasePlugin.connect();
 
+
 				sql = "select * from ecourts_case_data where cino='" + cIno +"'";
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 
@@ -395,6 +400,7 @@ public class HighCourtCasesCategoryUpdationReportAction extends DispatchAction {
 					request.setAttribute("USERSLIST", data);
 
 				}
+
 
 				sql = "select * from ecourts_case_category_wise_data where cino='" + cIno +
 						"'"; List<Map<String, Object>> dataUpdate = DatabasePlugin.executeQuery(sql,
@@ -404,6 +410,13 @@ public class HighCourtCasesCategoryUpdationReportAction extends DispatchAction {
 							request.setAttribute("USERSLIST", dataUpdate);
 
 						}
+
+
+
+						sql = "select * from cfms_bill_data_mst where cino='" + cIno + "'";
+						System.out.println("sql-cfms-"+sql);
+						List<Map<String, Object>> cfmsdata = DatabasePlugin.executeQuery(sql, con);
+						request.setAttribute("cfmsdata", cfmsdata);
 
 
 

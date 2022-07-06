@@ -103,7 +103,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ " upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag,"
 					+ " STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description||'-'||servicetpye||case when coalesce(gd.dept_category,'0')!='0' then '-'||gd.dept_category else '' end ,', ') as dept_descs,a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date,STRING_AGG(gd.servicetpye,',')  as servicetpye,STRING_AGG(gd.designation,',')  as designation "
-					+ " , mode_filing, case_category, hc_ack_no "
+					+ " , mode_filing, case_category, coalesce(a.hc_ack_no,'-') as hc_ack_no "
 					+ " from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
 					+ " left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
 					+ " left join (select ack_no,dm.dept_code,dm.description, respondent_slno,servicetpye,designation, coalesce(dept_category,'0') as dept_category from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code) order by ack_no, respondent_slno) gd on (a.ack_no=gd.ack_no)"
@@ -151,7 +151,9 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					+ " upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, services_id,services_flag,"
 					+ " STRING_AGG(gd.dept_code,',') as dept_codes,STRING_AGG(gd.description||'-'||servicetpye||case when coalesce(gd.dept_category,'0')!='0' then '-'||gd.dept_category else '' end ,', ') as dept_descs,"
 					+ " a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date, reg_year, reg_no, ack_type,STRING_AGG(gd.servicetpye,',')  as servicetpye,STRING_AGG(gd.designation,',')  as designation "
-					+ " , mode_filing, case_category from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
+					+ " , mode_filing, case_category, coalesce(a.hc_ack_no,'-') as hc_ack_no "
+					+ ""
+					+ "from ecourts_gpo_ack_dtls a left join district_mst dm on (a.distid=dm.district_id)"
 					+ " left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
 					//+ "left join (select ack_no,dm.dept_code,dm.description,servicetpye,designation, coalesce(dept_category,'Normal') as dept_category from ecourts_gpo_ack_depts inner join dept_new dm using (dept_code)) gd on (a.ack_no=gd.ack_no)"
 					+ " left join (select ack_no,dm.dept_code,dm.description, respondent_slno,servicetpye,designation, coalesce(dept_category,'Normal') as dept_category from ecourts_gpo_ack_depts "
@@ -175,7 +177,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 				if(ackType.equals("OLD")) {
 					request.setAttribute("DISPLAYOLD", "DISPLAYOLD");
 				}
-				
+				request.setAttribute("HEADING", "Acknowledgements Generated on Dt.:"+ackDate);
 				request.setAttribute("ACKDATA", data);
 			} else {
 				return displayAckForm(mapping, cform, request, response);
@@ -1087,7 +1089,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
-					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_desc(a.ack_no) as dept_descs "
+					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_desc(a.ack_no) as dept_descs, coalesce(a.hc_ack_no,'-') as hc_ack_no "
 					+ "from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
 					+ "left join district_mst dm on (a.distid=dm.district_id) "
 					+ "left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "

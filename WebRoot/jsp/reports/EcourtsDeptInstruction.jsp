@@ -9,7 +9,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <link rel='stylesheet'
 	href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
 <link rel='stylesheet'
+	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
+<link rel='stylesheet'
 	href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+
+<link href="./assetsnew/vendors/select2/dist/css/select2.min.css" rel="stylesheet" />
+<!-- <link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet" type="text/css" /> -->
+
+<!-- PLUGINS STYLES-->
+<link href="./assetsnew/vendors/DataTables/datatables.min.css" rel="stylesheet" />
 <!-- THEME STYLES-->
 <link href="assetsnew/css/main.min.css" rel="stylesheet" />
 <style>
@@ -240,15 +248,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			</logic:notEmpty>
 		</div>
-		
-		
+
+
 
 	</html:form>
 </div>
 
 <!-- Modal  Start-->
 
-<div id="MyPopup" class="modal fade" role="dialog" style="padding-top:200px;">
+<div id="MyPopup" class="modal fade" role="dialog"
+	style="padding-top:200px;">
 	<div class="modal-dialog modal-dialog-centered modal-lg">
 		<!-- Modal content-->
 		<div class="modal-content">
@@ -260,11 +269,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 			<div class="modal-body">
 				<p>
-					<iframe src="" id="page" name="model_window" style="width:100%;min-height:600px;border:0px;"> </iframe>
+					<iframe src="" id="page" name="model_window"
+						style="width:100%;min-height:600px;border:0px;"> </iframe>
 				</p>
 			</div>
 			<div class="modal-footer">
-				 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> 
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 				<!-- <div class="btn btn-danger" data-dismiss="modal">Close</div>  -->
 				<!-- <input type="submit" name="submit" value="Close" class="btn btn-danger" data-dismiss="modal" onclick="return fnShowCases();" /> -->
 				<!-- <div class="form-group">
@@ -280,6 +290,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script
 	src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
+<script
+	src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js'></script>
+
+<script src="./assetsnew/vendors/select2/dist/js/select2.full.min.js"
+	type="text/javascript"></script>
 
 <script type="text/javascript">
 	function reloadParent() {

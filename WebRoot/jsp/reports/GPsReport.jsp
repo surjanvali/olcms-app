@@ -86,6 +86,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Case Type</th>
 										<th>Case No.</th>
 										<th>Registered Date</th>
+										<th>Update Daily Status</th>
 										<th>Status</th>
 									</tr>
 								</thead>
@@ -96,8 +97,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td>${map.type_name_reg}</td>
 											<%-- <td>${map.reg_no}</td> --%>
 											<%-- <td><a href="./GPReport.do?mode=caseStatusUpdate&caseType=${map.type_name_reg}&caseNo=${map.reg_no}&caseYear=${map.reg_year}" class="btn btn-info btn-md"> ${map.type_name_reg} ${map.reg_no}/${map.reg_year} </a></td> --%>
-											<td><a href="./GPReport.do?mode=caseStatusUpdate&caseCiNo=${map.cino}" class="btn btn-info btn-md"> ${map.type_name_reg} ${map.reg_no}/${map.reg_year} </a></td>
+											<td><a href="./GPReport.do?mode=caseStatusUpdate&caseCiNo=${map.cino}" class="btn btn-info btn-md"> 
+											${map.type_name_reg} ${map.reg_no}/${map.reg_year} </a></td>
 											<td style="text-align: center;">${map.dt_regis }</td>
+											<td>
+												 <input type="button" id="btnShowPopup" value="Submit Daily Status"
+												class="btn btn-sm btn-success waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.type_name_reg} ${map.reg_no}/${map.reg_year}');" />
+											</td>
 											<td style="text-align: center;">Pending</td>
 											<%-- 
 												<td><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}">${map.ack_date }</a></td>
@@ -110,7 +117,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</tbody>
 								<tfoot>
 									<tR>
-										<td colspan="5" style="text-align: center;">&nbsp;</td>
+										<td colspan="6" style="text-align: center;">&nbsp;</td>
 									</tR>
 								</tfoot>
 							</table>
@@ -120,7 +127,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</logic:notEmpty>
 
 
-			<logic:notEmpty name="ACKSABSTRACTDATA">
+			<%-- <logic:notEmpty name="ACKSABSTRACTDATA">
 				<div class="ibox">
 					<div class="ibox-head">
 						<div class="ibox-title">New Cases Abstract Report</div>
@@ -173,7 +180,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 				</div>
-			</logic:notEmpty>
+			</logic:notEmpty> --%>
 
 
 
@@ -379,6 +386,21 @@ $(document).ready(function() {
 		if (cino != null && cino != "" && cino != "0") {
 			srclink = "./AssignedCasesToSection.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino=" + cino;
 			// alert("LINK:"+srclink);
+			if (srclink != "") {
+				$("#MyPopup .modal-title").html(heading);
+				$("#page").prop("src", srclink)
+				//$("#MyPopup .modal-body").html(body);
+				$("#MyPopup").modal("show");
+			};
+		};
+	};
+	
+	function viewCaseDetailsPopup1(cino, caseNo) {
+		var heading = "View/Submit Daily Status for Case : "+caseNo;
+		var srclink = "";
+		if (cino != null && cino != "" && cino != "0") {
+			srclink = "./DailyStatusEntry.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino=" + cino;
+			 //alert("LINK:"+srclink);
 			if (srclink != "") {
 				$("#MyPopup .modal-title").html(heading);
 				$("#page").prop("src", srclink)

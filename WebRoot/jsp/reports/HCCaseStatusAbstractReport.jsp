@@ -511,7 +511,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Sl.No</th>
 									<th>CINo</th>
 									<th>Scanned Affidavit</th>
-									<th>Assigned to</th>
+									<!-- <th>Assigned to</th> -->
 									<th>Date of Filing</th>
 									<th>Case Type</th>
 									<th>Reg.No.</th>
@@ -552,10 +552,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 															Affidavit</span></a>
 												</logic:notEqual>
 											</logic:notEmpty></td>
-											<td nowrap="nowrap">${map.globalorgname}<br />
+											<%-- <td nowrap="nowrap">${map.globalorgname}<br />
 												${map.fullname} - ${map.designation} <br />
 												${map.mobile} - ${map.email}
-											</td>
+											</td> --%>
 										<td><logic:notEmpty name="map" property="date_of_filing">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_of_filing">
@@ -589,7 +589,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</tbody>
 							<tfoot>
 								<tR>
-									<td colspan="21">&nbsp;</td>
+									<td colspan="20">&nbsp;</td>
 								</tR>
 							</tfoot>
 						</table>

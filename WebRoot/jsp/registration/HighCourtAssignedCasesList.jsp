@@ -109,7 +109,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												${map.fullname_en} - ${map.designation_name_en} <br />
 												${map.mobile1} - ${map.email}
 											</td>
-											<td><input type="submit" name="submit" value="Send Back"
+											<td><input type="submit" name="submit" value="Pull Back"
 												onclick="sendBack('${map.cino}');"
 												class="btn btn-sm btn-warning" /></td>
 										</tr>

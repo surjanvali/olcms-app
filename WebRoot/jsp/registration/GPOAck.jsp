@@ -19,8 +19,7 @@ label {
 <!--  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
 <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'> -->
 
-<link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet"
-	type="text/css" />
+<link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet" type="text/css" />
 
 <!-- START PAGE CONTENT-->
 <%-- <div class="page-heading">
@@ -62,7 +61,7 @@ label {
 			<div class="ibox-title" style="width: 100%;">
 				<logic:empty name="HEADING">
 					<logic:notEmpty name="ACKDATA">
-						<b>Acknowledgements Generated Today</b>
+						<b>Acknowledgements Generated </b>
 						<span class="pull-right"><input type="button" name="Submit"
 							value="Submit Acknowledgement" class="btn btn-primary pull-right"
 							onclick="showAckEntry();" /> </span>
@@ -468,12 +467,11 @@ label {
 											<tr>
 												<td>${i+1 }</td>
 												<td>${map.ack_no }
-												<br />
-												<logic:present name="map" property="hc_ack_no">
-												
-												<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
-												
-												</logic:present>
+												<logic:notEqual value="-" name="map" property="hc_ack_no">
+
+													<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
+
+												</logic:notEqual>
 												
 												</td>
 												<td nowrap="nowrap">${map.generated_date }</td>
@@ -521,24 +519,23 @@ label {
 														<span>Scanned Affidavit</span>
 												</a> 
 												 --%>
-												<logic:present name="map" property="ack_no">
-													<logic:notEmpty name="map" property="hc_ack_no">
+												<logic:notEqual value="-" name="map" property="hc_ack_no">
 														<a
 															href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
 															target="_new" title="Print Barcode"
 															class="btn btn-sm btn-info">
-													</logic:notEmpty>
-													<logic:empty name="map" property="hc_ack_no">
+													</logic:notEqual>
+
+
+													<logic:equal value="-" name="map" property="hc_ack_no">
 														<a
 															href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 															target="_new" title="Print Barcode"
 															class="btn btn-sm btn-info">
-													</logic:empty>
+													</logic:equal>
 													<i class="fa fa-save"></i>
 													<span>Scanned Affidavit</span>
 													</a>
-												</logic:present>
-												
 												
 												<%-- <logic:notPresent name="map" property="ack_file_path">
 														<button type="button" class="btn btn-sm btn-info"
@@ -608,7 +605,12 @@ label {
 										<logic:iterate id="map" name="DEPTACKDATA" indexId="i">
 											<tr>
 												<td>${i+1 }</td>
-												<td>${map.ack_no }</td>
+												<td>${map.ack_no }<logic:notEqual value="-" name="map"
+													property="hc_ack_no">
+
+													<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
+
+												</logic:notEqual></td>
 												<td nowrap="nowrap">${map.generated_date }</td>
 												<td>${map.district_name }</td>
 												<td>${map.case_full_name }</td>
@@ -631,12 +633,31 @@ label {
 															class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
 														</a>
 														<br />
-													</logic:present> <a
+													</logic:present> 
+													
+													<logic:notEqual value="-" name="map" property="hc_ack_no">
+														<a
+															href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
+															target="_new" title="Print Barcode"
+															class="btn btn-sm btn-info">
+													</logic:notEqual>
+
+
+													<logic:equal value="-" name="map" property="hc_ack_no">
+														<a
+															href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
+															target="_new" title="Print Barcode"
+															class="btn btn-sm btn-info">
+													</logic:equal>
+													
+													<%-- <a
 													href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 													target="_new" title="Print Barcode"
 													class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-														<span>Scanned Affidavit</span> <!-- <span>Download</span> -->
-												</a></td>
+														<span>Scanned Affidavit</span> 
+												</a> --%>
+												
+												</td>
 											</tr>
 										</logic:iterate>
 									</tbody>

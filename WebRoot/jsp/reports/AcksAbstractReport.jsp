@@ -13,8 +13,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <link rel='stylesheet'
 	href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 
-<link href="./assetsnew/vendors/select2/dist/css/select2.min.css"
-	rel="stylesheet" />
+<link href="./assetsnew/vendors/select2/dist/css/select2.min.css" rel="stylesheet" />
 <!-- <link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet" type="text/css" /> -->
 
 <!-- PLUGINS STYLES-->
@@ -143,7 +142,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="form-group">
 								<label class="font-bold">Advocate Name</label>
 								<html:text styleId="advcteName" property="dynaForm(advcteName)"
-									styleClass="form-control" />
+									styleClass="form-control" maxlength="25" />
 							</div>
 						</div>
 					</div>
@@ -309,12 +308,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<logic:iterate id="map" name="CASEWISEACKS" indexId="i">
 										<tr>
 											<td>${i+1 }</td>
-											<td>${map.ack_no }
-											<logic:present name="map" property="hc_ack_no">
-												
-												<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
-												
-												</logic:present>
+											<td>${map.ack_no }<logic:notEqual value="-" name="map"
+													property="hc_ack_no">
+
+													<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
+
+												</logic:notEqual>
 											</td>
 											<td nowrap="nowrap">${map.generated_date }</td>
 											<td>${map.district_name }</td>
@@ -345,18 +344,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 												<logic:present name="map" property="ack_no">
 
-													<logic:notEmpty name="map" property="hc_ack_no">
+
+													<logic:notEqual value="-" name="map" property="hc_ack_no">
 														<a
 															href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
 															target="_new" title="Print Barcode"
 															class="btn btn-sm btn-info">
-													</logic:notEmpty>
-													<logic:empty name="map" property="hc_ack_no">
+													</logic:notEqual>
+
+
+													<logic:equal value="-" name="map" property="hc_ack_no">
 														<a
 															href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 															target="_new" title="Print Barcode"
 															class="btn btn-sm btn-info">
-													</logic:empty>
+													</logic:equal>
 
 
 

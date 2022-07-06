@@ -119,24 +119,24 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 		if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 			return mapping.findForward("Logout");
 		}
-		String sql = null, sqlCondition = "", cIno = "";
+		String sql = null, cIno = "", roleId=null, deptCode=null, distCode=null;
 		try {
 			cIno = CommonModels.checkStringObject(cform.getDynaForm("cINO"));
+			
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			
 			if (cIno != null && !cIno.equals("")) {
 				
 				con = DatabasePlugin.connect();
 				
-				sql="select coalesce(case_status,0) as case_status,dept_code from ecourts_case_data where cino='"+cIno+"'";
-				
-				List<Map> currData = DatabasePlugin.executeQuery(con, sql);
-				
-				int currentStatus = Integer.parseInt(((Map)currData.get(0)).get("case_status").toString());
-				
-				String currDept = ((Map)currData.get(0)).get("dept_code").toString();
+				// sql="select coalesce(case_status,0) as case_status,dept_code from ecourts_case_data where cino='"+cIno+"'";
+				// List<Map> currData = DatabasePlugin.executeQuery(con, sql);
+				// int currentStatus = Integer.parseInt(((Map)currData.get(0)).get("case_status").toString());
+				// String currDept = ((Map)currData.get(0)).get("dept_code").toString();
 				
 				int backStatus=0;
-				
-				String roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 				
 				if(roleId.equals("4")) {//MLO
 					backStatus = 2;
@@ -160,7 +160,7 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 					backStatus = 8;
 				}*/
 				
-				sql = "update ecourts_case_data set assigned=false, assigned_to=null, case_status="+backStatus+" where cino='" + cIno + "' ";
+				sql = "update ecourts_case_data set assigned=false, assigned_to=null, case_status="+backStatus+", dept_code='"+deptCode+"',dist_id='"+distCode+"'  where cino='" + cIno + "' ";
 				System.out.println("UPDATE SQL:"+sql);
 				int a = DatabasePlugin.executeUpdate(sql, con);
 				

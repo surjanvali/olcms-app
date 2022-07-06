@@ -140,6 +140,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</html:select>
 							</div>
 						</div>
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Advocate Name</label>
+								<html:text styleId="advcteName" property="dynaForm(advcteName)"
+									styleClass="form-control" maxlength="25" />
+							</div>
+						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-12 col-xs-12">
@@ -189,7 +196,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 														class="input-span"></span></label>
 												</div>
 											</td>
-											<td>${map.ack_no }</td>
+											<td>${map.ack_no }<logic:notEqual value="-" name="map"
+													property="hc_ack_no">
+
+													<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
+
+												</logic:notEqual></td>
 											<td nowrap="nowrap">${map.generated_date }</td>
 											<td>${map.district_name }</td>
 											<td>${map.case_full_name }</td>
@@ -212,12 +224,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 														title="Print Barcode" class="btn btn-sm btn-info"> <i
 														class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
 													</a>
-												</logic:present> <a
-												href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
-												target="_new" title="Print Barcode"
-												class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-													<span>Scanned Affidavit</span> <!-- <span>Download</span> -->
-											</a></td>
+												</logic:present> <logic:notEqual value="-" name="map" property="hc_ack_no">
+													<a
+														href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
+														target="_new" title="Print Barcode"
+														class="btn btn-sm btn-info">
+												</logic:notEqual> <logic:equal value="-" name="map" property="hc_ack_no">
+													<a
+														href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
+														target="_new" title="Print Barcode"
+														class="btn btn-sm btn-info">
+												</logic:equal> <i class="fa fa-save"></i> <span>Scanned Affidavit</span> </a></td>
 										</tr>
 									</logic:iterate>
 								</tbody>
@@ -282,23 +299,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													<span class="input-span"></span>
 													<b>Assign Cases to Other Department HOD</b>
 												</html:radio>
-											</label> 
-											
-											<label class="ui-radio ui-radio-inline"> <html:radio
+											</label> <label class="ui-radio ui-radio-inline"> <html:radio
 													property="dynaForm(officerType)" styleId="officerType"
 													value="SD-SO" onclick="changeReport();">
 													<span class="input-span"></span>
 													<b>Assign Cases to Section Officer(Dept.)</b>
 												</html:radio>
-											</label> 
-											<label class="ui-radio ui-radio-inline"> <html:radio
+											</label> <label class="ui-radio ui-radio-inline"> <html:radio
 													property="dynaForm(officerType)" styleId="officerType"
 													value="OD-SO" onclick="changeReport();">
 													<span class="input-span"></span>
 													<b>Assign Cases to Section Officer(Other Dept.)</b>
 												</html:radio>
-											</label> 
-											<label class="ui-radio ui-radio-inline"> <html:radio
+											</label> <label class="ui-radio ui-radio-inline"> <html:radio
 													property="dynaForm(officerType)" styleId="officerType"
 													value="DC" onclick="changeReport();">
 													<span class="input-span"></span>
@@ -310,8 +323,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													<span class="input-span"></span>
 													<b>Assign Cases to District Nodal Officer</b>
 												</html:radio>
-											</label> 
-											<label class="ui-radio ui-radio-inline"> <html:radio
+											</label> <label class="ui-radio ui-radio-inline"> <html:radio
 													property="dynaForm(officerType)" styleId="officerType"
 													value="DC-SO" onclick="changeReport();">
 													<span class="input-span"></span>

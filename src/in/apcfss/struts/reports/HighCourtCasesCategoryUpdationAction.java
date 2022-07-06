@@ -111,7 +111,7 @@ public class HighCourtCasesCategoryUpdationAction extends DispatchAction {
 				
 				String str1="";
 				
-				if ( (roleId.equals("4") || roleId.equals("5")) && dept_code.equals("FIN01") ) {
+				if ( (roleId.equals("4") || roleId.equals("5") || roleId.equals("3")) && dept_code.equals("FIN01") ) {
 					
 					 str1=" ";
 				}else {
@@ -490,17 +490,45 @@ sql=" select c.dept_code as deptcode,upper(c.description) as description, "
 			
 			if(!request.getParameter("reportType").toString().equals("All")) {
 			
-			sql="SELECT d.cino,date_of_filing,type_name_fil,fil_no,fil_year,reg_no,reg_year,bench_name,coram,dist_name,purpose_name,res_name,pet_name,pet_adv,res_adv,"
-					+ " d.finance_category,d.work_name,d.est_cost,d.admin_sanction,d.grant_val,d.cfms_bill,d.bill_status,d.bill_amount "
-					+ " FROM  ecourts_case_data a right join ecourts_case_category_wise_data d    on (a.cino=d.cino) inner join dept_new c on (a.dept_code=c.dept_code) "
-					+ " where d.finance_category='"+request.getParameter("reportType").toString()+"' and a.dept_code='"+request.getParameter("deptId").toString()+"' "+sqlCondition+"  ORDER BY d.finance_category ";
+				/*
+				 * sql="SELECT d.cino,date_of_filing,type_name_fil,fil_no,fil_year,reg_no,reg_year,bench_name,coram,dist_name,purpose_name,res_name,pet_name,pet_adv,res_adv,"
+				 * +
+				 * " d.finance_category,d.work_name,d.est_cost,d.admin_sanction,d.grant_val,d.cfms_bill,d.bill_status,d.bill_amount "
+				 * +
+				 * " FROM  ecourts_case_data a right join ecourts_case_category_wise_data d    on (a.cino=d.cino) inner join dept_new c on (a.dept_code=c.dept_code) "
+				 * + " where d.finance_category='"+request.getParameter("reportType").toString()
+				 * +"' and a.dept_code='"+request.getParameter("deptId").toString()+"' "
+				 * +sqlCondition+"  ORDER BY d.finance_category ";
+				 */
+			
+			sql="SELECT d.cino,date_of_filing,type_name_fil,fil_no,fil_year,reg_no,reg_year,bench_name,coram,dist_name,"
+					+ " purpose_name,res_name,pet_name,pet_adv,res_adv, d.finance_category,d.work_name,d.est_cost,d.admin_sanction,d.grant_val,e.cfms_bill,e.bill_amount  "
+					+ " FROM  ecourts_case_data a right join ecourts_case_category_wise_data d    on (a.cino=d.cino) inner join dept_new c on (a.dept_code=c.dept_code)"
+					+ "  inner join (select cino, string_agg(cfms_bill_id,',') as cfms_bill, sum(coalesce(cfms_bill_amount,'0')::int4) as bill_amount"
+					+ "  from cfms_bill_data_mst group by cino) e on (a.cino=e.cino)  where  d.finance_category='"+request.getParameter("reportType").toString()+"' "
+							+ " and a.dept_code='"+request.getParameter("deptId").toString()+"' "+sqlCondition+"   ORDER BY d.finance_category ";
+			
 			
 			}else {
 				
-				sql="SELECT d.cino,date_of_filing,type_name_fil,fil_no,fil_year,reg_no,reg_year,bench_name,coram,dist_name,purpose_name,res_name,pet_name,pet_adv,res_adv,"
-						+ " d.finance_category,d.work_name,d.est_cost,d.admin_sanction,d.grant_val,d.cfms_bill,d.bill_status,d.bill_amount "
-						+ " FROM  ecourts_case_data a right join ecourts_case_category_wise_data d    on (a.cino=d.cino) inner join dept_new c on (a.dept_code=c.dept_code) "
-						+ " where  1=1 and a.dept_code='"+request.getParameter("deptId").toString()+"' "+sqlCondition+"  ORDER BY d.finance_category ";
+				/*
+				 * sql="SELECT d.cino,date_of_filing,type_name_fil,fil_no,fil_year,reg_no,reg_year,bench_name,coram,dist_name,purpose_name,res_name,pet_name,pet_adv,res_adv,"
+				 * +
+				 * " d.finance_category,d.work_name,d.est_cost,d.admin_sanction,d.grant_val,d.cfms_bill,d.bill_status,d.bill_amount "
+				 * +
+				 * " FROM  ecourts_case_data a right join ecourts_case_category_wise_data d    on (a.cino=d.cino) inner join dept_new c on (a.dept_code=c.dept_code) "
+				 * + " where  1=1 and a.dept_code='"+request.getParameter("deptId").toString()
+				 * +"' "+sqlCondition+"  ORDER BY d.finance_category ";
+				 */
+				
+				
+				sql="SELECT d.cino,date_of_filing,type_name_fil,fil_no,fil_year,reg_no,reg_year,bench_name,coram,dist_name,"
+						+ " purpose_name,res_name,pet_name,pet_adv,res_adv, d.finance_category,d.work_name,d.est_cost,d.admin_sanction,d.grant_val,e.cfms_bill,e.bill_amount  "
+						+ " FROM  ecourts_case_data a right join ecourts_case_category_wise_data d    on (a.cino=d.cino) inner join dept_new c on (a.dept_code=c.dept_code)"
+						+ "  inner join (select cino, string_agg(cfms_bill_id,',') as cfms_bill, sum(coalesce(cfms_bill_amount,'0')::int4) as bill_amount"
+						+ "  from cfms_bill_data_mst group by cino) e on (a.cino=e.cino)  where  1=1 and a.dept_code='"+request.getParameter("deptId").toString()+"' "+sqlCondition+"    ORDER BY d.finance_category ";
+				
+				
 			}
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

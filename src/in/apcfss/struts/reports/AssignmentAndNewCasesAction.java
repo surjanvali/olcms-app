@@ -157,7 +157,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
 				sqlCondition += " and a.casetype='" + cform.getDynaForm("caseTypeId").toString().trim() + "' ";
 			}
-
+			
 			else if (roleId.equals("10")) { // District Nodal Officer
 				sqlCondition += " and (case_status is null or case_status=8) and dist_id='" + distCode + "'";
 			} else if (roleId.equals("5") || roleId.equals("9")) {// NO & HOD
@@ -166,9 +166,13 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 				sqlCondition += " and (case_status is null or case_status in (1, 2))";
 			}
 
+			if (cform.getDynaForm("advcteName") != null && !cform.getDynaForm("advcteName").toString().contentEquals("")) {
+				sqlCondition += " and replace(replace(advocatename,' ',''),'.','') ilike  '%"+cform.getDynaForm("advcteName")+"%'";
+			}
+			
 			sql = "select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ " upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
-					+ " to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_desc(a.ack_no) as dept_descs "
+					+ " to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_desc(a.ack_no) as dept_descs, coalesce(a.hc_ack_no,'-') as hc_ack_no "
 					+ " from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
 					+ " inner join district_mst dm on (a.distid=dm.district_id) "
 					+ " inner join dept_new dmt on (ad.dept_code=dmt.dept_code)"

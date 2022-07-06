@@ -246,11 +246,10 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and replace(replace(advocatename,' ',''),'.','') ilike  '%"+cform.getDynaForm("advcteName")+"%'";
 			}
 			
-			if ((roleId.equals("1") || roleId.equals("7"))) {
+			
+			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14"))) {
 				sqlCondition += " and respondent_slno=1 ";
 			}
-			
-			
 
 			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14")
 					|| roleId.equals("6"))) {
@@ -534,7 +533,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("advcteName", request.getParameter("advcteName"));
 			}
 			
-			if ((roleId.equals("1") || roleId.equals("7"))) {
+			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14"))) {
 				sqlCondition += " and respondent_slno=1 ";
 			}
 
@@ -566,7 +565,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 
 			sql = "select distinct a.slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
-					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_desc(a.ack_no) as dept_descs,inserted_time "
+					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_desc(a.ack_no) as dept_descs,inserted_time, coalesce(a.hc_ack_no,'-') as hc_ack_no "
 					+ "from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
 					+ "inner join district_mst dm on (a.distid=dm.district_id) "
 					+ "inner join dept_new dmt on (ad.dept_code=dmt.dept_code)  " + condition + " "

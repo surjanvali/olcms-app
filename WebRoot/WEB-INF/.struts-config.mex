@@ -122,6 +122,7 @@
   <StrutsActivity path="casedetailspopupview1" location="2750,4150" dimension="152,51" />
   <StrutsActivity path="EcourtsDeptInstruction" location="3350,2050" dimension="151,51" />
   <StrutsActivity path="casedetailspopupview2" location="3350,2450" dimension="152,51" />
+  <StrutsActivity path="/jsp/reports/EcourtsDeptInstructionView.jsp" location="1550,3650" dimension="261,51" />
   <StrutsActivity path="DailyStatusEntry" location="3350,2850" dimension="115,51" />
   <StrutsActivity path="casedetailspopupview3" location="3350,3050" dimension="152,51" />
   <StrutsActivity path="casedetailsview2" location="3350,1850" dimension="117,51" />
@@ -151,7 +152,6 @@
   <StrutsActivity path="/form/eofficeEmployeeReport.jsp" location="350,3450" dimension="207,51" />
   <StrutsActivity path="casedetailspopupview4" location="3350,3550" dimension="152,51" />
   <StrutsActivity path="/jsp/REPORTS/EcourtsDeptInstructionView.jsp" location="950,3650" dimension="271,51" />
-  <StrutsActivity path="/jsp/reports/EcourtsDeptInstructionView.jsp" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,598" />
@@ -267,16 +267,6 @@
       <AbsolutePoint location="1451,2098" />
       <AbsolutePoint location="1451,2475" />
       <AbsolutePoint location="1550,2475" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
-  <StrutsTransition id="/EcourtsDeptInstruction.do,casepopupreport,/jsp/REPORTS/EcourtsDeptInstructionView.jsp,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="3666,498" />
-      <AbsolutePoint location="3801,498" />
-      <AbsolutePoint location="3801,1795" />
-      <AbsolutePoint location="3577,1795" />
-      <AbsolutePoint location="3577,3675" />
-      <AbsolutePoint location="1221,3675" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/ChangeRequestAbstract.do,success,changereqabstract,1" routingType="0">
@@ -450,16 +440,6 @@
     <AutomaticBendpoints>
       <AbsolutePoint location="2577,2246" />
       <AbsolutePoint location="2577,2550" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
-  <StrutsTransition id="/EcourtsDeptInstruction.do,casepopupreport,casedetailspopupview4,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="3666,498" />
-      <AbsolutePoint location="3801,498" />
-      <AbsolutePoint location="3801,1795" />
-      <AbsolutePoint location="3577,1795" />
-      <AbsolutePoint location="3577,3575" />
-      <AbsolutePoint location="3502,3575" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/ContemptCasesAbstract.do,success,contemptcasesreport,1" routingType="0">
@@ -746,17 +726,6 @@
       <AbsolutePoint location="1107,3416" />
       <AbsolutePoint location="122,3416" />
       <AbsolutePoint location="122,3550" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
-  <StrutsTransition id="/EcourtsDeptInstruction.do,casepopupreport,casedetailspopupview2,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="3666,498" />
-      <AbsolutePoint location="3801,498" />
-      <AbsolutePoint location="3801,1976" />
-      <AbsolutePoint location="3275,1976" />
-      <AbsolutePoint location="3275,2176" />
-      <AbsolutePoint location="3426,2176" />
-      <AbsolutePoint location="3426,2450" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/UsersCreated.do,success,usersreport,1" routingType="0">

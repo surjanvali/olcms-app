@@ -26,7 +26,8 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 	@Override
 	public ActionForward unspecified(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		System.out.println("HighCourtCasesListAction..............................................................................unspecified()");
+		System.out.println(
+				"HighCourtCasesListAction..............................................................................unspecified()");
 		Connection con = null;
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
@@ -331,61 +332,8 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 
 				request.setAttribute("HEADING", "Submit Instructions for CINO : " + cIno);
 			} else {
-			//	request.setAttribute("errorMsg", "Invalid Cino.");
-				sql = "select cino,dept_code,instructions from ecourts_dept_instructions where insert_by='"+userId+"' ";
-				System.out.println("sql--" + sql);
-				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
-				request.setAttribute("existDataDeptWise", existData);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			DatabasePlugin.closeConnection(con);
-		}
-		return mapping.findForward(target);
-	}
-	public ActionForward getInstReportDeptWise(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		CommonForm cform = (CommonForm) form;
-		Connection con = null;
-		HttpSession session = null;
-		String userId = null, roleId = null, sql = null, cIno = null, viewDisplay = null, target = "casepopupreport";
-		System.out.println("getCino");
-
-		try {
-			session = request.getSession();
-			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
-			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-			viewDisplay = CommonModels.checkStringObject(request.getParameter("SHOWPOPUP"));
-
-			System.out.println("viewDisplay--" + viewDisplay);
-
-			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
-				return mapping.findForward("Logout");
-			}
-
-			cIno = CommonModels.checkStringObject(request.getParameter("cino"));
-			cIno = cIno!=null && !cIno.equals("") ? cIno : CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
-
-			System.out.println("cIno" + cIno);
-
-			///if (cIno != null && !cIno.equals("")) {
-				
-				cform.setDynaForm("cino", cIno);
-				
-				con = DatabasePlugin.connect();
-
-				//sql = "select dept_code,count(*) as total from ecourts_dept_instructions group by dept_code ";
-				sql = "select cino,dept_code,instructions from ecourts_dept_instructions where insert_by='"+userId+"' ";
-				System.out.println("sql--" + sql);
-				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
-				request.setAttribute("existDataDeptWise", existData);
-
-				request.setAttribute("HEADING", "Submit Instructions" );
-			/*} else {
 				request.setAttribute("errorMsg", "Invalid Cino.");
-			}*/
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

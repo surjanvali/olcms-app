@@ -77,7 +77,25 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 						&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
 					sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 				}
+				
+				//
+				if (cform.getDynaForm("petitionerName") != null && !cform.getDynaForm("petitionerName").toString().contentEquals("")
+						&& !cform.getDynaForm("petitionerName").toString().contentEquals("0")) {
+					// sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+					sqlCondition += " and replace(replace(pet_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("petitionerName")+"%'";
+					
+				}
+				
+				if (cform.getDynaForm("respodentName") != null && !cform.getDynaForm("respodentName").toString().contentEquals("")
+						&& !cform.getDynaForm("respodentName").toString().contentEquals("0")) {
+					// sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+					sqlCondition += " and replace(replace(res_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("respodentName")+"%'";
+					
+				}
 
+				
+				
+				
 				sql = "select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases, sum(goi) as goi, sum(psu) as psu, sum(privatetot) as privatetot  from ("
 						+ "select a.dept_code , case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,count(*) as total_cases, "
 						+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
@@ -218,6 +236,19 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					&& CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
 				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
 			}
+			
+			if (cform.getDynaForm("petitionerName") != null && !cform.getDynaForm("petitionerName").toString().contentEquals("")
+					&& !cform.getDynaForm("petitionerName").toString().contentEquals("0")) {
+				sqlCondition += " and replace(replace(a.pet_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("petitionerName")+"%'";
+				
+			}
+			
+			if (cform.getDynaForm("respodentName") != null && !cform.getDynaForm("respodentName").toString().contentEquals("")
+					&& !cform.getDynaForm("respodentName").toString().contentEquals("0")) {
+				sqlCondition += " and replace(replace(a.res_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("respodentName")+"%'";
+				
+			}
+			
 			/*
 			 * if (cform.getDynaForm("deptId") != null &&
 			 * !cform.getDynaForm("deptId").toString().contentEquals("") &&
@@ -409,12 +440,20 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					&& CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
 				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
 			}
-
-
-			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
-					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
-				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+			
+			if (cform.getDynaForm("petitionerName") != null && !cform.getDynaForm("petitionerName").toString().contentEquals("")
+					&& !cform.getDynaForm("petitionerName").toString().contentEquals("0")) {
+				sqlCondition += " and replace(replace(a.pet_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("petitionerName")+"%'";
+				
 			}
+			
+			if (cform.getDynaForm("respodentName") != null && !cform.getDynaForm("respodentName").toString().contentEquals("")
+					&& !cform.getDynaForm("respodentName").toString().contentEquals("0")) {
+				sqlCondition += " and replace(replace(a.res_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("respodentName")+"%'";
+				
+			}
+
+			
 
 			if (roleId.equals("2") || roleId.equals("10")) {
 				sqlCondition += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
@@ -457,7 +496,13 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			
 			
 
-			sql = "select a.*, n.global_org_name as globalorgname, n.fullname_en as fullname, n.designation_name_en as designation, n.mobile1 as mobile, n.email as email, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths from ecourts_case_data a inner join nic_data n on (a.assigned_to=n.email) left join"
+			sql = "select a.*, "
+					+ ""
+					// + "n.global_org_name as globalorgname, n.fullname_en as fullname, n.designation_name_en as designation, n.mobile1 as mobile, n.email as email, "
+					+ ""
+					+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths from ecourts_case_data a "
+					//+ "inner join nic_data n on (a.assigned_to=n.email) "
+					+ "left join"
 					+ " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from "
@@ -468,11 +513,14 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
 					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) "+condition+" where d.display = true ";
 
-			if (deptCode != null && !deptCode.equals(""))
-				sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
-
-			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
+			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
+					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
+				sql += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+			}
+			else if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
 				sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
+			else if (deptCode != null && !deptCode.equals(""))
+				sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
 
 			sql += sqlCondition;
 
@@ -635,7 +683,19 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
 				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 			}
-
+			
+			if (cform.getDynaForm("petitionerName") != null && !cform.getDynaForm("petitionerName").toString().contentEquals("")
+					&& !cform.getDynaForm("petitionerName").toString().contentEquals("0")) {
+				sqlCondition += " and replace(replace(a.pet_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("petitionerName")+"%'";
+				
+			}
+			
+			if (cform.getDynaForm("respodentName") != null && !cform.getDynaForm("respodentName").toString().contentEquals("")
+					&& !cform.getDynaForm("respodentName").toString().contentEquals("0")) {
+				sqlCondition += " and replace(replace(a.res_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("respodentName")+"%'";
+				
+			}
+			
 			if (roleId.equals("2") || roleId.equals("10")) {
 				sqlCondition += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
 				cform.setDynaForm("districtId", session.getAttribute("dist_id"));
@@ -878,7 +938,19 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
 				sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 			}
-
+			
+			if (cform.getDynaForm("petitionerName") != null && !cform.getDynaForm("petitionerName").toString().contentEquals("")
+					&& !cform.getDynaForm("petitionerName").toString().contentEquals("0")) {
+				sqlCondition += " and replace(replace(a.pet_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("petitionerName")+"%'";
+				
+			}
+			
+			if (cform.getDynaForm("respodentName") != null && !cform.getDynaForm("respodentName").toString().contentEquals("")
+					&& !cform.getDynaForm("respodentName").toString().contentEquals("0")) {
+				sqlCondition += " and replace(replace(a.res_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("respodentName")+"%'";
+				
+			}
+			
 			if (roleId.equals("2") || roleId.equals("10")) {
 				sqlCondition += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
 				cform.setDynaForm("districtId", session.getAttribute("dist_id"));

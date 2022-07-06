@@ -236,7 +236,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<th>Administrative Sanction</th>
 											<th>Grant Value</th>
 											<th>CFMS Bill Id</th>
-											<th>CFMS Bill status</th>
+											<!-- <th>CFMS Bill status</th> -->
 											<th>CFMS Bill Amount</th>
 											<th>Date of Filing</th>
 											<th>Case Type</th>
@@ -274,7 +274,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												<td style="text-align: center;">${map.admin_sanction }</td>
 												<td style="text-align: center;">${map.grant_val }</td>
 												<td style="text-align: center;">${map.cfms_bill }</td>
-												<td style="text-align: center;">${map.bill_status }</td>
+												<%-- <td style="text-align: center;">${map.bill_status }</td> --%>
 												<td style="text-align: center;">${map.bill_amount}</td>
 												<td><logic:notEmpty name="map"
 														property="date_of_filing">
@@ -316,7 +316,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<tR>
 											<td colspan="4">Totals</td>
 											<td colspan="1" style="text-align: right;">${est_cost_tot}</td>
-											<td colspan="4" style="text-align: right;"></td>
+											<td colspan="3" style="text-align: right;"></td>
 											<td colspan="1" style="text-align: right;">${bill_amount_tot}</td>
 											<td colspan="20" style="text-align: right;"></td>
 											
