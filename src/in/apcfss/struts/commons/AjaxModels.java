@@ -125,18 +125,18 @@ public class AjaxModels extends DispatchAction {
 				String userType = request.getParameter("userType") != null ? request.getParameter("userType").toString()
 						: null;
 
-				String sql = "select distinct employee_id, fullname_en from " + tableName
+				String sql = "select distinct employee_id, fullname_en||' - '||org_unit_name_en from " + tableName
 						+ " where substring(global_org_name,1,5)='" + deptId.substring(0,5)
 						+ "' and designation_id=? order by fullname_en";
 				// System.out.println("sql="+sql);
 				if (userType != null && !userType.equals("0")) {
 					if (userType.equals("MLO")) {
 
-						sql = "select distinct employee_id, fullname_en from " + tableName
+						sql = "select distinct employee_id, fullname_en ||' - '||org_unit_name_en from " + tableName
 								+ " where substring(global_org_name,1,5)='" + deptId
 								+ "' and designation_id=? and employee_id not in (select employeeid from mlo_details) order by fullname_en";
 					} else if (userType.equals("NO")) {
-						sql = "select distinct employee_id, fullname_en from " + tableName
+						sql = "select distinct employee_id, fullname_en||' - '||org_unit_name_en from " + tableName
 								+ " where substring(global_org_name,1,5)='" + deptId
 								+ "' and designation_id=? and employee_id not in (select employeeid from nodal_officer_details where dept_id='"
 								+ deptId + "') order by fullname_en";
@@ -288,7 +288,7 @@ public class AjaxModels extends DispatchAction {
 				tableName = getTableName(distCode, con);
 
 				if (deptCode != null && deptCode != "")
-					sql = "select distinct trim(employee_id), trim(fullname_en)||' - '||trim(designation_name_en) from "
+					sql = "select distinct trim(employee_id), trim(fullname_en)||' - '||trim(designation_name_en)||' - '||trim(org_unit_name_en) from "
 							+ tableName
 							+ " where employee_identity=? and post_name_en=? and substr(trim(global_org_name),1,5)=? "
 							+ " and trim(email) not in (select userid from user_roles where role_id in (4,5))  ";

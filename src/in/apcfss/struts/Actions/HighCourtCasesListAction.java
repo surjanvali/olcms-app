@@ -386,7 +386,7 @@ public class HighCourtCasesListAction extends DispatchAction {
 							
 							System.out.println(mobileNo+""+smsText+""+templateId);
 							if(mobileNo!=null && !mobileNo.equals("")) {
-								mobileNo = "9618048663";
+								// mobileNo = "9618048663";
 								SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
 							}
 							con.commit();
@@ -632,7 +632,7 @@ public class HighCourtCasesListAction extends DispatchAction {
 						
 						System.out.println(mobileNo+""+smsText+""+templateId);
 						if(mobileNo!=null && !mobileNo.equals("")) {
-							mobileNo = "9618048663";
+							// mobileNo = "9618048663";
 							System.out.println("mobileNo::"+mobileNo);
 							SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
 						}
