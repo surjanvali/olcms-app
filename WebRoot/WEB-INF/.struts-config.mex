@@ -122,7 +122,6 @@
   <StrutsActivity path="casedetailspopupview1" location="2750,4150" dimension="152,51" />
   <StrutsActivity path="EcourtsDeptInstruction" location="3350,2050" dimension="151,51" />
   <StrutsActivity path="casedetailspopupview2" location="3350,2450" dimension="152,51" />
-  <StrutsActivity path="/jsp/reports/EcourtsDeptInstructionView.jsp" location="1550,3650" dimension="261,51" />
   <StrutsActivity path="DailyStatusEntry" location="3350,2850" dimension="115,51" />
   <StrutsActivity path="casedetailspopupview3" location="3350,3050" dimension="152,51" />
   <StrutsActivity path="casedetailsview2" location="3350,1850" dimension="117,51" />
@@ -150,8 +149,7 @@
   <StrutsActivity path="closedcasesreport" location="2450,2350" dimension="124,51" />
   <StrutsActivity path="mlologinstatusreport" location="650,2950" dimension="141,51" />
   <StrutsActivity path="/form/eofficeEmployeeReport.jsp" location="350,3450" dimension="207,51" />
-  <StrutsActivity path="casedetailspopupview4" location="3350,3550" dimension="152,51" />
-  <StrutsActivity path="/jsp/REPORTS/EcourtsDeptInstructionView.jsp" location="950,3650" dimension="271,51" />
+  <StrutsActivity path="/jsp/reports/EcourtsDeptInstructionView.jsp" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,598" />
@@ -697,9 +695,9 @@
   </StrutsTransition>
   <StrutsTransition id="/HighCourtCasesCategoryUpdationReport.do,casestatusupdate,casestatusupdate,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="3163,3616" />
-      <AbsolutePoint location="3547,3616" />
-      <AbsolutePoint location="3547,1425" />
+      <AbsolutePoint location="3163,3598" />
+      <AbsolutePoint location="3577,3598" />
+      <AbsolutePoint location="3577,1425" />
       <AbsolutePoint location="2510,1425" />
       <AbsolutePoint location="2510,1301" />
     </AutomaticBendpoints>
@@ -723,9 +721,9 @@
   <StrutsTransition id="/CaseAssignmentStatus.do,success,caseassignmentstatus,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1107,3146" />
-      <AbsolutePoint location="1107,3416" />
-      <AbsolutePoint location="122,3416" />
-      <AbsolutePoint location="122,3550" />
+      <AbsolutePoint location="1107,3811" />
+      <AbsolutePoint location="122,3811" />
+      <AbsolutePoint location="122,3601" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/UsersCreated.do,success,usersreport,1" routingType="0">
