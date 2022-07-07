@@ -88,8 +88,8 @@ public class HighCourtCauseListBenchAPI {
 		String sql = "";
 		resp = resp.trim();
 
-		//System.out.println("processMastersResponse"+resp);
-		if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_TOKEN"))) {
+		System.out.println("processMastersResponse"+resp);
+		if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_"))) {
 			JSONObject jObj = new JSONObject(resp);
 			if ((jObj.has("response_str")) && (jObj.getString("response_str") != null)) {
 				response_str = jObj.getString("response_str").toString();
