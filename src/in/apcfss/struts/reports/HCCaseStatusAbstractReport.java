@@ -357,7 +357,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
 
 			heading = "Cases List for " + deptName;
-
+System.out.println("caseStatus----"+caseStatus);
 			if (!caseStatus.equals("")) {
 				if (caseStatus.equals("withSD")) {
 					sqlCondition = " and case_status=1 and coalesce(ecourts_case_status,'')!='Closed' ";
@@ -400,7 +400,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					heading += " Pending at GP Login";
 				}
 				if (caseStatus.equals("closed")) {
-					sqlCondition = " and case_status=99 or coalesce(ecourts_case_status,'')='Closed' ";
+					sqlCondition = " and (case_status=99 or coalesce(ecourts_case_status,'')='Closed') ";
 					heading += " All Closed Cases ";
 				}
 				if (caseStatus.equals("goi")) {
@@ -513,17 +513,42 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
 					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) "+condition+" where d.display = true ";
 
+			if (roleId.equals("1") || roleId.equals("7")  ) {
 			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
 					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
+				sql += " and a.dept_code like '%" + cform.getDynaForm("deptId").toString().trim().substring(0, 3) + "%' ";
+			}
+		  }else if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
+					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
+			  if (( roleId.equals("4") || roleId.equals("5") ))
 				sql += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 			}
-			else if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
-				sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
-			else if (deptCode != null && !deptCode.equals(""))
-				sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
+			
+			String val=deptCode.substring(3, 5);
+			System.out.println("val---"+val);
+			
+			 if (roleId.equals("3") &&  caseStatus.equals("ALL") && deptCode.substring(4, 5).equals("01"))
+			 sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
 
-			sql += sqlCondition;
+			 if (roleId.equals("3") &&  caseStatus.equals("ALL") && !deptCode.substring(4, 5).equals("01"))
+				 sql += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+			 
+			 if (roleId.equals("9") &&  caseStatus.equals("ALL") )
+				 sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
+			 
+			 
+			 if (roleId.equals("1") || roleId.equals("7")  ) {
+			  if (deptCode != null && !deptCode.equals(""))
+				sql += " ";
+			 }else {
+				 if (!(caseStatus.equals("ALL")) ) {
+				 if (deptCode != null && !deptCode.equals("")) 
+						sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
+				 }
+			 }
 
+			 sql += sqlCondition;
+			 
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			// System.out.println("data=" + data);
