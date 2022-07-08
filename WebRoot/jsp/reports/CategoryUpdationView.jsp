@@ -117,12 +117,22 @@ body {
 						<div class="row">
 
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Grant(SDP/EAP/NABARD/etc..): </b>
+								<b> Grant : </b>
 							</div>
+							
+							
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<html:text styleId="grant" styleClass="form-control"
-									value="${datamap.grant_val}" property="dynaForm(grant)"
-									maxlength="40" />
+																
+								<html:select styleId="grant"
+									value="${datamap.grant_val}"
+									property="dynaForm(grant)" styleClass="form-control">
+									<html:option value="0">---Select Grant---</html:option>
+									<html:option value="SDP">SDP</html:option>
+									<html:option value="EAP">EAP</html:option>
+									<html:option value="NABARD">NABARD</html:option>
+									
+								</html:select>	
+									
 							</div>
 
 
@@ -354,6 +364,11 @@ body {
 			$("#estCost").focus();
 			return false;
 		}
+		if(isNaN($("#estCost").val())){
+			alert("Estimated Cost field should be a number");
+			$("#estCost").focus();
+			return false;
+		 }
 
 		if ($("#adminSanction").val() == null
 				|| $("#adminSanction").val() == "") {
@@ -362,7 +377,7 @@ body {
 			return false;
 		}
 
-		if ($("#grant").val() == null || $("#grant").val() == "") {
+		if ($("#grant").val() == null || $("#grant").val() == "" || $("#grant").val() == 0) {
 			alert("Grant Required");
 			$("#grant").focus();
 			return false;
@@ -469,10 +484,12 @@ body {
 	$("#removeResp").click(function() {
 		let rowfyable = $("#RESPSTABID").closest('table');
 		let rowCount = $("#RESPSTABID tbody tr").length;
-		if (rowCount > 0) {
+		if (rowCount > 1) {
 			$('tbody tr:last', rowfyable).remove();
 		}
-		$("#respondentIds").val($("#RESPSTABID tbody tr").length);
+		else {
+			alert ("Should have atleast one valid Bill Details")
+		}
 	});
 
 	/* =============================
