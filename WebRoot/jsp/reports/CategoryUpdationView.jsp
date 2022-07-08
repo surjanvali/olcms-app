@@ -34,7 +34,7 @@ body {
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden styleId="cino" property="dynaForm(cino)" />
 		<html:hidden styleId="respondentIds"
-			property="dynaForm(respondentIds)" value="1" />
+			property="dynaForm(respondentIds)" />
 		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="dashboard-cat-title">
@@ -183,7 +183,7 @@ body {
 													value="${map.cfms_bill_status}"
 													property="dynaForm(status1)" maxlength="50" /></td>
 										</tr>
-									</logic:notPresent>
+									</logic:notPresent> 
 									<logic:present name="cfmsdata">
 										<logic:iterate id="map" name="cfmsdata" indexId="i">
 											<tr id="1">
@@ -397,6 +397,8 @@ body {
 
 		$("#cino").val(id);
 		$("#mode").val("getSubmitCategory");
+		$("#respondentIds").val(
+				$("#RESPSTABID tbody tr").length);
 		$("#HighCourtCasesListForm").submit();
 	}
 
@@ -467,7 +469,7 @@ body {
 	$("#removeResp").click(function() {
 		let rowfyable = $("#RESPSTABID").closest('table');
 		let rowCount = $("#RESPSTABID tbody tr").length;
-		if (rowCount > 1) {
+		if (rowCount > 0) {
 			$('tbody tr:last', rowfyable).remove();
 		}
 		$("#respondentIds").val($("#RESPSTABID tbody tr").length);

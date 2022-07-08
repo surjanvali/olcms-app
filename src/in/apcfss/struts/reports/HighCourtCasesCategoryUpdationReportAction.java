@@ -312,14 +312,10 @@ public class HighCourtCasesCategoryUpdationReportAction extends DispatchAction {
 				respondentIds = CommonModels.checkIntObject(cform.getDynaForm("respondentIds"));
 
 				System.out.println("respondentIds--"+respondentIds);
+				sql = "delete from cfms_bill_data_mst where cino='" + cIno + "'";
+				DatabasePlugin.executeUpdate(sql, con);
 				if (respondentIds > 0) {
 					ps.close();
-					sql = "select count(*) from cfms_bill_data_mst where cino='" + cIno + "' ";
-					int caseBillsData = Integer.parseInt(DatabasePlugin.getSingleValue(con, sql));
-					if (caseBillsData > 0) {
-						sql = "delete from cfms_bill_data_mst where cino='" + cIno + "'";
-						DatabasePlugin.executeUpdate(sql, con);
-					}
 					sql = " INSERT INTO apolcms.cfms_bill_data_mst( cino, cfms_bill_id,cfms_bill_status,cfms_bill_amount) "
 							+ "     VALUES( ?, ?, ?, ?)";
 
