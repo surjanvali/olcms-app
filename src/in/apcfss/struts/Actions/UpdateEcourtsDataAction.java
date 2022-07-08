@@ -1,21 +1,22 @@
 package in.apcfss.struts.Actions;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -389,6 +391,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			String cino = "";
 
 			sql = "SELECT cino FROM apolcms.ecourts_cinos_new where inserted_time::date = current_date and coalesce(ecourts_response,'')=''";
+			sql = "SELECT cn.cino FROM apolcms.ecourts_cinos_new cn inner join ecourts_case_data cd on (cn.cino=cd.cino) where cn.inserted_time::date = current_date and coalesce(cn.ecourts_response,'')='' and cd.cino is null";
 			
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
@@ -1491,10 +1494,12 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					byte[] decoder = Base64.getDecoder().decode(decryptedRespStr.replace("\"", "").replace("\\", ""));
 					fos.write(decoder);
 					System.out.println("PDF File Saved");
-	
-					sql = "update ecourts_causelist_bench_data set causelist_document='uploads/HighCourtsCauseList/"
+					
+					String causeListPdfFilePath="uploads/HighCourtsCauseList/"
 							+ causelistDate + "/" + estCode + causelistDate + bench_id + causelist_id
-							+ ".pdf' where est_code='" + estCode + "' and causelist_date=to_date('" + causelistDate
+							+ ".pdf";
+					
+					sql = "update ecourts_causelist_bench_data set causelist_document='"+causeListPdfFilePath+"' where est_code='" + estCode + "' and causelist_date=to_date('" + causelistDate
 							+ "','yyyy-mm-dd') and bench_id='" + bench_id + "' and causelist_id='" + causelist_id + "'";
 					System.out.println("UPDATE SQL:" + sql);
 					DatabasePlugin.executeUpdate(sql, con);
@@ -1512,6 +1517,83 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		}
 	}
 
+	public static void main(String[] args) throws Exception {
+		Connection con=null;
+		causeListPdfCasesretrieval("07-07-2022", "", con);
+	}
+	
+	public static void causeListPdfCasesretrieval(String cauesListDate, String filePath, Connection con) throws Exception {
+		String pdfOutput=null;
+		String result = null, sql="", caseNo="";
+		JSONObject jObjData;
+		JSONArray casesList;
+		try {
+			// retrieve json string data through Nodejs API
+			// pdfOutput="{ \"result\": \"success\", \"data\": [ { \"srno\": \"1\", \"cases\": [ \"WP/13311/2022\", \"IA 1/2022\" ] }, { \"srno\": \"2\", \"cases\": [ \"WP/18728/2022\", \"IA 1/2022\" ] }, { \"srno\": \"3\", \"cases\": [ \"WP/18796/2022\", \"IA 1/2022\" ] }, { \"srno\": \"4\", \"cases\": [ \"WP/18851/2022\", \"IA 1/2022\" ] }, { \"srno\": \"5\", \"cases\": [ \"WP/18916/2022\", \"IA 1/2022\" ] }, { \"srno\": \"6\", \"cases\": [ \"WP/18932/2022\", \"IA 1/2022\" ] }, { \"srno\": \"1\", \"cases\": [ \"WP/13311/2022\", \"IA 1/2022\" ] }, { \"srno\": \"2\", \"cases\": [ \"WP/18728/2022\", \"IA 1/2022\" ] }, { \"srno\": \"3\", \"cases\": [ \"WP/18796/2022\", \"IA 1/2022\" ] }, { \"srno\": \"4\", \"cases\": [ \"WP/18851/2022\", \"IA 1/2022\" ] }, { \"srno\": \"5\", \"cases\": [ \"WP/18916/2022\", \"IA 1/2022\" ] }, { \"srno\": \"6\", \"cases\": [ \"WP/18932/2022\", \"IA 1/2022\" ] } ]}";
+			String fileURL="http://localhost:5007/hc/cases?pdf_data=http://localhost:8080/apolcms/"+filePath;
+			System.out.println("fileURL::"+fileURL);
+			pdfOutput = sendSimpleGetRequest(fileURL);
+			
+			JSONObject outputJson = new JSONObject(pdfOutput);
+			result = outputJson.has("result") ? CommonModels.checkStringObject(outputJson.get("result")) : null;
+			//System.out.println("result:"+result);
+			if(result.equals("success"))
+			{
+				Object jObj = (Object)outputJson.get("data");
+				if(jObj instanceof JSONObject) {
+					jObjData = (JSONObject)jObj;
+					if(jObjData.has("cases")) {
+						//System.out.println("CASES:"+jObjData.get("cases"));
+						casesList = (JSONArray)jObjData.get("cases");
+						
+						for(int j=0;j < casesList.length(); j++) {
+							caseNo = casesList.getString(j) ;
+							//System.out.println("caseNo:"+(j+1)+":"+caseNo);
+							sql="insert into ecourts_causelist_cases (causelist_date, case_no) values (to_date('"+cauesListDate+"','dd-mm-yyyy'), '"+caseNo+"')";
+							//System.out.println("SQL:"+sql);
+							DatabasePlugin.executeUpdate(sql, con);
+						}
+						//System.out.println("-----------------");
+					}
+					
+				}
+				else if(jObj instanceof JSONArray) {
+					JSONArray jArrayData =  (JSONArray)jObj;// new JSONArray(CommonModels.checkStringObject(outputJson.get("data")));
+					//System.out.println("Array:"+jArrayData.length());
+					//for (JSONObject jObjData : jArrayData) {
+					for(int i=0; i< jArrayData.length(); i++) {
+						jObjData = (JSONObject)jArrayData.get(i);
+						// System.out.println("jObjData::"+jObjData);
+						// System.out.println("CASES:"+jObjData.getString("cases"));
+						//String[] casesList=null;
+						if(jObjData.has("cases")) {
+							//System.out.println("CASES:"+jObjData.get("cases"));
+							casesList = (JSONArray)jObjData.get("cases");
+							
+							for(int j=0;j < casesList.length(); j++) {
+								caseNo = casesList.getString(j) ;
+								//System.out.println("caseNo:"+(j+1)+":"+caseNo);
+								sql="insert into ecourts_causelist_cases (causelist_date, case_no) values (to_date('"+cauesListDate+"','dd-mm-yyyy'), '"+caseNo+"')";
+								//System.out.println("SQL:"+sql);
+								DatabasePlugin.executeUpdate(sql, con);
+							}
+							//System.out.println("-----------------");
+						}
+					}
+				}
+			}
+			else {
+				System.out.println("Error in parsing the PDF file");
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Exception Error while parsing the PDF file");
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
 	
 	public static boolean saveDataToTableFromExcel(FormFile cinoExcelFile,Connection con) throws Exception, IOException {
 		String sql = "";
@@ -1809,4 +1891,24 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 	    return savedstatus;
 	  }
 
+	public static String sendSimpleGetRequest(String requestUrl) throws Exception {
+		System.out.println("sendGetRequest requestUrl:"+requestUrl);
+		URL url = new URL(requestUrl);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+		conn.setRequestMethod("GET");
+		System.out.println(conn.getResponseCode() + "-" + conn.getResponseMessage());
+		BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		String output="";
+		StringBuffer response = new StringBuffer();
+		while ((output = in.readLine()) != null) {
+			response.append(output);
+		}
+		in.close();
+		if(conn.getResponseCode()==200 && (response==null || response.toString().equals(""))) {
+			System.out.println("Record Not Found.");
+		}
+		return response.toString();
+	}
+	
 }

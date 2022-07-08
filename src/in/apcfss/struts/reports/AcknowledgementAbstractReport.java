@@ -125,6 +125,11 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			if (cform.getDynaForm("advcteName") != null && !cform.getDynaForm("advcteName").toString().contentEquals("")) {
 				sqlCondition += " and replace(replace(advocatename,' ',''),'.','') ilike  '%"+cform.getDynaForm("advcteName")+"%'";
 			}
+			
+			if (cform.getDynaForm("petitionerName") != null && !cform.getDynaForm("petitionerName").toString().contentEquals("")) {
+				sqlCondition += " and replace(replace(petitioner_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("petitionerName")+"%'";
+			}
+			
 
 			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))) {
 				sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='" + deptCode
@@ -200,6 +205,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			cform.setDynaForm("fromDate", cform.getDynaForm("fromDate"));
 			cform.setDynaForm("toDate", cform.getDynaForm("toDate"));
 			cform.setDynaForm("advcteName", cform.getDynaForm("advcteName"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 			DatabasePlugin.close(con, ps, null);
 		}
 		return mapping.findForward("success");
@@ -245,7 +251,9 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			if (cform.getDynaForm("advcteName") != null && !cform.getDynaForm("advcteName").toString().contentEquals("")) {
 				sqlCondition += " and replace(replace(advocatename,' ',''),'.','') ilike  '%"+cform.getDynaForm("advcteName")+"%'";
 			}
-			
+			if (cform.getDynaForm("petitionerName") != null && !cform.getDynaForm("petitionerName").toString().contentEquals("")) {
+				sqlCondition += " and replace(replace(petitioner_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("petitionerName")+"%'";
+			}
 			
 			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14"))) {
 				sqlCondition += " and respondent_slno=1 ";
@@ -330,6 +338,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			cform.setDynaForm("fromDate", cform.getDynaForm("fromDate"));
 			cform.setDynaForm("toDate", cform.getDynaForm("toDate"));
 			cform.setDynaForm("advcteName", cform.getDynaForm("advcteName"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 			DatabasePlugin.close(con, ps, null);
 		}
 		return mapping.findForward("success");
@@ -376,7 +385,11 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			if (cform.getDynaForm("advcteName") != null && !cform.getDynaForm("advcteName").toString().contentEquals("")) {
 				sqlCondition += " and replace(replace(advocatename,' ',''),'.','') ilike  '%"+cform.getDynaForm("advcteName")+"%'";
 			}
-
+			
+			if (cform.getDynaForm("petitionerName") != null && !cform.getDynaForm("petitionerName").toString().contentEquals("")) {
+				sqlCondition += " and replace(replace(petitioner_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("petitionerName")+"%'";
+			}
+			
 			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))) {
 				sqlCondition += " and (dm.dept_code='" + deptCode + "' or dm.reporting_dept_code='" + deptCode + "') ";
 			}
@@ -449,6 +462,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			cform.setDynaForm("fromDate", cform.getDynaForm("fromDate"));
 			cform.setDynaForm("toDate", cform.getDynaForm("toDate"));
 			cform.setDynaForm("advcteName", cform.getDynaForm("advcteName"));
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 			DatabasePlugin.close(con, ps, null);
 		}
 		return mapping.findForward("success");
@@ -500,7 +514,9 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			if (cform.getDynaForm("advcteName") != null && !cform.getDynaForm("advcteName").toString().contentEquals("")) {
 				sqlCondition += " and replace(replace(advocatename,' ',''),'.','') ilike  '%"+cform.getDynaForm("advcteName")+"%'";
 			}
-
+			if (cform.getDynaForm("petitionerName") != null && !cform.getDynaForm("petitionerName").toString().contentEquals("")) {
+				sqlCondition += " and replace(replace(petitioner_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("petitionerName")+"%'";
+			}
 			if (request.getParameter("districtId") != null
 					&& !CommonModels.checkStringObject(request.getParameter("districtId")).contentEquals("")
 					&& !CommonModels.checkStringObject(request.getParameter("districtId")).contentEquals("0")) {
@@ -625,7 +641,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			cform.setDynaForm("fromDate", cform.getDynaForm("fromDate"));
 			cform.setDynaForm("toDate", cform.getDynaForm("toDate"));
 			cform.setDynaForm("advcteName", cform.getDynaForm("advcteName"));
-
+			cform.setDynaForm("petitionerName", cform.getDynaForm("petitionerName"));
 			DatabasePlugin.close(con, ps, null);
 		}
 		return mapping.findForward("success");

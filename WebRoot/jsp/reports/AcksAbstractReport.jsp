@@ -147,6 +147,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 					<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Petitioner Name</label>
+								<html:text styleId="petitionerName" property="dynaForm(petitionerName)"
+									styleClass="form-control" maxlength="50" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
 						<div class="col-md-12 col-xs-12">
 							<input type="button" name="showcases" value="Show Cases"
 								class="btn btn-success" onclick="return fnShowCases();" /> <input
