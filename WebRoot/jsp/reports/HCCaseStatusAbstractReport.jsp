@@ -570,7 +570,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${map.reg_no}</td>
 										<td>${map.reg_year }</td> prayer --%>
 										<td>${map.type_name_fil }/ ${map.reg_no} / ${map.reg_year }</td>
-										<td>${map.prayer }</td>
+										<td style="width: 300px;">${map.prayer }</td>
 
 										<td>${map.fil_no}</td>
 										<td>${map.fil_year }</td>
@@ -585,7 +585,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${map.pet_name }</td>
 										<td>${map.dist_name }</td>
 										<td>${map.purpose_name }</td>
-										<td>${map.res_name }${map.address}</td>
+										<td>${map.res_name }, ${map.address}</td>
 
 										<td>${map.pet_adv }</td>
 										<td>${map.res_adv }</td>

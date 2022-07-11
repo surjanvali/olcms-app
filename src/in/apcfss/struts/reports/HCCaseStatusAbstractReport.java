@@ -131,7 +131,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 
 				System.out.println("unspecified SQL:" + sql);
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-				System.out.println("unspecified data=" + data);
+				// System.out.println("unspecified data=" + data);
 				if (data != null && !data.isEmpty() && data.size() > 0)
 					request.setAttribute("secdeptwise", data);
 				else
@@ -518,7 +518,7 @@ System.out.println("caseStatus----"+caseStatus);
 					+ ""
 					// + "n.global_org_name as globalorgname, n.fullname_en as fullname, n.designation_name_en as designation, n.mobile1 as mobile, n.email as email, "
 					+ ""
-					+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer from ecourts_case_data a "
+					+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer, ra.address from ecourts_case_data a "
 					+ " left join nic_prayer_data np on (a.cino=np.cino)"
 					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
 					//+ "inner join nic_data n on (a.assigned_to=n.email) "

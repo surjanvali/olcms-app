@@ -54,6 +54,7 @@
   <StrutsActivity path="/HighCourtCasesCategoryUpdationReport.do" location="2750,3550" dimension="413,96" />
   <StrutsActivity path="/EcourtsDeptInstruction.do" location="3350,450" dimension="316,96" />
   <StrutsActivity path="/DailyStatusEntry.do" location="3350,1250" dimension="280,96" />
+  <StrutsActivity path="/HCNewCaseStatusAbstractReport.do" location="50,3750" dimension="337,96" />
   <StrutsActivity path="Login;6" location="350,1750" dimension="92,81" />
   <StrutsActivity path="Logout;6" location="50,650" dimension="203,87" />
   <StrutsActivity path="Welcome;6" location="950,1450" dimension="107,81" />
@@ -125,6 +126,7 @@
   <StrutsActivity path="/jsp/reports/EcourtsDeptInstructionView.jsp" location="1550,3650" dimension="261,51" />
   <StrutsActivity path="DailyStatusEntry" location="3350,2850" dimension="115,51" />
   <StrutsActivity path="casedetailspopupview3" location="3350,3050" dimension="152,51" />
+  <StrutsActivity path="HCNewCaseStatusAbstractReport" location="650,3750" dimension="207,51" />
   <StrutsActivity path="casedetailsview2" location="3350,1850" dimension="117,51" />
   <StrutsActivity path="casedetailsview3" location="3350,2650" dimension="117,51" />
   <StrutsActivity path="districtreport" location="2150,2650" dimension="98,51" />
@@ -152,8 +154,6 @@
   <StrutsActivity path="/form/eofficeEmployeeReport.jsp" location="350,3450" dimension="207,51" />
   <StrutsActivity path="casedetailspopupview4" location="3350,3550" dimension="152,51" />
   <StrutsActivity path="/jsp/REPORTS/EcourtsDeptInstructionView.jsp" location="950,3650" dimension="271,51" />
-  <StrutsActivity path="/HCNewCaseStatusAbstractReport.do" location="50,3750" dimension="337,96" />
-  <StrutsActivity path="HCNewCaseStatusAbstractReport" location="650,3750" dimension="207,51" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,598" />

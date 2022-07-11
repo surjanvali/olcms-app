@@ -256,7 +256,9 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					request.setAttribute("PETEXTRAPARTYLIST", data);
 				}
 	
-				sql = "select a.*,b.address from ecourts_res_extra_party a left join nic_resp_addr_data b on (a.cino=b.cino and coalesce(trim(a.party_no),'0')::int4=b.party_no-1) where a.cino='" + cIno + "'";
+				sql = "select a.*,b.address from ecourts_res_extra_party a left join nic_resp_addr_data b on (a.cino=b.cino and coalesce(trim(a.party_no),'0')::int4=b.party_no-1) where a.cino='" + cIno + "' order by coalesce(trim(a.party_no),'0')::int4 ";
+				sql="select b.party_no,b.res_name as party_name, b.address from nic_resp_addr_data b left join ecourts_res_extra_party a on (b.cino=a.cino and b.party_no-1=coalesce(trim(a.party_no),'0')::int4) where b.cino='"+cIno+"' order by b.party_no";
+				System.out.println("RESP ADDR SQL:"+sql);
 				data = DatabasePlugin.executeQuery(sql, con);
 				if (data != null && !data.isEmpty() && data.size() > 0) {
 					request.setAttribute("RESEXTRAPARTYLIST", data);
@@ -435,6 +437,8 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 	
 				// sql = "select  * from apolcms.ecourts_res_extra_party where cino='" + cIno + "'";
 				sql = "select a.*,b.address from ecourts_res_extra_party a left join nic_resp_addr_data b on (a.cino=b.cino and coalesce(trim(a.party_no),'0')::int4=b.party_no-1) where a.cino='" + cIno + "'";
+				sql = "select b.party_no,b.res_name as party_name, b.address from nic_resp_addr_data b left join ecourts_res_extra_party a on (b.cino=a.cino and b.party_no-1=coalesce(trim(a.party_no),'0')::int4) where b.cino='" + cIno + "' order by b.party_no";
+				
 				data = DatabasePlugin.executeQuery(sql, con);
 				if (data != null && !data.isEmpty() && data.size() > 0) {
 					request.setAttribute("RESEXTRAPARTYLIST", data);

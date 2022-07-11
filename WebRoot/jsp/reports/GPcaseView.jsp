@@ -397,7 +397,7 @@ body {
 												<b>Respondent Name : </b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.res_name}</div>
+												${map.res_name}, ${map.address}</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
 												<b>Respondent Advocate : </b>
 											</div>
@@ -409,7 +409,11 @@ body {
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 												${map.res_adv}</div>
 										</div>
-
+										<div class="row">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+												<b>Prayer:</b> ${map.prayer}
+											</div>
+										</div>
 
 									</logic:iterate>
 
@@ -451,7 +455,7 @@ body {
 												cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th colspan="3">Petetioner's List</th>
+														<th colspan="3">Petitioner's List</th>
 													</tr>
 													<tr>
 														<th>Sl No.</th>
@@ -513,7 +517,7 @@ body {
 										cellspacing="0" width="100%">
 										<thead>
 											<tr>
-												<th colspan="3">Petetioner's List</th>
+												<th colspan="3">Petitioner's List</th>
 											</tr>
 											<tr>
 												<th>Sl No.</th>
@@ -585,8 +589,8 @@ body {
 														<th>Sl No.</th>
 														<th>Sr No</th>
 														<th>IA NO</th>
-														<th>IA PetetionerName</th>
-														<th>IA PetetionerDispoasal</th>
+														<th>IA Petitione rName</th>
+														<th>IA Petitioner Dispoasal</th>
 														<th>IA Date of Filling</th>
 													</tr>
 												</thead>
@@ -1191,7 +1195,8 @@ body {
 									<logic:equal value="ENABLE" name="PWRSUBMITION">
 
 										<button class="btn btn-md btn-success" type="button"
-											name="forward" onclick="return gpApprove('Parawise Remarks');">Approve</button>
+											name="forward"
+											onclick="return gpApprove('Parawise Remarks');">Approve</button>
 
 										<button class="btn btn-md btn-danger" type="button"
 											name="forward" onclick="return gpReject('Parawise Remarks');">Return</button>
@@ -1393,11 +1398,13 @@ body {
 											</div>
 										</div>
 										<button class="btn btn-md btn-success" type="button"
-											name="forward" onclick="return gpApprove('Counter Affidavit');">Update
+											name="forward"
+											onclick="return gpApprove('Counter Affidavit');">Update
 											& Finalize Counter</button>
 
 										<button class="btn btn-md btn-danger" type="button"
-											name="forward" onclick="return gpReject('Counter Affidavit');">Return</button>
+											name="forward"
+											onclick="return gpReject('Counter Affidavit');">Return</button>
 									</logic:equal>
 								</logic:present>
 							</div>
