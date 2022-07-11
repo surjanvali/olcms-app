@@ -21,7 +21,7 @@ import org.apache.struts.util.LabelValueBean;
 
 import plugins.DatabasePlugin;
 
-public class HCCaseStatusAbstractReport extends DispatchAction {
+public class HCNewCaseStatusAbstractReport extends DispatchAction {
 	@Override
 	public ActionForward unspecified(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -127,7 +127,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 				sql += " group by a.dept_code,d.dept_code ,reporting_dept_code ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code)"
 						+ " group by x.reporting_dept_code, d1.description order by 1";
 
-				request.setAttribute("HEADING", "Sect. Dept. Wise High Court Cases Abstract Report");
+				request.setAttribute("HEADING", "Sect. Dept. Wise High Court New Cases Abstract Report");
 
 				System.out.println("unspecified SQL:" + sql);
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -281,7 +281,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					+ "where d.display = true and (d.reporting_dept_code='" + deptId + "' or a.dept_code='" + deptId
 					+ "') " + sqlCondition + "group by a.dept_code , d.description order by 1";
 
-			request.setAttribute("HEADING", "HOD Wise High Court Cases Abstract Report for " + deptName);
+			request.setAttribute("HEADING", "HOD Wise High Court New Cases Abstract Report for " + deptName);
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			// System.out.println("data=" + data);
@@ -356,7 +356,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			actionType = CommonModels.checkStringObject(cform.getDynaForm("actionType"));
 			deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
 
-			heading = "Cases List for " + deptName;
+			heading = "New Cases List for " + deptName;
 System.out.println("caseStatus----"+caseStatus);
 			if (!caseStatus.equals("")) {
 				if (caseStatus.equals("withSD")) {
@@ -500,8 +500,7 @@ System.out.println("caseStatus----"+caseStatus);
 					+ ""
 					// + "n.global_org_name as globalorgname, n.fullname_en as fullname, n.designation_name_en as designation, n.mobile1 as mobile, n.email as email, "
 					+ ""
-					+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer from ecourts_case_data a "
-					+ " left join nic_prayer_data np on (a.cino=np.cino)"
+					+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths from ecourts_case_data a "
 					//+ "inner join nic_data n on (a.assigned_to=n.email) "
 					+ "left join"
 					+ " ("
@@ -802,7 +801,7 @@ System.out.println("caseStatus----"+caseStatus);
 
 			sql += " group by disposal_type,b.description,b.dept_code";
 
-			heading = "Cases List for Category " + request.getParameter("caseCategory").toString();
+			heading = "New Cases List for Category " + request.getParameter("caseCategory").toString();
 
 			System.out.println("DISPWISE SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -1016,7 +1015,7 @@ System.out.println("caseStatus----"+caseStatus);
 			
 			System.out.println("roleId--"+roleId);
 
-			heading = "Cases List for Category " + request.getParameter("caseCategory").toString();
+			heading = "New Cases List for Category " + request.getParameter("caseCategory").toString();
 
 			System.out.println("DISPWISE SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

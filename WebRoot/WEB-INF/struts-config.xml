@@ -454,6 +454,12 @@
 			<forward name="casepopupview1" path="casedetailspopupview3"></forward>
 		</action>
 		
+		<action path="/HCNewCaseStatusAbstractReport" name="CommonForm"
+			type="in.apcfss.struts.reports.HCNewCaseStatusAbstractReport"
+			parameter="mode" scope="request">
+			<forward name="success" path="HCNewCaseStatusAbstractReport"></forward>
+		</action>
+		
 		
 
 	</action-mappings>
