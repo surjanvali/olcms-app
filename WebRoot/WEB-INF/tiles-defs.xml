@@ -335,5 +335,11 @@
 		extends="modalLayout">
 		<put name="content" value="/jsp/reports/DailyStatusEntryView.jsp" />
 	</definition>
+	
+	<definition name="HCNewCaseStatusAbstractReport"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/HCNewCaseStatusAbstractReport.jsp" />
+	</definition>
 
 </tiles-definitions>

@@ -404,15 +404,15 @@ System.out.println("caseStatus----"+caseStatus);
 					heading += " All Closed Cases ";
 				}
 				if (caseStatus.equals("goi")) {
-					sqlCondition = " and case_status=96 and coalesce(ecourts_case_status,'')='Closed' ";
+					sqlCondition = " and (case_status=96 or coalesce(ecourts_case_status,'')='Closed') ";
 					heading += " Pending at Govt. of India ";
 				}
 				if (caseStatus.equals("psu")) {
-					sqlCondition = " and case_status=97 and coalesce(ecourts_case_status,'')='Closed' ";
+					sqlCondition = " and (case_status=97 or coalesce(ecourts_case_status,'')='Closed') ";
 					heading += " Pending at PSU ";
 				}
 				if (caseStatus.equals("Private")) {
-					sqlCondition = " and case_status=98 and coalesce(ecourts_case_status,'')='Closed' ";
+					sqlCondition = " and (case_status=98 or coalesce(ecourts_case_status,'')='Closed') ";
 					heading += " Pending at Private ";
 				}
 			}
