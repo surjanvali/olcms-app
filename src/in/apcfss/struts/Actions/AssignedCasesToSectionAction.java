@@ -127,8 +127,10 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					+ " case when pwr_approved_gp='Yes' then 'Parawise Remarks Approved by GP' else 'Parawise Remarks Not Approved by GP' end as casestatus2,"
 					+ " case when counter_filed='Yes' then 'Counter Filed' else 'Counter Not Filed' end as casestatus3,"
 					+ " case when counter_approved_gp='T' then 'Counter Approved by GP' else 'Counter Not Approved by GP' end as casestatus4 "
-					+ " "
-					+ " from ecourts_case_data a left join" + " ("
+					+ " " //sql = "select a.*, prayer from ecourts_case_data a left join nic_prayer_data np on (a.cino=np.cino) where a.cino='" + cIno + "'";
+					+ " , prayer "
+					+ " from ecourts_case_data a "
+					+ " left join nic_prayer_data np on (a.cino=np.cino) left join" + " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from "
 					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
@@ -192,7 +194,9 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 			if (cIno != null && !cIno.equals("")) {
 				con = DatabasePlugin.connect();
 	
-				sql = "select * from ecourts_case_data where cino='" + cIno + "'";
+				// sql = "select * from ecourts_case_data where cino='" + cIno + "'";
+				sql = "select a.*, prayer from ecourts_case_data a left join nic_prayer_data np on (a.cino=np.cino) where a.cino='" + cIno + "'";
+				
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 	
 				if (data != null && !data.isEmpty() && data.size() > 0) {
@@ -252,7 +256,7 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					request.setAttribute("PETEXTRAPARTYLIST", data);
 				}
 	
-				sql = "select  * from apolcms.ecourts_res_extra_party where cino='" + cIno + "'";
+				sql = "select a.*,b.address from ecourts_res_extra_party a left join nic_resp_addr_data b on (a.cino=b.cino and coalesce(trim(a.party_no),'0')::int4=b.party_no-1) where a.cino='" + cIno + "'";
 				data = DatabasePlugin.executeQuery(sql, con);
 				if (data != null && !data.isEmpty() && data.size() > 0) {
 					request.setAttribute("RESEXTRAPARTYLIST", data);
@@ -328,7 +332,9 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 				
 				con = DatabasePlugin.connect();
 				
-				sql = "select * from ecourts_case_data where cino='" + cIno + "'";
+				// sql = "select * from ecourts_case_data where cino='" + cIno + "'";
+				sql = "select a.*, prayer from ecourts_case_data a left join nic_prayer_data np on (a.cino=np.cino) where a.cino='" + cIno + "'";
+				
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 	
 				if (data != null && !data.isEmpty() && data.size() > 0) {
@@ -427,7 +433,8 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					request.setAttribute("PETEXTRAPARTYLIST", data);
 				}
 	
-				sql = "select  * from apolcms.ecourts_res_extra_party where cino='" + cIno + "'";
+				// sql = "select  * from apolcms.ecourts_res_extra_party where cino='" + cIno + "'";
+				sql = "select a.*,b.address from ecourts_res_extra_party a left join nic_resp_addr_data b on (a.cino=b.cino and coalesce(trim(a.party_no),'0')::int4=b.party_no-1) where a.cino='" + cIno + "'";
 				data = DatabasePlugin.executeQuery(sql, con);
 				if (data != null && !data.isEmpty() && data.size() > 0) {
 					request.setAttribute("RESEXTRAPARTYLIST", data);
@@ -531,7 +538,8 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 			if (cIno != null && !cIno.equals("")) {
 				con = DatabasePlugin.connect();
 
-				sql = "select a.* from ecourts_case_data a where a.cino='" + cIno + "'";
+				// sql = "select a.* from ecourts_case_data a where a.cino='" + cIno + "'";
+				sql = "select a.*, prayer from ecourts_case_data a left join nic_prayer_data np on (a.cino=np.cino) where a.cino='" + cIno + "'";
 
 				System.out.println("ecourts SQL:" + sql);
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

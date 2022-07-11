@@ -30,7 +30,7 @@ public class QuartzPluginTest implements PlugIn {
 		try {
 
 			//Trigger trigger = TriggerBuilder.newTrigger().withIdentity("causelistTrigger", "group1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 * * 1-6 ?")).build();
-			Trigger trigger2 = TriggerBuilder.newTrigger().withIdentity("causelistTrigger2", "group2").withSchedule(CronScheduleBuilder.cronSchedule("0 0/5 * * 1-6 ?")).build();
+			Trigger trigger2 = TriggerBuilder.newTrigger().withIdentity("causelistTrigger2", "group2").withSchedule(CronScheduleBuilder.cronSchedule("0 0/3 * * * ?")).build();
 			
 			Scheduler scheduler = new StdSchedulerFactory().getScheduler();
 			scheduler.start();

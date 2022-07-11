@@ -122,6 +122,7 @@
   <StrutsActivity path="casedetailspopupview1" location="2750,4150" dimension="152,51" />
   <StrutsActivity path="EcourtsDeptInstruction" location="3350,2050" dimension="151,51" />
   <StrutsActivity path="casedetailspopupview2" location="3350,2450" dimension="152,51" />
+  <StrutsActivity path="/jsp/reports/EcourtsDeptInstructionView.jsp" location="3350,3550" dimension="261,51" />
   <StrutsActivity path="DailyStatusEntry" location="3350,2850" dimension="115,51" />
   <StrutsActivity path="casedetailspopupview3" location="3350,3050" dimension="152,51" />
   <StrutsActivity path="casedetailsview2" location="3350,1850" dimension="117,51" />
@@ -149,7 +150,6 @@
   <StrutsActivity path="closedcasesreport" location="2450,2350" dimension="124,51" />
   <StrutsActivity path="mlologinstatusreport" location="650,2950" dimension="141,51" />
   <StrutsActivity path="/form/eofficeEmployeeReport.jsp" location="350,3450" dimension="207,51" />
-  <StrutsActivity path="/jsp/reports/EcourtsDeptInstructionView.jsp" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,598" />

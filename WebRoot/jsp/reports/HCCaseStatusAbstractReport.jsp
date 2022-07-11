@@ -513,9 +513,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Scanned Affidavit</th>
 									<!-- <th>Assigned to</th> -->
 									<th>Date of Filing</th>
-									<th>Case Type</th>
+									<!-- <th>Case Type</th>
 									<th>Reg.No.</th>
-									<th>Reg. Year</th>
+									<th>Reg. Year</th> -->
+									
+									<th>Case Reg No.</th>
+									<th>Prayer</th>
+									
 									<th>Filing No.</th>
 									<th>Filing Year</th>
 									<th>Date of Next List</th>
@@ -562,9 +566,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 																	${map.date_of_filing }
 																</logic:notEqual>
 											</logic:notEmpty></td>
-										<td>${map.type_name_fil }</td>
+											
+										<%-- <td>${map.type_name_fil }</td>
 										<td>${map.reg_no}</td>
-										<td>${map.reg_year }</td>
+										<td>${map.reg_year }</td> prayer --%>
+										<td>${map.type_name_fil } / ${map.reg_no} / ${map.reg_year }</td>
+										<td>${map.prayer }</td>
+										
 										<td>${map.fil_no}</td>
 										<td>${map.fil_year }</td>
 										<td><logic:notEmpty name="map" property="date_next_list">
@@ -589,7 +597,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</tbody>
 							<tfoot>
 								<tR>
-									<td colspan="20">&nbsp;</td>
+									<td colspan="19">&nbsp;</td>
 								</tR>
 							</tfoot>
 						</table>
