@@ -127,19 +127,19 @@ public class AjaxModels extends DispatchAction {
 
 				String sql = "select distinct employee_id, fullname_en||' - '||org_unit_name_en from " + tableName
 						+ " where substring(global_org_name,1,5)='" + deptId.substring(0,5)
-						+ "' and designation_id=? order by fullname_en";
+						+ "' and designation_id=? order by 2";
 				// System.out.println("sql="+sql);
 				if (userType != null && !userType.equals("0")) {
 					if (userType.equals("MLO")) {
 
 						sql = "select distinct employee_id, fullname_en ||' - '||org_unit_name_en from " + tableName
 								+ " where substring(global_org_name,1,5)='" + deptId
-								+ "' and designation_id=? and employee_id not in (select employeeid from mlo_details) order by fullname_en";
+								+ "' and designation_id=? and employee_id not in (select employeeid from mlo_details) order by 2";
 					} else if (userType.equals("NO")) {
 						sql = "select distinct employee_id, fullname_en||' - '||org_unit_name_en from " + tableName
 								+ " where substring(global_org_name,1,5)='" + deptId
 								+ "' and designation_id=? and employee_id not in (select employeeid from nodal_officer_details where dept_id='"
-								+ deptId + "') order by fullname_en";
+								+ deptId + "') order by 2";
 					}
 				}
 				System.out.println("getEmployeesList : SQL:" + sql);
