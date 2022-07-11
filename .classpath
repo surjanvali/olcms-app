@@ -40,6 +40,9 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/c3p0-0.9.1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-2.1.5.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/com.fasterxml.jackson.annotations.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/com.fasterxml.jackson.core.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/com.fasterxml.jackson.databind.jar"/>
 	<classpathentry kind="con" path="com.genuitec.runtime.library/com.genuitec.jstl_1.2.1">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="WEB-INF/lib"/>

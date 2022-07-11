@@ -213,6 +213,12 @@ body {
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${map.res_adv}</div>
 						</div>
+
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								<b>Prayer:</b>								
+								${map.prayer}</div>
+						</div>
 					</logic:iterate>
 				</logic:present>
 				<hr />
@@ -294,6 +300,7 @@ body {
 										<th>Sl No.</th>
 										<th>Party No</th>
 										<th>Party Name</th>
+										<th>Address</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -302,6 +309,7 @@ body {
 											<td>${i+1}</td>
 											<td>${res.party_no}</td>
 											<td>${res.party_name}</td>
+											<td>${res.address}</td>
 										</tr>
 									</logic:iterate>
 								</tbody>

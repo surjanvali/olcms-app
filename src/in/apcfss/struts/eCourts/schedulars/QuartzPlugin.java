@@ -32,6 +32,7 @@ public class QuartzPlugin implements PlugIn {
 		try {
 
 			Trigger trigger_CASESDATAUPDATE = TriggerBuilder.newTrigger().withIdentity("casesdataupdateTrigger", "group1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/5 0-8,20-23 * * ?")).build();
+			// Trigger trigger_CASESDATAUPDATE = TriggerBuilder.newTrigger().withIdentity("casesdataupdateTrigger", "group1").withSchedule(CronScheduleBuilder.cronSchedule("0 0/5 * * * ?")).build();
 			// Trigger trigger_SMSALERTS = TriggerBuilder.newTrigger().withIdentity("smsalertsTrigger", "group2").withSchedule(CronScheduleBuilder.cronSchedule("0 15 16 * 1-6 ?")).build();
 			// Trigger trigger_CAUSELIST = TriggerBuilder.newTrigger().withIdentity("causelistTrigger", "group3").withSchedule(CronScheduleBuilder.cronSchedule("0 30 21 * 1-6 ?")).build();//30 9 ? * MON-FRI
 

@@ -30,7 +30,7 @@ public class CheckFileinServer {
 		int c = 0;File myFile = null;
 		String  fileURL = "", fileName = "";
 		try {
-			fileURL = "https:\\\\apolcms.ap.gov.in\\uploads\\scandocs\\AGC011720220512104557955\\AGC011720220512104557955.pdf";
+			fileURL = "https://apolcms.ap.gov.in/uploads/scandocs/AGC011720220512104557955/AGC011720220512104557955.pdf";
 			System.out.println("fileURL:"+fileURL);
 			//URI u = new URI(fileURL);
 			//myFile = new File((u.toURL()).getFile());
@@ -38,7 +38,7 @@ public class CheckFileinServer {
 			URL url = new URL(fileURL);
 			myFile = new File(url.getFile());
 			
-			System.out.println("myFile:"+myFile.getAbsolutePath());
+			// System.out.println("myFile:"+myFile.getAbsolutePath());
 			
 			if (myFile != null && myFile.exists()) {
 				// file exist
