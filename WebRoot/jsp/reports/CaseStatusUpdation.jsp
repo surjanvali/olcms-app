@@ -189,18 +189,18 @@ body {
 						</div>
 						<div class="row">
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Petetioner Name: </b>
+								<b>Petitioner Name: </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${map.pet_name}</div>
 
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Petetioner Advacate : </b>
+								<b>Petitioner Advocate : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${map.pet_adv}</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Petetioner Legal Heir : </b>
+								<b>Petitioner Legal Heir : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${map.pet_legal_heir}</div>
@@ -210,7 +210,7 @@ body {
 								<b>Respondent Name : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.res_name}</div>
+								${map.res_name}, ${map.address}</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
 								<b>Respondent Advocate : </b>
 							</div>
@@ -222,10 +222,10 @@ body {
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${map.res_adv}</div>
 						</div>
-<div class="row">
+						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<b>Prayer:</b>								
-								${map.prayer}</div>
+								<b>Prayer:</b> ${map.prayer}
+							</div>
 						</div>
 
 					</logic:iterate>
@@ -279,7 +279,7 @@ body {
 								cellspacing="0" width="100%">
 								<thead>
 									<tr>
-										<th colspan="3">Petetioner's List</th>
+										<th colspan="3">Petitioner's List</th>
 									</tr>
 									<tr>
 										<th>Sl No.</th>
@@ -343,8 +343,8 @@ body {
 										<th>Sl No.</th>
 										<th>Sr No</th>
 										<th>IA NO</th>
-										<th>IA PetetionerName</th>
-										<th>IA PetetionerDispoasal</th>
+										<th>IA Petitioner Name</th>
+										<th>IA Petitioner Dispoasal</th>
 										<th>IA Date of Filling</th>
 									</tr>
 								</thead>
@@ -536,14 +536,14 @@ body {
 											<td>${order.order_details}</td>
 											<td><logic:notEmpty name="order"
 													property="order_document_path">
-													
+
 													<logic:notEqual value="-" name="order"
 														property="order_document_path">
-														
-													<a href="./${order.order_document_path}"
-														class="btn btn-sm btn-info" target="">
-														${order.order_details}-${order.order_no}</a>
-														</logic:notEqual>
+
+														<a href="./${order.order_document_path}"
+															class="btn btn-sm btn-info" target="">
+															${order.order_details}-${order.order_no}</a>
+													</logic:notEqual>
 												</logic:notEmpty></td>
 										</tr>
 									</logic:iterate>
@@ -582,13 +582,12 @@ body {
 											<td>${activities.inserted_by}</td>
 											<td>${activities.assigned_to}</td>
 											<td>${activities.remarks }</td>
-											<td>
-											<logic:notEmpty name="activities"
+											<td><logic:notEmpty name="activities"
 													property="uploaded_doc_path">
 
 													<logic:notEqual value="-" name="activities"
 														property="uploaded_doc_path">
- 
+
 														<a href='${activities.uploaded_doc_path}' target='_new'
 															class="btn btn-sm btn-info">View Uploaded File</a>
 													</logic:notEqual>
@@ -1128,8 +1127,6 @@ body {
 											}
 										});
 
-						
-
 						$("#parawiseRemarksSubmitted").change(function() {
 							if ($("#parawiseRemarksSubmitted").val() == "Yes") {
 								$(".parawiseRemarkssubmitteddiv").show();
@@ -1145,7 +1142,7 @@ body {
 								$(".parawiseRemarksapproveddiv").hide();
 							}
 						});
-						
+
 						$("#appealFiled").change(function() {
 							if ($("#appealFiled").val() == "Yes") {
 								$(".appealuploaddiv").show();
@@ -1153,7 +1150,7 @@ body {
 								$(".appealuploaddiv").hide();
 							}
 						});
-						
+
 						$("#counterFiled")
 								.change(
 										function() {

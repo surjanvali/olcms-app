@@ -180,18 +180,18 @@ body {
 						</div>
 						<div class="row">
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Petetioner Name: </b>
+								<b>Petitioner Name: </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${map.pet_name}</div>
 
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Petetioner Advacate : </b>
+								<b>Petitioner Advocate : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${map.pet_adv}</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Petetioner Legal Heir : </b>
+								<b>Petitioner Legal Heir : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 								${map.pet_legal_heir}</div>
@@ -201,7 +201,9 @@ body {
 								<b>Respondent Name : </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.res_name}</div>
+								${map.res_name}, 
+								${map.address}
+								</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
 								<b>Respondent Advocate : </b>
 							</div>
@@ -262,7 +264,7 @@ body {
 								cellspacing="0" width="100%">
 								<thead>
 									<tr>
-										<th colspan="3">Petetioner's List</th>
+										<th colspan="3">Petitioner's List</th>
 									</tr>
 									<tr>
 										<th>Sl No.</th>
@@ -331,8 +333,8 @@ body {
 										<th>Sl No.</th>
 										<th>Sr No</th>
 										<th>IA NO</th>
-										<th>IA PetetionerName</th>
-										<th>IA PetetionerDispoasal</th>
+										<th>IA Petitioner Name</th>
+										<th>IA Petitioner Dispoasal</th>
 										<th>IA Date of Filling</th>
 
 									</tr>

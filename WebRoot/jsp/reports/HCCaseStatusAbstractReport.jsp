@@ -10,16 +10,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 %>
 
 <!-- <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'> -->
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
-<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>	
+<link rel='stylesheet'
+	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
+<link rel='stylesheet'
+	href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 
-<link href="./assetsnew/vendors/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="./assetsnew/vendors/select2/dist/css/select2.min.css"
+	rel="stylesheet" />
 <!-- <link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet" type="text/css" /> -->
 
 <!-- PLUGINS STYLES-->
 <!-- <link href="./assetsnew/vendors/DataTables/datatables.min.css" rel="stylesheet" /> -->
 <!-- THEME STYLES-->
-<link href="assetsnew/css/main.min.css" rel="stylesheet" /> 
+<link href="assetsnew/css/main.min.css" rel="stylesheet" />
 
 <div class="page-content fade-in-up">
 	<html:form action="/HCCaseStatusAbstractReport"
@@ -292,11 +295,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 									<bean:define id="closedcases"
 										value="${closedcases + map.closedcases }"></bean:define>
-										<bean:define id="goiTotals"
-										value="${goiTotals + map.goi }"></bean:define>
-										<bean:define id="psuTotals"
-										value="${psuTotals + map.psu }"></bean:define>
-										<bean:define id="privateTotals"
+									<bean:define id="goiTotals" value="${goiTotals + map.goi }"></bean:define>
+									<bean:define id="psuTotals" value="${psuTotals + map.psu }"></bean:define>
+									<bean:define id="privateTotals"
 										value="${privateTotals + map.privatetot }"></bean:define>
 
 									<bean:define id="hodSecTotals"
@@ -332,7 +333,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<td colspan="1" style="text-align: right;">${goiTotals }</td>
 									<td colspan="1" style="text-align: right;">${psuTotals }</td>
 									<td colspan="1" style="text-align: right;">${privateTotals }</td>
-									
+
 								</tR>
 							</tfoot>
 
@@ -454,11 +455,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 									<bean:define id="closedcases"
 										value="${closedcases + map.closedcases }"></bean:define>
-										<bean:define id="goiTotals"
-										value="${goiTotals + map.goi }"></bean:define>
-										<bean:define id="psuTotals"
-										value="${psuTotals + map.psu }"></bean:define>
-										<bean:define id="privateTotals"
+									<bean:define id="goiTotals" value="${goiTotals + map.goi }"></bean:define>
+									<bean:define id="psuTotals" value="${psuTotals + map.psu }"></bean:define>
+									<bean:define id="privateTotals"
 										value="${privateTotals + map.privatetot }"></bean:define>
 
 									<bean:define id="hodSecTotals"
@@ -516,10 +515,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<!-- <th>Case Type</th>
 									<th>Reg.No.</th>
 									<th>Reg. Year</th> -->
-									
+
 									<th>Case Reg No.</th>
 									<th>Prayer</th>
-									
+
 									<th>Filing No.</th>
 									<th>Filing Year</th>
 									<th>Date of Next List</th>
@@ -556,7 +555,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 															Affidavit</span></a>
 												</logic:notEqual>
 											</logic:notEmpty></td>
-											<%-- <td nowrap="nowrap">${map.globalorgname}<br />
+										<%-- <td nowrap="nowrap">${map.globalorgname}<br />
 												${map.fullname} - ${map.designation} <br />
 												${map.mobile} - ${map.email}
 											</td> --%>
@@ -566,13 +565,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 																	${map.date_of_filing }
 																</logic:notEqual>
 											</logic:notEmpty></td>
-											
+
 										<%-- <td>${map.type_name_fil }</td>
 										<td>${map.reg_no}</td>
 										<td>${map.reg_year }</td> prayer --%>
-										<td>${map.type_name_fil } / ${map.reg_no} / ${map.reg_year }</td>
+										<td>${map.type_name_fil }/ ${map.reg_no} / ${map.reg_year }</td>
 										<td>${map.prayer }</td>
-										
+
 										<td>${map.fil_no}</td>
 										<td>${map.fil_year }</td>
 										<td><logic:notEmpty name="map" property="date_next_list">
@@ -586,7 +585,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${map.pet_name }</td>
 										<td>${map.dist_name }</td>
 										<td>${map.purpose_name }</td>
-										<td>${map.res_name }</td>
+										<td>${map.res_name }${map.address}</td>
 
 										<td>${map.pet_adv }</td>
 										<td>${map.res_adv }</td>
@@ -635,7 +634,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</tfoot>
 						</table>
 					</logic:present>
-					
+
 					<logic:present name="DIPTWISECASES">
 						<table id="example" class="table table-striped table-bordered"
 							style="width:100%">
@@ -699,11 +698,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js'></script>
-<script src="./assetsnew/vendors/select2/dist/js/select2.full.min.js" type="text/javascript"></script>
-	
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script
+	src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
+<script
+	src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js'></script>
+<script src="./assetsnew/vendors/select2/dist/js/select2.full.min.js"
+	type="text/javascript"></script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		$(".select2Class").select2();

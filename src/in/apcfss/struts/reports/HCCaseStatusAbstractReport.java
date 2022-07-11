@@ -513,6 +513,26 @@ System.out.println("caseStatus----"+caseStatus);
 					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
 					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
 					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) "+condition+" where d.display = true ";
+			
+			sql = "select a.*, "
+					+ ""
+					// + "n.global_org_name as globalorgname, n.fullname_en as fullname, n.designation_name_en as designation, n.mobile1 as mobile, n.email as email, "
+					+ ""
+					+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer from ecourts_case_data a "
+					+ " left join nic_prayer_data np on (a.cino=np.cino)"
+					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
+					//+ "inner join nic_data n on (a.assigned_to=n.email) "
+					+ " left join"
+					+ " ("
+					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
+					+ " from "
+					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1" + " union"
+					+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
+					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
+					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) "+condition+" where d.display = true ";
+			
 
 			if (roleId.equals("1") || roleId.equals("7")  ) {
 			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
