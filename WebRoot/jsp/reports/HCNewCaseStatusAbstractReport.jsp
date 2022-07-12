@@ -509,25 +509,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<thead>
 								<tr>
 									<th>Sl.No</th>
-									<th>CINo</th>
-									<th>Scanned Affidavit</th>
-									<!-- <th>Assigned to</th> -->
-									<th>Date of Filing</th>
+									<th>Ack No</th>
+									<!-- <th>Ack No</th> -->
+									<!-- <th>Scanned Affidavit</th> -->
 									<th>Case Type</th>
-									<th>Reg.No.</th>
-									<th>Reg. Year</th>
-									<th>Filing No.</th>
-									<th>Filing Year</th>
-									<th>Date of Next List</th>
-									<th>Bench</th>
-									<th>Judge Name</th>
-									<th>Petitioner</th>
-									<th>District</th>
-									<th>Purpose</th>
-									<th>Respondents</th>
+									<!-- <th>Reg.No.</th>
+									<th>Reg. Year</th> -->
+									<th>Main Case No</th>
+									<th>Case Category</th>
 									<th>Petitioner Advocate</th>
 									<th>Respondent Advocate</th>
-									<th>Orders</th>
+									<th>Respondent Advocate No</th>
+									<th>District</th>
+									<th>Download/Print</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -536,53 +530,77 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<tr>
 										<td>${i+1 }.</td>
 										<td><input type="button" id="btnShowPopup"
-											value="${map.cino}"
+											value="${map.ack_no}"
 											class="btn btn-sm btn-info waves-effect waves-light"
-											onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
+											onclick="javascript:viewCaseDetailsPopup('${map.ack_no}');" />
+											</td>
+											<%-- <td>${map.ack_no }<logic:notEqual value="-" name="map"
+													property="hc_ack_no">
 
-										</td>
-										<td><logic:notEmpty name="map"
+													<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
+
+												</logic:notEqual>
+											</td> --%>
+										
+										<%-- <td><logic:notEmpty name="map"
 												property="scanned_document_path1">
 												<logic:notEqual value="-" name="map"
 													property="scanned_document_path1">
-													<%-- ./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf --%>
-													<a href="./${map.scanned_document_path}" target="_new"
+													<a href="./${map.scanned_document_path1}" target="_new"
 														class="btn btn-sm btn-info"><i
 														class="glyphicon glyphicon-save"></i><span>Scanned
 															Affidavit</span></a>
 												</logic:notEqual>
-											</logic:notEmpty></td>
-											<%-- <td nowrap="nowrap">${map.globalorgname}<br />
-												${map.fullname} - ${map.designation} <br />
-												${map.mobile} - ${map.email}
-											</td> --%>
-										<td><logic:notEmpty name="map" property="date_of_filing">
-												<logic:notEqual value="0001-01-01" name="map"
-													property="date_of_filing">
-																	${map.date_of_filing }
-																</logic:notEqual>
-											</logic:notEmpty></td>
-										<td>${map.type_name_fil }</td>
-										<td>${map.reg_no}</td>
-										<td>${map.reg_year }</td>
-										<td>${map.fil_no}</td>
-										<td>${map.fil_year }</td>
-										<td><logic:notEmpty name="map" property="date_next_list">
-												<logic:notEqual value="0001-01-01" name="map"
-													property="date_next_list">
-																	${map.date_of_filing }
-																</logic:notEqual>
-											</logic:notEmpty></td>
-										<td>${map.bench_name }</td>
-										<td>Hon'ble Judge : ${map.coram }</td>
-										<td>${map.pet_name }</td>
-										<td>${map.dist_name }</td>
-										<td>${map.purpose_name }</td>
-										<td>${map.res_name }</td>
+											</logic:notEmpty></td> --%>
+											
+										<td>${map.case_short_name }</td>
+										<%-- <td>${map.reg_no}</td>
+										<td>${map.reg_year}</td> --%>
+										<td>${map.maincaseno}</td>
+										<td>${map.case_category }</td>
+										<td>${map.petitioner_name}</td>
+										<td>${map.advocatename}</td>
+										<td>${map.advocateccno}</td>
+										<td>${map.district_name}</td>
+										<td style="text-align: center;" nowrap="nowrap"><logic:present
+													name="map" property="ack_file_path">
+													<a href="./${map.ack_file_path}" target="_new"
+														title="Print Acknowledgement" class="btn btn-sm btn-info">
+														<i class="fa fa-save"></i> <span>Acknowledgement</span> <!-- <span>Download</span> -->
+													</a>
+												</logic:present> <logic:present name="map" property="barcode_file_path">
+													<a href="./${map.barcode_file_path}" target="_new"
+														title="Print Barcode" class="btn btn-sm btn-info"> <i
+														class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
+													</a>
+												</logic:present> <!-- //id="btnShowPopup"  --> <%-- <input type="button"
+												id="btnShowPopup" value="Scanned Affidavit"
+												class="btn btn-sm btn-info waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup('${map.ack_no}');" /> --%>
 
-										<td>${map.pet_adv }</td>
-										<td>${map.res_adv }</td>
-										<td style="text-align: center;">${map.orderpaths }</td>
+												<logic:present name="map" property="ack_no">
+
+
+													<logic:notEqual value="-" name="map" property="hc_ack_no">
+														<a
+															href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
+															target="_new" title="Print Barcode"
+															class="btn btn-sm btn-info">
+													</logic:notEqual>
+
+
+													<logic:equal value="-" name="map" property="hc_ack_no">
+														<a
+															href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
+															target="_new" title="Print Barcode"
+															class="btn btn-sm btn-info">
+													</logic:equal>
+
+													<i class="fa fa-save"></i>
+													<span>Scanned Affidavit</span>
+													</a>
+												</logic:present></td>
+										
 									</tr>
 
 								</logic:iterate>
@@ -723,12 +741,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#HCCaseStatusAbstract").submit();
 	}
 
-	function viewCaseDetailsPopup(cino) {
-		var heading = "View Case Details for CINO : " + cino;
+	function viewCaseDetailsPopup(ack_no) {
+		//alert("hai....");
+		var heading = "View Case Details for ACK NO : " + ack_no;
 		var srclink = "";
-		if (cino != null && cino != "" && cino != "0") {
-			srclink = "./AssignedCasesToSection.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino="
-					+ cino;
+		if (ack_no != null && ack_no != "" && ack_no != "0") {
+			srclink = "./HCNewCaseStatusAbstractReport.do?mode=getAckNo&SHOWPOPUP=SHOWPOPUP&cino="
+					+ ack_no;
 			// alert("LINK:"+srclink);
 			if (srclink != "") {
 				$("#MyPopup .modal-title").html(heading);
