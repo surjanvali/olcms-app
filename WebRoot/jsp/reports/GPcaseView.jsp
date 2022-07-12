@@ -99,7 +99,7 @@ body {
 						id="dialycasestatus-tab" data-toggle="tab" href="#dialycasestatus"
 						role="tab" aria-controls="dialycasestatus" aria-selected="true">
 							<span class="d-block d-sm-none"><i class="fas fa-user"></i></span>
-							<span class="d-none d-sm-block">Dialy Case Status Tab</span>
+							<span class="d-none d-sm-block">Dialy Case Status</span>
 					</a></li>
 					<!-- <li class="nav-item"><a class="nav-link" id="petitoner-tab"
 						data-toggle="tab" href="#petitoner" role="tab"
@@ -997,7 +997,8 @@ body {
 										</div>
 									</div>
 								</logic:present>
-
+<logic:present name="PWRSUBMITION">
+									<logic:equal value="ENABLE" name="PWRSUBMITION">
 								<div class="row">
 									<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
 										<label>Upload Petition <bean:message key="mandatory" /></label>
@@ -1191,8 +1192,7 @@ body {
 										</div>
 									</div>
 								</div>
-								<logic:present name="PWRSUBMITION">
-									<logic:equal value="ENABLE" name="PWRSUBMITION">
+								
 
 										<button class="btn btn-md btn-success" type="button"
 											name="forward"
@@ -1337,7 +1337,7 @@ body {
 												</div>
 											</div>
 										</div>
-										<div class="counterfileddiv">
+										<div>
 											<div class="row">
 												<div class="col-sm-6 form-group ">
 													<label>Counter Filed</label>
@@ -1390,8 +1390,8 @@ body {
 												<div class="form-group">
 													<label for="sel1" id="remaeksTextId">Remarks: </label>
 
-													<html:textarea cols="600" styleId="remarks2"
-														property="dynaForm(remarks2)"
+													<html:textarea cols="600" styleId="remarks"
+														property="dynaForm(remarks)"
 														style="width: 1000px; height: 250px;">
 													</html:textarea>
 												</div>

@@ -112,6 +112,39 @@ body {
 				</div>
 			</div>
 		</logic:present>
+		
+		<logic:present name="dailyStatusexistData">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">GP Daily Status submitted</div>
+				</div>
+				<div class="ibox-body">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<table id="example" class="table table-striped table-bordered"
+								style="width:100%">
+								<thead>
+									<tr>
+										<th>Sl.No</th>
+										<th>Description</th>
+										<th>Submitted On</th>
+									</tr>
+								</thead>
+								<tbody>
+									<logic:iterate id="map" name="dailyStatusexistData" indexId="i">
+										<tr>
+											<td>${i+1 }.</td>
+											<td>${map.status_remarks }</td>
+											<td>${map.insert_time}</td>
+										</tr>
+									</logic:iterate>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</logic:present>
 
 
 	</html:form>

@@ -157,13 +157,16 @@ public class HighCourtCasesListAction extends DispatchAction {
 			}
 			
 			
-			else if(roleId.equals("6") ) {//MLO & Sect. Dept.
+			else if(roleId.equals("6") ) {//GP
 				condition1 =" inner join ecourts_mst_gp_dept_map emgd on (a.dept_code=emgd.dept_code) ";
 				condition2 =" and case_status is null or case_status=2 ";
 			}
 			
 			
-			sql = "select a.*, b.orderpaths from ecourts_case_data a "+condition1+" left join"
+			sql = "select a.*,coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer, ra.address from ecourts_case_data a "
+					+ " left join nic_prayer_data np on (a.cino=np.cino)"
+					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
+					+ ""+condition1+" left join"
 					+ " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from "

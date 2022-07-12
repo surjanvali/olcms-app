@@ -47,21 +47,41 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</a>
 							</div>
 						</logic:greaterThan>
-
-						<logic:greaterThan value="0" name="innerData" property="total">
+						
+						<logic:present name="totaldeptcases">
+							<logic:greaterThan value="0" name="totaldeptcases">
 							<div class="col-lg-3 col-md-6">
-								<div class="ibox bg-primary color-white widget-stat">
-									<div class="ibox-body">
-										<h2 class="m-b-5 font-strong">${innerData.total }</h2>
-										<div class="m-b-5">Total Cases</div>
-										<i class="fa fa-file-text-o widget-stat-icon"></i>
-										<div>
-											<small> &nbsp;</small>
+									<div class="ibox bg-primary color-white widget-stat">
+										<div class="ibox-body">
+											<h2 class="m-b-5 font-strong">${totaldeptcases }</h2>
+											<div class="m-b-5">Total Cases</div>
+											<i class="fa fa-file-text-o widget-stat-icon"></i>
+											<div>
+												<small> &nbsp;</small>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-						</logic:greaterThan>
+							</logic:greaterThan>
+						</logic:present>
+
+						<logic:notPresent name="totaldeptcases">
+							<logic:greaterThan value="0" name="innerData" property="total">
+								<div class="col-lg-3 col-md-6">
+									<div class="ibox bg-primary color-white widget-stat">
+										<div class="ibox-body">
+											<h2 class="m-b-5 font-strong">${innerData.total }</h2>
+											<div class="m-b-5">Total Cases</div>
+											<i class="fa fa-file-text-o widget-stat-icon"></i>
+											<div>
+												<small> &nbsp;</small>
+											</div>
+										</div>
+									</div>
+								</div>
+							</logic:greaterThan>
+
+						</logic:notPresent>
 
 						<logic:greaterThan value="0" name="innerData"
 							property="assignment_pending">
@@ -225,14 +245,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</logic:iterate>
 				</logic:notEmpty>
 
-				<logic:notEmpty name="instructions">
-					<logic:greaterThan value="0" name="instructions">
+				<logic:notEmpty name="DAILYSTATUSBYGP">
+					<logic:greaterThan value="0" name="DAILYSTATUSBYGP">
 						<div class="col-lg-3 col-md-6">
-							<a href="./EcourtsDeptInstruction.do">
+							<a href="./EcourtsDeptInstruction.do?mode=getGPStatusUpdated">
 								<div class="ibox bg-danger color-white widget-stat">
 									<div class="ibox-body">
-										<h2 class="m-b-5 font-strong">${instructions }</h2>
-										<div class="m-b-5">Instructions Count</div>
+										<h2 class="m-b-5 font-strong">${DAILYSTATUSBYGP }</h2>
+										<div class="m-b-5">Daily Status Submitted by GP</div>
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
 											<small> &nbsp;</small>
@@ -485,75 +505,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</logic:greaterThan>
 
 					</logic:iterate>
-				</div>
-			</logic:notEmpty>
-
-			<logic:notEmpty name="SHOWABSTRACTS">
-				<div class="row">
-					<div class="col-lg-3 col-md-6">
-						<div class="ibox bg-success color-white widget-stat">
-							<div class="ibox-body">
-								<h2 class="m-b-5 font-strong">25</h2>
-								<div class="m-b-5">States</div>
-								<i class="fa fa-file-text-o widget-stat-icon"></i>
-								<div>
-									<small> &nbsp;</small>
-								</div>
-								<!-- <i class="ti-shopping-cart widget-stat-icon"></i>
-						<div>
-							<i class="fa fa-level-up m-r-5"></i><small>25% higher</small>
-						</div> -->
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-md-6">
-						<div class="ibox bg-info color-white widget-stat">
-							<div class="ibox-body">
-								<h2 class="m-b-5 font-strong">581</h2>
-								<div class="m-b-5">Districts</div>
-								<i class="fa fa-file-text-o widget-stat-icon"></i>
-								<div>
-									<small> &nbsp;</small>
-								</div>
-								<!-- <i class="ti-bar-chart widget-stat-icon"></i>
-						<div>
-							<i class="fa fa-level-up m-r-5"></i><small>17% higher</small>
-						</div> -->
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-md-6">
-						<div class="ibox bg-warning color-white widget-stat">
-							<div class="ibox-body">
-								<h2 class="m-b-5 font-strong">42</h2>
-								<div class="m-b-5">Benches</div>
-								<i class="fa fa-file-text-o widget-stat-icon"></i>
-								<div>
-									<small> &nbsp;</small>
-								</div>
-								<!-- <i class="fa fa-money widget-stat-icon"></i>
-						<div>
-							<i class="fa fa-level-up m-r-5"></i><small>22% higher</small>
-						</div> -->
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-3 col-md-6">
-						<div class="ibox bg-danger color-white widget-stat">
-							<div class="ibox-body">
-								<h2 class="m-b-5 font-strong">1,95,814</h2>
-								<div class="m-b-5">Cases</div>
-								<i class="fa fa-file-text-o widget-stat-icon"></i>
-								<div>
-									<small> &nbsp;</small>
-								</div>
-								<!-- <i class="ti-user widget-stat-icon"></i>
-						<div>
-							<i class="fa fa-level-down m-r-5"></i><small>-12% Lower</small>
-						</div> -->
-							</div>
-						</div>
-					</div>
 				</div>
 			</logic:notEmpty>
 

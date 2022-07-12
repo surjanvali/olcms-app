@@ -149,8 +149,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 			}
 
 			if (roleId.equals("3")) {// Secretariat Department
-				sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='" + deptCode
-						+ "') ";
+				sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='" + deptCode + "') ";
 			}
 
 			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
@@ -183,7 +182,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 			System.out.println("CASES SQL:" + sql);
 
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
+			// System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
 				request.setAttribute("CASEWISEACKS", data);
 			} else {

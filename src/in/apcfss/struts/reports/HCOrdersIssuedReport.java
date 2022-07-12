@@ -246,12 +246,16 @@ public class HCOrdersIssuedReport extends DispatchAction {
 			}
 			
 			String condition="";
-			if (roleId.equals("6") )
-				condition= " inner join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) ";
+			//if (roleId.equals("6") )
+				//condition= " inner join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) ";
 			
 			
 			
-			sql = "select a.*, b.orderpaths from ecourts_case_data a "+condition+" inner join" + " ("
+			sql = "select a.*, b.orderpaths, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, prayer, ra.address from ecourts_case_data a "
+					+ " left join nic_prayer_data np on (a.cino=np.cino)"
+					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
+					
+					+ ""+condition+" inner join" + " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from (select * from";
 

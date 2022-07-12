@@ -63,12 +63,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="ibox bg-danger color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${INSTRUCTIONSCOUNT }</h2>
-										<div class="m-b-5">Instructions Submitted</div>
+										<div class="m-b-5">Instructions</div>
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
 											<small> &nbsp;</small>
 										</div>
-
 									</div>
 								</div>
 							</a>

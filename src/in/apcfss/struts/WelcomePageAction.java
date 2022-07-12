@@ -143,6 +143,15 @@ public class WelcomePageAction extends DispatchAction{
 				}
 				else if(roleId.equals("3") || roleId.equals("4")  || roleId.equals("5") || roleId.equals("9")) {
 					
+					if(roleId.equals("3") || roleId.equals("4")) {
+						sql="select count(*) "
+							+ "from ecourts_case_data a "
+							+ "inner join dept_new d on (a.dept_code=d.dept_code) "
+							+ "where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
+						
+						request.setAttribute("totaldeptcases", DatabasePlugin.getStringfromQuery(sql, con) );
+					}
+					
 					sql="select a.dept_code as deptcode , upper(d.description) as description,count(*) as total_cases, "
 							+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
 							+ "sum(case when (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withmlo, "
@@ -217,6 +226,12 @@ public class WelcomePageAction extends DispatchAction{
 					
 					List<Map<Object, String>> disposedCasesStatus = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("disposedCasesStatus", disposedCasesStatus);
+					
+					// Daily Status
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_gpo_daily_status) b on (a.cino=b.cino) "
+							+ " inner join dept_new d on (a.dept_code=d.dept_code) "
+							+ " where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
+					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 				}
 				
 				//District Collector
@@ -296,6 +311,11 @@ public class WelcomePageAction extends DispatchAction{
 					List<Map<Object, String>> disposedCasesStatus = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("disposedCasesStatus", disposedCasesStatus);
 					
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_gpo_daily_status) b on (a.cino=b.cino) "
+							+ " inner join dept_new d on (a.dept_code=d.dept_code) "
+							+ " where d.display = true and a.dist_id='"+distId+"' ";
+					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
+					
 				}else if(roleId.equals("3")) { // Sect. Dept.
 					// sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=2 and coalesce(ecourts_case_status,'')!='Closed'";
 					sql="select count(*) as total, "
@@ -316,6 +336,10 @@ public class WelcomePageAction extends DispatchAction{
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
 					
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_gpo_daily_status) b on (a.cino=b.cino) "
+							+ " where dept_code='"+deptCode+"' ";
+					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
+					
 				}else if(roleId.equals("9")) { // HOD
 					// sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=2 and coalesce(ecourts_case_status,'')!='Closed'";
 					sql="select count(*) as total, "
@@ -335,6 +359,10 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("NEWCASESCOUNTS:"+sql);
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
+					
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_gpo_daily_status) b on (a.cino=b.cino) "
+							+ " where dept_code='"+deptCode+"' ";
+					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
 				}else if(roleId.equals("4")) { // MLO
 					// sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=2 and coalesce(ecourts_case_status,'')!='Closed'";
@@ -361,7 +389,9 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("instruction SQL:"+sql);
 					request.setAttribute("instructions", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_gpo_daily_status) b on (a.cino=b.cino) "
+							+ " where dept_code='"+deptCode+"' ";
+					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
 					
 				}
@@ -385,6 +415,10 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("NEWCASESCOUNTS:"+sql);
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
+					
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_gpo_daily_status) b on (a.cino=b.cino) "
+							+ " where dept_code='"+deptCode+"' ";
+					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 				}
 				else  if(roleId.equals("10")) { // District NODAL OFFICER
 					// sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=4 and coalesce(ecourts_case_status,'')!='Closed'";
@@ -405,6 +439,10 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("NEWCASESCOUNTS:"+sql);
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
+					
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_gpo_daily_status) b on (a.cino=b.cino) "
+							+ " where dept_code='"+deptCode+"' ";
+					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 				}
 				
 				
@@ -420,6 +458,10 @@ public class WelcomePageAction extends DispatchAction{
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
 					
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_gpo_daily_status) b on (a.cino=b.cino) "
+							+ " where assigned=true and assigned_to='"+userid+"' and case_status=5 and coalesce(ecourts_case_status,'')!='Closed'";
+					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
+					
 				}
 				else if(roleId.equals("11")) { // Section Officer (HOD)
 					// sql="select emp_id,count(*) as assigned from ecourts_case_emp_assigned_dtls where emp_id='"+empId+"' group by emp_id";
@@ -433,6 +475,10 @@ public class WelcomePageAction extends DispatchAction{
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
 					
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_gpo_daily_status) b on (a.cino=b.cino) "
+							+ " where assigned=true and assigned_to='"+userid+"' and case_status=9 and coalesce(ecourts_case_status,'')!='Closed'";
+					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
+					
 				}else if(roleId.equals("12")) { // Section Officer (DIST - HOD)
 					// sql="select emp_id,count(*) as assigned from ecourts_case_emp_assigned_dtls where emp_id='"+empId+"' group by emp_id";
 					sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=10 and coalesce(ecourts_case_status,'')!='Closed'";
@@ -443,6 +489,10 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("NEWCASESCOUNTS:"+sql);
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
+					
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_gpo_daily_status) b on (a.cino=b.cino) "
+							+ " where assigned=true and assigned_to='"+userid+"' and case_status=10 and coalesce(ecourts_case_status,'')!='Closed'";
+					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
 				}
 				else if(roleId.equals("1") || roleId.equals("7")) {
@@ -494,14 +544,14 @@ public class WelcomePageAction extends DispatchAction{
 					request.setAttribute("YEARWISECASES", DatabasePlugin.executeQuery(con, sql));
 					
 					
-					  sql="select count(*) from ecourts_dept_instructions a where a.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"')";
+					  sql="select count(distinct a.cino) from ecourts_dept_instructions a where a.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"')";
 					  System.out.println("instruction SQL:"+sql);
 					  request.setAttribute("INSTRUCTIONSCOUNT", DatabasePlugin.getStringfromQuery(sql, con));
 					
 					sql="select count(*) From ecourts_olcms_case_details a "
 							+ "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  "
 							+ "inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code and ecd.assigned_to=emgd.gp_id) "
-							+ "where pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6' "
+							+ "where pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'No')='Yes' and (counter_filed='No' or counter_filed='Yes') and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6' "
 							+ "and emgd.gp_id='"+userid+"'";
 					System.out.println("COUNTERS SQL:"+sql);
 					request.setAttribute("counterFileCount", DatabasePlugin.getStringfromQuery(sql, con));
@@ -510,7 +560,7 @@ public class WelcomePageAction extends DispatchAction{
 					sql="select count(*) From ecourts_olcms_case_details a "
 							+ "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  "
 							+ "inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code and ecd.assigned_to=emgd.gp_id) "
-							+ "where pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6' "
+							+ "where (pwr_uploaded='No' or pwr_uploaded='Yes') and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6' "
 							+ "and emgd.gp_id='"+userid+"'  ";
 					System.out.println("PARAWISE COUNT SQL:"+sql);
 					request.setAttribute("parawiseCount", DatabasePlugin.getStringfromQuery(sql, con));

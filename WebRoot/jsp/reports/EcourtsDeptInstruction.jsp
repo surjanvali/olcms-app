@@ -189,7 +189,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Petitioner Advocate</th>
 										<th>Respondent Advocate</th>
 										<!-- <th>Category</th> -->
-										<th>Action</th>
+										<th>Instructions / Daily Status Action</th>
 
 									</tr>
 								</thead>

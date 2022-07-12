@@ -951,7 +951,7 @@ body {
 						<logic:notEmpty name="SHOWSECDEPTBTN">
 							<button class="btn btn-md btn-success" type="submit"
 								name="forward" onclick="return forwardCase();">Forward
-								to Sect. Dept.</button>
+								to Secretary</button>
 						</logic:notEmpty>
 
 						<logic:notEmpty name="SHOWGPBTN">

@@ -129,8 +129,9 @@ public class GPReportAction extends DispatchAction {
 			 * sql += "order by reg_year,type_name_reg,reg_no";
 			 * request.setAttribute("HEADING", heading);
 			 */
-			 sql="select type_name_reg, reg_no, reg_year, to_char(dt_regis,'dd-mm-yyyy') as dt_regis, a.cino, case when length(scanned_document_path) > 10 then scanned_document_path else '-' end as scanned_document_path from ecourts_dept_instructions a inner join ecourts_case_data od on (a.cino=od.cino)"
-			 		+ " where a.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userId+"')";
+			 sql="select type_name_reg, reg_no, reg_year, to_char(dt_regis,'dd-mm-yyyy') as dt_regis, a.cino, case when length(scanned_document_path) > 10 then scanned_document_path else '-' end as scanned_document_path "
+			 		+ " from (select distinct cino from ecourts_dept_instructions) a inner join ecourts_case_data d on (a.cino=d.cino)"
+			 		+ " where d.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userId+"')";
 			 
 			 
 			System.out.println("SQL:" + sql);
@@ -182,13 +183,13 @@ public class GPReportAction extends DispatchAction {
 				
 				if(counter_pw_flag.equals("PR")) {
 					heading = "Parawise Remarks submitted Cases List";
-					// pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6'
-					condition+=" and pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' )";
+					// pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6' //  and action_to_perfom='Parawise Remarks'
+					condition+=" and (pwr_uploaded='No' or pwr_uploaded='Yes') and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' )";
 				}
 				if(counter_pw_flag.equals("COUNTER")) {
 					heading = "Counters filed Cases List";
-					//pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6'
-					condition+=" and pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F'";
+					//pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6' //and action_to_perfom='Counter Affidavit'
+					condition+=" and pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'No')='Yes' and (counter_filed='No' or counter_filed='Yes') and coalesce(counter_approved_gp,'F')='F'";
 				}
 			}
 			
@@ -465,16 +466,17 @@ public class GPReportAction extends DispatchAction {
 					cform.setDynaForm("appealFileCopyOld" , CommonModels.checkStringObject(caseData1.get("appeal_filed_copy")));
 					cform.setDynaForm("appealFiledDt" , caseData1.get("appeal_filed_date"));
 					cform.setDynaForm("actionToPerform" , caseData1.get("action_to_perfom"));
+					cform.setDynaForm("counter_approved_gp" , caseData1.get("counter_approved_gp"));
 					
 					System.out.println("actionToPerform:"+cform.getDynaForm("actionToPerform"));
+					System.out.println("counter_approved_gp:"+cform.getDynaForm("counter_approved_gp"));
 					// 1. View old Parawise Remarks & Enable to Upload Parawise Remarks and send to Department and disable Counter Update.
-					if(cform.getDynaForm("actionToPerform").equals("Parawise Remarks")) {
+					if(CommonModels.checkStringObject(cform.getDynaForm("actionToPerform")).equals("Parawise Remarks")) {
 						//a. APPROVED
 						if(cform.getDynaForm("pwr_gp_approved").equals("Yes")) {
 							// disable Submission
 							request.setAttribute("pwrsuccessMsg", "Parawise Remarks was submitted and approved.");
 							request.setAttribute("PWRSUBMITION", "DISABLE");
-							
 						}
 						//b. NOT APPROVED
 						else if(cform.getDynaForm("pwr_gp_approved").equals("No")) {
@@ -483,25 +485,26 @@ public class GPReportAction extends DispatchAction {
 						}
 					}
 					// 2. View Counter uploaded by Dept. and Disable Parawise Remarks Updation and enable Counter Upload by GP.
-					else if(cform.getDynaForm("actionToPerform").equals("Counter Affidavit")) {
+					else if(CommonModels.checkStringObject(cform.getDynaForm("actionToPerform")).equals("Counter Affidavit")) {
 						//a. PWR NOT APPROVED
-						if(cform.getDynaForm("pwr_gp_approved").equals("No")) {
+						if(CommonModels.checkStringObject(cform.getDynaForm("pwr_gp_approved")).equals("No")) {
 							request.setAttribute("countererrorMsg", "Parawise Remarks was not submitted/approved.");
 							request.setAttribute("COUNTERSUBMITION", "DISABLE");
 						}
 						//b. PWR APPROVED COUNTER NOT APPROVED
-						else if(cform.getDynaForm("pwr_gp_approved").equals("Yes") && !cform.getDynaForm("counter_approved_gp").equals("T")) {
+						else if(CommonModels.checkStringObject(cform.getDynaForm("pwr_gp_approved")).equals("Yes") && !CommonModels.checkStringObject(cform.getDynaForm("counter_approved_gp")).equals("T")) {
 							request.setAttribute("COUNTERSUBMITION", "ENABLE");
 						}
 						//c. COUNTER APPROVED
-						if(cform.getDynaForm("pwr_gp_approved").equals("Yes") && cform.getDynaForm("counter_approved_gp").equals("T")) {
-							request.setAttribute("countersuccessMsg", "Counter was already submitted and Approved.");
+						if(CommonModels.checkStringObject(cform.getDynaForm("pwr_gp_approved")).equals("Yes") && CommonModels.checkStringObject(cform.getDynaForm("counter_approved_gp")).equals("T")) {
+							request.setAttribute("countersuccessMsg", "Counter submitted and finalized by GP.");
 							request.setAttribute("COUNTERSUBMITION", "DISABLE");
 						}
 					}
-					
+					/*else {
+						request.setAttribute("PWRSUBMITION", "ENABLE");
+					}*/
 					request.setAttribute("STATUSUPDATEBTN", "STATUSUPDATEBTN");
-					
 				}
 				
 				// Dept. Instructions
@@ -523,6 +526,7 @@ public class GPReportAction extends DispatchAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			cform.setDynaForm("fileCino", cIno);
 			DatabasePlugin.closeConnection(con);
 		}
 		// return mapping.findForward("casestatusupdate");
@@ -558,6 +562,45 @@ public class GPReportAction extends DispatchAction {
 				// System.out.println("counterRemarks::" + cform.getDynaForm("ecourtsCaseStatus"));
 				con = DatabasePlugin.connect();
 				con.setAutoCommit(false);
+				
+				
+				
+				sql="select dept_code,dist_id from ecourts_case_data where cino='"+cIno+"'";
+				String deptCodeC="", distCodeC="", newStatus="", assigned2Emp="";
+				
+				List<Map> caseData = DatabasePlugin.executeQuery(con, sql);
+				
+				if(caseData!=null) {
+					Map datainner = (Map)caseData.get(0);
+					deptCodeC = CommonModels.checkStringObject(datainner.get("dept_code"));
+					distCodeC = CommonModels.checkStringObject(datainner.get("dist_id"));
+					System.out.println("deptCodeC::"+deptCodeC);
+					System.out.println("distCodeC::"+distCodeC);
+					if(deptCodeC.contains("01") && (distCodeC.equals("") || distCodeC.equals("0"))) {//SECTION SECT DEPT
+						newStatus="5";
+						sql="select inserted_by from ecourts_case_activities where cino='"+cIno+"' and action_type='CASE FORWARDED' and assigned_to in (select emailid from mlo_details where user_id='"+deptCodeC+"') order by inserted_on desc limit 1";
+						msg = "Returned Case to Section Officer (Sect. Dept.)";
+					}
+					else if(!deptCodeC.contains("01") && (distCodeC.equals("") || distCodeC.equals("0"))) {//SECTION HOD
+						newStatus="9";
+						msg = "Returned Case to Section Officer (HOD)";
+						sql="select inserted_by from ecourts_case_activities where cino='"+cIno+"' and action_type='CASE FORWARDED' "
+								+ "and assigned_to in (select emailid from nodal_officer_details where dept_id='"+deptCodeC+"'  and coalesce(dist_id,0) = 0) order by inserted_on desc limit 1";
+						
+					}
+					else if(!distCodeC.equals("") && !distCodeC.equals("0")) {//SECTION DIST
+						newStatus="10";
+						msg = "Returned Case to Section Officer (District)";
+						sql="select inserted_by from ecourts_case_activities where cino='"+cIno+"' and action_type='CASE FORWARDED' "
+								+ "and assigned_to in (select emailid from nodal_officer_details where dept_id='"+deptCodeC+"' and coalesce(dist_id,0) > 0) order by inserted_on desc limit 1";
+						
+					}
+					
+					System.out.println("assigned2Emp::"+sql);
+					assigned2Emp = DatabasePlugin.getSingleValue(con, sql);
+				}
+				
+				
 				FileUploadUtilities fuu = new FileUploadUtilities();
 				String petition_document = "",filePath="", newFileName="", counter_filed_document="", action_taken_order="", judgement_order="", appeal_filed_copy="", pwr_uploaded_copy="";
 				
@@ -571,6 +614,7 @@ public class GPReportAction extends DispatchAction {
 				
 				sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"'";
 				a += DatabasePlugin.executeUpdate(sql, con);
+				String sqlCondition2="";
 				
 				if(cform.getDynaForm("actionToPerform").toString().equals("Parawise Remarks")) {
 					
@@ -581,15 +625,23 @@ public class GPReportAction extends DispatchAction {
 						pwr_uploaded_copy = fuu.saveFile(myDoc, filePath, newFileName);
 						
 						sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
-								+ "values ('" + cIno + "','Uploaded Parawise Remarks','"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"', '"+pwr_uploaded_copy+"')";
+								+ "values ('" + cIno + "','GP Approved Parawise Remarks','"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"', '"+pwr_uploaded_copy+"')";
 						DatabasePlugin.executeUpdate(sql, con);
+						
+						sqlCondition2 = ", pwr_uploaded_copy='"+pwr_uploaded_copy+"'";
 					}
 					
 					sql="update ecourts_olcms_case_details set pwr_approved_gp='Yes',pwr_gp_approved_date=current_date"
 							+", remarks='" + remarks
-							+ "', last_updated_by='" + userId + "', last_updated_on=now() " + ", pwr_uploaded_copy='"+pwr_uploaded_copy+"'"
+							+ "', last_updated_by='" + userId + "', last_updated_on=now() " + sqlCondition2
 							+ "  where cino='"+cIno+"'";
 					a += DatabasePlugin.executeUpdate(sql, con);
+					
+					
+					sql="update ecourts_case_data set case_status='"+newStatus+"' where cino='"+cIno+"'";
+					sql="update ecourts_case_data set  case_status="+newStatus+", assigned_to='"+assigned2Emp+"' where cino='"+cIno+"' ";
+					a += DatabasePlugin.executeUpdate(sql, con);
+					
 					
 					msg = "Parawise Remarks Approved successfully for Case ("+cIno+").";
 				}
@@ -602,16 +654,20 @@ public class GPReportAction extends DispatchAction {
 						counter_filed_document = fuu.saveFile(myDoc, filePath, newFileName);
 						
 						sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
-								+ "values ('" + cIno + "','Uploaded Counter','"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"', '"+counter_filed_document+"')";
+								+ "values ('" + cIno + "','Counter finalized by GP','"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"', '"+counter_filed_document+"')";
 						DatabasePlugin.executeUpdate(sql, con);
+						
+						sqlCondition2=", counter_filed_document='" + counter_filed_document + "'";
+						
 					}
 					
-					msg = "Counter Affidavit Approved successfully for Case ("+cIno+").";
+					msg = "Counter Affidavit finalized successfully for Case ("+cIno+").";
 					
 					sql = "update ecourts_olcms_case_details set counter_approved_gp='T',counter_approved_date=current_date, counter_approved_by='"
 							+ userId + "', remarks='" + remarks + "', last_updated_by='" + userId
-							+ "', last_updated_on=now()" + ", counter_filed_document='" + counter_filed_document + "'"
+							+ "', last_updated_on=now()" + "" + sqlCondition2
 							+ " where cino='" + cIno + "'";
+					System.out.println("COUNTER SQL:"+sql);
 					a += DatabasePlugin.executeUpdate(sql, con);
 				}
 				

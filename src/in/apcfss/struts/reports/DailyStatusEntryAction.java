@@ -172,8 +172,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 					+ sqlCondition
 					+ " and coalesce(ecourts_case_status,'')!='Closed'";
 
-			sql= " select a.*, b.finance_category from ecourts_case_data a left join ecourts_case_category_wise_data b on (a.cino=b.cino) "
-					+ " where coalesce(assigned,'f')='f'  "+sqlCondition+" and coalesce(ecourts_case_status,'')!='Closed' order by b.finance_category";
+			sql= " select a.* from ecourts_case_data a where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" and coalesce(ecourts_case_status,'')!='Closed'";
 
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -285,6 +284,12 @@ public class DailyStatusEntryAction extends DispatchAction {
 
 			System.out.println("a--->"+a);
 			if(a>0) {
+				
+				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks) "
+						+ " values ('" + cIno + "','SUBMITTED DAILY CASE STATUS', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("daily_status").toString()+"')";
+				DatabasePlugin.executeUpdate(sql, con);
+				
+				
 				request.setAttribute("successMsg", "Dialy Status details saved successfully.");
 			}else {
 				request.setAttribute("errorMsg", "Error in submission. Kindly try again.");

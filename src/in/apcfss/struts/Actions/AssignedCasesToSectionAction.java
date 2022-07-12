@@ -128,9 +128,11 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					+ " case when counter_filed='Yes' then 'Counter Filed' else 'Counter Not Filed' end as casestatus3,"
 					+ " case when counter_approved_gp='T' then 'Counter Approved by GP' else 'Counter Not Approved by GP' end as casestatus4 "
 					+ " " //sql = "select a.*, prayer from ecourts_case_data a left join nic_prayer_data np on (a.cino=np.cino) where a.cino='" + cIno + "'";
-					+ " , prayer "
+					+ " ,coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, prayer, ra.address "
 					+ " from ecourts_case_data a "
-					+ " left join nic_prayer_data np on (a.cino=np.cino) left join" + " ("
+					+ " left join nic_prayer_data np on (a.cino=np.cino) "
+					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
+					+ "left join" + " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
 					+ " from "
 					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
@@ -142,7 +144,7 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					+ " on (a.cino=b.cino) "
 					+ " "
 					+ " left join ecourts_olcms_case_details od on (a.cino=od.cino)"
-					+ " left join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) "
+					// + " left join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) "
 					
 					+ " where assigned=true "+condition
 					+ " and coalesce(a.ecourts_case_status,'')!='Closed' "
@@ -372,7 +374,7 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 	
 						sql="select emailid, first_name||' '||last_name||' - '||designation from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b using (gp_id) where b.dept_code='"+deptCode+"' order by emailid";
 						sql="select emailid, first_name||' '||last_name||' - '||designation from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b on (a.emailid=b.gp_id) where b.dept_code='"+deptCode+"' order by emailid";
-						sql="select emailid, first_name||' '||last_name||' - '||designation from ecourts_mst_gps order by 1";
+						sql = "select emailid, short_name from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b on (a.emailid=b.gp_id) where b.dept_code='"+deptCode+"' order by emailid";
 						cform.setDynaForm("GPSLIST", DatabasePlugin.getSelectBox(sql, con));
 						request.setAttribute("SHOWGPBTN", "SHOWGPBTN");
 					}
@@ -956,9 +958,9 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 				if(roleId!=null && roleId.equals("4")) {//FROM MLO to SECT DEPT.
 					fwdOfficer = deptCode;
 					newStatus = "1";
-					msg = "Case details ("+cIno+") forwarded successfully to Sect. Department.";
+					msg = "Case details ("+cIno+") forwarded successfully to Secretary.";
 					
-					sql="update ecourts_case_data set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' and case_status='2'";
+					sql="update ecourts_case_data set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where cino='"+cIno+"' and mlo_no_updated='T' and case_status='2'";
 					
 				}
 				else if(roleId!=null && roleId.equals("5")) {//FROM NO TO HOD
@@ -966,7 +968,7 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					newStatus = "3";
 					msg = "Case details ("+cIno+") forwarded successfully to HOD.";
 					
-					sql="update ecourts_case_data set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' and case_status='4'";
+					sql="update ecourts_case_data set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where cino='"+cIno+"' and mlo_no_updated='T' and case_status='4'";
 					
 				}
 				else if(roleId!=null && roleId.equals("10")) {//FROM Dist-NO TO HOD
@@ -974,11 +976,9 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					newStatus = "3";
 					msg = "Case details ("+cIno+") forwarded successfully to HOD.";
 					
-					sql="update ecourts_case_data set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' and case_status='8'";
+					sql="update ecourts_case_data set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where cino='"+cIno+"' and mlo_no_updated='T' and case_status='8'";
 					
 				}
-				
-				
 				
 				else if((roleId!=null && roleId.equals("8")) && (deptCode.substring(3, 5)=="01" || deptCode.substring(3, 5).equals("01"))) { //FROM SECTION-SECT. TO MLO
 					fwdOfficer = DatabasePlugin.selectString("select trim(emailid) from mlo_details where user_id='"+deptCode+"'", con);
@@ -1001,7 +1001,6 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					msg = "Case details ("+cIno+") forwarded successfully to Nodal Officer.";
 					
 					sql="update ecourts_case_data set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where cino='"+cIno+"' and section_officer_updated='T' and case_status='10'";
-					
 				}
 				
 				System.out.println("SQL:"+sql);
@@ -1156,15 +1155,14 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 				if(roleId!=null && roleId.equals("3")) {//FROM SECT DEPT TO GP.
 					newStatus = "6";
 					msg = "Case details ("+cIno+") forwarded successfully to GP for Approval.";
-					
-					sql="update ecourts_case_data set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' and case_status='1'";
+					sql="update ecourts_case_data set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where cino='"+cIno+"'  and mlo_no_updated='T' and case_status='1'";//and section_officer_updated='T' 
 					
 				}
 				else if(roleId!=null && roleId.equals("9")) {//FROM HOD TO GP
 					newStatus = "6";
 					msg = "Case details ("+cIno+") forwarded successfully to GP for Approval.";
 					
-					sql="update ecourts_case_data set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where cino='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' and case_status='3'";
+					sql="update ecourts_case_data set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where cino='"+cIno+"' and mlo_no_updated='T' and case_status='3'"; //and section_officer_updated='T' 
 					
 				}
 				

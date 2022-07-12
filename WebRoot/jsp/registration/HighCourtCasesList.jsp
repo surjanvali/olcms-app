@@ -314,25 +314,28 @@ styleId="HighCourtCasesListForm">
 						<th>Sl.No</th>
 						<th></th>
 						<th>CINo</th>
-						<th>Date of Filing</th>
-						<th>Case Type</th>
-						<th>Reg.No.</th>
-						<th>Reg. Year</th>
-						<!-- <th>Filing No.</th>
-						<th>Filing Year</th>
-						<th>Date of Next List</th>
-						<th>Bench</th>
-						<th>Judge Name</th> -->
-						<th>Petitioner</th>
+						<th>Scanned Affidavit</th>
+									<!-- <th>Assigned to</th> -->
+									<th>Date of Filing</th>
+									<!-- <th>Case Type</th>
+									<th>Reg.No.</th>
+									<th>Reg. Year</th> -->
 
-						<th>District</th>
-						<th>Purpose</th>
-						<th>Respondents</th>
+									<th>Case Reg No.</th>
+									<th>Prayer</th>
 
-						<th>Petitioner Advocate</th>
-						<th>Respondent Advocate</th>
-
-						<th>Orders</th>
+									<th>Filing No.</th>
+									<th>Filing Year</th>
+									<th>Date of Next List</th>
+									<th>Bench</th>
+									<th>Judge Name</th>
+									<th>Petitioner</th>
+									<th>District</th>
+									<th>Purpose</th>
+									<th>Respondents</th>
+									<th>Petitioner Advocate</th>
+									<th>Respondent Advocate</th>
+									<th>Orders</th>
 						<!-- <th>Assign To</th> -->
 					</tr>
 				</thead>
@@ -360,34 +363,52 @@ styleId="HighCourtCasesListForm">
 								onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
 
 							</td>
-							<td><logic:notEmpty name="map" property="date_of_filing">
-									<logic:notEqual value="0001-01-01" name="map"
-										property="date_of_filing">
-													${map.date_of_filing }
+							<td><logic:notEmpty name="map"
+												property="scanned_document_path1">
+												<logic:notEqual value="-" name="map"
+													property="scanned_document_path1">
+													<%-- ./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf --%>
+													<a href="./${map.scanned_document_path}" target="_new"
+														class="btn btn-sm btn-info"><i
+														class="glyphicon glyphicon-save"></i><span>Scanned
+															Affidavit</span></a>
 												</logic:notEqual>
-								</logic:notEmpty></td>
-							<td>${map.type_name_fil }</td>
-							<td>${map.reg_no}</td>
-							<td>${map.reg_year }</td>
-							<%-- <td>${map.fil_no}</td>
-							<td>${map.fil_year }</td>
-							<td><logic:notEmpty name="map" property="date_next_list">
-									<logic:notEqual value="0001-01-01" name="map"
-										property="date_next_list">
-													${map.date_of_filing }
-												</logic:notEqual>
-								</logic:notEmpty></td>
-							<td>${map.bench_name }</td>
-							<td>Hon'ble Judge : ${map.coram }</td> --%>
-							<td>${map.pet_name }</td>
-							<td>${map.dist_name }</td>
-							<td>${map.purpose_name }</td>
-							<td>${map.res_name }</td>
+											</logic:notEmpty></td>
+										<%-- <td nowrap="nowrap">${map.globalorgname}<br />
+												${map.fullname} - ${map.designation} <br />
+												${map.mobile} - ${map.email}
+											</td> --%>
+										<td><logic:notEmpty name="map" property="date_of_filing">
+												<logic:notEqual value="0001-01-01" name="map"
+													property="date_of_filing">
+																	${map.date_of_filing }
+																</logic:notEqual>
+											</logic:notEmpty></td>
 
-							<td>${map.pet_adv }</td>
-							<td>${map.res_adv }</td>
+										<%-- <td>${map.type_name_fil }</td>
+										<td>${map.reg_no}</td>
+										<td>${map.reg_year }</td> prayer --%>
+										<td>${map.type_name_fil }/ ${map.reg_no} / ${map.reg_year }</td>
+										<td style="width: 300px;">${map.prayer }</td>
 
-							<td style="text-align: center;">${map.orderpaths }</td>
+										<td>${map.fil_no}</td>
+										<td>${map.fil_year }</td>
+										<td><logic:notEmpty name="map" property="date_next_list">
+												<logic:notEqual value="0001-01-01" name="map"
+													property="date_next_list">
+																	${map.date_of_filing }
+																</logic:notEqual>
+											</logic:notEmpty></td>
+										<td>${map.bench_name }</td>
+										<td>Hon'ble Judge : ${map.coram }</td>
+										<td>${map.pet_name }</td>
+										<td>${map.dist_name }</td>
+										<td>${map.purpose_name }</td>
+										<td>${map.res_name }, ${map.address}</td>
+
+										<td>${map.pet_adv }</td>
+										<td>${map.res_adv }</td>
+										<td style="text-align: center;">${map.orderpaths }</td>
 
 							<%-- <td><input type="button" id="btnShowPopup"
 								value="Assign Case"
@@ -464,7 +485,7 @@ styleId="HighCourtCasesListForm">
 				</tbody>
 				<tfoot>
 					<tR>
-						<td colspan="14">&nbsp;</td>
+						<td colspan="19">&nbsp;</td>
 					</tR>
 				</tfoot>
 			</table>

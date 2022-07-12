@@ -57,7 +57,7 @@ public class ImportECourtsData
 			// sql = "select distinct a.cino from ecourts_cinos_1105_1605 a left join ecourts_case_data b using (cino) where b.cino is null ";
 			//sql = "select distinct a.cino from ecourts_cinos_1705_2305 a left join ecourts_case_data b using (cino) where b.cino is null";
 			
-			sql = "select distinct cino from ecourts_cinos_new limit 1";//where to_char(inserted_time,'dd/mm/yyyy')=current_date and ecourts_response is null";
+			sql = "select distinct cino from ecourts_case_data where cino='APHC010194442020'";// ecourts_cinos_new limit 1";//where to_char(inserted_time,'dd/mm/yyyy')=current_date and ecourts_response is null";
 			System.out.println("SQL:"+sql);
 			
 			st = con.createStatement();
