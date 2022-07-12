@@ -166,7 +166,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 					+ sqlCondition
 					+ " and coalesce(ecourts_case_status,'')!='Closed'";
 
-			sql= " select a.*, b.finance_category from ecourts_case_data a where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" order by 1";
+			sql= " select a.* from ecourts_case_data a where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" order by 1";
 
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
