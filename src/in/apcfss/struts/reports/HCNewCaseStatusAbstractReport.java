@@ -94,8 +94,6 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 				}
 
 				
-				
-				
 				sql = "select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases, sum(goi) as goi, sum(psu) as psu, sum(privatetot) as privatetot  from ("
 						+ "select a.dept_code , case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,count(*) as total_cases, "
 						+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
@@ -112,8 +110,9 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 						+ "sum(case when case_status=96 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as goi, "
 						+ "sum(case when case_status=97 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as psu, "
 						+ "sum(case when case_status=98 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as privatetot "
-						+ "from ecourts_case_data a " + "inner join dept_new d on (a.dept_code=d.dept_code) "
-						+ "where d.display = true " + sqlCondition;
+						+ "from ecourts_gpo_ack_depts  a "
+						+ " inner join ecourts_gpo_ack_dtls b on (a.ack_no=b.ack_no) inner join dept_new d on (a.dept_code=d.dept_code)"
+						+ " where b.ack_type='NEW'  and respondent_slno=1  " + sqlCondition;
 
 				if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
 					sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or a.dept_code='"
@@ -277,8 +276,9 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 					+ "sum(case when case_status=96 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as goi, "
 					+ "sum(case when case_status=97 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as psu, "
 					+ "sum(case when case_status=98 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as privatetot "
-					+ "from ecourts_case_data a " + "inner join dept_new d on (a.dept_code=d.dept_code) "
-					+ "where d.display = true and (d.reporting_dept_code='" + deptId + "' or a.dept_code='" + deptId
+					+ "from ecourts_gpo_ack_depts  a "
+					+ " inner join ecourts_gpo_ack_dtls b on (a.ack_no=b.ack_no) inner join dept_new d on (a.dept_code=d.dept_code)"
+					+ " where b.ack_type='NEW' and respondent_slno=1   and (d.reporting_dept_code='" + deptId + "' or a.dept_code='" + deptId
 					+ "') " + sqlCondition + "group by a.dept_code , d.description order by 1";
 
 			request.setAttribute("HEADING", "HOD Wise High Court New Cases Abstract Report for " + deptName);
@@ -474,63 +474,50 @@ System.out.println("caseStatus----"+caseStatus);
 			String deptType = CommonModels.checkStringObject(request.getParameter("deptType"));
 
 			if (caseCategory != null && !caseCategory.equals("")) {
-				/*
-				 * if(caseCategory.equals("DISPOSED")) { sqlCondition
-				 * +=" and (disposal_type='DISPOSED OF NO COSTS' or disposal_type='DISPOSED OF AS INFRUCTUOUS')"
-				 * ; } else if(caseCategory.equals("ALLOWED")) { sqlCondition
-				 * +=" and (disposal_type='ALLOWED NO COSTS' or disposal_type='PARTLY ALLOWED NO COSTS')"
-				 * ; } else if(caseCategory.equals("DISMISSED")) { sqlCondition
-				 * +=" and (disposal_type='DISMISSED' or disposal_type='DISMISSED AS INFRUCTUOUS' or disposal_type='DISMISSED NO COSTS' or disposal_type='DISMISSED FOR DEFAULT' or disposal_type='DISMISSED AS NON PROSECUTION' or disposal_type='DISMISSED AS ABATED' or disposal_type='DISMISSED AS NOT PRESSED' )"
-				 * ; } else if(caseCategory.equals("WITHDRAWN")) { sqlCondition
-				 * +=" and (disposal_type='WITHDRAWN')"; } else
-				 * if(caseCategory.equals("CLOSED")) { sqlCondition
-				 * +=" and (disposal_type='CLOSED NO COSTS' or disposal_type='CLOSED AS NOT PRESSED')"
-				 * ; } else if(caseCategory.equals("RETURNED")) { sqlCondition
-				 * +=" and (disposal_type='REJECTED' or disposal_type='ORDERED' or disposal_type='RETURN TO COUNSEL' or disposal_type='TRANSFERRED')"
-				 * ; }
-				 */
+			
 				sqlCondition += " and trim(disposal_type)='" + caseCategory.trim() + "'  and trim(d.description)='"+deptType.trim()+"'  ";
 				heading += caseCategory.trim()+", Department : "+deptType.trim();
 			}
 			
-			
-			
 
-			sql = "select a.*, "
-					+ ""
-					// + "n.global_org_name as globalorgname, n.fullname_en as fullname, n.designation_name_en as designation, n.mobile1 as mobile, n.email as email, "
-					+ ""
-					+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths from ecourts_case_data a "
-					//+ "inner join nic_data n on (a.assigned_to=n.email) "
-					+ "left join"
-					+ " ("
-					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
-					+ " from "
-					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1" + " union"
-					+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
-					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
-					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) "+condition+" where d.display = true ";
+			sql = "select a.ack_no,advocatename,advocateccno,cm.case_short_name,maincaseno,inserted_time,petitioner_name,"
+					+ "	 services_flag,reg_year,reg_no,mode_filing,case_category,dm.district_name,coalesce(e.hc_ack_no,'-') as hc_ack_no,barcode_file_path, "
+					+ " coalesce(trim(e.ack_file_path),'-') as scanned_document_path1,'' as orderpaths "
+					+ " from  ecourts_gpo_ack_depts  a "
+					+ " inner join ecourts_gpo_ack_dtls e on (a.ack_no=e.ack_no) "
+					+ " inner join dept_new d on (a.dept_code=d.dept_code)"
+					+ " inner join district_mst dm on (e.distid=dm.district_id) "
+					+ " inner join case_type_master cm on (e.casetype=cm.sno::text or e.casetype=cm.case_short_name) "
+					+ " "+condition+" where e.ack_type='NEW' and respondent_slno=1 ";
 
 			if (roleId.equals("1") || roleId.equals("7")  ) {
 			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
 					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
 				sql += " and a.dept_code like '%" + cform.getDynaForm("deptId").toString().trim().substring(0, 3) + "%' ";
 			}
-		  }else if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
-					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
-			  if (( roleId.equals("4") || roleId.equals("5") ))
-				sql += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
-			}
+		  }else if (( roleId.equals("4") && caseStatus.equals("ALL") )) {
+			  if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
+					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) 
+			  
+				  sql += " and a.dept_code like '%" + cform.getDynaForm("deptId").toString().trim().substring(0, 3) + "%' ";
+			  
+			}else if ((  roleId.equals("5") && caseStatus.equals("ALL") )) {
+				  sql += " and a.dept_code like '%" + cform.getDynaForm("deptId").toString().trim().substring(0, 3) + "%' ";
+			} /*
+				 * else { sql += " and a.dept_code like '" +
+				 * cform.getDynaForm("deptId").toString().trim() + "' "; }
+				 */
 			
 			String val=deptCode.substring(3, 5);
 			System.out.println("val---"+val);
 			
-			 if (roleId.equals("3") &&  caseStatus.equals("ALL") && deptCode.substring(4, 5).equals("01"))
-			 sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
+			 if (roleId.equals("3") &&  caseStatus.equals("ALL") && deptCode.substring(3, 5).equals("01"))
+				  sql += " and a.dept_code like '%" + cform.getDynaForm("deptId").toString().trim().substring(0, 3) + "%' ";
 
-			 if (roleId.equals("3") &&  caseStatus.equals("ALL") && !deptCode.substring(4, 5).equals("01"))
+			 if (roleId.equals("3") &&  caseStatus.equals("ALL") && !deptCode.substring(3, 5).equals("01"))
+				 sql += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+			 
+			 if (roleId.equals("3") &&  !caseStatus.equals("ALL") && deptCode.substring(3, 5).equals("01"))
 				 sql += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 			 
 			 if (roleId.equals("9") &&  caseStatus.equals("ALL") )
@@ -597,6 +584,78 @@ System.out.println("caseStatus----"+caseStatus);
 
 		return mapping.findForward("success");
 	}
+	
+	public ActionForward getAckNo(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		CommonForm cform = (CommonForm) form;
+		Connection con = null;
+		HttpSession session = null;
+		String userId = null, roleId = null, sql = null, cIno = null, viewDisplay=null, target="newcaseview";
+
+		try {
+			session = request.getSession();
+			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+
+			viewDisplay = CommonModels.checkStringObject(request.getParameter("SHOWPOPUP"));
+			
+			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
+				return mapping.findForward("Logout");
+			}
+			
+			if(!viewDisplay.equals("") && viewDisplay.equals("SHOWPOPUP")) {
+				target = "newcasepopupview";
+				cIno = CommonModels.checkStringObject(request.getParameter("cino"));
+			}
+			else {
+				cIno = CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
+			}
+			
+			System.out.println("cIno---"+cIno);
+			
+			if (cIno != null && !cIno.equals("")) {
+				con = DatabasePlugin.connect();
+	
+				// sql = "select * from ecourts_case_data where cino='" + cIno + "'";
+				//sql = "select a.*, prayer from ecourts_case_data a left join nic_prayer_data np on (a.cino=np.cino) where a.cino='" + cIno + "'";
+				sql = " select advocatename,advocateccno,cm.case_short_name,maincaseno,inserted_time,petitioner_name,"
+						+ " services_flag,reg_year,reg_no,mode_filing,case_category,dm.district_name from  ecourts_gpo_ack_dtls a"
+						+ " INNER JOIN district_mst dm on (a.distid=dm.district_id) "
+						+ " inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name)"
+						+ "where ack_no='" + cIno + "'";
+
+				System.out.println("sql---"+sql);
+				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+	
+				if (data != null && !data.isEmpty() && data.size() > 0) {
+					request.setAttribute("USERSLIST", data);
+	
+				}
+	
+				sql="select cino,action_type,inserted_by,inserted_on,assigned_to,remarks as remarks, coalesce(uploaded_doc_path,'-') as uploaded_doc_path from ecourts_case_activities where cino = '"+cIno+"' order by inserted_on";
+				System.out.println("ecourts activities SQL:" + sql);
+				data = DatabasePlugin.executeQuery(sql, con);
+				request.setAttribute("ACTIVITIESDATA", data);
+			
+			
+			
+	
+				request.setAttribute("HEADING", "Case Details for ACK NO : " + cIno);
+			}
+			else {
+				request.setAttribute("errorMsg", "Invalid ACK NO.");
+			}
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DatabasePlugin.closeConnection(con);
+		}
+		return mapping.findForward(target);
+	}
+	
 	public ActionForward getCasesDeptWiseList(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		System.out.println(
