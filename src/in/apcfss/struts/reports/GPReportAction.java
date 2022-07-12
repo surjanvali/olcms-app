@@ -72,6 +72,83 @@ public class GPReportAction extends DispatchAction {
 		return mapping.findForward("success");
 	}
 	
+	public ActionForward viewInstructionsCases(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		CommonForm cform = (CommonForm) form;
+		Connection con = null;
+		HttpSession session = null;
+		String userId = null, roleId = null, sql = null, empId = null, empSection = null, empPost = null, condition="", deptId="", deptCode="", distId="", heading=null;
+
+		try {
+			session = request.getSession();
+			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			
+			deptId = CommonModels.checkStringObject(session.getAttribute("dept_id"));
+			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+
+			empId = CommonModels.checkStringObject(session.getAttribute("empId"));
+			empSection = CommonModels.checkStringObject(session.getAttribute("empSection"));
+			empPost = CommonModels.checkStringObject(session.getAttribute("empPost"));
+			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+
+			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
+				return mapping.findForward("Logout");
+			}
+			con = DatabasePlugin.connect();
+			
+			if(roleId!=null && roleId.equals("6")) { // GPO
+				
+				String counter_pw_flag = CommonModels.checkStringObject(request.getParameter("pwCounterFlag"));
+				
+				condition=" and a.case_status=6 and e.gp_id='"+userId+"' ";
+				
+				if(counter_pw_flag.equals("PR")) {
+					heading = "Parawise Remarks submitted Cases List";
+					// pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6'
+					condition+=" and pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' )";
+				}
+				if(counter_pw_flag.equals("COUNTER")) {
+					heading = "Counters filed Cases List";
+					//pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6'
+					condition+=" and pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F'";
+				}
+			}
+			
+			/*
+			 * sql =
+			 * "select type_name_reg, reg_no, reg_year, to_char(dt_regis,'dd-mm-yyyy') as dt_regis, a.cino, case when length(scanned_document_path) > 10 then scanned_document_path else '-' end as scanned_document_path "
+			 * + " from ecourts_case_data a " +
+			 * " left join ecourts_olcms_case_details od on (a.cino=od.cino)" +
+			 * " left join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) " +
+			 * " inner join dept_new d on (a.dept_code=d.dept_code) " +
+			 * " where assigned=true "+condition +
+			 * " and coalesce(a.ecourts_case_status,'')!='Closed' "+condition;
+			 * 
+			 * 
+			 * sql += "order by reg_year,type_name_reg,reg_no";
+			 * request.setAttribute("HEADING", heading);
+			 */
+			 sql="select type_name_reg, reg_no, reg_year, to_char(dt_regis,'dd-mm-yyyy') as dt_regis, a.cino, case when length(scanned_document_path) > 10 then scanned_document_path else '-' end as scanned_document_path from ecourts_dept_instructions a inner join ecourts_case_data od on (a.cino=od.cino)"
+			 		+ " where a.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userId+"')";
+			 
+			 
+			System.out.println("SQL:" + sql);
+			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+			// System.out.println("data=" + data);
+			if (data != null && !data.isEmpty() && data.size() > 0)
+				request.setAttribute("CASEWISEDATA", data);
+			else
+				request.setAttribute("errorMsg", "No Records found to display");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DatabasePlugin.closeConnection(con);
+		}
+		return mapping.findForward("success");
+	}
+	
 	public ActionForward viewGPCases(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		CommonForm cform = (CommonForm) form;

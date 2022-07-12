@@ -78,8 +78,9 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 		if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 			return mapping.findForward("Logout");
 		}
-		String sql = null, sqlCondition = "", roleId="", distId="", deptCode="";
+		String sql = null, sqlCondition = "", roleId="", distId="", deptCode="", userid="";
 		try {
+			userid = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
@@ -134,7 +135,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 				sqlCondition +=" and dept_code='" + deptCode + "' ";
 			}
 
-			if(roleId.equals("2")) { //District Collector
+			if(roleId.equals("2") || roleId.equals("12")) { //District Collector
 
 				sqlCondition +="  and dist_id='"+distId+"'";//and case_status=7
 			}
@@ -146,6 +147,9 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 			}
 			else if(roleId.equals("3") || roleId.equals("4")) {//MLO & Sect. Dept.
 				//sqlCondition +=" and (case_status is null or case_status in (1, 2))";
+			}
+			else if(roleId.equals("8") || roleId.equals("11") || roleId.equals("12")) {
+				sqlCondition +="  and assigned_to='"+userid+"'";
 			}
 
 			sql = "select a.*, b.orderpaths from ecourts_case_data a left join"
@@ -162,8 +166,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 					+ sqlCondition
 					+ " and coalesce(ecourts_case_status,'')!='Closed'";
 
-			sql= " select a.*, b.finance_category from ecourts_case_data a left join ecourts_case_category_wise_data b on (a.cino=b.cino) "
-					+ " where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" order by b.finance_category";
+			sql= " select a.*, b.finance_category from ecourts_case_data a where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" order by 1";
 
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

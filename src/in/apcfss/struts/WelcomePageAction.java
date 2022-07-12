@@ -452,7 +452,7 @@ public class WelcomePageAction extends DispatchAction{
 				
 				else if(roleId.equals("6")) { // GP NEW CODE
 					
-					/*/ LEGACY CASES DATA
+					// LEGACY CASES DATA
 					sql="select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases, sum(goi) as goi, sum(psu) as psu, sum(privatetot) as privatetot   from ("
 							+ "select a.dept_code , case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,count(*) as total_cases, "
 							+ "sum(case when case_status=1 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as withsectdept, "
@@ -477,7 +477,7 @@ public class WelcomePageAction extends DispatchAction{
 						sql+= "group by a.dept_code,d.dept_code ,reporting_dept_code ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code)"
 							+ "group by x.reporting_dept_code, d1.description order by 1";
 					
-					request.setAttribute("HEADING", "High Court Cases Abstract Report"); */
+					request.setAttribute("HEADING", "High Court Cases Abstract Report"); 
 
 					System.out.println("SQL:" + sql);
 					List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -493,14 +493,10 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("YEARLY COUNT SQL:"+sql);
 					request.setAttribute("YEARWISECASES", DatabasePlugin.executeQuery(con, sql));
 					
-					/*
-					 * sql="select count(*) from ecourts_dept_instructions where insert_by='"+userid
-					 * +"'"; System.out.println("instruction SQL:"+sql);
-					 * request.setAttribute("INSTRUCTIONSCOUNT", DatabasePlugin.executeQuery(con,
-					 * sql));
-					 */
 					
-					
+					  sql="select count(*) from ecourts_dept_instructions a where a.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"')";
+					  System.out.println("instruction SQL:"+sql);
+					  request.setAttribute("INSTRUCTIONSCOUNT", DatabasePlugin.getStringfromQuery(sql, con));
 					
 					sql="select count(*) From ecourts_olcms_case_details a "
 							+ "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  "

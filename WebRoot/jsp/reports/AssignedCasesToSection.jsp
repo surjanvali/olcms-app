@@ -150,7 +150,14 @@ body {
 												<button class="btn btn-sm btn-primary"
 													onclick="caseStatusUpdate('${map.cino}');">Update
 													Status</button>
-											</logic:notEqual></td>
+											</logic:notEqual>
+											
+											<input type="button" id="btnShowPopup"
+												value="Submit Instructions"
+												class="btn btn-sm btn-primary waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup1('${map.cino}');" />
+											
+											</td>
 								</logic:iterate>
 							</logic:notEmpty>
 						</tbody>
@@ -166,7 +173,37 @@ body {
 		</div>
 	</html:form>
 </div>
+<!-- Modal  Start-->
 
+<div id="MyPopup" class="modal fade" role="dialog"
+	style="padding-top:200px;">
+	<div class="modal-dialog modal-dialog-centered modal-lg">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header"
+				style="background-color: #3498db;color: #fff;">
+				<button type="button" class="close" data-dismiss="modal">
+					&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					<iframe src="" id="page" name="model_window"
+						style="width:100%;min-height:600px;border:0px;"> </iframe>
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<!-- <div class="btn btn-danger" data-dismiss="modal">Close</div>  -->
+				<!-- <input type="submit" name="submit" value="Close" class="btn btn-danger" data-dismiss="modal" onclick="return fnShowCases();" /> -->
+				<!-- <div class="form-group">
+					<a href="./EcourtsDeptInstruction.do"
+						class="btn btn-danger border-0">Close</a>
+				</div> -->
+			</div>
+		</div>
+	</div>
+</div>
 <script type="text/javascript">
 	function backFn() {
 		document.forms[0].mode.value = "unspecified";
@@ -190,6 +227,25 @@ body {
 		$("#fileCino").val("" + fileCino);
 		$("#AssignedCasesToSectionForm").submit();
 	}
+	
+	function viewCaseDetailsPopup1(cino) {
+		var heading = "Instructions Details for CINO : " + cino;
+		var srclink = "";
+		if (cino != null && cino != "" && cino != "0") {
+			srclink = "./EcourtsDeptInstruction.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino="
+					+ cino;
+			//alert("LINK:"+srclink);
+			if (srclink != "") {
+				$("#MyPopup .modal-title").html(heading);
+				$("#page").prop("src", srclink)
+				//$("#MyPopup .modal-body").html(body);
+				$("#MyPopup").modal("show");
+			}
+			;
+		}
+		;
+	};
+	
 </script>
 <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
