@@ -21,18 +21,18 @@ public class JsonApplication {
 			connection = DriverManager.getConnection("jdbc:postgresql://localhost/apolcms", "apolcms", "apolcms");
 			connection.setAutoCommit(false);
 
-			/*
-			 * PreparedStatement respPS = connection.prepareStatement(
-			 * "INSERT INTO dept_data (sno, cino, party_no, res_name, address) VALUES " +
-			 * " (?, ?, ?, ?, ?);"); prepareData(respPS); respPS.executeBatch();
-			 */
+			
+			  PreparedStatement respPS = connection.prepareStatement( "INSERT INTO nic_resp_addr_data (sno, cino, party_no, res_name, address, data_case_status) VALUES " +
+			  " (?, ?, ?, ?, ?, ?);"); 
+			  prepareData(respPS); 
+			  respPS.executeBatch();
+			 
 			System.out.println("Start:" + (new Date()));
-			PreparedStatement prayerPS = connection.prepareStatement(
-					"INSERT INTO nic_prayer_data (cino, asreg_case, reg_no, reg_year, subnature1_desc, prayer, case_status) VALUES "
-							+ " (?, ?, ?, ?, ?, ?, ?);");
+			/*PreparedStatement prayerPS = connection.prepareStatement( "INSERT INTO nic_prayer_data (cino, asreg_case, reg_no, reg_year, subnature1_desc, prayer, data_case_status) VALUES (?, ?, ?, ?, ?, ?, ?);");
 			preparePrayerData(prayerPS);
 			prayerPS.executeBatch();
-
+			*/
+			
 			connection.commit();
 			//connection.setAutoCommit(true);
 			System.out.println("Finished:" + (new Date()));
@@ -49,7 +49,7 @@ public class JsonApplication {
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			List<Dept> deptList = objectMapper.readValue(
-					new File("C:\\Users\\dell\\Desktop\\HighCourt Prayers data\\dept_pend_res_add-copy.json"),
+					new File("E:\\olcmsdata\\dept_disposed_res_add1.json"),
 					new TypeReference<List<Dept>>() {
 					});
 
@@ -60,6 +60,7 @@ public class JsonApplication {
 				preparedStatement.setLong(++i, c.getPartyNo());
 				preparedStatement.setString(++i, c.getResName());
 				preparedStatement.setString(++i, c.getAddress());
+				preparedStatement.setString(++i, "DISPOSED");
 				preparedStatement.addBatch();
 			}
 

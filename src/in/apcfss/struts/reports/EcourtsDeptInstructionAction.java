@@ -274,9 +274,13 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 			System.out.println("sql--"+sql);
 
 			a = ps.executeUpdate();
-
+			
 			System.out.println("a--->"+a);
 			if(a>0) {
+				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks) "
+						+ " values ('" + cIno + "','SUBMITTED INSTRUCTIONS TO GP', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("instructions").toString()+"')";
+				DatabasePlugin.executeUpdate(sql, con);
+				
 				request.setAttribute("successMsg", "Instructions data saved successfully.");
 			}else {
 				request.setAttribute("errorMsg", "Error in submission. Kindly try again.");
