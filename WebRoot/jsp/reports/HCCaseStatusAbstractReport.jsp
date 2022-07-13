@@ -187,7 +187,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<div class="ibox-title">
 					<h4 class="m-t-0 header-title">
 						<b><logic:notEmpty name="HEADING">
-									${HEADING }
+									${HEADING } (Legacy Cases)
 								</logic:notEmpty> </b>
 					</h4>
 				</div>
@@ -200,8 +200,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<thead>
 								<tr>
 									<th>Sl.No</th>
-									<th>Sect.Department Code</th>
-									<th>Department Name</th>
+									<th>Sect. Department Code</th>
+									<th>Sect. Department Name</th>
 									<th>Total Cases</th>
 
 									<th>Pending With Sect.Dept</th>

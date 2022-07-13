@@ -132,7 +132,7 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 				System.out.println("unspecified data=" + data);
 				if (data != null && !data.isEmpty() && data.size() > 0)
-					request.setAttribute("secdeptwise", data);
+					request.setAttribute("secdeptwisenewcases", data);
 				else
 					request.setAttribute("errorMsg", "No Records found to display");
 			}
@@ -286,7 +286,7 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			// System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0)
-				request.setAttribute("deptwise", data);
+				request.setAttribute("deptwisenewcases", data);
 			else
 				request.setAttribute("errorMsg", "No Records found to display");
 		} catch (Exception e) {

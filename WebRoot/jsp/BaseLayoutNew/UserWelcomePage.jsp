@@ -274,13 +274,11 @@ label{
 	<script src="assetsnew/js/app.min.js" type="text/javascript"></script>
 	<!-- PAGE LEVEL SCRIPTS-->
 	<!-- <script src="./assetsnew/js/scripts/dashboard_1_demo.js" type="text/javascript"></script> -->
+	
 	<!-- PAGE LEVEL PLUGINS-->
-	<script src="./assetsnew/vendors/DataTables/datatables.min.js"
-		type="text/javascript"></script>
+	<script src="./assetsnew/vendors/DataTables/datatables.min.js" type="text/javascript"></script>
+	
 	<!-- <script src="./assetsnew/vendors/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" type="text/javascript"></script> -->
-
-
-
 	<!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
 	<script
 		src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
@@ -297,6 +295,7 @@ label{
 	<script
 		src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
 	<script>
+	if($('#example')){
 		$('#example').DataTable(
 				{
 					dom : 'Blfrtip',
@@ -307,6 +306,19 @@ label{
 					"lengthMenu" : [ [ 10, 25, 50, 100, -1 ],
 							[ 10, 25, 50, 100, "All" ] ]
 				});
+	}
+		if($('#example2')){
+		$('#example2').DataTable(
+				{
+					dom : 'Blfrtip',
+					buttons : [ 'print', {
+						extend : 'pdf',
+						orientation : 'landscape'
+					}, 'excel' ],
+					"lengthMenu" : [ [ 10, 25, 50, 100, -1 ],
+							[ 10, 25, 50, 100, "All" ] ]
+				});
+		}
 	</script>
 
 

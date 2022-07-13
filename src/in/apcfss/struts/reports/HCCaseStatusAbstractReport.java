@@ -545,7 +545,7 @@ System.out.println("caseStatus----"+caseStatus);
 				sql += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 			}
 			
-			String val=deptCode!=null ?deptCode.substring(3, 5):null;
+			String val=deptCode!=null && !deptCode.equals("") ?deptCode.substring(3, 5):null;
 			System.out.println("val---"+val);
 			
 			 if (roleId.equals("3") &&  caseStatus.equals("ALL") && deptCode.substring(4, 5).equals("01"))

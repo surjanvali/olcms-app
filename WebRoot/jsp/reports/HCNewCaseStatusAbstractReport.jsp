@@ -23,7 +23,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 <div class="page-content fade-in-up">
 	<html:form action="/HCNewCaseStatusAbstractReport"
-		styleId="HCCaseStatusAbstract">
+		styleId="HCNewCaseStatusAbstract">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden property="dynaForm(deptName)" styleId="deptName" />
 		<html:hidden property="dynaForm(caseStatus)" styleId="caseStatus" />
@@ -183,22 +183,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="ibox-head">
 				<div class="ibox-title">
 					<h4 class="m-t-0 header-title">
-						<b><logic:notEmpty name="HEADING">
-									${HEADING }
-								</logic:notEmpty> </b>
+						<b><logic:notEmpty name="HEADING"> ${HEADING } (New Cases) </logic:notEmpty> </b>
 					</h4>
 				</div>
 			</div>
 			<div class="ibox-body">
 				<div class="table-responsive">
-					<logic:present name="secdeptwise">
+					<logic:present name="secdeptwisenewcases">
 						<table class="table table-striped table-bordered table-hover"
-							id="example" cellspacing="0" width="100%">
+							id="example2" cellspacing="0" width="100%">
 							<thead>
 								<tr>
 									<th>Sl.No</th>
-									<th>Sect.Department Code</th>
-									<th>Department Name</th>
+									<th>Sect. Department Code</th>
+									<th>Sect. Department Name</th>
 									<th>Total Cases</th>
 
 									<th>Pending With Sect.Dept</th>
@@ -238,44 +236,44 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<bean:define id="disthodSecTotals" value="0"></bean:define>
 
 
-								<logic:iterate id="map" name="secdeptwise" indexId="i">
+								<logic:iterate id="map" name="secdeptwisenewcases" indexId="i">
 									<tr>
 										<td>${i+1 }</td>
 										<td>${map.deptcode }</td>
 										<td><a
-											href="javascript:ShowHODWise('${map.deptcode}','${map.description }');">${map.description }</a></td>
+											href="javascript:ShowHODWiseNew('${map.deptcode}','${map.description }');">${map.description }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','ALL');">${map.total_cases }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','ALL');">${map.total_cases }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSD');">${map.withsectdept }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withSD');">${map.withsectdept }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withMLO');">${map.withmlo }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withMLO');">${map.withmlo }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHOD');">${map.withhod }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withHOD');">${map.withhod }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withNO');">${map.withnodal }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withNO');">${map.withnodal }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSDSec');">${map.withsection }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withSDSec');">${map.withsection }</a></td>
 
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHODSec');">${map.withsectionhod }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withHODSec');">${map.withsectionhod }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDC');">${map.withdc }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withDC');">${map.withdc }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistNO');">${map.withdistno }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withDistNO');">${map.withdistno }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistSec');">${map.withsectiondist }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withDistSec');">${map.withsectiondist }</a></td>
 
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withGP');">${map.withgpo }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withGP');">${map.withgpo }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','closed');">${map.closedcases }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','closed');">${map.closedcases }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','goi');">${map.goi }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','goi');">${map.goi }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','psu');">${map.psu }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','psu');">${map.psu }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','Private');">${map.privatetot }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','Private');">${map.privatetot }</a></td>
 
 									</tr>
 									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
@@ -339,7 +337,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</table>
 
 					</logic:present>
-					<logic:present name="deptwise">
+					<logic:present name="deptwisenewcases">
 
 						<table class="table table-striped table-bordered table-hover"
 							id="example" cellspacing="0" width="100%">
@@ -386,7 +384,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<bean:define id="disthodSecTotals" value="0"></bean:define>
 
 
-								<logic:iterate id="map" name="deptwise" indexId="i">
+								<logic:iterate id="map" name="deptwisenewcases" indexId="i">
 									<tr>
 										<td>${i+1 }</td>
 										<td>${map.deptcode }</td>
@@ -407,37 +405,37 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td  style="text-align: right;">${map.closedcases }</td> --%>
 
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','ALL');">${map.total_cases }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','ALL');">${map.total_cases }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSD');">${map.withsectdept }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withSD');">${map.withsectdept }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withMLO');">${map.withmlo }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withMLO');">${map.withmlo }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHOD');">${map.withhod }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withHOD');">${map.withhod }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withNO');">${map.withnodal }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withNO');">${map.withnodal }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSDSec');">${map.withsection }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withSDSec');">${map.withsection }</a></td>
 
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHODSec');">${map.withsectionhod }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withHODSec');">${map.withsectionhod }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDC');">${map.withdc }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withDC');">${map.withdc }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistNO');">${map.withdistno }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withDistNO');">${map.withdistno }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistSec');">${map.withsectiondist }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withDistSec');">${map.withsectiondist }</a></td>
 
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withGP');">${map.withgpo }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','withGP');">${map.withgpo }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','closed');">${map.closedcases }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','closed');">${map.closedcases }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','goi');">${map.goi }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','goi');">${map.goi }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','psu');">${map.psu }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','psu');">${map.psu }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','Private');">${map.privatetot }</a></td>
+											href="javascript:showCasesWiseNew('${map.deptcode}','${map.description }','Private');">${map.privatetot }</a></td>
 
 									</tr>
 									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
@@ -724,21 +722,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	function fnShowCases() {
 		$("#mode").val("unspecified");
-		$("#HCCaseStatusAbstract").submit();
+		$("#HCNewCaseStatusAbstract").submit();
 	}
 
-	function ShowHODWise(deptId, deptDesc) {
+	function ShowHODWiseNew(deptId, deptDesc) {
 		$("#deptId").val(deptId);
 		$("#deptName").val(deptDesc);
 		$("#mode").val("HODwisedetails");
-		$("#HCCaseStatusAbstract").submit();
+		$("#HCNewCaseStatusAbstract").submit();
 	}
-	function showCasesWise(deptId, deptDesc, status) {
+	function showCasesWiseNew(deptId, deptDesc, status) {
 		$("#deptId").val(deptId);
 		$("#deptName").val(deptDesc);
 		$("#caseStatus").val(status);
 		$("#mode").val("getCasesList");
-		$("#HCCaseStatusAbstract").submit();
+		$("#HCNewCaseStatusAbstract").submit();
 	}
 
 	function viewCaseDetailsPopup(ack_no) {

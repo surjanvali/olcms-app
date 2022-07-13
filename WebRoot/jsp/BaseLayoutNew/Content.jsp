@@ -47,10 +47,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</a>
 							</div>
 						</logic:greaterThan>
-						
+
 						<logic:present name="totaldeptcases">
 							<logic:greaterThan value="0" name="totaldeptcases">
-							<div class="col-lg-3 col-md-6">
+								<div class="col-lg-3 col-md-6">
 									<div class="ibox bg-primary color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${totaldeptcases }</h2>
@@ -188,7 +188,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</a>
 							</div>
 						</logic:greaterThan>
-						
+
 						<logic:greaterThan value="0" name="innerCases" property="total">
 							<div class="col-lg-3 col-md-6">
 								<a href="./AcksAbstractReport.do">
@@ -508,15 +508,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 			</logic:notEmpty>
 
-			<logic:present name="showReport1">
+			<logic:present name="secdeptwisenewcases">
 				<div class="row">
 					<div class="col-lg-12">
-
-						<jsp:include page="/jsp/reports/HCCaseStatusAbstractReport.jsp"></jsp:include>
-
+						<jsp:include page="/jsp/reports/HCNewCaseStatusAbstractReport.jsp"></jsp:include>
 					</div>
 				</div>
 			</logic:present>
+
+			<logic:present name="showReport1">
+				<div class="row">
+					<div class="col-lg-12">
+						<jsp:include page="/jsp/reports/HCCaseStatusAbstractReport.jsp"></jsp:include>
+					</div>
+				</div>
+			</logic:present>
+			
 			<logic:present name="recentActivities">
 				<div class="row">
 					<div class="col-lg-12">
