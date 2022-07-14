@@ -458,6 +458,13 @@
 			<forward name="newcasepopupview"
 				path="newcasedetailspopupview" />
 		</action>
+		
+		<action path="/ScannedDocumentrReport" name="CommonForm"
+			type="in.apcfss.struts.reports.ScannedDocumentrReportAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="ScannedDocumentrReport"></forward>
+		</action>
+		
 
 	</action-mappings>
 

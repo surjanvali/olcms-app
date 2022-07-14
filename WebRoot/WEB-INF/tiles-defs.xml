@@ -349,6 +349,13 @@
 	<definition name="newcasedetailspopupview" extends="modalLayout">
 		<put name="content" value="/jsp/reports/NewCaseDetailsView.jsp" />
 	</definition>
+	
+	
+	<definition name="ScannedDocumentrReport"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/ScannedDocumentrReport.jsp" />
+	</definition>
 
 
 </tiles-definitions>
