@@ -508,7 +508,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 			</logic:notEmpty>
 
-			<logic:present name="secdeptwisenewcases">
+			<logic:present name="showReport1">
 				<div class="row">
 					<div class="col-lg-12">
 						<jsp:include page="/jsp/reports/HCNewCaseStatusAbstractReport.jsp"></jsp:include>

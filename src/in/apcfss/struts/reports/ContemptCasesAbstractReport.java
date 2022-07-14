@@ -518,40 +518,16 @@ System.out.println("caseStatus----"+caseStatus);
 					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) "+condition+" where d.display = true  and a.case_type_id='6' ";
 			
 
-			if (roleId.equals("1") || roleId.equals("7")  ) {
-			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
-					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
-				sql += " and a.dept_code like '%" + cform.getDynaForm("deptId").toString().trim().substring(0, 3) + "%' ";
-			}
-		  }else if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
-					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
-			  if (( roleId.equals("4") || roleId.equals("5") ))
-				sql += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
-			}
-			
-			String val=deptCode!=null && !deptCode.equals("") ?deptCode.substring(3, 5):null;
-			System.out.println("val---"+val);
-			
-			 if (roleId.equals("3") &&  caseStatus.equals("ALL") && deptCode.substring(4, 5).equals("01"))
-			 sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
-
-			 if (roleId.equals("3") &&  caseStatus.equals("ALL") && !deptCode.substring(4, 5).equals("01"))
-				 sql += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+		
+			 String reportLevel = CommonModels.checkStringObject(cform.getDynaForm("reportLevel"));
 			 
-			 if (roleId.equals("9") &&  caseStatus.equals("ALL") )
-				 sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
-			 
-			 
-			 if (roleId.equals("1") || roleId.equals("7")  ) {
-			  if (deptCode != null && !deptCode.equals(""))
-				sql += " ";
-			 }else {
-				 if (!(caseStatus.equals("ALL")) ) {
-				 if (deptCode != null && !deptCode.equals("")) 
-						sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
-				 }
+			 if(reportLevel.equals("SD")) {
+				 sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
 			 }
-
+			 else {//if(reportLevel.equals("HOD")) {
+				 sql += " and a.dept_code='" + deptCode + "' ";
+			 }
+			 
 			 sql += sqlCondition;
 			 
 			System.out.println("ecourts SQL:" + sql);

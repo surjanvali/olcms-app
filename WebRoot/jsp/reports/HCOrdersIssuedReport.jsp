@@ -236,7 +236,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<tr>
 												<td>${i+1 }</td>
 												<td>${map.deptcode }</td>
-												<td>${map.total_cases }</td>
+												<td>${map.description }</td>
+												
+												<td style="text-align: right;">${map.total_cases }</td>
 												<td style="text-align: right;"><a
 													href="javascript:showCasesWise('${map.deptcode}','${map.description }','IO','HOD');">${map.interim_order_cases }</a></td>
 												<td style="text-align: right;"><a

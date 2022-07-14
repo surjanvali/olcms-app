@@ -490,48 +490,13 @@ System.out.println("caseStatus----"+caseStatus);
 					+ " inner join case_type_master cm on (e.casetype=cm.sno::text or e.casetype=cm.case_short_name) "
 					+ " "+condition+" where e.ack_type='NEW' and respondent_slno=1 ";
 
-			if (roleId.equals("1") || roleId.equals("7")  ) {
-			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
-					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
-				sql += " and a.dept_code like '%" + cform.getDynaForm("deptId").toString().trim().substring(0, 3) + "%' ";
-			}
-		  }else if (( roleId.equals("4") && caseStatus.equals("ALL") )) {
-			  if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
-					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) 
-			  
-				  sql += " and a.dept_code like '%" + cform.getDynaForm("deptId").toString().trim().substring(0, 3) + "%' ";
-			  
-			}else if ((  roleId.equals("5") && caseStatus.equals("ALL") )) {
-				  sql += " and a.dept_code like '%" + cform.getDynaForm("deptId").toString().trim().substring(0, 3) + "%' ";
-			} /*
-				 * else { sql += " and a.dept_code like '" +
-				 * cform.getDynaForm("deptId").toString().trim() + "' "; }
-				 */
-			
-			String val=deptCode.substring(3, 5);
-			System.out.println("val---"+val);
-			
-			 if (roleId.equals("3") &&  caseStatus.equals("ALL") && deptCode.substring(3, 5).equals("01"))
-				  sql += " and a.dept_code like '%" + cform.getDynaForm("deptId").toString().trim().substring(0, 3) + "%' ";
-
-			 if (roleId.equals("3") &&  caseStatus.equals("ALL") && !deptCode.substring(3, 5).equals("01"))
-				 sql += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
+ String reportLevel = CommonModels.checkStringObject(cform.getDynaForm("reportLevel"));
 			 
-			 if (roleId.equals("3") &&  !caseStatus.equals("ALL") && deptCode.substring(3, 5).equals("01"))
-				 sql += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
-			 
-			 if (roleId.equals("9") &&  caseStatus.equals("ALL") )
-				 sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
-			 
-			 
-			 if (roleId.equals("1") || roleId.equals("7")  ) {
-			  if (deptCode != null && !deptCode.equals(""))
-				sql += " ";
-			 }else {
-				 if (!(caseStatus.equals("ALL")) ) {
-				 if (deptCode != null && !deptCode.equals("")) 
-						sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
-				 }
+			 if(reportLevel.equals("SD")) {
+				 sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') ";
+			 }
+			 else {//if(reportLevel.equals("HOD")) {
+				 sql += " and a.dept_code='" + deptCode + "' ";
 			 }
 
 			 sql += sqlCondition;

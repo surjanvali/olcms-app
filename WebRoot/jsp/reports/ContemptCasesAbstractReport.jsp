@@ -30,6 +30,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden property="dynaForm(deptName)" styleId="deptName" />
 		<html:hidden property="dynaForm(caseStatus)" styleId="caseStatus" />
+		<html:hidden property="dynaForm(reportLevel)" styleId="reportLevel" />
 		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="dashboard-cat-title">
@@ -249,37 +250,37 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td><a
 											href="javascript:ShowHODWise('${map.deptcode}','${map.description }');">${map.description }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','ALL');">${map.total_cases }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','ALL','SD');">${map.total_cases }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSD');">${map.withsectdept }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSD','SD');">${map.withsectdept }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withMLO');">${map.withmlo }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withMLO','SD');">${map.withmlo }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHOD');">${map.withhod }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHOD','SD');">${map.withhod }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withNO');">${map.withnodal }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withNO','SD');">${map.withnodal }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSDSec');">${map.withsection }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSDSec','SD');">${map.withsection }</a></td>
 
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHODSec');">${map.withsectionhod }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHODSec','SD');">${map.withsectionhod }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDC');">${map.withdc }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDC','SD');">${map.withdc }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistNO');">${map.withdistno }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistNO','SD');">${map.withdistno }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistSec');">${map.withsectiondist }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistSec','SD');">${map.withsectiondist }</a></td>
 
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withGP');">${map.withgpo }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withGP','SD');">${map.withgpo }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','closed');">${map.closedcases }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','closed','SD');">${map.closedcases }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','goi');">${map.goi }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','goi','SD');">${map.goi }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','psu');">${map.psu }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','psu','SD');">${map.psu }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','Private');">${map.privatetot }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','Private','SD');">${map.privatetot }</a></td>
 
 									</tr>
 									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
@@ -395,37 +396,37 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${map.description }</td>
 
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','ALL');">${map.total_cases }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','ALL','HOD');">${map.total_cases }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSD');">${map.withsectdept }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSD','HOD');">${map.withsectdept }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withMLO');">${map.withmlo }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withMLO','HOD');">${map.withmlo }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHOD');">${map.withhod }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHOD','HOD');">${map.withhod }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withNO');">${map.withnodal }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withNO','HOD');">${map.withnodal }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSDSec');">${map.withsection }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withSDSec','HOD');">${map.withsection }</a></td>
 
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHODSec');">${map.withsectionhod }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withHODSec','HOD');">${map.withsectionhod }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDC');">${map.withdc }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDC','HOD');">${map.withdc }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistNO');">${map.withdistno }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistNO','HOD');">${map.withdistno }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistSec');">${map.withsectiondist }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withDistSec','HOD');">${map.withsectiondist }</a></td>
 
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withGP');">${map.withgpo }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','withGP','HOD');">${map.withgpo }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','closed');">${map.closedcases }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','closed','HOD');">${map.closedcases }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','goi');">${map.goi }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','goi','HOD');">${map.goi }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','psu');">${map.psu }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','psu','HOD');">${map.psu }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','Private');">${map.privatetot }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','Private','HOD');">${map.privatetot }</a></td>
 
 									</tr>
 									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
@@ -713,10 +714,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#mode").val("HODwisedetails");
 		$("#ContemptCaseStatusAbstract").submit();
 	}
-	function showCasesWise(deptId, deptDesc, status) {
+	function showCasesWise(deptId, deptDesc, status, level) {
 		$("#deptId").val(deptId);
 		$("#deptName").val(deptDesc);
 		$("#caseStatus").val(status);
+		$("#reportLevel").val(level);
 		$("#mode").val("getCasesList");
 		$("#ContemptCaseStatusAbstract").submit();
 	}
