@@ -373,4 +373,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		}
 		;
 	};
+	function viewCaseDetailsPopup(cino) {
+		var heading = "View Case Details for CINO : " + cino;
+		var srclink = "";
+		if (cino != null && cino != "" && cino != "0") {
+			srclink = "./AssignedCasesToSection.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino="
+					+ cino;
+			// alert("LINK:"+srclink);
+			if (srclink != "") {
+				$("#MyPopup .modal-title").html(heading);
+				$("#page").prop("src", srclink)
+				//$("#MyPopup .modal-body").html(body);
+				$("#MyPopup").modal("show");
+			}
+			;
+		}
+		;
+	};
 </script>
