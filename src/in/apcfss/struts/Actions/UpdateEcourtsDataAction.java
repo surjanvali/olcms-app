@@ -1495,14 +1495,18 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					fos.write(decoder);
 					System.out.println("PDF File Saved");
 					
+					String fileName =  estCode + causelistDate + bench_id + causelist_id;
 					String causeListPdfFilePath="uploads/HighCourtsCauseList/"
-							+ causelistDate + "/" + estCode + causelistDate + bench_id + causelist_id
+							+ causelistDate + "/" +fileName
 							+ ".pdf";
 					
 					sql = "update ecourts_causelist_bench_data set causelist_document='"+causeListPdfFilePath+"' where est_code='" + estCode + "' and causelist_date=to_date('" + causelistDate
 							+ "','yyyy-mm-dd') and bench_id='" + bench_id + "' and causelist_id='" + causelist_id + "'";
 					System.out.println("UPDATE SQL:" + sql);
 					DatabasePlugin.executeUpdate(sql, con);
+					
+					causeListPdfCasesretrieval(causelistDate, causeListPdfFilePath, fileName, con);
+					
 				}
 			}else {
 				System.out.println("DATA NOT UPDATED INVALID DECRYPT STRING");	
@@ -1519,10 +1523,10 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 
 	public static void main(String[] args) throws Exception {
 		Connection con=null;
-		causeListPdfCasesretrieval("07-07-2022", "", con);
+		// causeListPdfCasesretrieval("07-07-2022", "","", con);
 	}
 	
-	public static void causeListPdfCasesretrieval(String cauesListDate, String filePath, Connection con) throws Exception {
+	public static void causeListPdfCasesretrieval(String cauesListDate, String filePath, String fileName, Connection con) throws Exception {
 		String pdfOutput=null;
 		String result = null, sql="", caseNo="";
 		JSONObject jObjData;
@@ -1549,13 +1553,12 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 						for(int j=0;j < casesList.length(); j++) {
 							caseNo = casesList.getString(j) ;
 							//System.out.println("caseNo:"+(j+1)+":"+caseNo);
-							sql="insert into ecourts_causelist_cases (causelist_date, case_no) values (to_date('"+cauesListDate+"','dd-mm-yyyy'), '"+caseNo+"')";
+							sql="insert into ecourts_causelist_cases (file_name, causelist_date, case_no) values ('"+fileName+"', to_date('"+cauesListDate+"','dd-mm-yyyy'), '"+caseNo+"')";
 							//System.out.println("SQL:"+sql);
 							DatabasePlugin.executeUpdate(sql, con);
 						}
 						//System.out.println("-----------------");
 					}
-					
 				}
 				else if(jObj instanceof JSONArray) {
 					JSONArray jArrayData =  (JSONArray)jObj;// new JSONArray(CommonModels.checkStringObject(outputJson.get("data")));
@@ -1573,7 +1576,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 							for(int j=0;j < casesList.length(); j++) {
 								caseNo = casesList.getString(j) ;
 								//System.out.println("caseNo:"+(j+1)+":"+caseNo);
-								sql="insert into ecourts_causelist_cases (causelist_date, case_no) values (to_date('"+cauesListDate+"','dd-mm-yyyy'), '"+caseNo+"')";
+								sql="insert into ecourts_causelist_cases (file_name, causelist_date, case_no) values ('"+fileName+"', to_date('"+cauesListDate+"','dd-mm-yyyy'), '"+caseNo+"')";
 								//System.out.println("SQL:"+sql);
 								DatabasePlugin.executeUpdate(sql, con);
 							}
