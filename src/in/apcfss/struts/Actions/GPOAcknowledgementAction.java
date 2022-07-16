@@ -1,11 +1,13 @@
 package in.apcfss.struts.Actions;
 
 import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -48,8 +50,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 	@Override
 	public ActionForward unspecified(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		System.out.println(
-				"GPOAcknowledgementAction..............................................................................unspecified()");
+		
 		Connection con = null;
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
@@ -113,6 +114,31 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					+ " case_full_name,a.ack_file_path, services_id,services_flag, inserted_time,a.barcode_file_path, reg_year, reg_no, ack_type, a.mode_filing, a.case_category, a.hc_ack_no "
 					+ " order by inserted_time desc";
 			
+			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip,"
+					+ " upper(trim(district_name)) as district_name,  upper(trim(case_full_name)) as  case_full_name, a.ack_file_path,"
+					+ " case when services_id='0' then null else services_id end as services_id,services_flag,"
+					+ " STRING_AGG(gd.dept_code,',') as dept_codes,"
+					+ " STRING_AGG(gd.description||'-'||gd.servicetpye||case when coalesce(gd.dept_category,'0')!='0' then '-'||gd.dept_category else '' end ,', ') as dept_descs,"
+					+ " a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date,"
+					//+ " --STRING_AGG(gd.designation,',')  as designation,"
+					+ " mode_filing, case_category, coalesce(a.hc_ack_no,'-') as hc_ack_no"
+					+ " from ecourts_gpo_ack_dtls a"
+					+ " left join district_mst dm on (a.distid=dm.district_id)"
+					+ " left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name)"
+					+ " left join (select ack_no,respondent_slno,a1.dept_code,"
+					+ " case when dm1.description is not null then dm1.description when dm2.district_id is not null then 'District Collector, '||dm2.district_name end as description ,servicetpye , coalesce(dept_category,'0') as dept_category"
+					+ " from ecourts_gpo_ack_depts a1 left join dept_new dm1 on (a1.dept_code=dm1.dept_code)"
+					+ " left join district_mst dm2 on (a1.dist_id=dm2.district_id)"
+					+ " order by respondent_slno) gd on (a.ack_no=gd.ack_no)"
+					
+					+ " where a.inserted_by='"+session.getAttribute("userid")
+					+"' and a.delete_status is false and ack_type='"+ackType+"' and inserted_time::date=current_date"
+
+					
+					+ " group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name, case_full_name,a.ack_file_path, services_id,services_flag, inserted_time,a.barcode_file_path, reg_year, reg_no, ack_type, a.mode_filing, a.case_category, a.hc_ack_no  order by inserted_time desc"
+					+ "";
+			
+			
 			System.out.println("SQL:"+sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			System.out.println("data=" + data);
@@ -131,8 +157,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 	
 	public ActionForward getAcknowledementsListAll(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		System.out.println(
-				"GPOAcknowledgementAction..............................................................................getAcknowledementsListAll()");
+		
 		Connection con = null;
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
@@ -160,6 +185,27 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					+ " inner join dept_new dm using (dept_code) order by ack_no, respondent_slno) gd on (a.ack_no=gd.ack_no)"
 					+ " where a.inserted_by='"+session.getAttribute("userid")
 					+"' and a.delete_status is false";
+			
+			
+			sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip,"
+					+ " upper(trim(district_name)) as district_name,  upper(trim(case_full_name)) as  case_full_name, a.ack_file_path,"
+					+ " case when services_id='0' then null else services_id end as services_id,services_flag,"
+					+ " STRING_AGG(gd.dept_code,',') as dept_codes,"
+					+ " STRING_AGG(gd.description||'-'||gd.servicetpye||case when coalesce(gd.dept_category,'0')!='0' then '-'||gd.dept_category else '' end ,', ') as dept_descs,"
+					+ " a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date,"
+					//+ " --STRING_AGG(gd.designation,',')  as designation,"
+					+ " mode_filing, case_category, coalesce(a.hc_ack_no,'-') as hc_ack_no"
+					+ " from ecourts_gpo_ack_dtls a"
+					+ " left join district_mst dm on (a.distid=dm.district_id)"
+					+ " left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name)"
+					+ " left join (select ack_no,respondent_slno,a1.dept_code,"
+					+ " case when dm1.description is not null then dm1.description when dm2.district_id is not null then 'District Collector, '||dm2.district_name end as description ,servicetpye , coalesce(dept_category,'0') as dept_category"
+					+ " from ecourts_gpo_ack_depts a1 left join dept_new dm1 on (a1.dept_code=dm1.dept_code)"
+					+ " left join district_mst dm2 on (a1.dist_id=dm2.district_id)"
+					+ " order by respondent_slno) gd on (a.ack_no=gd.ack_no)"
+					+ " where a.inserted_by='"+session.getAttribute("userid")
+					+"' and a.delete_status is false ";
+			
 			
 			if(!CommonModels.checkStringObject(ackType).equals(""))
 				sql+=" and ack_type='"+ackType+"'";
@@ -192,8 +238,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 	public ActionForward displayAckForm(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		System.out.println(
-				"GPOAcknowledgementAction..............................................................................displayAckForm()");
+		
 		Connection con = null;
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
@@ -209,6 +254,13 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 			cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox( "select  sno,upper(trim(case_full_name)) as case_full_name from case_type_master order by sno", con));
 			cform.setDynaForm("serviceTypesList", DatabasePlugin.getSelectBox( "select  service_desc,upper(trim(service_desc)) as service_desc from ecourts_mst_services order by 1", con));
+			
+			
+			// cform.setDynaForm("advocateCCnoList",DatabasePlugin.getSelectBox("select advocate_code,lpad(advocate_code::text,5,'0')||'-'||advocate_name from ecourts_mst_advocate_ccs order by advocate_code", con));
+			
+			
+			
+			
 			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 					//"select dept_id,sdeptcode||deptcode||'-'||upper(trim(description)) as description from dept order by sdeptcode||deptcode",
 					"select  dept_code as dept_code,dept_code||' - '||upper(description) as description from dept_new where display=true order by dept_code",
@@ -326,6 +378,12 @@ public class GPOAcknowledgementAction extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		HttpSession session = request.getSession();
 		String sql = null;
+		int distId = 0;
+		String deptId="";
+		String hcAckNo=null;
+		String ackNo = null;//generateNewAckNo();
+		int respondentIds=0;
+		String 	deptdist=null;
 		try {
 			if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 				return mapping.findForward("Logout");
@@ -335,24 +393,28 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 				con = DatabasePlugin.connect();
 				con.setAutoCommit(false);
-				String hcAckNo=null;
-				String ackNo = null;//generateNewAckNo();
-				int respondentIds = CommonModels.checkIntObject(cform.getDynaForm("respondentIds"));
 				
-				int distId = 0;
-				String deptId="";
-				distId = Integer.parseInt(cform.getDynaForm("distId").toString());
+				respondentIds = CommonModels.checkIntObject(cform.getDynaForm("respondentIds"));
+				System.out.println("respondentIds................"+respondentIds);
+				
+				distId = CommonModels.checkIntObject(cform.getDynaForm("distId"+1));
+				deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"+1));
 				 
 				for(int respondentId=1; respondentId <= respondentIds; respondentId++) {
-					
-					 //distId = Integer.parseInt(cform.getDynaForm("distId"+respondentId).toString());
-					 deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"+1));
+					 
+					 if(deptId==null || deptId.contentEquals("0") || deptId.contentEquals("")) {
+						 deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"+respondentId));
+					 }
+					 if(distId==0) {
+						 distId = CommonModels.checkIntObject(cform.getDynaForm("distId"+respondentId));
+					 }
 				}
 				
+				if(distId==0)
+					distId = CommonModels.checkIntObject(cform.getDynaForm("distId"));
 				
-				
-				System.out.println("distId===="+distId);
-				//System.out.println("deptId===="+deptId);
+				System.out.println("deptId.........."+deptId);
+				System.out.println("distId.........."+distId);
 				
 				// != null ? Integer.parseInt(cform.getDynaForm("distId").toString()) : 0;
 				//System.out.println("deptIds:"+cform.getDeptId());
@@ -368,6 +430,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					hcAckNo = DatabasePlugin.getStringfromQuery(sql, con);
 				}
 				System.out.println("ackNo--"+ackNo+hcAckNo);
+				
 				/*
 				 * String designation =
 				 * CommonModels.checkStringObject(cform.getDynaForm("deptId1")); if(distId>0 &&
@@ -380,12 +443,15 @@ public class GPOAcknowledgementAction extends DispatchAction {
 				if (ackNo != null && !ackNo.contentEquals("") && hcAckNo != null && !hcAckNo.contentEquals("")) {
 
 					int i = 1;
-					sql = "insert into ecourts_gpo_ack_dtls (ack_no, distid, petitioner_name, advocatename ,advocateccno ,casetype , maincaseno , remarks ,  " //casetype
+					sql = "insert into ecourts_gpo_ack_dtls ( ack_no, distid, petitioner_name, advocatename ,advocateccno ,casetype , maincaseno , remarks ,  " //casetype
 							+ "inserted_by , inserted_ip , ack_type, reg_year, reg_no, mode_filing, case_category, hc_ack_no)"  //,designation,mandalid,villageid
-							+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";//,?,?,?    , ?, ?
+							+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";//,?,?,?    , ?, ?
 					System.out.println("sql--"+sql);
 					ps = con.prepareStatement(sql);
+					
 					ps.setString(i, ackNo);
+					//ps.setInt(++i, Integer.parseInt( deptdist));
+					// ps.setString(++i, deptId);
 					ps.setInt(++i, distId);
 					ps.setString(++i, cform.getDynaForm("petitionerName") != null ? cform.getDynaForm("petitionerName").toString() : "");
 					ps.setString(++i, cform.getDynaForm("advocateName") != null ? cform.getDynaForm("advocateName").toString() : "");
@@ -406,17 +472,17 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					ps.setString(++i, CommonModels.checkStringObject(cform.getDynaForm("filingMode")));
 					ps.setString(++i, CommonModels.checkStringObject(cform.getDynaForm("caseCategory")));
 					ps.setString(++i, hcAckNo);
+					System.out.println("ps..........."+ps);
 					
 					
 					int a = ps.executeUpdate();
 					
 					 respondentIds = CommonModels.checkIntObject(cform.getDynaForm("respondentIds"));
 					if(respondentIds > 0) {
-						
 						ps.close();
-						sql="insert into ecourts_gpo_ack_depts (ack_no, dept_code, respondent_slno, servicetpye, dept_category"
+						sql="insert into ecourts_gpo_ack_depts (ack_no, dept_code, respondent_slno, servicetpye, dept_category, dept_distcoll, dist_id"
 								// + ",designation,mandalid,villageid"
-								+ ") values (?,?,?,?,?"
+								+ ") values (?,?,?,?,?,?,?"
 								// + ",?,?,?"
 								+ ")";
 						ps = con.prepareStatement(sql);
@@ -427,12 +493,15 @@ public class GPOAcknowledgementAction extends DispatchAction {
 								ps.setString(i, ackNo);
 								ps.setString(++i, cform.getDynaForm("deptId"+respondentId).toString());
 								ps.setInt(++i, respondentId);
+								
 								/*ps.setString(++i, cform.getDynaForm("designation"+respondentId).toString());
 								ps.setString(++i, cform.getDynaForm("mandalId"+respondentId).toString());
 								ps.setString(++i, cform.getDynaForm("villageId"+respondentId).toString());
 								*/
 								ps.setString(++i, cform.getDynaForm("serviceType"+respondentId).toString());
 								ps.setString(++i, cform.getDynaForm("deptCategory"+respondentId).toString());
+								ps.setString(++i, cform.getDynaForm("departmentId"+respondentId).toString());
+								ps.setInt(++i, Integer.parseInt(cform.getDynaForm("distId"+respondentId).toString()));
 								ps.addBatch();
 							}
 						}
@@ -453,6 +522,31 @@ public class GPOAcknowledgementAction extends DispatchAction {
 								+ " case_full_name,a.ack_file_path, services_id,services_flag, inserted_time, a.mode_filing, a.case_category "
 								+ " order by district_name, inserted_time";
 						
+						
+						sql="select slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip,"
+								+ " upper(trim(district_name)) as district_name,  upper(trim(case_full_name)) as  case_full_name, a.ack_file_path,"
+								+ " case when services_id='0' then null else services_id end as services_id,services_flag,"
+								+ " STRING_AGG(gd.dept_code,',') as dept_codes,"
+								+ " STRING_AGG(gd.description||'-'||gd.servicetpye||case when coalesce(gd.dept_category,'0')!='0' then '-'||gd.dept_category else '' end ,', ') as dept_descs,"
+								+ " a.barcode_file_path, to_char(inserted_time,'dd-mm-yyyy') as generated_date,"
+								//+ " --STRING_AGG(gd.designation,',')  as designation,"
+								+ " mode_filing, case_category, coalesce(a.hc_ack_no,'-') as hc_ack_no"
+								+ " from ecourts_gpo_ack_dtls a"
+								+ " left join district_mst dm on (a.distid=dm.district_id)"
+								+ " left join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name)"
+								+ " left join (select ack_no,respondent_slno,a1.dept_code,"
+								+ " case when dm1.description is not null then dm1.description when dm2.district_id is not null then 'District Collector, '||dm2.district_name end as description ,servicetpye , coalesce(dept_category,'0') as dept_category"
+								+ " from ecourts_gpo_ack_depts a1 left join dept_new dm1 on (a1.dept_code=dm1.dept_code)"
+								+ " left join district_mst dm2 on (a1.dist_id=dm2.district_id)"
+								+ " order by respondent_slno) gd on (a.ack_no=gd.ack_no)"
+								
+								+ " where a.inserted_by='"+session.getAttribute("userid")
+								+"' and a.delete_status is false and a.ack_no='"+ackNo+"'"
+								
+								+ " group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name, case_full_name,a.ack_file_path, services_id,services_flag, inserted_time,a.barcode_file_path, reg_year, reg_no, ack_type, a.mode_filing, a.case_category, a.hc_ack_no  order by inserted_time desc"
+								+ "";
+						
+						
 						System.out.println("SQL:" + sql);
 						List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 						System.out.println("data=" + data);
@@ -471,10 +565,11 @@ public class GPOAcknowledgementAction extends DispatchAction {
 							cform.setDynaForm("remarks", ackData.get("remarks").toString());
 							cform.setDynaForm("dept_name", ackData.get("dept_descs").toString());
 							cform.setDynaForm("district_name", ackData.get("district_name").toString());
-							cform.setDynaForm("serviceType", ackData.get("servicetpye").toString());
-							cform.setDynaForm("serviceNonService", ackData.get("services_flag").toString());
+							//cform.setDynaForm("serviceType", ackData.get("servicetpye").toString());
+							//cform.setDynaForm("serviceNonService", ackData.get("services_flag").toString());
 							cform.setDynaForm("generatedDate", ackData.get("generated_date").toString());
 							cform.setDynaForm("filingMode", ackData.get("mode_filing").toString());
+							cform.setDynaForm("hc_ack_no", ackData.get("hc_ack_no").toString());
 							
 						}
 						
@@ -650,7 +745,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 	public ActionForward downloadAckPDF(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		System.out.println("GPOAcknowledgementAction..............................................................................unspecified()");
+		
 		Connection con = null;
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
@@ -849,6 +944,11 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			
 			table.addCell(pdfsetting.cell("Acknowledgement No. : ",1,Element.ALIGN_RIGHT,para,Font.BOLD));
 			table.addCell(pdfsetting.cell(""+ackNo+"",2,Element.ALIGN_LEFT,para,Font.NORMAL)); // CLIENT ORG ADDRESS
+			
+			table.addCell(pdfsetting.cell("High Court Ack No. : ",1,Element.ALIGN_RIGHT,para,Font.BOLD));
+			table.addCell(pdfsetting.cell(""+cform.getDynaForm("hc_ack_no")+"",2,Element.ALIGN_LEFT,para,Font.NORMAL)); // CLIENT ORG ADDRESS
+			
+			
 			// table.addCell(pdfsetting.cell(" ",1,Element.ALIGN_RIGHT,para,Font.NORMAL));
 			table.addCell(pdfsetting.cell("Date :",1,Element.ALIGN_RIGHT,para,Font.BOLD));
 			table.addCell(pdfsetting.cell(""+cform.getDynaForm("generatedDate"),1,Element.ALIGN_LEFT,para,Font.NORMAL));
@@ -1071,8 +1171,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 	public ActionForward deptWiseCases(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		System.out.println(
-				"GPOAcknowledgementAction..............................................................................getAcknowledementsListAll()");
+		
 		Connection con = null;
 		PreparedStatement ps = null;
 		CommonForm cform = (CommonForm) form;
@@ -1113,4 +1212,34 @@ public class GPOAcknowledgementAction extends DispatchAction {
 		}
 		return mapping.findForward("success");
 	}
+	
+	
+	 public ActionForward getdatadetails(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+ 			throws Exception {		
+ 		
+     	Connection con = null;
+     	String details ="";
+     	String sql = null;  
+         try{
+        	 	con = DatabasePlugin.connect();
+         		response.setContentType("text/html");
+             	PrintWriter pw = null;
+             	pw = response.getWriter();
+ 	        	String advocate_code = request.getParameter("advocate_code");
+         		sql = " select advocate_code||'@'||advocate_name as advocate_code from ecourts_mst_advocate_ccs where  advocate_code = '"+advocate_code+"' ";
+         		details = DatabasePlugin.getStringfromQuery(sql, con);
+         		
+         	pw.println(details);
+ 	        pw.flush();
+ 	        pw.close();
+         }catch (Exception e) {
+             e.printStackTrace();
+         }
+ 		finally{
+ 			DatabasePlugin.closeConnection(con);
+ 		}
+         return null;
+     }
+	 
+	 
 }

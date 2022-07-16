@@ -19,7 +19,8 @@ label {
 <!--  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
 <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'> -->
 
-<link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet" type="text/css" />
+<link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet"
+	type="text/css" />
 
 <!-- START PAGE CONTENT-->
 <%-- <div class="page-heading">
@@ -112,7 +113,10 @@ label {
 											</tr>
 											<tr>
 												<th style="width: 10%;">Sl No.</th>
-												<th style="width: 60%;">Respondent Department</th>
+												<th style="width: 30%;">Department/District</th>
+												<!-- <th style="width: 30%;">Department</th>
+												<th style="width: 30%;">District</th> -->
+												<th style="width: 30%;">Respondent Department / District Collector</th>
 												<th style="width: 30%;">Service Type</th>
 												<!-- <th style="width: 20%;">Designation</th>
 												<th style="width: 20%;">District</th>
@@ -123,26 +127,73 @@ label {
 										<tbody>
 											<tr id="1">
 												<td>1.</td>
-												<td><html:select styleId="deptId1"
-														property="dynaForm(deptId1)" styleClass="select2Class"
+												<td><html:select styleId="departmentId1"
+														property="dynaForm(departmentId1)" styleClass="select2Class"
+														style="width: 100%;"
+														onchange="chkDeptAndDist(1);">
+														<html:option value="0">---SELECT---</html:option>
+														<html:option value="Department">Department</html:option>
+														<html:option value="District">District Collector</html:option>
+													</html:select></td>
+												<%-- <td><html:select styleId="departmentId"
+														property="dynaForm(departmentId)" styleClass="select2Class"
 														style="width: 100%;"
 														onchange="showRevenueClassification(1);">
 														<html:option value="0">---SELECT---</html:option>
 														<logic:notEmpty name="CommonForm"
 															property="dynaForm(deptList)">
 															<html:optionsCollection name="CommonForm"
-																property="dynaForm(deptList)" />
+																property="dynaForm(departmentList)" />
 														</logic:notEmpty>
-													</html:select> <html:select styleId="deptCategory1"
-														property="dynaForm(deptCategory1)"
-														styleClass="form-control"
-														style="width: 100%;display : none;">
-														<html:option value="0">---SELECT---</html:option>
-														<html:option value="General">General</html:option>
-														<html:option value="Assignment">Assignment</html:option>
-														<html:option value="Land Acquisition">Land Acquisition</html:option>
-
 													</html:select></td>
+												<td><html:select styleId="districtId"
+														property="dynaForm(districtId)" styleClass="select2Class"
+														style="width: 100%;"
+														onchange="showRevenueClassification(1);">
+														<html:option value="0">---SELECT---</html:option>
+														<logic:notEmpty name="CommonForm"
+															property="dynaForm(distList)">
+															<html:optionsCollection name="CommonForm"
+																property="dynaForm(distList)" />
+														</logic:notEmpty>
+													</html:select></td> --%>
+												<td>
+													<div class="deptClass" id="dispalyDept1" style="display: none;">
+														<html:select styleId="deptId1"
+															property="dynaForm(deptId1)" styleClass="select2Class"
+															style="width: 100%;"
+															onchange="showRevenueClassification(1);">
+															<html:option value="0">---SELECT---</html:option>
+															<logic:notEmpty name="CommonForm"
+																property="dynaForm(deptList)">
+																<html:optionsCollection name="CommonForm"
+																	property="dynaForm(deptList)" />
+															</logic:notEmpty>
+														</html:select>
+														<html:select styleId="deptCategory1"
+															property="dynaForm(deptCategory1)"
+															styleClass="form-control"
+															style="width: 100%;display : none;">
+															<html:option value="0">---SELECT---</html:option>
+															<html:option value="General">General</html:option>
+															<html:option value="Assignment">Assignment</html:option>
+															<html:option value="Land Acquisition">Land Acquisition</html:option>
+
+														</html:select>
+													</div>
+													<div class="distClass" id="dispalyDist1" style="display: none;">
+														<html:select styleId="distId1"
+															property="dynaForm(distId1)" styleClass="select2Class"
+															style="width: 100%;">
+															<html:option value="0">---SELECT---</html:option>
+															<logic:notEmpty name="CommonForm"
+																property="dynaForm(distList)">
+																<html:optionsCollection name="CommonForm"
+																	property="dynaForm(distList)" />
+															</logic:notEmpty>
+														</html:select>
+													</div>
+												</td>
 												<td><html:select property="dynaForm(serviceType1)"
 														styleClass="select2Class" style="width: 100%;"
 														styleId="serviceType1">
@@ -233,8 +284,20 @@ label {
 								<div class="form-group">
 									<label> Advocate CC No. <bean:message key="mandatory" />
 									</label>
+												<%-- <html:select property="dynaForm(advocateCCno)" onchange="getdatadetails();"
+														styleClass="select2Class" style="width: 100%;"
+														styleId="advocateCCno">
+														<html:option value="0">---SELECT---</html:option>
+														
+														<logic:notEmpty property="dynaForm(advocateCCnoList)"
+															name="CommonForm">
+															<html:optionsCollection
+																property="dynaForm(advocateCCnoList)" name="CommonForm" />
+														</logic:notEmpty>
+													</html:select> --%>
+									
 									<html:text styleId="advocateCCno" styleClass="form-control"
-										property="dynaForm(advocateCCno)" maxlength="10" />
+										property="dynaForm(advocateCCno)" maxlength="6" onchange="getdatadetails();"/>
 								</div>
 							</div>
 
@@ -243,7 +306,7 @@ label {
 									<label> Advocate Name <bean:message key="mandatory" />
 									</label>
 									<html:text styleId="advocateName" styleClass="form-control"
-										property="dynaForm(advocateName)" maxlength="150" />
+										property="dynaForm(advocateName)" maxlength="150" readonly="true" />
 								</div>
 							</div>
 						</div>
@@ -441,6 +504,7 @@ label {
 										<tr>
 											<th>Sl.No</th>
 											<th>Ack No.</th>
+											<th>HC Ack No.</th>
 											<th>Date</th>
 											<th>District</th>
 											<th>Department</th>
@@ -466,13 +530,11 @@ label {
 										<logic:iterate id="map" name="ACKDATA" indexId="i">
 											<tr>
 												<td>${i+1 }</td>
-												<td>${map.ack_no }
-												<logic:notEqual value="-" name="map" property="hc_ack_no">
-
-													<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
-
-												</logic:notEqual>
-												
+												<td>${map.ack_no }</td>
+												<td>
+													<logic:notEqual value="-" name="map" property="hc_ack_no">
+														<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
+													</logic:notEqual>
 												</td>
 												<td nowrap="nowrap">${map.generated_date }</td>
 												<td>${map.district_name }</td>
@@ -493,11 +555,11 @@ label {
 
 												<td>${map.remarks }</td>
 												<td>
-													<%-- <button type="button" class="btn btn-sm btn-warning"
+													<button type="button" class="btn btn-sm btn-warning"
 														title="Edit Acknowledgement"
 														onclick="editAck('${map.ack_no}')">
 														<i class="fa fa-edit"></i><span>Edit</span>
-													</button> --%> <logic:present name="map"
+													</button> <logic:present name="map"
 														property="ack_file_path">
 														<a href="./${map.ack_file_path}" target="_new"
 															title="Print Acknowledgement" class="btn btn-sm btn-info">
@@ -510,34 +572,25 @@ label {
 															class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
 														</a>
 														<br />
-													</logic:present> 
-													
-													<%-- <a
+													</logic:present> <%-- <a
 													href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 													target="_new" title="Print Barcode"
 													class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
 														<span>Scanned Affidavit</span>
 												</a> 
-												 --%>
-												<logic:notEqual value="-" name="map" property="hc_ack_no">
+												 --%> <logic:notEqual value="-" name="map"
+														property="hc_ack_no">
 														<a
 															href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
 															target="_new" title="Print Barcode"
 															class="btn btn-sm btn-info">
-													</logic:notEqual>
-
-
-													<logic:equal value="-" name="map" property="hc_ack_no">
+													</logic:notEqual> <logic:equal value="-" name="map" property="hc_ack_no">
 														<a
 															href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 															target="_new" title="Print Barcode"
 															class="btn btn-sm btn-info">
-													</logic:equal>
-													<i class="fa fa-save"></i>
-													<span>Scanned Affidavit</span>
-													</a>
-												
-												<%-- <logic:notPresent name="map" property="ack_file_path">
+													</logic:equal> <i class="fa fa-save"></i> <span>Scanned Affidavit</span>
+													</a> <%-- <logic:notPresent name="map" property="ack_file_path">
 														<button type="button" class="btn btn-sm btn-info"
 															onclick="downloadAck('${map.ack_no}')">
 															<i class="fa fa-save"></i> <span>Download</span>
@@ -561,13 +614,11 @@ label {
 									<tfoot>
 										<tR>
 											<logic:present name="DISPLAYOLD">
-												<td colspan="14">
+												<td colspan="15">
 											</logic:present>
 											<logic:notPresent name="DISPLAYOLD">
-												<td colspan="13">
+												<td colspan="14">
 											</logic:notPresent>
-
-
 											&nbsp;
 											</td>
 										</tR>
@@ -589,6 +640,7 @@ label {
 										<tr>
 											<th>Sl.No</th>
 											<th>Ack No.</th>
+											<th>HC Ack No.</th>
 											<th>Date</th>
 											<th>District</th>
 											<th>Case Type</th>
@@ -605,12 +657,11 @@ label {
 										<logic:iterate id="map" name="DEPTACKDATA" indexId="i">
 											<tr>
 												<td>${i+1 }</td>
-												<td>${map.ack_no }<logic:notEqual value="-" name="map"
-													property="hc_ack_no">
-
-													<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
-
-												</logic:notEqual></td>
+												<td>${map.ack_no }</td>
+												<td><logic:notEqual value="-" name="map" property="hc_ack_no">
+														<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
+													</logic:notEqual>
+												</td>	
 												<td nowrap="nowrap">${map.generated_date }</td>
 												<td>${map.district_name }</td>
 												<td>${map.case_full_name }</td>
@@ -633,41 +684,32 @@ label {
 															class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
 														</a>
 														<br />
-													</logic:present> 
-													
-													<logic:notEqual value="-" name="map" property="hc_ack_no">
+													</logic:present> <logic:notEqual value="-" name="map" property="hc_ack_no">
 														<a
 															href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
 															target="_new" title="Print Barcode"
 															class="btn btn-sm btn-info">
-													</logic:notEqual>
-
-
-													<logic:equal value="-" name="map" property="hc_ack_no">
+													</logic:notEqual> <logic:equal value="-" name="map" property="hc_ack_no">
 														<a
 															href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 															target="_new" title="Print Barcode"
 															class="btn btn-sm btn-info">
-													</logic:equal>
-													
-													<%-- <a
+													</logic:equal> <%-- <a
 													href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
 													target="_new" title="Print Barcode"
 													class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
 														<span>Scanned Affidavit</span> 
-												</a> --%>
-												
-												</td>
+												</a> --%></td>
 											</tr>
 										</logic:iterate>
 									</tbody>
 									<tfoot>
 										<tR>
 											<logic:present name="DISPLAYOLD">
-												<td colspan="13">
+												<td colspan="15">
 											</logic:present>
 											<logic:notPresent name="DISPLAYOLD">
-												<td colspan="11">
+												<td colspan="14">
 											</logic:notPresent>
 											&nbsp;
 											</td>
@@ -688,15 +730,14 @@ label {
 <script type="text/javascript">
 
 
-	function showRevenueClassification(val){
-		if($("#deptId"+val).val()=="REV01-L"){
+	function showRevenueClassification(val) {
+		if ($("#deptId" + val).val() == "REV01-L") {
 			// show Clasification Select box
-				$("#deptCategory"+val).show();
-		}
-		else{
+			$("#deptCategory" + val).show();
+		} else {
 			// nothing
-			$("#deptCategory"+val).hide();
-			$("#deptCategory"+val).val("0");
+			$("#deptCategory" + val).hide();
+			$("#deptCategory" + val).val("0");
 		}
 	}
 
@@ -704,167 +745,199 @@ label {
 		document.forms[0].mode.value = "unspecified";
 		document.forms[0].submit();
 	}
-	
+
 	$(document).ready(function() {
 		$(".servicesDiv").hide();
 		$("#OLDCASEDIV").hide();
-	
+
 		//$('#caseCategory [value="Others"]').prop('checked', true);
 		$('input[id=caseCategory][value="Others"]').prop('checked', true);
 		// $("input[name=type][value=" + value + "]").prop('checked', true);
-		
-		if($("#ackType").val()=="OLD"){
-			$("#OLDCASEDIV").show();			
+
+		if ($("#ackType").val() == "OLD") {
+			$("#OLDCASEDIV").show();
 		}
-		
-		$("#serviceNonService").change(function(){
-			if($("#serviceNonService").val()=="SERVICES"){
+
+		$("#serviceNonService").change(function() {
+			if ($("#serviceNonService").val() == "SERVICES") {
 				$(".servicesDiv").show();
-			}
-			else{
+			} else {
 				$("#serviceType").val("0");
 				$(".servicesDiv").hide();
 			}
 		});
-		
-		$("#addResp").click(function(){
+
+		$("#addResp").click(function() {
+
+
+			let rowfyable = $("#RESPSTABID").closest('table');
+			//let randomNo = Math.floor(Math.random() * (100 - 2) + 1);
+			let rowCount = $("#RESPSTABID tbody tr").length; //$('tbody', rowfyable).rows.length;
+			let rowCount2 = rowCount + 1;
+			let prevVal = $("#deptId" + rowCount).val();
+			let service = $("#serviceType" + rowCount).val();
+			let deptCat = $("#deptCategory" + rowCount).val();
 			
-			
-			  let rowfyable = $("#RESPSTABID").closest('table');
-			  //let randomNo = Math.floor(Math.random() * (100 - 2) + 1);
-			  let rowCount = $("#RESPSTABID tbody tr").length; //$('tbody', rowfyable).rows.length;
-			  let rowCount2 = rowCount+1;
-			  let prevVal=$("#deptId"+rowCount).val();
-			  let service=$("#serviceType"+rowCount).val();
-			  let deptCat=$("#deptCategory"+rowCount).val();
-			  
-			  /*let design=$("#designation"+rowCount).val();
-			  let dist=$("#distId"+rowCount).val();
-			  let mandal=$("#mandalId"+rowCount).val();
-			  let village=$("#villageId"+rowCount).val();*/
-			  
-			 // alert("prevVal--"+prevVal);
-			  if( (prevVal != null && prevVal != "" && prevVal!="0") && (service != null && service != "" && service!="0")
-					 // && (design != null && design != "" && design!="0" ) && (dist != null && dist != "" && dist!="0" ) 
-					  // && (mandal != null && mandal != "" && mandal!="0" ) && (village != null && village != "" && village!="0" )
-					  )
-			  {
-				  //console.log("rowCount:"+rowCount);
-				 // console.log("rowCount2:"+rowCount2);
-			
-				  $('tbody', rowfyable).append("<tr id='"+rowCount2+"'><td>"+rowCount2+".</td><td>"
-				  		+ "<select name='dynaForm(deptId"+rowCount2+")' id='deptId"+rowCount2+"' style='width: 100%;'></select>"
-				  		+ "<select name='dynaForm(deptCategory"+rowCount2+")' id='deptCategory"+rowCount2+"' style='width:100%;display:none;' class='form-control'><option value='0'>---SELECT---</option><option value='General'>General</option><option value='Assignment'>Assignment</option><option value='Land Acquisition'>Land Acquisition</option></select>"
-				  		+"</td>"
-				  		+ "<td><select name='dynaForm(serviceType"+rowCount2+")' id='serviceType"+rowCount2+"' style='width: 100%;' ></select></td></tr>"
-				  
-				  /*+"<td><select name='dynaForm(designation"+rowCount2+")' id='designation"+rowCount2+"' style='width: 100%;' ></select></td>"
-					 +"<td><select name='dynaForm(distId"+rowCount2+")' id='distId"+rowCount2+"' style='width: 100%;' ></select></td>"
-					 +"<td><select name='dynaForm(mandalId"+rowCount2+")' id='mandalId"+rowCount2+"' style='width: 100%;' ></select></td>"
-					 +"<td><select name='dynaForm(villageId"+rowCount2+")' id='villageId"+rowCount2+"' style='width: 100%;' ></select></td></tr>" */
-					    + "");
-				  
-				  
-				  $("#deptId"+rowCount+" option").clone().appendTo("#deptId"+rowCount2);
-				  $("#deptId"+rowCount2).select2();
-				  $("#deptId"+rowCount2).select2("val", "0");
-				  $("#deptId"+rowCount2).change(function(){showRevenueClassification(rowCount2);});
-				  
-				  /*$("#deptCategory"+rowCount+" option").clone().appendTo("#deptCategory"+rowCount2);
-				  $("#deptCategory"+rowCount2).select2();
-				  $("#deptCategory"+rowCount2).select2("val", "0");*/
-				  
-				  $("#serviceType"+rowCount+" option").clone().appendTo("#serviceType"+rowCount2);
-				  $("#serviceType"+rowCount2).select2();
-				  $("#serviceType"+rowCount2).select2("val", "0");
-				 
-				  
-				  
-				  /*$("#designation"+rowCount+" option").clone().appendTo("#designation"+rowCount2);
-				  $("#designation"+rowCount2).select2();
-				  $("#designation"+rowCount2).select2("val", "0");
-				  
-				  
-				  $("#distId"+rowCount+" option").clone().appendTo("#distId"+rowCount2);
-				  $("#distId"+rowCount2).select2();
-				  $("#distId"+rowCount2).select2("val", "0");
-				  
-				  
-				  $("#mandalId"+rowCount+" option").clone().appendTo("#mandalId"+rowCount2);
-				  $("#mandalId"+rowCount2).select2();
-				  $("#mandalId"+rowCount2).select2("val", "0");
-				  
-				  $("#villageId"+rowCount+" option").clone().appendTo("#villageId"+rowCount2);
-				  $("#villageId"+rowCount2).select2();
-				  $("#villageId"+rowCount2).select2("val", "0"); */
+			let deptDistSelection = $("#departmentId" + rowCount).val();
+			let distColl = $("#distId" + rowCount).val();
+
+			/*let design=$("#designation"+rowCount).val();
+			let dist=$("#distId"+rowCount).val();
+			let mandal=$("#mandalId"+rowCount).val();
+			let village=$("#villageId"+rowCount).val();*/
+
+			// alert("prevVal--"+prevVal);
+			//if ((prevVal != null && prevVal != "" && prevVal != "0") && (service != null && service != "" && service != "0")
+			// && (design != null && design != "" && design!="0" ) && (dist != null && dist != "" && dist!="0" ) 
+			// && (mandal != null && mandal != "" && mandal!="0" ) && (village != null && village != "" && village!="0" )
+			if(((prevVal != null && prevVal != "" && prevVal != "0") || (distColl !=null && distColl!="" && distColl!="0")) && (service != null && service != "" && service != "0")) {
+				//console.log("rowCount:"+rowCount);
+				// console.log("rowCount2:"+rowCount2);
+
+				$('tbody', rowfyable).append("<tr id='" + rowCount2 + "'><td>" + rowCount2 + ".</td><td>"
 				
-				  // $("#deptId"+rowCount2+" option[value="+prevVal+"]").remove();
-				 // $("#serviceType"+rowCount2+" option[value="+service+"]").remove();
-				 // $("#designation"+rowCount2+" option[value="+service+"]").remove();
-				  //$("#distId"+rowCount2+" option[value="+service+"]").remove();
-				 // $("#mandalId"+rowCount2+" option[value="+service+"]").remove();
-				 // $("#villageId"+rowCount2+" option[value="+service+"]").remove(); 
-				  
-				  $("#respondentIds").val($("#RESPSTABID tbody tr").length);
-			  }
-			  
-			  if( (prevVal=="0") )
-			  {
-				 // alert("else prevVal--"+prevVal);
-			  	alert("Select Respondant Department.");
-			  	$("#deptId"+rowCount).focus();
-			  }
-			  if(prevVal=="REV01-L" && (deptCat=="" || deptCat=="0"))
-			  {
-				 // alert("else prevVal--"+prevVal);
-			  	alert("Select Department Category.");
-			  	$("#deptCategory"+rowCount).focus();
-			  }
-			  
-			  if(  ( service=="0") )
-			  {
-			  	alert("Select Service Type");
-			  	$("#serviceType"+rowCount).focus();
-			  }
-			  
-			  /*  if( ( design=="0" ) )
-			  {
-			  	alert("Select Designation");
-			  	$("#designation"+rowCount).focus();
-			  }
-			  
-			 if(  ( dist=="0" ) )
-			  {
-			  	alert("Select District");
-			  	$("#distId"+rowCount).focus();
-			  
-			  }
-			  
-			  if( ( mandal=="0" ) )
-			  {
-			  	alert("Select Mandal");
-			  	$("#mandalId"+rowCount).focus();
-			  }
-			  
-			  if(( village=="0" ) )
-			  {
-				alert("Select Village");
-			  	$("#villageId"+rowCount).focus();
-			  
-			  }*/
-			  
+					+ "<select name='dynaForm(departmentId" + rowCount2 + ")' id='departmentId" + rowCount2 + "' style='width: 100%;'></select></td>"
+					
+					+ "<td> <div class='deptClass' id='dispalyDept" + rowCount2 + "' style='display: none;'>"
+					+"<select name='dynaForm(deptId" + rowCount2 + ")' id='deptId" + rowCount2 + "' style='width: 100%;'></select>"
+					+ "<select name='dynaForm(deptCategory" + rowCount2 + ")' id='deptCategory" + rowCount2 + "' style='width:100%;display:none;' class='form-control'><option value='0'>---SELECT---</option><option value='General'>General</option><option value='Assignment'>Assignment</option><option value='Land Acquisition'>Land Acquisition</option></select>"
+					+ "</div><div class='distClass' id='dispalyDist" + rowCount2 + "' style='display: none;'><select name='dynaForm(distId"+rowCount2+")' id='distId"+rowCount2+"' style='width: 100%;' ></select></div></td>"
+					+ "<td><select name='dynaForm(serviceType" + rowCount2 + ")' id='serviceType" + rowCount2 + "' style='width: 100%;' ></select></td></tr>"
+
+					/*+"<td><select name='dynaForm(designation"+rowCount2+")' id='designation"+rowCount2+"' style='width: 100%;' ></select></td>"
+								 +"<td><select name='dynaForm(distId"+rowCount2+")' id='distId"+rowCount2+"' style='width: 100%;' ></select></td>"
+								 +"<td><select name='dynaForm(mandalId"+rowCount2+")' id='mandalId"+rowCount2+"' style='width: 100%;' ></select></td>"
+								 +"<td><select name='dynaForm(villageId"+rowCount2+")' id='villageId"+rowCount2+"' style='width: 100%;' ></select></td></tr>" */
+					+ "");
+
+
+				
+				$("#deptId" + rowCount + " option").clone().appendTo("#deptId" + rowCount2);
+				$("#deptId" + rowCount2).select2();
+				$("#deptId" + rowCount2).select2("val", "0");
+				$("#deptId" + rowCount2).change(function() {
+					showRevenueClassification(rowCount2);
+				});
+				
+				$("#departmentId" + rowCount + " option").clone().appendTo("#departmentId" + rowCount2);
+				$("#departmentId" + rowCount2).select2();
+				$("#departmentId" + rowCount2).select2("val", "0");
+				$("#departmentId" + rowCount2).change(function() {
+					chkDeptAndDist(rowCount2);
+				});
+				
+				$("#distId" + rowCount + " option").clone().appendTo("#distId" + rowCount2);
+				$("#distId" + rowCount2).select2();
+				$("#distId" + rowCount2).select2("val", "0");
+
+				/*$("#deptCategory"+rowCount+" option").clone().appendTo("#deptCategory"+rowCount2);
+				$("#deptCategory"+rowCount2).select2();
+				$("#deptCategory"+rowCount2).select2("val", "0");*/
+
+				$("#serviceType" + rowCount + " option").clone().appendTo("#serviceType" + rowCount2);
+				$("#serviceType" + rowCount2).select2();
+				$("#serviceType" + rowCount2).select2("val", "0");
+
+
+
+				/*$("#designation"+rowCount+" option").clone().appendTo("#designation"+rowCount2);
+				$("#designation"+rowCount2).select2();
+				$("#designation"+rowCount2).select2("val", "0");
+				
+				
+				$("#distId"+rowCount+" option").clone().appendTo("#distId"+rowCount2);
+				$("#distId"+rowCount2).select2();
+				$("#distId"+rowCount2).select2("val", "0");
+				
+				
+				$("#mandalId"+rowCount+" option").clone().appendTo("#mandalId"+rowCount2);
+				$("#mandalId"+rowCount2).select2();
+				$("#mandalId"+rowCount2).select2("val", "0");
+				
+				$("#villageId"+rowCount+" option").clone().appendTo("#villageId"+rowCount2);
+				$("#villageId"+rowCount2).select2();
+				$("#villageId"+rowCount2).select2("val", "0"); */
+
+				// $("#deptId"+rowCount2+" option[value="+prevVal+"]").remove();
+				// $("#serviceType"+rowCount2+" option[value="+service+"]").remove();
+				// $("#designation"+rowCount2+" option[value="+service+"]").remove();
+				//$("#distId"+rowCount2+" option[value="+service+"]").remove();
+				// $("#mandalId"+rowCount2+" option[value="+service+"]").remove();
+				// $("#villageId"+rowCount2+" option[value="+service+"]").remove(); 
+
+				$("#respondentIds").val($("#RESPSTABID tbody tr").length);
+			}
+
+			if(deptDistSelection =="" || deptDistSelection == "0" || deptDistSelection == ""  ) {
+				alert("Select Department/District Collector.");
+				$("#departmentId" + rowCount).focus();
+			}
+			
+			if(deptDistSelection =="Department" && (prevVal == "0") ) {
+				// alert("else prevVal--"+prevVal);
+				alert("Select Respondant Department.");
+				$("#deptId" + rowCount).focus();
+			}
+			/*if ((prevVal == "REV01-L" && (deptCat == "" || deptCat == "0")) && (distColl=="" || distColl=="0")) {
+				// alert("else prevVal--"+prevVal);
+				alert("Select Department Category/ District.");
+				$("#deptCategory" + rowCount).focus();
+			}*/
+			//alert(deptDistSelection);
+			if(deptDistSelection =="Department" && (prevVal == "REV01-L" && (deptCat == "" || deptCat == "0")))
+			{
+				alert("Select Department Category.");
+				$("#deptCategory" + rowCount).focus();
+			}
+			if(deptDistSelection =="District" && (distColl=="" || distColl=="0"))
+			{
+				alert("Select District Collector.");
+				$("#distId" + rowCount).focus();
+			}
+
+			if( (service == "0") ) {
+				alert("Select Service Type");
+				$("#serviceType" + rowCount).focus();
+			}
+
+			/*  if( ( design=="0" ) )
+			{
+				alert("Select Designation");
+				$("#designation"+rowCount).focus();
+			}
+			
+				 if(  ( dist=="0" ) )
+			{
+				alert("Select District");
+				$("#distId"+rowCount).focus();
+			
+			}
+			
+			if( ( mandal=="0" ) )
+			{
+				alert("Select Mandal");
+				$("#mandalId"+rowCount).focus();
+			}
+			
+			if(( village=="0" ) )
+			{
+					alert("Select Village");
+				$("#villageId"+rowCount).focus();
+			
+			}*/
+
 		});
-		$("#removeResp").click(function(){
+		$("#removeResp").click(function() {
 			let rowfyable = $("#RESPSTABID").closest('table');
 			let rowCount = $("#RESPSTABID tbody tr").length;
-			if(rowCount > 1){
+			if (rowCount > 1) {
 				$('tbody tr:last', rowfyable).remove();
 			}
 			$("#respondentIds").val($("#RESPSTABID tbody tr").length);
 		});
-		
-		
- 		$("#designationId").change(function() {
+
+
+		$("#designationId").change(function() {
 
 			$("#LOADINGPAGEGIF").html('<img src="<%=basePath%>images/gears.gif" /> <br /> Retrieving your data. Please wait...');
 
@@ -902,15 +975,14 @@ label {
 			alert("Department Required");
 			$("#deptId1").focus();
 			return false;
-		}else if($("#deptId1").val()=="REV01-L" && ($("#deptCategory1").val()=="" || $("#deptCategory1").val()=="0"))
-		  {
-		  	alert("Select Department Category.");
-		  	$("#deptCategory1").focus();
-		  } else if ($("#serviceType1").val() == null || $("#serviceType1").val() == "" || $("#serviceType1").val() == "0") {
+		} else if ($("#deptId1").val() == "REV01-L" && ($("#deptCategory1").val() == "" || $("#deptCategory1").val() == "0")) {
+			alert("Select Department Category.");
+			$("#deptCategory1").focus();
+		} else if ($("#serviceType1").val() == null || $("#serviceType1").val() == "" || $("#serviceType1").val() == "0") {
 			alert("Service Type Required");
 			$("#serviceType1").focus();
 			return false;
-		}else if ($("#distId").val() == null || $("#distId").val() == "" || $("#distId").val() == "0") {
+		} else if ($("#distId").val() == null || $("#distId").val() == "" || $("#distId").val() == "0") {
 			alert("District Required");
 			$("#distId").focus();
 			return false;
@@ -918,7 +990,7 @@ label {
 			alert("Petitioner Name Required");
 			$("#petitionerName").focus();
 			return false;
-		}else if ($("#advocateCCno").val() == null || $("#advocateCCno").val() == "" || $("#advocateCCno").val() == "0") {
+		} else if ($("#advocateCCno").val() == null || $("#advocateCCno").val() == "" || $("#advocateCCno").val() == "0") {
 			alert("Advocate CC No. Required");
 			$("#advocateCCno").focus();
 			return false;
@@ -930,26 +1002,24 @@ label {
 			alert("Case Type (Nature of Petition) Required");
 			$("#caseType").focus();
 			return false;
-		} 
-
-		else if ($("#filingMode").val() == null || $("#filingMode").val() == "" || $("#filingMode").val() == "0") {
+		} else if ($("#filingMode").val() == null || $("#filingMode").val() == "" || $("#filingMode").val() == "0") {
 			alert("Mode of Filing Required");
 			$("#filingMode").focus();
 			return false;
-		}  
-		/*else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
-			alert("Main Case No. Required");
-			$("#mainCaseNo").focus();
-			return false;
-		} /*  else if ($("#serviceNonService").val() == null || $("#serviceNonService").val() == "" || $("#serviceNonService").val() == "0") {
-			alert("Service / Non-Service Required");
-			$("#serviceNonService").focus();
-			return false;
-		} else if ( $("#serviceNonService").val() == "SERVICES" && ($("#serviceType").val() == null || $("#serviceType").val() == "" || $("#serviceType").val() == "0")) {
-			alert("Service Type Required");
-			$("#serviceType").focus();
-			return false;
-		} */ /*   else if ($("#remarks").val() == null || $("#remarks").val() == "" || $("#remarks").val() == "0") {
+		}
+			/*else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
+				alert("Main Case No. Required");
+				$("#mainCaseNo").focus();
+				return false;
+			} /*  else if ($("#serviceNonService").val() == null || $("#serviceNonService").val() == "" || $("#serviceNonService").val() == "0") {
+				alert("Service / Non-Service Required");
+				$("#serviceNonService").focus();
+				return false;
+			} else if ( $("#serviceNonService").val() == "SERVICES" && ($("#serviceType").val() == null || $("#serviceType").val() == "" || $("#serviceType").val() == "0")) {
+				alert("Service Type Required");
+				$("#serviceType").focus();
+				return false;
+			} */ /*   else if ($("#remarks").val() == null || $("#remarks").val() == "" || $("#remarks").val() == "0") {
 			alert("Remarks Required");
 			$("#remarks").focus();
 			return false;
@@ -967,7 +1037,8 @@ label {
 			alert("District Required");
 			$("#distId").focus();
 			return false;
-		} else */ if ($("#deptId").val() == null || $("#deptId").val() == "" || $("#deptId").val() == "0") {
+		} else */
+		if ($("#deptId").val() == null || $("#deptId").val() == "" || $("#deptId").val() == "0") {
 			alert("Department Required");
 			$("#deptId").focus();
 			return false;
@@ -983,7 +1054,7 @@ label {
 			alert("Case Type Required");
 			$("#caseType").focus();
 			return false;
-		}  */else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
+		}  */ else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
 			alert("Main Case No. Required");
 			$("#mainCaseNo").focus();
 			return false;
@@ -1008,7 +1079,7 @@ label {
 		document.forms[0].mode.value = "getAcknowledementsListAll";
 		document.forms[0].submit();
 	}
-	
+
 	function showAckList() {
 		document.forms[0].mode.value = "getAcknowledementsList";
 		document.forms[0].submit();
@@ -1021,8 +1092,8 @@ label {
 			document.forms[0].submit();
 		}
 	}
-	
-	
+
+
 	function downloadAck(ackId) {
 		if (ackId != null && ackId != "") {
 			$("#ackId").val(ackId);
@@ -1030,7 +1101,7 @@ label {
 			document.forms[0].submit();
 		}
 	}
-	
+
 	function deleteAck(ackId) {
 		if (ackId != null && ackId != "") {
 			$("#ackId").val(ackId);
@@ -1208,5 +1279,73 @@ label {
 			alert("Invalid aadhar no.");
 			$("#aadharNo").val("");
 		}
+	}
+
+	function chkDeptAndDist(val) {
+		
+		$("#dispalyDept"+val).hide();
+		$("#dispalyDist"+val).hide();
+		
+		if ($("#departmentId" + val).val() == "Department") {
+			$("#dispalyDept"+val).show();
+		} else if ($("#departmentId" + val).val() == "District") {
+			$("#dispalyDist"+val).show();
+		}  
+		
+	}
+	
+	/* function getdatadetails() {
+	
+	if ($("#reference_year").val()==0) {
+			alert("Please select Year");
+			$("#reference_year").focus();
+			$("#village_id").val("0");
+			return false;
+		}
+		else{
+		$("#ration_total").html("");
+		$("#lpg_total").html("");
+		$("#voters_total").html("");
+		var village_id = $("#village_id").val();
+		var reference_year = $("#reference_year").val();
+		var url = "revnuecivilsupplies.done?method=getdatadetails&village="
+				+ village_id + "&reference_year=" + reference_year;
+		$.post(url, function(data) {
+			var details = data.split("@");
+			$("#in_fairpricce1").val(details[0]);
+			$("#in_ration_white").val(details[1]);
+			$("#in_ration_aay").val(details[2]);
+			$("#in_annapurna_aay").val(details[3]);
+			$("#ration_total").html(details[4]);
+
+			$("#in_no_of_lpg_connection").val(details[5]);
+			$("#in_no_of_deepam_connection").val(details[6]);
+			$("#lpg_total").html(details[7]);
+
+			$("#in_no_of_polling_stations").val(details[8]);
+			$("#in_no_of_voter_male").val(details[9]);
+			$("#in_no_of_voter_female").val(details[10]);
+			$("#voters_total").html(details[11]);
+			if(details[12]=='1' && jQuery.type(details[12])!= "undefined"){
+				$(".readonly").attr('readonly', 'true');
+				$("#buttonhide").hide();
+				}
+				else{
+				$("#buttonhide").show();
+				}
+		});
+	}
+	}
+	 */
+	function getdatadetails()
+	{
+	 var advocate_code=$("#advocateCCno").val();
+	var  url = "./GPOAck.do?mode=getdatadetails&advocate_code="+ advocate_code;
+	$.post(url, function(data) {
+	var details = data.split("@");
+	$("#advocateName").val(details['1']);
+	
+	
+	 });
 	}
 </script>
