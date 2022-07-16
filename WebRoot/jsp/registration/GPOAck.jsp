@@ -555,11 +555,11 @@ label {
 
 												<td>${map.remarks }</td>
 												<td>
-													<button type="button" class="btn btn-sm btn-warning"
+													<%-- <button type="button" class="btn btn-sm btn-warning"
 														title="Edit Acknowledgement"
 														onclick="editAck('${map.ack_no}')">
 														<i class="fa fa-edit"></i><span>Edit</span>
-													</button> <logic:present name="map"
+													</button> --%> <logic:present name="map"
 														property="ack_file_path">
 														<a href="./${map.ack_file_path}" target="_new"
 															title="Print Acknowledgement" class="btn btn-sm btn-info">
