@@ -192,14 +192,15 @@ public class SMSAlertsJobOld {
 			sendDialyCasesReportDC(rs, con);
 			
 			//sec dept
-			sql=" select b.dept_code,dn.description,ctm.sno,casetype,ctm.case_short_name,dn.mobile_no as mobileno,a.inserted_time::date,"
-					+ " count(*) as casescount from  ecourts_gpo_ack_dtls a  "
-					+ "	 inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no) "
-					+ "	 inner join case_type_master ctm on (a.casetype=ctm.sno::text) "
-					+ "	 inner join dept_new dn on (b.dept_code=dn.dept_code or dn.reporting_dept_code=b.dept_code)"
-					+ "	where    a.inserted_time::date =current_date - 10"
-					+ "	 group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,mobileno,dn.description,a.inserted_time::date  "
-					+ "order by b.dept_code,ctm.sno  ";
+			sql=" select dn1.dept_code,dn1.description,mobileno,to_char(inserted_time,'dd-mm-yyyy') as inserted_time,  string_agg(case_short_name||'('||cases||')'  ,',')  as report"
+					+ " from (select b.dept_code, dn.reporting_dept_code,dn.description,ctm.sno,casetype,ctm.case_short_name,dn.mobile_no as  mobileno,a.inserted_time::date,count(*) as cases from  ecourts_gpo_ack_dtls a "
+					+ "	 inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no)"
+					+ "	 inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
+					+ "	 inner join dept_new dn on (b.dept_code=dn.dept_code )"
+					+ "	 where a.inserted_time::date = current_date - 10 "
+					+ "	group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.reporting_dept_code,dn.description,mobileno,a.inserted_time::date order by b.dept_code,ctm.sno"
+					+ "			) x inner join dept_new dn1 on (x.reporting_dept_code=dn1.dept_code) "
+					+ "group by dn1.description, mobileno, inserted_time,dn1.dept_code,dn1.reporting_dept_code ";
 
 			System.out.println("SEC Dept ALL SQL:"+sql);
 			st = con.createStatement();
@@ -207,16 +208,48 @@ public class SMSAlertsJobOld {
 			sendDialyCasesReport(rs, con);
 			
 			//HOD
-			sql=" select b.dept_code,dn.description,ctm.sno,casetype,ctm.case_short_name,dn.mobile_no as mobileno,a.inserted_time::date,"
-					+ " count(*) as casescount from  ecourts_gpo_ack_dtls a  "
-					+ "	 inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no) "
-					+ "	 inner join case_type_master ctm on (a.casetype=ctm.sno::text) "
+			sql=" select dept_code,description,mobileno,to_char(inserted_time,'dd-mm-yyyy') as inserted_time,  string_agg(case_short_name||'('||cases||')'  ,',')  as report"
+					+ " from ("
+					+ " select b.dept_code,dn.description,ctm.sno,casetype,ctm.case_short_name,dn.mobile_no as  mobileno,a.inserted_time::date,count(*) as cases from  ecourts_gpo_ack_dtls a "
+					+ "	 inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no)"
+					+ "	 inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
 					+ "	 inner join dept_new dn on (b.dept_code=dn.dept_code )"
-					+ "	where    a.inserted_time::date =current_date - 10"
-					+ "	 group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,mobileno,dn.description,a.inserted_time::date  "
-					+ "order by b.dept_code,ctm.sno  ";
+					+ "	 where a.inserted_time::date = current_date - 10 "
+					+ "	group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,mobileno,a.inserted_time::date "
+					+ ") x group by description, mobileno, inserted_time,dept_code ";
 
 			System.out.println("HOD ALL SQL:"+sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			sendDialyCasesReport(rs, con);
+			
+			//sec CC
+			sql=" select dn1.dept_code,dn1.description,mobileno,to_char(inserted_time,'dd-mm-yyyy') as inserted_time,  string_agg(case_short_name||'('||cases||')'  ,',')  as report"
+					+ " from (select b.dept_code, dn.reporting_dept_code,dn.description,ctm.sno,casetype,ctm.case_short_name,dn.mobile_no as  mobileno,a.inserted_time::date,count(*) as cases from  ecourts_gpo_ack_dtls a "
+					+ "	 inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no)"
+					+ "	 inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
+					+ "	 inner join dept_new dn on (b.dept_code=dn.dept_code )"
+					+ "	 where a.inserted_time::date = current_date - 10 and  a.casetype='4'"
+					+ "	group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.reporting_dept_code,dn.description,mobileno,a.inserted_time::date order by b.dept_code,ctm.sno"
+					+ "	) x inner join dept_new dn1 on (x.reporting_dept_code=dn1.dept_code) "
+					+ "group by dn1.description, mobileno, inserted_time,dn1.dept_code,dn1.reporting_dept_code ";
+
+			System.out.println("SEC CC SQL:"+sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			sendDialyCasesReport(rs, con);
+			
+			sql=" select dept_code,description,mobileno,to_char(inserted_time,'dd-mm-yyyy') as inserted_time,  string_agg(case_short_name||'('||cases||')'  ,',')  as report"
+					+ " from ("
+					+ "select b.dept_code,dn.description,ctm.sno,casetype,ctm.case_short_name,dn.mobile_no as  mobileno,a.inserted_time::date,count(*) as cases from  ecourts_gpo_ack_dtls a "
+					+ "	 inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no)"
+					+ "	 inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
+					+ "	 inner join dept_new dn on (b.dept_code=dn.dept_code )"
+					+ "	 where a.inserted_time::date = current_date - 10 and  a.casetype='4'"
+					+ "	group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,mobileno,a.inserted_time::date "
+					+ ") x group by description, mobileno, inserted_time,dept_code";
+
+			System.out.println("HOD CC SQL:"+sql);
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
 			sendDialyCasesReport(rs, con);
@@ -226,7 +259,7 @@ public class SMSAlertsJobOld {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DatabasePlugin.closeConnection(con);
+			// DatabasePlugin.closeConnection(con);
 			if(con!=null) {
 				con.close();
 			}
