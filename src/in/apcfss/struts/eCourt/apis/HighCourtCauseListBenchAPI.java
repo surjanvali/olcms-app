@@ -39,7 +39,7 @@ public class HighCourtCauseListBenchAPI {
 			con = DriverManager.getConnection(apolcmsDataBase, apolcmsUserName, apolcmsPassword);
 			String opVal = ECourtAPIs.getSelectParam(11);
 			
-			 String estCode="APHC01", causelistDate="2022-06-23";//2022-04-06
+			 String estCode="APHC01", causelistDate="2022-07-18";//2022-04-06
 			
 			inputStr = "est_code="+estCode+"|causelist_date="+causelistDate;//ECourtAPIs.getInputStringValue(opVal);
 			// 1. Encoding Request Token

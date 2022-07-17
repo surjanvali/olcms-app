@@ -320,7 +320,7 @@ public class SMSAlertsJobOld {
 						+ " Department :"+CommonModels.checkStringObject(rs.getString("description"))+" "
 						+ " Please visit https://apolcms.ap.gov.in for details -APOLCMS Team, GOVTAP";
 				
-				System.out.println("smsText:"+smsText);
+				//System.out.println("smsText:"+smsText);
 				//mobileNo = "9618048663"; 
 				//SendSMSAction.sendSMS(mobileNo, smsText, templateIdDCR, con);
 			}
@@ -336,7 +336,7 @@ public class SMSAlertsJobOld {
 						CommonModels.checkStringObject(rs.getString("casescount"))+ " No.of CC registered in APOLCMS on "+CommonModels.checkStringObject(rs.getString("inserted_time"))
 						+" Department :"+CommonModels.checkStringObject(rs.getString("description"))+" Please visit https://apolcms.ap.gov.in for details. -APOLCMS Team, GOVTAP";
 				
-				System.out.println("smsText:"+smsText);
+				//System.out.println("smsText:"+smsText);
 				//mobileNo = "9618048663"; 
 				//SendSMSAction.sendSMS(mobileNo, smsText, templateIdCC, con);
 			}
@@ -367,7 +367,7 @@ public class SMSAlertsJobOld {
 					+ " Department : ALL and District :"+CommonModels.checkStringObject(rs.getString("district_name"))+" "
 					+ " Please visit https://apolcms.ap.gov.in for details -APOLCMS Team, GOVTAP";
 			
-			System.out.println("smsText:"+smsText);
+			//System.out.println("smsText:"+smsText);
 			//mobileNo = "9618048663"; 
 			//SendSMSAction.sendSMS(mobileNo, smsText, templateIdDCR, con);
 			}
@@ -383,7 +383,7 @@ public class SMSAlertsJobOld {
 						CommonModels.checkStringObject(rs.getString("casescount"))+ " No.of CC registered in APOLCMS on "+CommonModels.checkStringObject(rs.getString("inserted_time"))
 						+" Department : ALL and District :"+CommonModels.checkStringObject(rs.getString("district_name"))+" Please visit https://apolcms.ap.gov.in for details. -APOLCMS Team, GOVTAP";
 				
-				System.out.println("smsText:"+smsText);
+				//System.out.println("smsText:"+smsText);
 				//mobileNo = "9618048663"; 
 				//SendSMSAction.sendSMS(mobileNo, smsText, templateIdCC, con);
 			}
