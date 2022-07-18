@@ -306,7 +306,7 @@ label {
 									<label> Advocate Name <bean:message key="mandatory" />
 									</label>
 									<html:text styleId="advocateName" styleClass="form-control"
-										property="dynaForm(advocateName)" maxlength="150" readonly="true" />
+										property="dynaForm(advocateName)" maxlength="150" readonly="true"/>   <!-- readonly="true"  -->
 								</div>
 							</div>
 						</div>

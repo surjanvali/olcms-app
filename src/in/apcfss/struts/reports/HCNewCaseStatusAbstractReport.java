@@ -480,7 +480,7 @@ System.out.println("caseStatus----"+caseStatus);
 			}
 			
 
-			sql = "select a.ack_no,advocatename,advocateccno,cm.case_short_name,maincaseno,inserted_time,petitioner_name,"
+			sql = "select a.ack_no,advocatename,advocateccno,cm.case_short_name,maincaseno,inserted_time,petitioner_name,getack_dept_dist_desc(a.ack_no::text) as dept_descs,"
 					+ "	 services_flag,reg_year,reg_no,mode_filing,case_category,dm.district_name,coalesce(e.hc_ack_no,'-') as hc_ack_no,barcode_file_path, "
 					+ " coalesce(trim(e.ack_file_path),'-') as scanned_document_path1,'' as orderpaths "
 					+ " from  ecourts_gpo_ack_depts  a "
