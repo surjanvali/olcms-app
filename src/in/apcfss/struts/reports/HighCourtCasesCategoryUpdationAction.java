@@ -220,8 +220,15 @@ public class HighCourtCasesCategoryUpdationAction extends DispatchAction {
 						"select upper(description) as description from dept_new where dept_code='" + deptId + "'", con);
 				// CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			} else {
+				
+				if(request.getParameter("deptId").toString().equals(null)) {
 				deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"));
 				deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
+				}else {
+					
+					deptId = CommonModels.checkStringObject(request.getParameter("deptId").toString());
+					deptName = CommonModels.checkStringObject(request.getParameter("deptName"));
+				}
 			}
 			if (cform.getDynaForm("dofFromDate") != null
 					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
