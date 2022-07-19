@@ -212,6 +212,8 @@ public class HighCourtCasesCategoryUpdationAction extends DispatchAction {
 				return mapping.findForward("Logout");
 			}
 			con = DatabasePlugin.connect();
+			System.out.println("deptId---"+CommonModels.checkStringObject(session.getAttribute("dept_code")));
+			
 			if (roleId.equals("5") || roleId.equals("9")) {
 				deptId = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 				deptName = DatabasePlugin.getStringfromQuery(
@@ -281,7 +283,9 @@ sql=" select c.dept_code as deptcode,upper(c.description) as description, "
 		+ "coalesce(sum (case  when a.finance_category='C1' then 1 end),'0') as C1 ,"
 		+ "coalesce(sum (case  when a.finance_category='C2' then 1 end),'0') as C2 "
 		+ " from ecourts_case_category_wise_data a  inner join ecourts_case_data b on (a.cino=b.cino)       "
-		+ " inner join dept_new c on (b.dept_code=c.dept_code) where ( c.reporting_dept_code='" + request.getParameter("deptId").toString() +"' or b.dept_code='" + request.getParameter("deptId").toString() +"' )  group by description,c.dept_code order by c.description";
+		+ " inner join dept_new c on (b.dept_code=c.dept_code) "
+		+ " where ( c.reporting_dept_code='" + deptId +"' or b.dept_code='" + deptId +"' ) " //request.getParameter("deptId").toString()
+		+ " group by description,c.dept_code order by c.description";
 			
 
 			request.setAttribute("HEADING", "HOD Wise High Court Cases Abstract Report for " + deptName);
