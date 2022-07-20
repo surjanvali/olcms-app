@@ -722,17 +722,28 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	}
 
 	function ShowHODWise(deptId, deptDesc) {
+		document.forms["HCCaseStatusAbstract"].elements["deptId"].value=deptId;
+		document.forms["HCCaseStatusAbstract"].elements["deptName"].value=deptDesc;
+		document.forms["HCCaseStatusAbstract"].elements["mode"].value="HODwisedetails";
+		/*
 		$("#deptId").val(deptId);
 		$("#deptName").val(deptDesc);
-		$("#mode").val("HODwisedetails");
+		$("#mode").val("HODwisedetails");*/
 		$("#HCCaseStatusAbstract").submit();
 	}
 	function showCasesWise(deptId, deptDesc, status,level) {
-		$("#deptId").val(deptId);
+		
+		document.forms["HCCaseStatusAbstract"].elements["deptId"].value=deptId;
+		document.forms["HCCaseStatusAbstract"].elements["deptName"].value=deptDesc;
+		document.forms["HCCaseStatusAbstract"].elements["mode"].value="getCasesList";
+		document.forms["HCCaseStatusAbstract"].elements["caseStatus"].value=status;
+		document.forms["HCCaseStatusAbstract"].elements["reportLevel"].value=level;
+		
+		/*$("#deptId").val(deptId);
 		$("#deptName").val(deptDesc);
 		$("#caseStatus").val(status);
 		$("#reportLevel").val(level);
-		$("#mode").val("getCasesList");
+		$("#mode").val("getCasesList");*/
 		$("#HCCaseStatusAbstract").submit();
 	}
 

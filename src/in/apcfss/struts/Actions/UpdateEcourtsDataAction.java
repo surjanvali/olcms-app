@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.sql.Connection;
@@ -24,6 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -1505,7 +1508,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					System.out.println("UPDATE SQL:" + sql);
 					DatabasePlugin.executeUpdate(sql, con);
 					
-					causeListPdfCasesretrieval(causelistDate, causeListPdfFilePath, fileName, con);
+					// causeListPdfCasesretrieval(causelistDate, causeListPdfFilePath, fileName, con);
 					
 				}
 			}else {
@@ -1534,6 +1537,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		try {
 			// retrieve json string data through Nodejs API
 			// pdfOutput="{ \"result\": \"success\", \"data\": [ { \"srno\": \"1\", \"cases\": [ \"WP/13311/2022\", \"IA 1/2022\" ] }, { \"srno\": \"2\", \"cases\": [ \"WP/18728/2022\", \"IA 1/2022\" ] }, { \"srno\": \"3\", \"cases\": [ \"WP/18796/2022\", \"IA 1/2022\" ] }, { \"srno\": \"4\", \"cases\": [ \"WP/18851/2022\", \"IA 1/2022\" ] }, { \"srno\": \"5\", \"cases\": [ \"WP/18916/2022\", \"IA 1/2022\" ] }, { \"srno\": \"6\", \"cases\": [ \"WP/18932/2022\", \"IA 1/2022\" ] }, { \"srno\": \"1\", \"cases\": [ \"WP/13311/2022\", \"IA 1/2022\" ] }, { \"srno\": \"2\", \"cases\": [ \"WP/18728/2022\", \"IA 1/2022\" ] }, { \"srno\": \"3\", \"cases\": [ \"WP/18796/2022\", \"IA 1/2022\" ] }, { \"srno\": \"4\", \"cases\": [ \"WP/18851/2022\", \"IA 1/2022\" ] }, { \"srno\": \"5\", \"cases\": [ \"WP/18916/2022\", \"IA 1/2022\" ] }, { \"srno\": \"6\", \"cases\": [ \"WP/18932/2022\", \"IA 1/2022\" ] } ]}";
+			// String fileURL="http://localhost:5007/hc/cases?pdf_data=http://localhost:8080/apolcms/"+filePath;
 			String fileURL="http://localhost:5007/hc/cases?pdf_data=http://localhost:8080/apolcms/"+filePath;
 			System.out.println("fileURL::"+fileURL);
 			pdfOutput = sendSimpleGetRequest(fileURL);
@@ -1554,7 +1558,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 							caseNo = casesList.getString(j) ;
 							//System.out.println("caseNo:"+(j+1)+":"+caseNo);
 							sql="insert into ecourts_causelist_cases (file_name, causelist_date, case_no) values ('"+fileName+"', to_date('"+cauesListDate+"','dd-mm-yyyy'), '"+caseNo+"')";
-							//System.out.println("SQL:"+sql);
+							System.out.println("SQL:"+sql);
 							DatabasePlugin.executeUpdate(sql, con);
 						}
 						//System.out.println("-----------------");
@@ -1577,7 +1581,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 								caseNo = casesList.getString(j) ;
 								//System.out.println("caseNo:"+(j+1)+":"+caseNo);
 								sql="insert into ecourts_causelist_cases (file_name, causelist_date, case_no) values ('"+fileName+"', to_date('"+cauesListDate+"','dd-mm-yyyy'), '"+caseNo+"')";
-								//System.out.println("SQL:"+sql);
+								System.out.println("SQL:"+sql);
 								DatabasePlugin.executeUpdate(sql, con);
 							}
 							//System.out.println("-----------------");
@@ -1914,4 +1918,16 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		return response.toString();
 	}
 	
+	public static String sendSimpleGetRequest(String requestUrl, String parameter) throws Exception {
+		URL url = new URL(requestUrl);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+		
+		con.setRequestProperty("Content-Type", "application/json");
+		
+		con.setConnectTimeout(5000);
+		con.setReadTimeout(5000);
+		
+		return "";
+	}
 }
