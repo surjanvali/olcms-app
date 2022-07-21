@@ -90,7 +90,7 @@ public class ImportECourtsData
 						e.printStackTrace();
 					}
 				}
-				// resp=null;
+				 resp=null;
 				if (resp != null && !resp.equals("")) {
 					try {
 						String response_str="", decryptedRespStr="";
