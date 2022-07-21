@@ -394,7 +394,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			String cino = "";
 
 			sql = "SELECT cino FROM apolcms.ecourts_cinos_new where inserted_time::date = current_date and coalesce(ecourts_response,'')=''";
-			sql = "SELECT cn.cino FROM apolcms.ecourts_cinos_new cn inner join ecourts_case_data cd on (cn.cino=cd.cino) where cn.inserted_time::date = current_date and coalesce(cn.ecourts_response,'')='' and cd.cino is null";
+			sql = "SELECT cn.cino FROM apolcms.ecourts_cinos_new cn left join ecourts_case_data cd on (cn.cino=cd.cino) where cn.inserted_time::date = current_date and coalesce(cn.ecourts_response,'')='' and cd.cino is null";
 			
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
@@ -1529,6 +1529,23 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		// causeListPdfCasesretrieval("07-07-2022", "","", con);
 	}
 	
+	
+	public ActionForward retrieveCauseListCases(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Connection con = null;
+		try {
+			con = DatabasePlugin.connect();
+			causeListPdfCasesretrieval("07-07-2022", "filepath", "filename", con);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			DatabasePlugin.closeConnection(con);
+		}
+
+		return mapping.findForward("success");
+	}
+	
 	public static void causeListPdfCasesretrieval(String cauesListDate, String filePath, String fileName, Connection con) throws Exception {
 		String pdfOutput=null;
 		String result = null, sql="", caseNo="";
@@ -1538,7 +1555,8 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			// retrieve json string data through Nodejs API
 			// pdfOutput="{ \"result\": \"success\", \"data\": [ { \"srno\": \"1\", \"cases\": [ \"WP/13311/2022\", \"IA 1/2022\" ] }, { \"srno\": \"2\", \"cases\": [ \"WP/18728/2022\", \"IA 1/2022\" ] }, { \"srno\": \"3\", \"cases\": [ \"WP/18796/2022\", \"IA 1/2022\" ] }, { \"srno\": \"4\", \"cases\": [ \"WP/18851/2022\", \"IA 1/2022\" ] }, { \"srno\": \"5\", \"cases\": [ \"WP/18916/2022\", \"IA 1/2022\" ] }, { \"srno\": \"6\", \"cases\": [ \"WP/18932/2022\", \"IA 1/2022\" ] }, { \"srno\": \"1\", \"cases\": [ \"WP/13311/2022\", \"IA 1/2022\" ] }, { \"srno\": \"2\", \"cases\": [ \"WP/18728/2022\", \"IA 1/2022\" ] }, { \"srno\": \"3\", \"cases\": [ \"WP/18796/2022\", \"IA 1/2022\" ] }, { \"srno\": \"4\", \"cases\": [ \"WP/18851/2022\", \"IA 1/2022\" ] }, { \"srno\": \"5\", \"cases\": [ \"WP/18916/2022\", \"IA 1/2022\" ] }, { \"srno\": \"6\", \"cases\": [ \"WP/18932/2022\", \"IA 1/2022\" ] } ]}";
 			// String fileURL="http://localhost:5007/hc/cases?pdf_data=http://localhost:8080/apolcms/"+filePath;
-			String fileURL="http://localhost:5007/hc/cases?pdf_data=http://localhost:8080/apolcms/"+filePath;
+			//String fileURL="http://localhost:5007/hc/cases?pdf_data=http://localhost:8080/apolcms/"+filePath;
+			String fileURL="http://localhost:5007/hc/cases?pdf_data=https://apolcms.ap.gov.in/uploads/HighCourtsCauseList/2022-07-21/APHC012022-07-2126931001.pdf";
 			System.out.println("fileURL::"+fileURL);
 			pdfOutput = sendSimpleGetRequest(fileURL);
 			

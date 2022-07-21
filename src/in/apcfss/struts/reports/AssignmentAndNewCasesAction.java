@@ -144,7 +144,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 			}
 
 			if (roleId.equals("2")) {// District Collector
-				sqlCondition += " and (case_status is null or a.case_status=7) and a.distid='" + distCode + "' ";
+				sqlCondition += " and (case_status is null or case_status=7) and a.distid='" + distCode + "' ";
 				cform.setDynaForm("districtId", distCode);
 			}
 
@@ -159,7 +159,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 			
 			else if (roleId.equals("10")) { // District Nodal Officer
 				sqlCondition += " and (case_status is null or case_status=8) and dist_id='" + distCode + "'";
-			} else if (roleId.equals("5") || roleId.equals("9")) {// NO & HOD
+			} else if (roleId.equals("5") || roleId.equals("9")) { // NO & HOD
 				sqlCondition += " and (case_status is null or case_status in (3,4))";
 			} else if (roleId.equals("3") || roleId.equals("4")) {// MLO & Sect. Dept.
 				sqlCondition += " and (case_status is null or case_status in (1, 2))";

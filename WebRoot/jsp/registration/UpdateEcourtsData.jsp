@@ -230,6 +230,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<input type="button" name="getCauseList"
 										value="Import Cause List" class="btn btn-primary"
 										onclick="return fnGetCauseList();" />
+										
+									<input type="button" name="getCauseList"
+										value="Import Cause List Cases" class="btn btn-primary"
+										onclick="return fnGetCauseListCases();" />	
 								</div>
 							</div>
 						</div>
@@ -415,6 +419,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#updateEcourtsDataFormId").submit();
 			///return true;
 		}
+	}
+	function fnGetCauseListCases() {
+		
+			$("#mode").val("retrieveCauseListCases");
+			$("#updateEcourtsDataFormId").submit();
+			///return true;
 	}
 
 	function updateCino(cino) {
