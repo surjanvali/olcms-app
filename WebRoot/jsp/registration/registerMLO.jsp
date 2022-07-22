@@ -313,6 +313,7 @@ function backFn(){
 				var data = {
 						mode : "AjaxAction",
 						empId : $("#employeeId").val(),
+						designationId : $("#designationId").val(),
 						getType : "getEmpDetails"
 					}
 					$.post("AjaxModels.do",data).done(function(res){

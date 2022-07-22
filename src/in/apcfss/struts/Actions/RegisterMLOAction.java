@@ -159,7 +159,9 @@ public class RegisterMLOAction extends DispatchAction {
 						sql="insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id , dept_code) "
 								+ "select a.emailid, md5('olcms@2021'), b.fullname_en, '"+(String) session.getAttribute("userid")+"', now(),'"+request.getRemoteAddr()
 								+"', '"+ CommonModels.checkIntObject(session.getAttribute("dept_id"))+"','"+deptCode
-								+"'  from mlo_details a inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id) where employeeid='"+employeeId+"'";
+								// +"'  from mlo_details a inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id) where employeeid='"+employeeId+"'";
+								+ "'  from mlo_details a inner join (select distinct employee_id,designation_id,designation_name_en,fullname_en from nic_data) b on (a.employeeid=b.employee_id and a.designation=b.designation_id) "
+								+ "where employeeid='"+employeeId+"' and a.designation='"+designationId+"' ";
 						System.out.println("USER INSERT SQL:"+sql);
 						status=DatabasePlugin.executeUpdate(sql, con);
 						
@@ -170,7 +172,7 @@ public class RegisterMLOAction extends DispatchAction {
 							//con.commit();
 							String smsText="Your User Id is "+emailId+" and Password is olcms@2021 to Login to https://apolcms.ap.gov.in/ Portal. Please do not share with anyone. \r\n-APOLCMS";
 							String templateId="1007784197678878760";
-							mobileNo="9618048663";
+							// mobileNo="9618048663";
 							SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
 							//request.setAttribute("successMsg", "Employee details saved succesfully and User credentials have been created. Login with the Email Id as User Id and olcms@2021 as Password.");
 							request.setAttribute("successMsg", "Mid Level Officer (Legal) details Registered & Login Credentails created successfully. Login details sent to MLO Registered Mobile no.");

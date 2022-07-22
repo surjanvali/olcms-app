@@ -214,9 +214,10 @@ public class AjaxModels extends DispatchAction {
 				 * && userId.equals("DC-WG")) tableName = "nic_data_wg";
 				 */
 				String empId = request.getParameter("empId") != null ? request.getParameter("empId").toString() : null;
+				String designationId = request.getParameter("designationId") != null ? request.getParameter("designationId").toString() : null;
 				if (empId != null) {
 					String sql = "select distinct employee_id||'#'||replace(mobile1, 'NULL', '')||'#'||replace(email, 'NULL', '')||'#'||replace(uid, 'NULL', '')  from "
-							+ tableName + " where employee_id ='" + empId + "' ";
+							+ tableName + " where employee_id ='" + empId + "' and designation_id='"+designationId+"'";
 					System.out.println("SQL:" + sql);
 					out.println(DatabasePlugin.getSingleValue(con, sql));
 				}
