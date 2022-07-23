@@ -568,26 +568,51 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and a.distid='" + distCode + "' ";
 				cform.setDynaForm("districtId", distCode);
 			}
-
+            
+			if (roleId.equals("13")) {
+				cform.setDynaForm("inserted_by", userid);
+			}
+			
 			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
 					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
 				sqlCondition += " and a.casetype='" + cform.getDynaForm("caseTypeId").toString().trim() + "' ";
 			}
-			if (cform.getDynaForm("inserted_by") != null
+			
+			if (  cform.getDynaForm("inserted_by") != null
 					&& !cform.getDynaForm("inserted_by").toString().contentEquals("")
 					&& !cform.getDynaForm("inserted_by").toString().contentEquals("0")) {
-				sqlCondition += " and a.inserted_by='" + inserted_by + "' ";
+				sqlCondition += " and a.inserted_by='" + cform.getDynaForm("inserted_by") + "' ";
 			}
-
+			
+			
+			/*
+			 * sql =
+			 * "select distinct a.slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
+			 * +
+			 * "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
+			 * +
+			 * "to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_dist_desc(a.ack_no::text) as dept_descs ,inserted_time, coalesce(a.hc_ack_no,'-') as hc_ack_no "
+			 * //getack_dept_desc(a.ack_no) as dept_descs, +
+			 * "from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
+			 * + "inner join district_mst dm on (a.distid=dm.district_id) " +
+			 * "inner join dept_new dmt on (ad.dept_code=dmt.dept_code)  " + condition + " "
+			 * +
+			 * "inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
+			 * + "where a.delete_status is false and ack_type='NEW' and respondent_slno=1 "
+			 * + sqlCondition + "order by inserted_time desc";
+			 */
+			
+			
 			sql = "select distinct a.slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 					+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
-					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date, getack_dept_dist_desc(a.ack_no::text) as dept_descs ,inserted_time, coalesce(a.hc_ack_no,'-') as hc_ack_no "//getack_dept_desc(a.ack_no) as dept_descs,
-					+ "from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
-					+ "inner join district_mst dm on (a.distid=dm.district_id) "
-					+ "inner join dept_new dmt on (ad.dept_code=dmt.dept_code)  " + condition + " "
-					+ "inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
-					+ "where a.delete_status is false and ack_type='NEW' and respondent_slno=1 " + sqlCondition
-					+ "order by inserted_time desc";
+					+ "to_char(inserted_time,'dd-mm-yyyy') as generated_date, (a.ack_no::text) as dept_descs ,inserted_time, coalesce(a.hc_ack_no,'-') as hc_ack_no "
+					+ ", getack_dept_desc(a.ack_no) as dept_descs"
+					+ " from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
+					+ " inner join district_mst dm on (a.distid=dm.district_id) "
+					+ " inner join dept_new dmt on (ad.dept_code=dmt.dept_code)  " + condition + " "
+					+ " inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
+					+ " where a.delete_status is false and ack_type='NEW' and respondent_slno=1 " + sqlCondition
+					+ " order by inserted_time desc";
 
 			System.out.println("SQL:" + sql);
 
