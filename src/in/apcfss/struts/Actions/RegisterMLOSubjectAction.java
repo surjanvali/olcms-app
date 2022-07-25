@@ -171,7 +171,7 @@ public class RegisterMLOSubjectAction extends DispatchAction {
 							//con.commit();
 							String smsText="Your User Id is "+emailId+" and Password is olcms@2021 to Login to https://apolcms.ap.gov.in/ Portal. Please do not share with anyone. \r\n-APOLCMS";
 							String templateId="1007784197678878760";
-							mobileNo="9618048663";
+							// mobileNo="9618048663";
 							SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
 							//request.setAttribute("successMsg", "Employee details saved succesfully and User credentials have been created. Login with the Email Id as User Id and olcms@2021 as Password.");
 							request.setAttribute("successMsg", "Mid Level Officer (Legal) details Registered & Login Credentails created successfully. Login details sent to MLO Registered Mobile no.");
