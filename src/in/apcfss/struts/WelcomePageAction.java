@@ -170,9 +170,9 @@ public class WelcomePageAction extends DispatchAction{
 					
 					
 				}
-				else if(roleId.equals("3") || roleId.equals("4")  || roleId.equals("5") || roleId.equals("9")) {
+				else if(roleId.equals("3") || roleId.equals("4")  || roleId.equals("5") || roleId.equals("9") || roleId.equals("15")) {
 					
-					if(roleId.equals("3") || roleId.equals("4")) {
+					if(roleId.equals("3") || roleId.equals("4") || roleId.equals("15")) {
 						sql="select count(*) "
 							+ "from ecourts_case_data a "
 							+ "inner join dept_new d on (a.dept_code=d.dept_code) "
@@ -458,6 +458,35 @@ public class WelcomePageAction extends DispatchAction{
 					sql="select count(*) as total, "
 							+ "sum(case when (case_status is null or case_status=2) and coalesce(assigned,'f')='f' then 1 else 0 end) as assignment_pending,"
 							+ "sum(case when (case_status=2) and coalesce(assigned,'f')='t' then 1 else 0 end) as approval_pending,"
+							+ "sum(case when case_status=99 then 1 else 0 end) as closedcases"
+							+ " from ecourts_gpo_ack_dtls ad1 inner join ecourts_gpo_ack_depts ad2 on (ad1.ack_no=ad2.ack_no)  where ack_type='NEW' and ad2.dept_code='"+deptCode+"'";
+					System.out.println("NEWCASESCOUNTS:"+sql);
+					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
+					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
+					
+					
+					sql="select count(*) from ecourts_dept_instructions where dept_code='"+deptCode+"'";
+					System.out.println("instruction SQL:"+sql);
+					request.setAttribute("instructions", DatabasePlugin.getStringfromQuery(sql, con));
+					
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_gpo_daily_status) b on (a.cino=b.cino) "
+							+ " where dept_code='"+deptCode+"' ";
+					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
+				}
+				else if(roleId.equals("15")) { // MLO - SUBJECT
+					// sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=2 and coalesce(ecourts_case_status,'')!='Closed'";
+					sql="select count(*) as total, "
+							+ "sum(case when (case_status=12) and coalesce(assigned,'f')='f' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as assignment_pending,"
+							+ "sum(case when (case_status=12) and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as approval_pending,"
+							+ "sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases"
+							+ "  from ecourts_case_data where dept_code='"+deptCode+"'";
+					
+					List<Map<Object, String>> dashboardCounts = DatabasePlugin.executeQuery(con, sql);
+					request.setAttribute("dashboardCounts", dashboardCounts);
+					
+					sql="select count(*) as total, "
+							+ "sum(case when (case_status=12) and coalesce(assigned,'f')='f' then 1 else 0 end) as assignment_pending,"
+							+ "sum(case when (case_status=12) and coalesce(assigned,'f')='t' then 1 else 0 end) as approval_pending,"
 							+ "sum(case when case_status=99 then 1 else 0 end) as closedcases"
 							+ " from ecourts_gpo_ack_dtls ad1 inner join ecourts_gpo_ack_depts ad2 on (ad1.ack_no=ad2.ack_no)  where ack_type='NEW' and ad2.dept_code='"+deptCode+"'";
 					System.out.println("NEWCASESCOUNTS:"+sql);

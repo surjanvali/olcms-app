@@ -63,7 +63,7 @@ public class LoginAction extends DispatchAction{
 					System.out.println("LOGIN ACTION ROLE: 60 LINE:"+role);
 					//ps = con.prepareStatement("select * from (select sdeptcode||deptcode as userid,description,dept_id from apdrp_dept union all select sdeptcode as userid,description,dept_id from apdrp_corporations)a where userid=?");
 					//SCT DEPT / MLO / NO / SO / Dist NO
-					if(role==3 || role==4) { //3	SECRETARIAT DEPARTMENT
+					if(role==3 || role==4 || role==15) { //3	SECRETARIAT DEPARTMENT
 						  
 						  sql="select u.userid,u.user_description, ur.role_id, upper(trim(rm.role_name)) as role_name, u.dept_id, upper(trim(un.description)) as dept_name,"
 						  		+ "un.dept_code as deptcode , "

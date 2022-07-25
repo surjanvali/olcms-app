@@ -370,7 +370,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</logic:greaterThan>
 				</logic:notEmpty>
 				<div class="col-lg-3 col-md-6">
-					<a href="./HighCourtCauseList.do">
+					<a href="./HighCourtCauseList.do?mode=getDashboardCauseList">
 						<div class="ibox bg-warning color-white widget-stat">
 							<div class="ibox-body">
 								<h2 class="m-b-5 font-strong">Cause List</h2>

@@ -122,44 +122,47 @@ public class HighCourtCasesListAction extends DispatchAction {
 			
 			
 			if(CommonModels.checkStringObject(cform.getDynaForm("ShowDefault")).equals("ShowDefault")) {
-				sqlCondition += " and reg_year in ('2021','2022') ";
+				sqlCondition += " and a.reg_year in ('2021','2022') ";
 				//heading
 				cform.setDynaForm("regYear", "2022");
 			}
 			else if (!CommonModels.checkStringObject(cform.getDynaForm("regYear")).equals("ALL") && CommonModels.checkIntObject(cform.getDynaForm("regYear")) > 0) {
-				sqlCondition += " and reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
+				sqlCondition += " and a.reg_year='" + CommonModels.checkIntObject(cform.getDynaForm("regYear")) + "' ";
 			}
 			
 			
 			if (CommonModels.checkIntObject(cform.getDynaForm("filingYear")) > 0) {
-				sqlCondition += " and fil_year='" + CommonModels.checkIntObject(cform.getDynaForm("filingYear")) + "' ";
+				sqlCondition += " and a.fil_year='" + CommonModels.checkIntObject(cform.getDynaForm("filingYear")) + "' ";
 			}
 			
 			}
 			
 			
 			if(!roleId.equals("2") && !roleId.equals("6")) { //District Nodal Officer
-				sqlCondition +=" and dept_code='" + deptCode + "' ";
+				sqlCondition +=" and a.dept_code='" + deptCode + "' ";
 			}
 			
 			if(roleId.equals("2")) { //District Collector
 				
-				sqlCondition +=" and case_status=7 and dist_id='"+distId+"'";
+				sqlCondition +=" and a.case_status=7 and a.dist_id='"+distId+"'";
 			}
 			else if(roleId.equals("10")) { //District Nodal Officer
-				sqlCondition +=" and case_status=8 and dist_id='"+distId+"'";
+				sqlCondition +=" and a.case_status=8 and a.dist_id='"+distId+"'";
 			}
 			else if(roleId.equals("5") || roleId.equals("9")) {//NO & HOD
-				sqlCondition +=" and case_status in (3,4)";
+				sqlCondition +=" and a.case_status in (3,4)";
 			}
 			else if(roleId.equals("3") || roleId.equals("4")) {//MLO & Sect. Dept.
-				sqlCondition +=" and (case_status is null or case_status in (1, 2))";
+				sqlCondition +=" and (a.case_status is null or a.case_status in (1, 2))";
+			}
+			else if(roleId.equals("15")) {//MLO Subject.
+				sqlCondition +=" and  a.case_status=12 ";
 			}
 			
 			
 			else if(roleId.equals("6") ) {//GP
 				condition1 =" inner join ecourts_mst_gp_dept_map emgd on (a.dept_code=emgd.dept_code) ";
-				condition2 =" and case_status is null or case_status=2 ";
+				condition2 =" and a.case_status is null or a.case_status=2 ";
 			}
 			
 			
@@ -217,6 +220,14 @@ public class HighCourtCasesListAction extends DispatchAction {
 			
 			cform.setDynaForm("DCLIST", DatabasePlugin.getSelectBox(
 					"select district_id,upper(district_name) from district_mst order by 1",
+					con));
+			
+			sql = "select emailid, b.fullname_en||'-'|| designation_name_en||' - MLO-'||a.subject_desc from mlo_subject_details a "
+					+ " inner join (select distinct employee_id,designation_id,designation_name_en,fullname_en from nic_data) b on (a.employeeid=b.employee_id and a.designation=b.designation_id) "
+					+ " where a.user_id='" + deptCode + "'";
+			
+			cform.setDynaForm("MLOSUBLIST", DatabasePlugin.getSelectBox(
+					sql,
 					con));
 			
 			ArrayList selectData = new ArrayList();
@@ -474,7 +485,34 @@ public class HighCourtCasesListAction extends DispatchAction {
 				con.commit();
 				request.setAttribute("successMsg", "Case/Cases successfully moved to selected Department / HOD.");
 				
-			} else
+			} 
+			else if(!CommonModels.checkStringObject(cform.getDynaForm("selectedCaseIds")).equals("") && !CommonModels.checkStringObject(cform.getDynaForm("mloSubjectId")).equals("0")) {
+				for (String newCaseId : CommonModels.checkStringObject(cform.getDynaForm("selectedCaseIds")).split(",")) {
+					selectedCaseIds+="'"+newCaseId+"',";
+					
+					System.out.println("newCaseId::::::"+newCaseId);
+					
+					sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, assigned_to , remarks ) "
+							+ "values ('" + newCaseId + "','CASE ASSSIGNED TO MLO (SUBJECT)','"+userId+"', '"+request.getRemoteAddr()+"', '"+CommonModels.checkStringObject(cform.getDynaForm("mloSubjectId"))+"', null)";
+					
+					a+=DatabasePlugin.executeUpdate(sql, con);
+					System.out.println(a+":ACTIVITIES SQL:"+sql);
+				}
+				
+				if(selectedCaseIds!=null && !selectedCaseIds.equals("")) {
+					selectedCaseIds = selectedCaseIds.substring(0,selectedCaseIds.length()-1);
+					
+					sql = "update ecourts_case_data set case_status='12', assigned_to='"+CommonModels.checkStringObject(cform.getDynaForm("mloSubjectId"))+"'  where cino in (" + selectedCaseIds + ") ";
+					
+					System.out.println("UPDATE SQL:"+sql);
+					
+					a+=DatabasePlugin.executeUpdate(sql, con);
+					con.commit();
+					request.setAttribute("successMsg", "Case/Cases successfully moved to selected MLO (Subject).");
+				}
+			}
+			
+			else
 				request.setAttribute("errorMsg", "Error : Case assignment failed .</font>");
 		} catch (Exception e) {
 			con.rollback();

@@ -357,5 +357,9 @@
 			value="/jsp/reports/ScannedDocumentrReport.jsp" />
 	</definition>
 
+	<definition name="registerMLOsub" extends="UserLayoutNew">
+		<put name="content" value="/jsp/registration/registerSubMLO.jsp" />
+	</definition>
+
 
 </tiles-definitions>

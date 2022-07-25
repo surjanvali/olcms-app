@@ -8,7 +8,8 @@
 			+ path + "/";
 %>
 
-<link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet" type="text/css" />
+<link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet"
+	type="text/css" />
 
 <div class="page-content fade-in-up">
 	<div class="row">
@@ -35,158 +36,174 @@
 			</div>
 		</div>
 	</div>
-	<div class="ibox">
-		<div class="ibox-head">
-			<div class="ibox-title">Mid Level Officer (Legal) Registration</div>
-			<div class="ibox-tools">
-				<a class="ibox-collapse"><i class="fa fa-minus"></i> </a>
-				<!-- <a
+	<html:form method="post" action="/registerMLOSubject">
+		<html:hidden styleId="mode" styleClass="form-control" property="mode" />
+		<html:hidden property="dynaForm(mloId)" styleClass="form-control"
+			styleId="mloId" />
+		<html:hidden property="dynaForm(deptId)" styleClass="form-control"
+			styleId="deptId" />
+		<div class="ibox">
+			<div class="ibox-head">
+				<div class="ibox-title">Mid Level Officer (Subject)
+					Registration</div>
+				<div class="ibox-tools">
+					<a class="ibox-collapse"><i class="fa fa-minus"></i> </a>
+					<!-- <a
 									class="dropdown-toggle" data-toggle="dropdown"><i
 									class="fa fa-ellipsis-v"></i> </a>  <div class="dropdown-menu dropdown-menu-right">
 					<a class="dropdown-item">option 1</a> <a class="dropdown-item">option
 						2</a>
 				</div> -->
+				</div>
 			</div>
-		</div>
-		<div class="ibox-body">
-			<html:form method="post" action="/registerMLO">
-				<html:hidden styleId="mode" styleClass="form-control"
-					property="mode" />
-				<html:hidden property="dynaForm(mloId)" styleClass="form-control"
-					styleId="mloId" />
-				<html:hidden property="dynaForm(deptId)" styleClass="form-control"
-					styleId="deptId" />
+			<div class="ibox-body">
+
+				<div class="row">
+
+					<logic:present name="saveAction">
+						<logic:equal value="INSERT" name="saveAction">
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label> Designation <bean:message key="mandatory" />
+									</label>
+									<html:select styleId="designationId"
+										property="dynaForm(designationId)" styleClass="select2Class"
+										style="width:100%;">
+										<html:option value="0">---SELECT---</html:option>
+										<logic:notEmpty name="CommonForm"
+											property="dynaForm(designationList)">
+											<html:optionsCollection name="CommonForm"
+												property="dynaForm(designationList)" />
+										</logic:notEmpty>
+									</html:select>
+								</div>
+							</div>
+
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label> Employee <bean:message key="mandatory" />
+									</label>
+									<html:select styleId="employeeId"
+										property="dynaForm(employeeId)" styleClass="select2Class"
+										style="width:100%;" onchange="populateDetails();">
+										<html:option value="0">---SELECT---</html:option>
+										<logic:notEmpty name="CommonForm"
+											property="dynaForm(employeeList)">
+											<html:optionsCollection name="CommonForm"
+												property="dynaForm(employeeList)" />
+										</logic:notEmpty>
+									</html:select>
+								</div>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label> Subject Description<bean:message
+											key="mandatory" />
+									</label>
+									<html:text styleId="subjectDesc" styleClass="form-control"
+										property="dynaForm(subjectDesc)" maxlength="25" size="12" />
+								</div>
+							</div>
+						</logic:equal>
+
+						<logic:equal value="UPDATE" name="saveAction">
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label> Designation <bean:message key="mandatory" />
+									</label> <span class="form-control"> <bean:write
+											name="CommonForm" property="dynaForm(designationName)" />
+									</span>
+									<html:hidden styleId="designationId"
+										property="dynaForm(designationId)" />
+
+								</div>
+							</div>
 
 
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<label> Employee <bean:message key="mandatory" />
+									</label> <span class="form-control"><bean:write
+											name="CommonForm" property="dynaForm(employeeName)" /> </span>
+									<html:hidden styleId="employeeId"
+										property="dynaForm(employeeId)" />
+								</div>
+							</div>
+						</logic:equal>
+					</logic:present>
+				</div>
+				<div class="row">
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label> Mobile <bean:message key="mandatory" />
+							</label>
+							<html:text styleId="mobileNo" styleClass="form-control"
+								property="dynaForm(mobileNo)" maxlength="10" size="12"
+								onkeypress="return isNumberKey(event)" />
+						</div>
+					</div>
 
-				<logic:empty name="List_data">
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label> Email Id <bean:message key="mandatory" />
+							</label>
+							<html:text styleId="emailId" styleClass="form-control"
+								property="dynaForm(emailId)"
+								onchange=" return validateEmail(this)" />
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label> Aadhar Number <bean:message key="mandatory" />
+							</label>
+							<html:text styleId="aadharNo" styleClass="form-control"
+								property="dynaForm(aadharNo)" maxlength="12" size="12"
+								onkeypress="return isNumberKey(event)"
+								onchange="verifyAadhaar();" />
+						</div>
+					</div>
 
-					<div class="row">
+				</div>
+				<hr />
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
 						<logic:present name="saveAction">
 							<logic:equal value="INSERT" name="saveAction">
-								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-									<div class="form-group">
-										<label> Designation <bean:message key="mandatory" />
-										</label>
-										<html:select styleId="designationId"
-											property="dynaForm(designationId)" styleClass="select2Class" style="width:100%;">
-											<html:option value="0">---SELECT---</html:option>
-											<logic:notEmpty name="CommonForm"
-												property="dynaForm(designationList)">
-												<html:optionsCollection name="CommonForm"
-													property="dynaForm(designationList)" />
-											</logic:notEmpty>
-										</html:select>
-									</div>
-								</div>
 
-								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-									<div class="form-group">
-										<label> Employee <bean:message key="mandatory" />
-										</label>
-										<html:select styleId="employeeId"
-											property="dynaForm(employeeId)" styleClass="select2Class" style="width:100%;"
-											onchange="populateDetails();">
-											<html:option value="0">---SELECT---</html:option>
-											<logic:notEmpty name="CommonForm"
-												property="dynaForm(employeeList)">
-												<html:optionsCollection name="CommonForm"
-													property="dynaForm(employeeList)" />
-											</logic:notEmpty>
-										</html:select>
-									</div>
-								</div>
+
+								<input type="button" name="Submit" value="Submit"
+									class="btn btn-success pull-right" onclick="addEmployee();" />
 							</logic:equal>
 							<logic:equal value="UPDATE" name="saveAction">
-								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-									<div class="form-group">
-										<label> Designation <bean:message key="mandatory" />
-										</label> <span class="form-control"> <bean:write
-												name="CommonForm" property="dynaForm(designationName)" />
-										</span>
-										<html:hidden styleId="designationId"
-											property="dynaForm(designationId)" />
+								<input type="button" name="Submit" value="Back"
+									class="btn btn-primary pull-right" onclick="backFn();" />
 
-									</div>
-								</div>
+								<input type="button" name="Submit" value="Submit"
+									class="btn btn-success pull-right"
+									onclick="updateEmployeeDetails();" />
 
-
-								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-									<div class="form-group">
-										<label> Employee <bean:message key="mandatory" />
-										</label> <span class="form-control"><bean:write
-												name="CommonForm" property="dynaForm(employeeName)" /> </span>
-										<html:hidden styleId="employeeId"
-											property="dynaForm(employeeId)" />
-									</div>
-								</div>
 							</logic:equal>
+
 						</logic:present>
+
+
+
+						<!-- <input type="button" ng-click="Clear()" name="Clear" value="Clear" class="btn btn-danger" /> -->
 					</div>
-					<div class="row">
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> Mobile <bean:message key="mandatory" />
-								</label>
-								<html:text styleId="mobileNo" styleClass="form-control"
-									property="dynaForm(mobileNo)" maxlength="10" size="12"
-									onkeypress="return isNumberKey(event)" />
-							</div>
-						</div>
-
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> Email Id <bean:message key="mandatory" />
-								</label>
-								<html:text styleId="emailId" styleClass="form-control"
-									property="dynaForm(emailId)"
-									onchange=" return validateEmail(this)" />
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label> Aadhar Number <bean:message key="mandatory" />
-								</label>
-								<html:text styleId="aadharNo" styleClass="form-control"
-									property="dynaForm(aadharNo)" maxlength="12" size="12"
-									onkeypress="return isNumberKey(event)"
-									onchange="verifyAadhaar();" />
-							</div>
-						</div>
-
+				</div>
+			</div>
+		</div>
+		<logic:notEmpty name="List_data">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">Mid Level Officer (Subject)
+						Registered</div>
+					<div class="ibox-tools">
+						<a class="ibox-collapse"><i class="fa fa-minus"></i> </a>
 					</div>
-					<hr />
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-							<logic:present name="saveAction">
-								<logic:equal value="INSERT" name="saveAction">
-
-
-									<input type="button" name="Submit" value="Submit"
-										class="btn btn-success pull-right" onclick="addEmployee();" />
-								</logic:equal>
-								<logic:equal value="UPDATE" name="saveAction">
-									<input type="button" name="Submit" value="Back"
-										class="btn btn-primary pull-right" onclick="backFn();" />
-
-									<input type="button" name="Submit" value="Submit"
-										class="btn btn-success pull-right"
-										onclick="updateEmployeeDetails();" />
-
-								</logic:equal>
-
-							</logic:present>
-
-
-
-							<!-- <input type="button" ng-click="Clear()" name="Clear" value="Clear" class="btn btn-danger" /> -->
-						</div>
-					</div>
-
-				</logic:empty>
-				<logic:notEmpty name="List_data">
+				</div>
+				<div class="ibox-body">
 
 					<div class="table-responsive">
 						<table class="table table-striped table-bordered table-hover"
@@ -194,6 +211,7 @@
 							<thead>
 								<tr>
 									<th>Sl.No</th>
+									<th>MLO - Subject</th>
 									<th>Employee Name</th>
 									<th>Designation</th>
 									<th>Mobile</th>
@@ -207,23 +225,24 @@
 								<logic:iterate id="map" name="List_data" indexId="i">
 									<tr>
 										<td>${i+1 }</td>
+										<td>${map.subject_desc }</td>
 										<td>${map.fullname_en }</td>
 										<td>${map.designation_name_en }</td>
 										<td>${map.mobileno }</td>
 										<td>${map.emailid }</td>
 										<td>${map.aadharno }</td>
 										<td>
-											<button type="button" class="btn btn-sm btn-info"
+											<%-- <button type="button" class="btn btn-sm btn-info"
 												onclick="showEdit('${map.slno}')">
 												<i class="glyphicon glyphicon-edit"></i> <span>Edit</span>
-											</button> <%-- 
+											</button> --%> <%-- 
 															<button type="button" class="btn btn-sm btn-danger" onclick="deleteData('${map.slno}')">
 																<i class="glyphicon glyphicon-trash"></i> <span>Delete</span>
 															</button> --%>
 											<div id="SMSMSGDIV${map.aadharno}"></div>
 											<div id="SMSBTNDIV${map.aadharno}">
 												<button type="button" class="btn btn-sm btn-warning"
-													onclick="sendSMS('${map.aadharno}','${map.emailid}','MLO')">
+													onclick="sendSMS('${map.aadharno}','${map.emailid}','MLO-SUB')">
 													Send SMS</span>
 												</button>
 											</div>
@@ -239,12 +258,12 @@
 							</tfoot>
 						</table>
 					</div>
-				</logic:notEmpty>
+				</div>
+			</div>
+		</logic:notEmpty>
 
 
-			</html:form>
-		</div>
-	</div>
+	</html:form>
 	<!-- /.row -->
 </div>
 
@@ -313,6 +332,7 @@ function backFn(){
 				var data = {
 						mode : "AjaxAction",
 						empId : $("#employeeId").val(),
+						designationId : $("#designationId").val(),
 						getType : "getEmpDetails"
 					}
 					$.post("AjaxModels.do",data).done(function(res){
@@ -330,23 +350,6 @@ function backFn(){
 					setTimeout(function() {$("#LOADINGPAGEGIF").html("");}, 900);
 			}
 			
-/* <script type="text/javascript">
-		   $(document).ready(function() {
-			    $("#designationId").change(function(){
-					var data = {
-						mode : "AjaxAction",
-						designationId : $("#designationId").val(),
-						getType : "getEmployeesList"
-					}
-					$.post("AjaxModels.do",data).done(function(res){
-						$("#employeeId").html(res);
-					}).fail(function(exc){
-						$("#employeeId").html("<option value='0'>---SELECT---</option>");
-						alert("Error Occured.Please Try Again");
-					});
-				});
-				
-			}); */
 		   
 		   function showEdit(val){
 	   			$("#mloId").val(val);

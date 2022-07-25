@@ -524,6 +524,13 @@ styleId="HighCourtCasesListForm">
 						<div class="form-group">
 							<label class="ui-radio ui-radio-inline"> <html:radio
 									property="dynaForm(officerType)" styleId="officerType"
+									value="MLO-SUB" onclick="changeReport();">
+									<span class="input-span"></span>
+									<b>Assign Cases to MLO (Subject)</b>
+								</html:radio>
+							</label>
+							<label class="ui-radio ui-radio-inline"> <html:radio
+									property="dynaForm(officerType)" styleId="officerType"
 									value="S-HOD" onclick="changeReport();">
 									<span class="input-span"></span>
 									<b>Assign Cases to Department HOD</b>
@@ -586,6 +593,29 @@ styleId="HighCourtCasesListForm">
 							</html:select>
 
 						</div> --%>
+						
+						
+						<div class="mloSubDiv" style="display: none;">
+						<div class="form-group">
+								<label>Select MLO (Subject) <bean:message key="mandatory" /></label>
+							<html:select styleId="mloSubjectId" property="dynaForm(mloSubjectId)"  styleClass="select2Class" style="width:100%;">
+								<html:option value="0">---SELECT---</html:option>
+								<logic:notEmpty name="CommonForm"
+									property="dynaForm(MLOSUBLIST)">
+									<html:optionsCollection name="CommonForm"
+										property="dynaForm(MLOSUBLIST)" />
+								</logic:notEmpty>
+							</html:select></div>
+							<div class="form-group">
+								<input type="submit" name="submit"
+									value="Assign Cases to MLO(Subject)"
+									class="btn btn-sm btn-primary"
+									onclick="return fnAssignMloSubject();" />
+							</div>
+
+						</div>
+						
+						
 						<div class="distDiv" style="display: none;">
 							<div class="form-group">
 								<label>Select District <bean:message key="mandatory" /></label>
@@ -947,8 +977,11 @@ function changeReport(){
 	$(".distDiv").hide();
 	$(".disthodDiv").hide();
 	$(".distdepthodSectionDiv").hide();
+	$(".mloSubDiv").hide();
 	
-	if(chkdVal=="S-HOD"){
+	if(chkdVal=="MLO-SUB"){
+		$(".mloSubDiv").show();
+	} else if(chkdVal=="S-HOD"){
 		$(".depthodDiv").show();
 	} else if(chkdVal=="D-HOD"){
 		$(".depthodDiv").show();
@@ -993,6 +1026,28 @@ $(document).ready(function() {
 		document.forms[0].submit();
 	}
 	
+function fnAssignMloSubject(){
+		
+		var testval = [];
+		 $('#caseIds:checked').each(function() {
+		   testval.push($(this).val());
+		 });
+		 $("#selectedCaseIds").val(testval);
+		 //alert("selectedCaseIds:"+$("#selectedCaseIds").val());
+		if($("#selectedCaseIds").val()==null || $("#selectedCaseIds").val()=="" || $("#selectedCaseIds").val()=="0"){
+			alert("Select atleast a case to submit.");
+			return false;
+		}
+		if($("#mloSubjectId").val()==null || $("#mloSubjectId").val()=="" || $("#mloSubjectId").val()=="0"){
+			alert("Select MLO Subject.");
+			$("#mloSubjectId").focus();
+			return false;
+		}
+		else{
+			$("#mode").val("assign2DeptHOD");
+			$("#HighCourtCasesListForm").submit();
+		}
+	}
 	
 	function fnAssign2DeptHOD(){
 		

@@ -121,8 +121,7 @@
 			scope="request">
 			<forward name="registerMLO" path="registerMLO"></forward>
 		</action>
-
-
+		
 		<action path="/registerNodal" name="CommonForm"
 			type="in.apcfss.struts.Actions.RegisterNodalOfficerAction"
 			parameter="mode" scope="request">
@@ -467,6 +466,11 @@
 			<forward name="success" path="ScannedDocumentrReport"></forward>
 		</action>
 		
+		<action path="/registerMLOSubject" name="CommonForm"
+			type="in.apcfss.struts.Actions.RegisterMLOSubjectAction" parameter="mode"
+			scope="request">
+			<forward name="registerMLO" path="registerMLOsub"></forward>
+		</action>
 
 	</action-mappings>
 

@@ -294,8 +294,7 @@ public class HighCourtCauseListAction extends DispatchAction {
 			e.printStackTrace();
 		} 
 	}
-	
-	public ActionForward getCauseReportList(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	public ActionForward deptWiseCauseListCases(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         PreparedStatement ps = null;
         CommonForm cform = (CommonForm) form;
@@ -315,27 +314,160 @@ public class HighCourtCauseListAction extends DispatchAction {
             System.out.println("date:::::::::::::::" + date);
             con = DatabasePlugin.connect();
 
-            sql=" select a.*, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer, ra.address,coalesce(a.cino,'-') as cino1  "
-                    + "from ecourts_causelist_cases ecc left join ecourts_case_data a on (ecc.case_no=a.type_name_reg||'/'||a.reg_no||'/'||reg_year) "
-                    + " left join nic_prayer_data np on (a.cino=np.cino)  "
-                    + " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1)   "
-                    + " left join  "
-                    + " (  "
-                    + " select cino, string_agg('<a href=\\ ./'||order_document_path||'\\  target=\\ _new\\  class=\\ btn btn-sm btn-info\\ ><i class=\\ glyphicon glyphicon-save\\ ></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths  "
-                    + " from   "
-                    + " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0  "
-                    + " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1    union  "
-                    + " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null  "
-                    + " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0  "
-                    + " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b  "
-                    + " on (a.cino=b.cino) left join dept_new d on (a.dept_code=d.dept_code) where ecc.causelist_date::date = to_date('" + date+ "','mm-dd-yyyy')   ";
+            sql=" select to_char(ecc.causelist_date::date,'dd-mm-yyyy') as causelist_date, ecd.dept_code,upper(d.description) as description, count(*) as casescount from ecourts_causelist_cases ecc "
+            		+ "inner join ecourts_case_data ecd on (ecc.case_no=ecd.type_name_reg||'/'||ecd.reg_no||'/'||ecd.reg_year) "
+            		//+ "left join nic_resp_addr_data ra on (ecd.cino=ra.cino and party_no=1) "
+            		+ "left join dept_new d on (ecd.dept_code=d.dept_code) "
+            		+ "where ecc.causelist_date::date = to_date('"+date+"','mm-dd-yyyy') group by ecd.dept_code,d.description, ecc.causelist_date order by casescount desc ";
 
             System.out.println("SQL:" + sql);
             List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 
             System.out.println("data=" + data);
             if (data != null && !data.isEmpty() && data.size() > 0)
-                request.setAttribute("causeReportList", data);
+                request.setAttribute("DEPTCAUSELISTCASES", data);
+            else
+                request.setAttribute("errorMsg", "No Records found to display");
+
+            request.setAttribute("HEADING", "Dpet. Wise Cause List Cases on Dt.:"+date);
+            cform.setDynaForm("list_date" , cform.getDynaForm("list_date"));
+
+        } catch (Exception e) {
+            request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
+            e.printStackTrace();
+        } finally {
+            DatabasePlugin.closeConnection(con);
+        }
+        return mapping.findForward("success");
+    }
+	
+	public ActionForward getCauseReportList(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        PreparedStatement ps = null;
+        CommonForm cform = (CommonForm) form;
+        Connection con = null;
+        HttpSession session = null;
+        String userId = null, roleId = null, sql = null, causelist_date = null,deptCode=null, sqlCondition = "", actionType = "", deptId = "", deptName = "", heading = "", 
+				 caseStatus = null, distId=null;
+		try {
+
+			session = request.getSession();
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+            
+			causelist_date = CommonModels.checkStringObject(cform.getDynaForm("causelist_date"));
+            deptCode = deptCode!=null && !deptCode.equals("") ? deptCode : CommonModels.checkStringObject(cform.getDynaForm("dept_code"));
+            deptCode = deptCode!=null && !deptCode.equals("") ? deptCode : CommonModels.checkStringObject(request.getParameter("dept_code"));
+            
+            if(causelist_date ==null || causelist_date.equals("")) {
+            	causelist_date = CommonModels.checkStringObject(request.getParameter("causelist_date"));
+            }
+            System.out.println("date:::::::::::::::" + causelist_date);
+            con = DatabasePlugin.connect();
+
+            sql = "select ecc.causelist_date::date as causelist_date ,a.*, "
+					+ ""
+					+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer, ra.address "
+					+ " from ecourts_causelist_cases ecc "
+                    + " inner join ecourts_case_data a on (ecc.case_no=a.type_name_reg||'/'||a.reg_no||'/'||a.reg_year) "
+					+ " left join nic_prayer_data np on (a.cino=np.cino)"
+					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
+					+ " left join"
+					+ " ("
+					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
+					+ " from "
+					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1" + " union"
+					+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
+					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
+					+ " on (a.cino=b.cino) "
+					+ " inner join dept_new d on (a.dept_code=d.dept_code)  "
+					+ " where d.display = true and ecc.causelist_date::date = to_date('" + causelist_date+ "','mm-dd-yyyy') ";
+            
+            if(roleId.equals("2") || roleId.equals("10")) {
+            	sql+=" and a.dist_id='"+distId+"'";
+            }
+            
+            if(!roleId.equals("2")) {
+            	sql+=" and a.dept_code='"+deptCode+"'";
+            }
+
+            System.out.println("SQL:" + sql);
+            List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+
+            System.out.println("data=" + data);
+            if (data != null && !data.isEmpty() && data.size() > 0)
+            	request.setAttribute("CASESLIST", data);
+            else
+                request.setAttribute("errorMsg", "No Records found to display");
+
+            request.setAttribute("HEADING", "High Court Cause List ");
+            cform.setDynaForm("list_date" , cform.getDynaForm("list_date"));
+
+            request.setAttribute("show", "causeReportList");
+
+        } catch (Exception e) {
+            request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
+            e.printStackTrace();
+        } finally {
+            DatabasePlugin.closeConnection(con);
+        }
+        return mapping.findForward("success");
+    }
+	
+	
+	public ActionForward getDashboardCauseList(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        PreparedStatement ps = null;
+        CommonForm cform = (CommonForm) form;
+        Connection con = null;
+        HttpSession session = null;
+        String userId = null, roleId = null, sql = null, causelist_date = null,deptCode=null, sqlCondition = "", actionType = "", deptId = "", deptName = "", heading = "", 
+				 caseStatus = null, distId=null;
+		try {
+
+			session = request.getSession();
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+            con = DatabasePlugin.connect();
+
+            sql = "select ecc.causelist_date::date as causelist_date ,a.*, "
+					+ ""
+					+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer, ra.address "
+					+ " from ecourts_causelist_cases ecc "
+                    + " inner join ecourts_case_data a on (ecc.case_no=a.type_name_reg||'/'||a.reg_no||'/'||a.reg_year) "
+					+ " left join nic_prayer_data np on (a.cino=np.cino)"
+					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
+					+ " left join"
+					+ " ("
+					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
+					+ " from "
+					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1" + " union"
+					+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
+					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
+					+ " on (a.cino=b.cino) "
+					+ " inner join dept_new d on (a.dept_code=d.dept_code)  "
+					+ " where d.display = true and ecc.causelist_date::date > current_date - 2 ";
+            
+            if(roleId.equals("2") || roleId.equals("10")) {
+            	sql+=" and a.dist_id='"+distId+"'";
+            }
+            
+            if(!roleId.equals("2")) {
+            	sql+=" and a.dept_code='"+deptCode+"'";
+            }
+
+            System.out.println("SQL:" + sql);
+            List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+
+            System.out.println("data=" + data);
+            if (data != null && !data.isEmpty() && data.size() > 0)
+            	request.setAttribute("CASESLIST", data);
             else
                 request.setAttribute("errorMsg", "No Records found to display");
 

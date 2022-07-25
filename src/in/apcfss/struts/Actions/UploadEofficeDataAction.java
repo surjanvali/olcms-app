@@ -130,6 +130,9 @@ public class UploadEofficeDataAction extends DispatchAction {
 			sql="update "+tableName+" set designation_id='0' where designation_id='' or designation_id is null";
 			DatabasePlugin.executeUpdate(sql, con);
 			
+			sql="update "+tableName+" set global_org_name=replace(global_org_name,'TRB07','TRB02') where substr(global_org_name,1,5)='TRB07'";
+			DatabasePlugin.executeUpdate(sql, con);
+			
 			request.setAttribute("successMsg", c+" records data saved to table "+tableName);
 			con.commit();
 		} catch (Exception e) {

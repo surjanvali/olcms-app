@@ -62,6 +62,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 				<html:hidden styleId="mode" property="mode" />
 				<html:hidden property="dynaForm(list_date)" styleId="list_date" />
+				<html:hidden property="dynaForm(dept_code)" styleId="dept_code" />
 
 
 
@@ -89,151 +90,201 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								onclick="showCauseList();">Show Cause List</div>
 						</div>
 
-						<!-- <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+						<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
 							<div class='btn btn-success pull-right'
-								onclick="causeReportList();">Show CauseList Cases</div>
-						</div> -->
+								onclick="causeReportList();">Show Department Wise</div>
+						</div>
 
 					</div>
 				</div>
-				<c:if test="${show!='causeReportList'}">
-					<logic:notEmpty name="causelist">
-						<div class="table-responsive">
-							<table class="table table-striped table-bordered table-hover"
-								id="example">
-								<thead>
+				<hr />
+				<logic:notEmpty name="causelist">
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered table-hover"
+							id="example">
+							<thead>
+								<tr>
+									<th>Sl.No</th>
+									<th>CauseList Date</th>
+									<th>Bench ID</th>
+									<th>Judge Name</th>
+									<th>CauseList ID</th>
+									<th>CauseList Type</th>
+									<th>Document</th>
+								</tr>
+							</thead>
+							<tbody>
+								<logic:iterate id="map" name="causelist" indexId="i">
 									<tr>
-										<th>Sl.No</th>
-										<th>CauseList Date</th>
-										<th>Bench ID</th>
-										<th>Judge Name</th>
-										<th>CauseList ID</th>
-										<th>CauseList Type</th>
-										<th>Document</th>
+										<td>${i+1 }</td>
+										<td>${map.causelist_date }</td>
+										<td>${map.bench_id }</td>
+										<td>${map.judge_name }</td>
+										<td>${map.causelist_id }</td>
+										<td>${map.cause_list_type }</td>
+										<td style="text-align: center;">
+											<%-- ${map.document }  --%> <logic:notEmpty name="map"
+												property="document">
+												<logic:notEqual value="" name="map" property="document">
+													<a href="./${map.document }" target="_new"
+														class="btn btn-sm btn-info"><i class="fa fa-save"></i></a>
+												</logic:notEqual>
+											</logic:notEmpty>
+										</td>
 									</tr>
-								</thead>
-								<tbody>
-									<logic:iterate id="map" name="causelist" indexId="i">
-										<tr>
-											<td>${i+1 }</td>
-											<td>${map.causelist_date }</td>
-											<td>${map.bench_id }</td>
-											<td>${map.judge_name }</td>
-											<td>${map.causelist_id }</td>
-											<td>${map.cause_list_type }</td>
-											<td style="text-align: center;">
-												<%-- ${map.document }  --%>
-												<logic:notEmpty name="map" property="document">
-													<logic:notEqual value="" name="map" property="document">
-														<a href="./${map.document }" target="_new"
-															class="btn btn-sm btn-info"><i class="fa fa-save"></i></a>
-													</logic:notEqual>
-												</logic:notEmpty>
-											</td>
-										</tr>
-									</logic:iterate>
-								</tbody>
-								<tfoot>
-									<tR>
-										<td colspan="7">&nbsp;</td>
-									</tR>
-								</tfoot>
-							</table>
-						</div>
-					</logic:notEmpty>
-				</c:if>
+								</logic:iterate>
+							</tbody>
+							<tfoot>
+								<tR>
+									<td colspan="7">&nbsp;</td>
+								</tR>
+							</tfoot>
+						</table>
+					</div>
+				</logic:notEmpty>
 
-				<c:if test="${show=='causeReportList'}">
-					<logic:notEmpty name="causeReportList">
-						<div class="table-responsive">
-							<table id="example" class="table table-striped table-bordered"
-								style="width:100%">
-								<thead>
+				<logic:notEmpty name="DEPTCAUSELISTCASES">
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered table-hover"
+							id="example">
+							<thead>
+								<tr>
+									<th>Sl.No</th>
+									<th>CauseList Date</th>
+									<th>Department Code</th>
+									<th>Department</th>
+									<th>Cases Count</th>
+								</tr>
+							</thead>
+							<tbody>
+								<bean:define id="totCases" value="0"></bean:define>
+								<logic:iterate id="map" name="DEPTCAUSELISTCASES" indexId="i">
 									<tr>
-										<th>Sl.No</th>
-										<th>CINo</th>
-										<th>Scanned Affidavit</th>
-										<th>Date of Filing</th>
+										<td>${i+1 }</td>
+										<td>${map.causelist_date }</td>
+										<td>${map.dept_code }</td>
+										<td><a
+											href="javascript:showCaseWiseCauseList('${map.dept_code }');">${map.description }</a></td>
 
-										<th>Case Reg No.</th>
-										<th>Prayer</th>
-
-										<th>Filing No.</th>
-										<th>Filing Year</th>
-										<th>Date of Next List</th>
-										<th>Bench</th>
-										<th>Judge Name</th>
-										<th>Petitioner</th>
-										<th>District</th>
-										<th>Purpose</th>
-										<th>Respondents</th>
-										<th>Petitioner Advocate</th>
-										<th>Respondent Advocate</th>
-										<th>Orders</th>
+										<td style="text-align: right;">${map.casescount }</td>
+										<bean:define id="totCases"
+											value="${totCases + map.casescount }"></bean:define>
 									</tr>
-								</thead>
-								<tbody>
+								</logic:iterate>
+							</tbody>
+							<tfoot>
+								<tR>
+									<td colspan="4" style="text-align: center;">Total</td>
+									<td colspan="1" style="text-align: right;">${totCases}</td>
+								</tR>
+							</tfoot>
+						</table>
+					</div>
+				</logic:notEmpty>
 
-									<logic:iterate id="map" name="causeReportList" indexId="i">
-										<tr>
-											<td>${i+1 }.</td>
-											<td style="text-align: center;"><c:if
-													test="${map.cino1!='-'}">
-													<input type="button" id="btnShowPopup" value="${map.cino}"
-														class="btn btn-sm btn-info waves-effect waves-light"
-														onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
-												</c:if> <c:if test="${map.cino1=='-'}">	 - </c:if></td>
-											<td><logic:notEmpty name="map"
+				<logic:present name="CASESLIST">
+					<div class="table-responsive">
+						<table id="example" class="table table-striped table-bordered"
+							style="width:100%">
+							<thead>
+								<tr>
+									<th>Sl.No</th>
+									<th>Causelist Date</th>
+									<th>CINo</th>
+									<th>Scanned Affidavit</th>
+									<!-- <th>Assigned to</th> -->
+									<th>Date of Filing</th>
+									<!-- <th>Case Type</th>
+									<th>Reg.No.</th>
+									<th>Reg. Year</th> -->
+
+									<th>Case Reg No.</th>
+									<th>Prayer</th>
+
+									<th>Filing No.</th>
+									<th>Filing Year</th>
+									<th>Date of Next List</th>
+									<th>Bench</th>
+									<th>Judge Name</th>
+									<th>Petitioner</th>
+									<th>District</th>
+									<th>Purpose</th>
+									<th>Respondents</th>
+									<th>Petitioner Advocate</th>
+									<th>Respondent Advocate</th>
+									<th>Orders</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<logic:iterate id="map" name="CASESLIST" indexId="i">
+									<tr>
+										<td>${i+1 }.</td>
+										<td>${map.causelist_date}</td>
+										<td><input type="button" id="btnShowPopup"
+											value="${map.cino}"
+											class="btn btn-sm btn-info waves-effect waves-light"
+											onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
+
+										</td>
+										<td><logic:notEmpty name="map"
+												property="scanned_document_path1">
+												<logic:notEqual value="-" name="map"
 													property="scanned_document_path1">
-													<logic:notEqual value="-" name="map"
-														property="scanned_document_path1">
-														<a href="./${map.scanned_document_path}" target="_new"
-															class="btn btn-sm btn-info"><i
-															class="glyphicon glyphicon-save"></i><span>Scanned
-																Affidavit</span></a>
-													</logic:notEqual>
-												</logic:notEmpty></td>
-											<td><logic:notEmpty name="map" property="date_of_filing">
-													<logic:notEqual value="0001-01-01" name="map"
-														property="date_of_filing">
+													<%-- ./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf --%>
+													<a href="./${map.scanned_document_path}" target="_new"
+														class="btn btn-sm btn-info"><i
+														class="glyphicon glyphicon-save"></i><span>Scanned
+															Affidavit</span></a>
+												</logic:notEqual>
+											</logic:notEmpty></td>
+										<%-- <td nowrap="nowrap">${map.globalorgname}<br />
+												${map.fullname} - ${map.designation} <br />
+												${map.mobile} - ${map.email}
+											</td> --%>
+										<td><logic:notEmpty name="map" property="date_of_filing">
+												<logic:notEqual value="0001-01-01" name="map"
+													property="date_of_filing">
 																	${map.date_of_filing }
 																</logic:notEqual>
-												</logic:notEmpty></td>
+											</logic:notEmpty></td>
 
-											<td>${map.type_name_fil }/${map.reg_no} / ${map.reg_year }</td>
-											<td style="width: 300px;">${map.prayer }</td>
+										<%-- <td>${map.type_name_fil }</td>
+										<td>${map.reg_no}</td>
+										<td>${map.reg_year }</td> prayer --%>
+										<td>${map.type_name_fil }/${map.reg_no} / ${map.reg_year }</td>
+										<td style="width: 300px;">${map.prayer }</td>
 
-											<td>${map.fil_no}</td>
-											<td>${map.fil_year }</td>
-											<td><logic:notEmpty name="map" property="date_next_list">
-													<logic:notEqual value="0001-01-01" name="map"
-														property="date_next_list">
+										<td>${map.fil_no}</td>
+										<td>${map.fil_year }</td>
+										<td><logic:notEmpty name="map" property="date_next_list">
+												<logic:notEqual value="0001-01-01" name="map"
+													property="date_next_list">
 																	${map.date_of_filing }
 																</logic:notEqual>
-												</logic:notEmpty></td>
-											<td>${map.bench_name }</td>
-											<td>Hon'ble Judge : ${map.coram }</td>
-											<td>${map.pet_name }</td>
-											<td>${map.dist_name }</td>
-											<td>${map.purpose_name }</td>
-											<td>${map.res_name },${map.address}</td>
+											</logic:notEmpty></td>
+										<td>${map.bench_name }</td>
+										<td>Hon'ble Judge : ${map.coram }</td>
+										<td>${map.pet_name }</td>
+										<td>${map.dist_name }</td>
+										<td>${map.purpose_name }</td>
+										<td>${map.res_name },${map.address}</td>
 
-											<td>${map.pet_adv }</td>
-											<td>${map.res_adv }</td>
-											<td style="text-align: center;">${map.orderpaths }</td>
-										</tr>
+										<td>${map.pet_adv }</td>
+										<td>${map.res_adv }</td>
+										<td style="text-align: center;">${map.orderpaths }</td>
+									</tr>
 
-									</logic:iterate>
-								</tbody>
-								<tfoot>
-									<tR>
-										<td colspan="19">&nbsp;</td>
-									</tR>
-								</tfoot>
-							</table>
-						</div>
-					</logic:notEmpty>
-				</c:if>
+								</logic:iterate>
+							</tbody>
+							<tfoot>
+								<tR>
+									<td colspan="20">&nbsp;</td>
+								</tR>
+							</tfoot>
+						</table>
+					</div>
+				</logic:present>
 
 			</html:form>
 		</div>
@@ -291,6 +342,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	});
 </script>
 <script>
+	function showCaseWiseCauseList(deptCode) {
+
+		$("#dept_code").val(deptCode);
+		$("#mode").val("getCauseReportList");
+		$("#HighCourtCauseList").submit();
+	}
+
 	function showCauseList() {
 		// alert(document.getElementById("causelist_date").value);
 		var date = document.getElementById("causelist_date").value;
@@ -304,7 +362,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#mode").val("ShowCauselist");
 		$("#HighCourtCauseList").submit();
 	}
-	
+
 	function causeReportList() {
 		var date = document.getElementById("causelist_date").value;
 		$("#list_date").val(date);
@@ -314,10 +372,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#causelist_date").focus();
 			return false;
 		}
-		$("#mode").val("getCauseReportList");
+		$("#mode").val("deptWiseCauseListCases");
+		// $("#mode").val("getCauseReportList");
 		$("#HighCourtCauseList").submit();
 	}
-	
+
 	function viewCaseDetailsPopup(cino) {
 		var heading = "View Case Details for CINO : " + cino;
 		var srclink = "";

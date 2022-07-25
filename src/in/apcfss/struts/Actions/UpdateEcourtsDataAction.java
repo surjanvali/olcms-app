@@ -1533,13 +1533,29 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 	public ActionForward retrieveCauseListCases(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
 		try {
+			CommonForm cform = (CommonForm) form;
 			con = DatabasePlugin.connect();
-			causeListPdfCasesretrieval("07-07-2022", "filepath", "filename", con);
+			con.setAutoCommit(false);
+			String estCode = "APHC01", causelistDate = (String) cform.getDynaForm("causeListDate");// yyyy-mm-dd
+			String sql = "select causelist_document, replace(upper(split_part(causelist_document,'/',4)),'.PDF','') as filename from ecourts_causelist_bench_data where causelist_date=to_date('"
+					+ causelistDate + "','yyyy-mm-dd') ";
+			System.out.println("CAUSELIST CASES SQL:"+sql);
+
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+
+			while (rs.next()) {
+				causeListPdfCasesretrieval(causelistDate, rs.getString("causelist_document"), rs.getString("filename"), con);
+			}
+			con.commit();
+			request.setAttribute("successMsg", "Successfully extracted and saved the Causelist Cases data.");
 		} catch (Exception e) {
+			request.setAttribute("errorMsg", "Error-1 while extracting the Cause list cases data.");
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			DatabasePlugin.closeConnection(con);
 		}
 
@@ -1551,12 +1567,17 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 		String result = null, sql="", caseNo="";
 		JSONObject jObjData;
 		JSONArray casesList;
-		try {
 			// retrieve json string data through Nodejs API
 			// pdfOutput="{ \"result\": \"success\", \"data\": [ { \"srno\": \"1\", \"cases\": [ \"WP/13311/2022\", \"IA 1/2022\" ] }, { \"srno\": \"2\", \"cases\": [ \"WP/18728/2022\", \"IA 1/2022\" ] }, { \"srno\": \"3\", \"cases\": [ \"WP/18796/2022\", \"IA 1/2022\" ] }, { \"srno\": \"4\", \"cases\": [ \"WP/18851/2022\", \"IA 1/2022\" ] }, { \"srno\": \"5\", \"cases\": [ \"WP/18916/2022\", \"IA 1/2022\" ] }, { \"srno\": \"6\", \"cases\": [ \"WP/18932/2022\", \"IA 1/2022\" ] }, { \"srno\": \"1\", \"cases\": [ \"WP/13311/2022\", \"IA 1/2022\" ] }, { \"srno\": \"2\", \"cases\": [ \"WP/18728/2022\", \"IA 1/2022\" ] }, { \"srno\": \"3\", \"cases\": [ \"WP/18796/2022\", \"IA 1/2022\" ] }, { \"srno\": \"4\", \"cases\": [ \"WP/18851/2022\", \"IA 1/2022\" ] }, { \"srno\": \"5\", \"cases\": [ \"WP/18916/2022\", \"IA 1/2022\" ] }, { \"srno\": \"6\", \"cases\": [ \"WP/18932/2022\", \"IA 1/2022\" ] } ]}";
 			// String fileURL="http://localhost:5007/hc/cases?pdf_data=http://localhost:8080/apolcms/"+filePath;
-			//String fileURL="http://localhost:5007/hc/cases?pdf_data=http://localhost:8080/apolcms/"+filePath;
-			String fileURL="http://localhost:5007/hc/cases?pdf_data=https://apolcms.ap.gov.in/uploads/HighCourtsCauseList/2022-07-21/APHC012022-07-2126931001.pdf";
+			// String fileURL="http://localhost:5007/hc/cases?pdf_data=http://localhost:8080/apolcms/"+filePath;
+			
+			String fileURL="http://localhost:5007/hc/cases?pdf_data=/app/tomcat9/webapps/apolcms/"+filePath;
+			// String fileURL="http://localhost:5007/hc/cases?pdf_data=/app/tomcat9/webapps/apolcms/uploads/HighCourtsCauseList/2022-07-06/APHC012022-07-0631631003.pdf";
+			// String fileURL="http://localhost:5007/hc/cases?pdf_data=http://10.252.113.64:80/apolcms/uploads/HighCourtsCauseList/2022-07-05/APHC012022-07-0526051001.pdf";
+			// String fileURL="http://localhost:5007/hc/cases?pdf_data=https://10.252.113.64/apolcms/uploads/HighCourtsCauseList/2022-07-05/APHC012022-07-0526051001.pdf";
+			// String fileURL="http://localhost:5007/hc/cases?pdf_data=http://10.252.113.64/apolcms/uploads/HighCourtsCauseList/2022-07-05/APHC012022-07-0526051001.pdf";
+			
 			System.out.println("fileURL::"+fileURL);
 			pdfOutput = sendSimpleGetRequest(fileURL);
 			
@@ -1575,7 +1596,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 						for(int j=0;j < casesList.length(); j++) {
 							caseNo = casesList.getString(j) ;
 							//System.out.println("caseNo:"+(j+1)+":"+caseNo);
-							sql="insert into ecourts_causelist_cases (file_name, causelist_date, case_no) values ('"+fileName+"', to_date('"+cauesListDate+"','dd-mm-yyyy'), '"+caseNo+"')";
+							sql="insert into ecourts_causelist_cases (file_name, causelist_date, case_no) values ('"+fileName+"', to_date('"+cauesListDate+"','yyyy-mm-dd'), '"+caseNo+"')";
 							System.out.println("SQL:"+sql);
 							DatabasePlugin.executeUpdate(sql, con);
 						}
@@ -1598,7 +1619,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 							for(int j=0;j < casesList.length(); j++) {
 								caseNo = casesList.getString(j) ;
 								//System.out.println("caseNo:"+(j+1)+":"+caseNo);
-								sql="insert into ecourts_causelist_cases (file_name, causelist_date, case_no) values ('"+fileName+"', to_date('"+cauesListDate+"','dd-mm-yyyy'), '"+caseNo+"')";
+								sql="insert into ecourts_causelist_cases (file_name, causelist_date, case_no) values ('"+fileName+"', to_date('"+cauesListDate+"','yyyy-mm-dd'), '"+caseNo+"')";
 								System.out.println("SQL:"+sql);
 								DatabasePlugin.executeUpdate(sql, con);
 							}
@@ -1610,11 +1631,6 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			else {
 				System.out.println("Error in parsing the PDF file");
 			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Exception Error while parsing the PDF file");
-			e.printStackTrace();
-		}
 	}
 	
 	
