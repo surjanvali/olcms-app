@@ -1541,7 +1541,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			con.setAutoCommit(false);
 			String estCode = "APHC01", causelistDate = (String) cform.getDynaForm("causeListDate");// yyyy-mm-dd
 			String sql = "select causelist_document, replace(upper(split_part(causelist_document,'/',4)),'.PDF','') as filename from ecourts_causelist_bench_data where causelist_date=to_date('"
-					+ causelistDate + "','yyyy-mm-dd') ";
+					+ causelistDate + "','yyyy-mm-dd')  and causelist_document is not null and causelist_document!='Causelist Not Uploaded'";
 			System.out.println("CAUSELIST CASES SQL:"+sql);
 
 			st = con.createStatement();

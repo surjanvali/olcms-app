@@ -192,7 +192,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td>
 												<div class="form-group">
 													<label class="ui-checkbox"> <input type="checkbox"
-														name="caseIds" value="${map.ack_no }" id="caseIds" /> <span
+														name="caseIds" value="${map.ack_no}@${map.respondent_slno}" id="caseIds" /> <span
 														class="input-span"></span></label>
 												</div>
 											</td>
@@ -287,6 +287,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="row">
 									<div class="col-md-12 col-sm-12 col-xs-12">
 										<div class="form-group">
+										<logic:present name="login_type">
 											<label class="ui-radio ui-radio-inline"> <html:radio
 													property="dynaForm(officerType)" styleId="officerType"
 													value="S-HOD" onclick="changeReport();">
@@ -311,7 +312,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													<span class="input-span"></span>
 													<b>Assign Cases to Section Officer(Other Dept.)</b>
 												</html:radio>
-											</label> <label class="ui-radio ui-radio-inline"> <html:radio
+											</label>
+											</logic:present>
+											<logic:present name="login_type_dc">
+											 <label class="ui-radio ui-radio-inline"> <html:radio
 													property="dynaForm(officerType)" styleId="officerType"
 													value="DC" onclick="changeReport();">
 													<span class="input-span"></span>
@@ -330,6 +334,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													<b>Assign Cases to District Section Officer</b>
 												</html:radio>
 											</label>
+											
+											</logic:present>
 										</div>
 									</div>
 								</div>
@@ -383,11 +389,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													property="dynaForm(caseDept)" styleClass="select2Class"
 													style="width:100%;">
 													<html:option value="0">---SELECT---</html:option>
-													<%-- <logic:notEmpty name="CommonForm"
-										property="dynaForm(deptList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(deptList)" />
-									</logic:notEmpty> --%>
 												</html:select>
 											</div>
 											<div class="form-group">
@@ -420,11 +421,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													styleClass="select2Class" onchange="populateDeptSecs();"
 													style="width:100%;">
 													<html:option value="0">---SELECT---</html:option>
-													<%-- <logic:notEmpty name="CommonForm"
-										property="dynaForm(deptList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(deptList)" />
-									</logic:notEmpty> --%>
 												</html:select>
 											</div>
 											<div class="form-group">
@@ -433,11 +429,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													property="dynaForm(empSection)" styleClass="select2Class"
 													onchange="populatePostDetails();" style="width:100%;">
 													<html:option value="0">---SELECT---</html:option>
-													<%-- <logic:notEmpty name="CommonForm"
-										property="dynaForm(empSectionList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(empSectionList)" />
-									</logic:notEmpty> --%>
 												</html:select>
 											</div>
 											<div class="form-group">
@@ -466,6 +457,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										</div>
 									</div>
 								</div>
+								
+								
 							</div>
 						</div>
 					</div>
@@ -592,6 +585,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				.post("AjaxModels.do", data)
 				.done(
 						function(res) {
+							
 							if (res != ''
 									&& (chkdVal == "S-HOD"
 											|| chkdVal == "D-HOD" || chkdVal == "DC-NO")) {
@@ -633,6 +627,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$(".depthodSectionDiv").show();
 		} else if (chkdVal == "DC") {
 			$(".distDiv").show();
+			$(".disthodDiv").show();
 		} else if (chkdVal == "DC-NO") {
 			$(".distDiv").show();
 			$(".disthodDiv").show();
@@ -734,7 +729,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	}
 
 	function fnAssign2DeptHOD() {
-
+		//alert("fnAssign2DeptHOD");
 		var testval = [];
 		$('#caseIds:checked').each(function() {
 			testval.push($(this).val());
@@ -759,11 +754,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	}
 
 	function fnAssign2DistHOD() {
-
+		
+	//alert("fnAssign2DistHOD");
+		
 		var testval = [];
 		$('#caseIds:checked').each(function() {
 			testval.push($(this).val());
 		});
+		
+		//alert("testval--"+testval);
 		$("#selectedCaseIds").val(testval);
 		var chkdVal = $("#officerType:checked").val();
 
@@ -774,16 +773,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			alert("Select atleast a case to submit.");
 			return false;
 		}
+		
+		
+		
+		//alert("chkdVal--"+chkdVal);
+		
 		if ($("#caseDist").val() == null || $("#caseDist").val() == ""
 				|| $("#caseDist").val() == "0") {
 			alert("Select District.");
 			$("#caseDist").focus();
 			return false;
 		}
+		
 
-		else if (chkdVal == "DC-NO"
-				&& ($("#distDept").val() == null || $("#distDept").val() == "" || $(
-						"#distDept").val() == "0")) {
+		else if ((chkdVal == "DC-NO" || chkdVal == "DC") && ($("#distDept").val() == null || $("#distDept").val() == "" || $("#distDept").val() == "0")) {
 			alert("Select Department.");
 			$("#distDept").focus();
 			return false;
@@ -796,7 +799,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	}
 
 	function fnAssign2DeptHOD2() {
-
+		
+		//alert("fnAssign2DeptHOD2 ");
+		
 		var testval = [];
 		$('#caseIds:checked').each(function() {
 			testval.push($(this).val());

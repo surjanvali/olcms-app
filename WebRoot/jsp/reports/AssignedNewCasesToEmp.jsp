@@ -40,7 +40,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			property="dynaForm(selectedCaseIds)" />
 			<html:hidden styleId="fileCino"
 			property="dynaForm(fileCino)" />
-			
+			<html:hidden property="dynaForm(resident_id)" styleId="resident_id" />
 			
 		<div class="container-fluid">
 			<div class="row">
@@ -110,7 +110,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 														class="input-span"></span></label>
 												</div>
 											</td> --%>
-											<td>${map.ack_no }</td>
+											<td>${map.ack_no }<logic:notEqual value="-" name="map"
+													property="hc_ack_no">
+
+													<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
+
+												</logic:notEqual></td>
 											<td nowrap="nowrap">${map.generated_date }</td>
 											<td>${map.district_name }</td>
 											<td>${map.case_full_name }</td>
@@ -121,8 +126,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 
 
-											<%-- <td>${map.remarks }</td> --%>
-											<td style="text-align: center;" nowrap="nowrap"><logic:present
+										<td style="text-align: center;" nowrap="nowrap"><logic:present
 													name="map" property="ack_file_path">
 													<a href="./${map.ack_file_path}" target="_new"
 														title="Print Acknowledgement" class="btn btn-sm btn-info">
@@ -133,17 +137,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 														title="Print Barcode" class="btn btn-sm btn-info"> <i
 														class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
 													</a>
-												</logic:present> <a
-												href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
-												target="_new" title="Print Barcode"
-												class="btn btn-sm btn-info"> <i class="fa fa-save"></i>
-													<span>Scanned Affidavit</span> <!-- <span>Download</span> -->
-											</a></td>
+												</logic:present> <logic:notEqual value="-" name="map" property="hc_ack_no">
+													<a
+														href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
+														target="_new" title="Print Scanned Affidavit"
+														class="btn btn-sm btn-info">
+												</logic:notEqual> <logic:equal value="-" name="map" property="hc_ack_no">
+													<a
+														href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
+														target="_new" title="Print Scanned Affidavit"
+														class="btn btn-sm btn-info">
+												</logic:equal> <i class="fa fa-save"></i> <span>Scanned Affidavit</span> </a></td>
 											
 											<td style="min-width: 150px !important;">
 
 												<button class="btn btn-sm btn-primary"
-													onclick="caseStatusUpdate('${map.ack_no}');">Update
+													onclick="caseStatusUpdate('${map.ack_no}@${map.respondent_slno}');">Update
 													Status</button>
 											</td>
 										</tr>

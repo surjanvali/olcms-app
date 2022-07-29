@@ -33,6 +33,7 @@ body {
 		styleId="AssignedCasesToSectionForm" enctype="multipart/form-data">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden property="dynaForm(fileCino)" styleId="fileCino" />
+		<html:hidden property="dynaForm(resident_id)" styleId="resident_id" />
 		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="dashboard-cat-title">
@@ -72,24 +73,7 @@ body {
 				<logic:present name="USERSLIST">
 					<logic:iterate id="map" name="USERSLIST">
 
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Generated date: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.generated_date}</div>
-
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Case Type : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.casetype}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Main Case No.: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.maincaseno}</div>
-						</div>
+						
 						<div class="row">
 
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
@@ -157,17 +141,27 @@ body {
 								${map.case_full_name}</div>
 						</div>
 						
-
-
-						<div class="row">
-							
-							
+<div class="row">
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Services  : </b>
+								<b> Generated date: </b>
 							</div>
 							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.services_flag}</div>
+								${map.generated_date}</div>
+
+							
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
+								<b> Main Case No.: </b>
+							</div>
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+								${map.maincaseno}</div>
+								<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
+								<b>Department Description : </b>
+							</div>
+							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+								${map.dept_descs}</div>
 						</div>
+
+						
 
 					</logic:iterate>
 
@@ -251,7 +245,7 @@ body {
 								property="dynaForm(ecourtsCaseStatus)" styleClass="form-control">
 								<html:option value="0">---SELECT---</html:option>
 								<html:option value="Pending">Pending</html:option>
-							<%-- 	<html:option value="Closed">Closed</html:option> --%>
+								<html:option value="Closed">Closed</html:option>
 							</html:select>
 						</div>
 					</div>
@@ -511,7 +505,7 @@ body {
 								Case Details</button>
 						</logic:notEmpty>
 
-						<%-- <logic:notEmpty name="SHOWNOBTN">
+						<logic:notEmpty name="SHOWNOBTN">
 							<button class="btn btn-md btn-success" type="submit"
 								name="forward" onclick="return forwardCase();">Forward
 								to Nodal Officer</button>
@@ -534,7 +528,7 @@ body {
 							<button class="btn btn-md btn-success" type="submit"
 								name="forward" onclick="return forwardCase();">Forward
 								to Sect. Dept.</button>
-						</logic:notEmpty> --%>
+						</logic:notEmpty>
 
 						<logic:notEmpty name="SHOWGPBTN">
 
@@ -609,8 +603,6 @@ body {
 	function updateCaseDetails() {
 		
 		
-		//alert("jeev");
-
 		
 		/* if ($("#ecourtsCaseStatus").val() == ""
 				|| $("#ecourtsCaseStatus").val() == null
@@ -736,9 +728,11 @@ body {
 						});
 
 						$("#parawiseRemarksSubmitted").change(function() {
-							if ($("#parawiseRemarksSubmitted").val() == "Yes") {
+							
+						//	alert("--"+$("#parawiseRemarksSubmitted").val());
+							if ($("#parawiseRemarksSubmitted").val() == "Yes"  ) {
 								$(".parawiseRemarkssubmitteddiv").show();
-							} else {
+							} else  {  //if($("#parawiseRemarksSubmitted").val() == "No" )
 								$(".parawiseRemarksSubmitteddiv").hide();
 							}
 						});
@@ -760,15 +754,19 @@ body {
 											if ($("#counterFiled").val() == "Yes") {
 												$(".counteruploaddiv").show();
 											} else if ($("#counterFiled").val() == "No"
-													&& $("#ecourtsCaseStatus")
+													&& $("#ecourtsCaseStatus")       
 															.val() == "Pending") {
 												//$(".parawiseRemarksdiv").show();
 											}
 										});
+						
+						
+						
 
 						if ($("#ecourtsCaseStatus").val() == "Closed") {
 							$(".casecloseddiv").show();
 							$(".appealfileddiv").show();
+						//	$(".parawiseRemarkssubmitteddiv").hide();
 
 						} else if ($("#ecourtsCaseStatus").val() == "Pending") {
 							$(".casependingdiv").show();
@@ -816,7 +814,7 @@ body {
 													.substr(filename
 															.lastIndexOf("."));
 											/* define allowed file types */
-											var allowedExtensionsRegx = /(\.doc|\.DOC)$/i;
+											var allowedExtensionsRegx = /(\.doc|\.DOC|\.pdf|\.PDF)$/i;
 											/* testing extension with regular expression */
 											var isAllowed = allowedExtensionsRegx
 													.test(extension);
@@ -854,7 +852,7 @@ body {
 											.substr(filename
 													.lastIndexOf("."));
 									/* define allowed file types */
-									var allowedExtensionsRegx = /(\.doc|\.DOC)$/i;
+									var allowedExtensionsRegx = /(\.doc|\.DOC|\.pdf|\.PDF)$/i;
 									/* testing extension with regular expression */
 									var isAllowed = allowedExtensionsRegx
 											.test(extension);

@@ -52,6 +52,9 @@ public class LoginAction extends DispatchAction{
 				System.out.println("SQL:"+sql);
 				ps = con.prepareStatement(sql);
 				
+				System.out.println("username:"+username);
+				System.out.println("password:"+password);
+				
 				ps.setString(1, username);
 				ps.setString(2, password);
 				ps.setString(3, password);
@@ -72,13 +75,14 @@ public class LoginAction extends DispatchAction{
 						  		// + "left join dept un on (u.dept_id=un.dept_id) "
 						  		+ "left join dept_new un on (u.dept_code=un.dept_code) "
 						  		+ "left join district_mst dm on (u.dist_id=dm.district_id)"
-						  		+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)='" + username.toUpperCase() + "' group by user_id) ll on (u.userid=ll.user_id)"
+						  		+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)=? group by user_id) ll on (u.userid=ll.user_id)"
 						  		+ "where upper(u.userid)=upper(trim(?))";
 						  
 						  System.out.println("SQL3:"+sql);
 						  
 							ps = con.prepareStatement(sql);
-							ps.setString(1, username);
+							ps.setString(1, username.toUpperCase());
+							ps.setString(2, username);
 							rs = ps.executeQuery();
 							if (rs != null && rs.next()) {
 								
@@ -113,13 +117,15 @@ public class LoginAction extends DispatchAction{
 						  		// + "left join dept un on (u.dept_id=un.dept_id) "
 						  		+ "left join dept_new un on (u.dept_code=un.dept_code) "
 						  		+ "left join district_mst dm on (u.dist_id=dm.district_id)"
-						  		+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)='" + username.toUpperCase() + "' group by user_id) ll on (u.userid=ll.user_id)"
+						  		+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)=? group by user_id) ll on (u.userid=ll.user_id)"
 						  		+ "where upper(u.userid)=upper(trim(?))";
 						  
 						  System.out.println("SQL3:"+sql);
 						  
 							ps = con.prepareStatement(sql);
-							ps.setString(1, username);
+							ps.setString(1, username.toUpperCase());
+							ps.setString(2, username);
+							
 							rs = ps.executeQuery();
 							if (rs != null && rs.next()) {
 								
@@ -154,12 +160,14 @@ public class LoginAction extends DispatchAction{
 									+ " inner join user_roles ur on (u.userid=ur.userid) "
 									+ " left join "+tableName+" nd on (u.userid=nd.email and nd.is_primary='t')"
 									+ " left join roles_mst rm on (ur.role_id=rm.role_id)  "
-									+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)='" + username.toUpperCase() + "' group by user_id) ll on (u.userid=ll.user_id)"
+									+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)=? group by user_id) ll on (u.userid=ll.user_id)"
 									+ " where upper(u.userid)=upper(trim(?)) ";
 						  
 						  System.out.println("role==8 || role==10 || role==11 || role==12 SQL 121:"+sql);
 							ps = con.prepareStatement(sql);
-							ps.setString(1, username);
+							ps.setString(1, username.toUpperCase());
+							ps.setString(2, username);
+							
 							rs = ps.executeQuery();
 							if (rs != null && rs.next()) {
 								session = request.getSession(true);
@@ -194,12 +202,14 @@ public class LoginAction extends DispatchAction{
 									+ " inner join user_roles ur on (u.userid=ur.userid) "
 									+ " left join nic_data nd on (u.userid=nd.email and nd.is_primary='t')"
 									+ " left join roles_mst rm on (ur.role_id=rm.role_id)  "
-									+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)='" + username.toUpperCase() + "' group by user_id) ll on (u.userid=ll.user_id)"
+									+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)=? group by user_id) ll on (u.userid=ll.user_id)"
 									+ " where upper(u.userid)=upper(trim(?)) ";
 						  
 						  System.out.println("SQL 121:"+sql);
 							ps = con.prepareStatement(sql);
-							ps.setString(1, username);
+							ps.setString(1, username.toUpperCase());
+							ps.setString(2, username);
+							
 							rs = ps.executeQuery();
 							if (rs != null && rs.next()) {
 								session = request.getSession(true);
@@ -226,12 +236,14 @@ public class LoginAction extends DispatchAction{
 						
 						sql="select u.userid,user_type,user_description,designation||', '||court_name as dept_name,post_end_date, upper(trim(rm.role_name)) as role_name, to_char(last_login,'dd-mm-yyyy HH12:MI AM') as last_login,ur.role_id from users u inner join ecourts_mst_gps gp on (u.userid=gp.emailid) "
 								+ "inner join user_roles ur on (u.userid=ur.userid) inner join roles_mst rm on (ur.role_id=rm.role_id) "
-								+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)='" + username.toUpperCase() + "' group by user_id) ll on (u.userid=ll.user_id)"
+								+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)=? group by user_id) ll on (u.userid=ll.user_id)"
 								
 								+ " where upper(u.userid)=upper(trim(?)) ";
 						System.out.println("SQL 121:"+sql);
 						ps = con.prepareStatement(sql);
-						ps.setString(1, username);
+						ps.setString(1, username.toUpperCase());
+						ps.setString(2, username);
+						
 						rs = ps.executeQuery();
 						if (rs != null && rs.next()) {
 							session = request.getSession(true);
@@ -253,11 +265,13 @@ public class LoginAction extends DispatchAction{
 						sql="select u.userid,user_type,user_description,'' as dept_name, upper(trim(rm.role_name)) as role_name, "
 								+ " to_char(last_login,'dd-mm-yyyy HH12:MI AM') as last_login,ur.role_id from users u "
 								+ " inner join user_roles ur on (u.userid=ur.userid) inner join roles_mst rm on (ur.role_id=rm.role_id) "
-								+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)='" + username.toUpperCase() + "' group by user_id) ll on (u.userid=ll.user_id)"
+								+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)=? group by user_id) ll on (u.userid=ll.user_id)"
 								+ " where upper(u.userid)=upper(trim(?)) ";
 						System.out.println("SQL 121:"+sql);
 						ps = con.prepareStatement(sql);
-						ps.setString(1, username);
+						ps.setString(1, username.toUpperCase());
+						ps.setString(2, username);
+						
 						rs = ps.executeQuery();
 						if (rs != null && rs.next()) {
 							session = request.getSession(true);
@@ -287,12 +301,14 @@ public class LoginAction extends DispatchAction{
 								+ " left join dept_new un on (u.dept_code=un.dept_code) "
 								
 								+ "left join nic_data nd on (u.userid=nd.email and nd.is_primary='t') "
-								+ "left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)='" + username.toUpperCase() + "' group by user_id) ll on (u.userid=ll.user_id)"
+								+ "left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)=? group by user_id) ll on (u.userid=ll.user_id)"
 								+ "where upper(u.userid)=upper(trim(?)) ";
 					  
 					  System.out.println("SQL 121:"+sql);
 						ps = con.prepareStatement(sql);
-						ps.setString(1, username);
+						ps.setString(1, username.toUpperCase());
+						ps.setString(2, username);
+						
 						rs = ps.executeQuery();
 						if (rs != null && rs.next()) {
 							session = request.getSession(true);

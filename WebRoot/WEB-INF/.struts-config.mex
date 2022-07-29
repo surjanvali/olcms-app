@@ -158,6 +158,9 @@
   <StrutsActivity path="/form/eofficeEmployeeReport.jsp" location="350,3450" dimension="207,51" />
   <StrutsActivity path="casedetailspopupview4" location="3350,3550" dimension="152,51" />
   <StrutsActivity path="/jsp/REPORTS/EcourtsDeptInstructionView.jsp" location="950,3650" dimension="271,51" />
+  <StrutsActivity path="/registerMLOSubject.do" location="950,3850" dimension="305,96" />
+  <StrutsActivity path="causelistpopup" location="1550,3850" dimension="110,51" />
+  <StrutsActivity path="registerMLOsub" location="1850,3850" dimension="114,51" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,598" />
@@ -334,6 +337,14 @@
       <AbsolutePoint location="2800,1050" />
     </AutomaticBendpoints>
   </StrutsTransition>
+  <StrutsTransition id="/HighCourtCauseList.do,causelistpopup,causelistpopup,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="2450,2816" />
+      <AbsolutePoint location="1510,2816" />
+      <AbsolutePoint location="1510,3875" />
+      <AbsolutePoint location="1550,3875" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
   <StrutsTransition id="/HighCourtCasesCategoryUpdationReport.do,caseview1,casedetailsview1,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="3078,3646" />
@@ -415,8 +426,8 @@
   <StrutsTransition id="/HCNewCaseStatusAbstractReport.do,newcasepopupview,newcasedetailspopupview,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="218,3846" />
-      <AbsolutePoint location="218,3891" />
-      <AbsolutePoint location="2534,3891" />
+      <AbsolutePoint location="218,4016" />
+      <AbsolutePoint location="2534,4016" />
       <AbsolutePoint location="2534,3801" />
     </AutomaticBendpoints>
   </StrutsTransition>
@@ -677,6 +688,13 @@
       <AbsolutePoint location="3681,2716" />
       <AbsolutePoint location="1919,2716" />
       <AbsolutePoint location="1919,2850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/registerMLOSubject.do,registerMLO,registerMLOsub,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="1255,3916" />
+      <AbsolutePoint location="1907,3916" />
+      <AbsolutePoint location="1907,3901" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/HighCourtCauseList.do,success,highcourtcauselist,1" routingType="0">

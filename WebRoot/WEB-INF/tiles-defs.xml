@@ -360,6 +360,9 @@
 	<definition name="registerMLOsub" extends="UserLayoutNew">
 		<put name="content" value="/jsp/registration/registerSubMLO.jsp" />
 	</definition>
-
+	
+	<definition name="causelistpopup" extends="modalLayout">
+		<put name="content" value="/jsp/reports/CauseListCases.jsp" />
+	</definition>
 
 </tiles-definitions>

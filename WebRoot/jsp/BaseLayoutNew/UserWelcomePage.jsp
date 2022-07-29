@@ -85,7 +85,8 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 .modal-lg {
 	min-width: 85% !important;
 }
-label{
+
+label {
 	font-weight: bold;
 }
 </style>
@@ -274,10 +275,11 @@ label{
 	<script src="assetsnew/js/app.min.js" type="text/javascript"></script>
 	<!-- PAGE LEVEL SCRIPTS-->
 	<!-- <script src="./assetsnew/js/scripts/dashboard_1_demo.js" type="text/javascript"></script> -->
-	
+
 	<!-- PAGE LEVEL PLUGINS-->
-	<script src="./assetsnew/vendors/DataTables/datatables.min.js" type="text/javascript"></script>
-	
+	<script src="./assetsnew/vendors/DataTables/datatables.min.js"
+		type="text/javascript"></script>
+
 	<!-- <script src="./assetsnew/vendors/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" type="text/javascript"></script> -->
 	<!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
 	<script
@@ -295,29 +297,29 @@ label{
 	<script
 		src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
 	<script>
-	if($('#example')){
-		$('#example').DataTable(
-				{
-					dom : 'Blfrtip',
-					buttons : [ 'print', {
-						extend : 'pdf',
-						orientation : 'landscape'
-					}, 'excel' ],
-					"lengthMenu" : [ [ 10, 25, 50, 100, -1 ],
-							[ 10, 25, 50, 100, "All" ] ]
-				});
-	}
-		if($('#example2')){
-		$('#example2').DataTable(
-				{
-					dom : 'Blfrtip',
-					buttons : [ 'print', {
-						extend : 'pdf',
-						orientation : 'landscape'
-					}, 'excel' ],
-					"lengthMenu" : [ [ 10, 25, 50, 100, -1 ],
-							[ 10, 25, 50, 100, "All" ] ]
-				});
+		if ($('#example')) {
+			$('#example').DataTable(
+					{
+						dom : 'Blfrtip',
+						buttons : [ 'print', {
+							extend : 'pdf',
+							orientation : 'landscape'
+						}, 'excel' ],
+						"lengthMenu" : [ [ 10, 25, 50, 100, -1 ],
+								[ 10, 25, 50, 100, "All" ] ]
+					});
+		}
+		if ($('#example2')) {
+			$('#example2').DataTable(
+					{
+						dom : 'Blfrtip',
+						buttons : [ 'print', {
+							extend : 'pdf',
+							orientation : 'landscape'
+						}, 'excel' ],
+						"lengthMenu" : [ [ 10, 25, 50, 100, -1 ],
+								[ 10, 25, 50, 100, "All" ] ]
+					});
 		}
 	</script>
 
@@ -325,6 +327,18 @@ label{
 
 	<script type="text/javascript">
 		$(function() {
+			if ($('#panel-modal2')) {
+				/*$('#panel-modal2').modal({
+					backdrop : 'static',
+					keyboard : false
+				});
+				$('#panel-modal2').modal('show');*/
+				viewCauselistCasesPopup();
+			}
+			$(".btnClosePopup2").click(function() {
+				$("#panel-modal2").modal("hide");
+			});
+
 			/* $('#example-table').DataTable({
 				"scrollX" : true,
 				"pagingType": "full_numbers",
@@ -343,7 +357,21 @@ label{
 			    autoclose: true
 			}); */
 
-		})
+		});
+
+		function viewCauselistCasesPopup() {
+			var heading = "View Causelist Cases";
+			var srclink = "";
+			srclink = "./HighCourtCauseList.do?mode=usersCauseList";
+			// alert("LINK:"+srclink);
+			if (srclink != "") {
+				$("#panel-modal2 .modal-title").html(heading);
+				$("#panel-modal2-page").prop("src", srclink)
+				//$("#MyPopup .modal-body").html(body);
+				$("#panel-modal2").modal("show");
+			}
+			;
+		};
 	</script>
 
 </body>
