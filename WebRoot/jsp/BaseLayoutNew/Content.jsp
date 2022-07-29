@@ -592,10 +592,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	</div>
 	
 	
-	<logic:notEmpty name="SHOWCAUSELIST">
+	<logic:notEmpty name="SHOWCAUSELISTPOPUP">
 	<div id="panel-modal2" class="modal fade" role="dialog"
-		style="padding-top:200px;">
-		<div class="modal-dialog modal-md modal-primary">
+		style="padding-top:100px;"> 
+			<div class="modal-dialog modal-lg">
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header"
@@ -615,7 +615,5 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		</div>
 	</div>
 </logic:notEmpty>
-	
-	
 </body>
 </html>

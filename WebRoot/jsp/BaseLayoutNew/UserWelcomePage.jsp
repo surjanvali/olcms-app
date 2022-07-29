@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -324,7 +325,7 @@ label {
 	</script>
 
 
-
+<logic:notEmpty name="SHOWCAUSELISTPOPUP">
 	<script type="text/javascript">
 		$(function() {
 			if ($('#panel-modal2')) {
@@ -360,7 +361,7 @@ label {
 		});
 
 		function viewCauselistCasesPopup() {
-			var heading = "View Causelist Cases";
+			var heading = "Today's Causelist";
 			var srclink = "";
 			srclink = "./HighCourtCauseList.do?mode=usersCauseList";
 			// alert("LINK:"+srclink);
@@ -373,6 +374,6 @@ label {
 			;
 		};
 	</script>
-
+</logic:notEmpty>
 </body>
 </html>

@@ -13,7 +13,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <link rel='stylesheet'
 	href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 
-<link href="./assetsnew/vendors/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="./assetsnew/vendors/select2/dist/css/select2.min.css"
+	rel="stylesheet" />
 <!-- <link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet" type="text/css" /> -->
 
 <!-- PLUGINS STYLES-->
@@ -147,11 +148,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 					<div class="row">
-					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 							<div class="form-group">
 								<label class="font-bold">Petitioner Name</label>
-								<html:text styleId="petitionerName" property="dynaForm(petitionerName)"
-									styleClass="form-control" maxlength="50" />
+								<html:text styleId="petitionerName"
+									property="dynaForm(petitionerName)" styleClass="form-control"
+									maxlength="50" />
 							</div>
 						</div>
 					</div>
@@ -302,6 +304,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<tr>
 										<th>Sl.No</th>
 										<th>Ack No.</th>
+										<th>HC Ack No.</th>
 										<th>Date</th>
 										<th>District</th>
 										<th>Case Type</th>
@@ -309,7 +312,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Departments / Respondents</th>
 										<th>Advocate CC No.</th>
 										<th>Advocate Name</th>
-										<!-- <th>Remarks</th> -->
+										<th>Petitioner</th>
 										<th>Download / Print</th>
 									</tr>
 								</thead>
@@ -317,13 +320,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<logic:iterate id="map" name="CASEWISEACKS" indexId="i">
 										<tr>
 											<td>${i+1 }</td>
-											<td>${map.ack_no }<logic:notEqual value="-" name="map"
+											<td>${map.ack_no }</td>
+											<td><logic:notEqual value="-" name="map"
 													property="hc_ack_no">
 
 													<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
 
-												</logic:notEqual>
-											</td>
+												</logic:notEqual></td>
 											<td nowrap="nowrap">${map.generated_date }</td>
 											<td>${map.district_name }</td>
 											<td>${map.case_full_name }</td>
@@ -331,6 +334,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td nowrap="nowrap">${map.dept_descs }</td>
 											<td>${map.advocateccno }</td>
 											<td>${map.advocatename }</td>
+											<td>${map.petitioner_name }</td>
 
 
 

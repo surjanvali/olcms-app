@@ -498,12 +498,12 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 						String smsText = "Your User Id is " + emailId
 								+ " and Password is olcms@2021 to Login to https://apolcms.ap.gov.in/ Portal. Please do not share with anyone. \r\n-APOLCMS";
 						String templateId = "1007784197678878760";
-						 mobileNo = "8500909816";
+						 //mobileNo = "8500909816";
 						System.out.println(mobileNo + "" + smsText + "" + templateId);
 						if (mobileNo != null && !mobileNo.equals("")) {
-						 mobileNo = "8500909816";
+						// mobileNo = "8500909816";
 							System.out.println("mobileNo::" + mobileNo);
-							//SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
+							SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
 						}
 						con.commit();
 						request.setAttribute("successMsg",

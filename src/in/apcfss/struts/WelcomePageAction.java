@@ -807,7 +807,8 @@ public class WelcomePageAction extends DispatchAction{
 				//target="UserWelcomePageNew";
 			}
 			
-			request.setAttribute("SHOWCAUSELIST", "SHOWCAUSELIST");
+			if(roleId!=null && !roleId.equals("1") && !roleId.equals("7") && !roleId.equals("13") && !roleId.equals("14"))
+				request.setAttribute("SHOWCAUSELISTPOPUP", "SHOWCAUSELISTPOPUP");
 			
 			System.out.println("target:"+target);
 		} catch (Exception e) {

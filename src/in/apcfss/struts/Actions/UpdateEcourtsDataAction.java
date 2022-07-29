@@ -1550,10 +1550,35 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			while (rs.next()) {
 				causeListPdfCasesretrieval(causelistDate, rs.getString("causelist_document"), rs.getString("filename"), con);
 			}
+			
+			//updateCauselistCases(con, causelistDate);
 			con.commit();
 			request.setAttribute("successMsg", "Successfully extracted and saved the Causelist Cases data.");
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Error-1 while extracting the Cause list cases data.");
+			e.printStackTrace();
+		} finally {
+			DatabasePlugin.closeConnection(con);
+		}
+
+		return mapping.findForward("success");
+	}
+	
+	public ActionForward updateCauseListCases(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
+		try {
+			CommonForm cform = (CommonForm) form;
+			con = DatabasePlugin.connect();
+			con.setAutoCommit(false);
+			String causelistDate = (String) cform.getDynaForm("causeListDate");// yyyy-mm-dd
+			updateCauselistCases(con, causelistDate);
+			con.commit();
+			request.setAttribute("successMsg", "Successfully Updated and saved the Causelist Cases data.");
+		} catch (Exception e) {
+			request.setAttribute("errorMsg", "Error-1 while updating the Cause list cases data.");
 			e.printStackTrace();
 		} finally {
 			DatabasePlugin.closeConnection(con);
@@ -1634,6 +1659,63 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 	}
 	
 	
+	public static  void updateCauselistCases(Connection con, String cauesListDate) throws Exception{
+
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Statement st = null;
+		String sql = null;
+		int totalCount = 0;
+		String inputStr = "", targetURL = "";
+		String authToken = "";
+		String request_token = "", requeststring = "";
+
+			String opVal = ECourtAPIs.getSelectParam(1);
+			String cino = "";
+			sql = "select aa.cino from ecourts_causelist_cases ecc "
+                    + " inner join ecourts_case_data a on (ecc.case_no=a.type_name_reg||'/'||a.reg_no||'/'||a.reg_year) "
+					+ " where ecc.causelist_date::date=to_date('"+cauesListDate+"','yyyy-mm-dd')";
+			System.out.println("SQLLLLLLLLLLLLLL:::::::"+sql);
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+
+			while (rs.next()) {
+				// if (cino != null) {
+				cino = rs.getString("cino").toString().trim();
+				totalCount++;
+				inputStr = "cino=" + cino;// ECourtAPIs.getInputStringValue(opVal);
+
+				// 1. Encoding Request Token
+				byte[] hmacSha256 = HASHHMACJava.calcHmacSha256("15081947".getBytes("UTF-8"),
+						inputStr.getBytes("UTF-8"));
+				request_token = String.format("%032x", new BigInteger(1, hmacSha256));
+				// 2. Encoding Request String
+				requeststring = URLEncoder.encode(ECourtsCryptoHelper.encrypt(inputStr.getBytes()), "UTF-8");
+
+				targetURL = ECourtAPIs.getTargetURL(opVal, requeststring, request_token);
+
+				System.out.println(totalCount + ":opVal : " + opVal);
+
+				System.out.println(totalCount + ":URL : " + targetURL);
+				System.out.println("Input String : " + inputStr);
+
+				authToken = EHighCourtAPI.getAuthToken();
+				System.out.println("authToken---" + authToken);
+				String resp = "";
+				System.out.println("OPVAL:" + opVal);
+
+				resp = EHighCourtAPI.sendGetRequest(targetURL, authToken);
+
+				//System.out.println("resp--" + resp);
+
+				if (resp != null && !resp.equals("")) {
+					boolean b = processCNRsearchResponse(resp, opVal, con, cino);
+				}
+			}
+			System.out.println("FINAL END : Records fetched:" + totalCount);
+			
+	
+	}
 	
 	
 	public static boolean saveDataToTableFromExcel(FormFile cinoExcelFile,Connection con) throws Exception, IOException {

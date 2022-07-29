@@ -342,15 +342,17 @@
 			value="/jsp/reports/HCNewCaseStatusAbstractReport.jsp" />
 	</definition>
 
-	<definition name="newcasedetailsview" extends="UserLayoutNew">
+	<definition name="newcasedetailsview"
+		extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/NewCaseDetailsView.jsp" />
 	</definition>
 
-	<definition name="newcasedetailspopupview" extends="modalLayout">
+	<definition name="newcasedetailspopupview"
+		extends="modalLayout">
 		<put name="content" value="/jsp/reports/NewCaseDetailsView.jsp" />
 	</definition>
-	
-	
+
+
 	<definition name="ScannedDocumentrReport"
 		extends="UserLayoutNew">
 		<put name="content"
@@ -360,9 +362,15 @@
 	<definition name="registerMLOsub" extends="UserLayoutNew">
 		<put name="content" value="/jsp/registration/registerSubMLO.jsp" />
 	</definition>
-	
+
 	<definition name="causelistpopup" extends="modalLayout">
 		<put name="content" value="/jsp/reports/CauseListCases.jsp" />
+	</definition>
+
+	<definition name="hccasedocsuploadnew"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/HCCaseDocsUploadAbstractReportNew.jsp" />
 	</definition>
 
 </tiles-definitions>

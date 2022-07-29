@@ -454,16 +454,16 @@ public class HighCourtCauseListAction extends DispatchAction {
 					
 					+ " on (a.cino=b.cino) "
 					+ " inner join dept_new d on (a.dept_code=d.dept_code) "
-					+ " where d.display = true and ecc.causelist_date::date > current_date - 2 order by ecc.causelist_date::date desc ";
+					+ " where d.display = true and ecc.causelist_date::date=current_date  ";
             
             if(roleId.equals("2") || roleId.equals("10")) {
             	sql+=" and a.dist_id='"+distId+"'";
             }
             
-            if(!roleId.equals("2")) {
+            if(!roleId.equals("2") && !roleId.equals("1") && !roleId.equals("7")) {
             	sql+=" and a.dept_code='"+deptCode+"'";
             }
-
+            sql+=" order by ecc.causelist_date::date desc";
             System.out.println("SQL:" + sql);
             List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 
@@ -510,7 +510,7 @@ public class HighCourtCauseListAction extends DispatchAction {
                     + " inner join ecourts_case_data a on (ecc.case_no=a.type_name_reg||'/'||a.reg_no||'/'||a.reg_year) "
 					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
 					+ " inner join dept_new d on (a.dept_code=d.dept_code) "
-					+ " where d.display = true and ecc.causelist_date::date > current_date - 2  ";
+					+ " where d.display = true and ecc.causelist_date::date=current_date  ";
             
             if(roleId.equals("2") || roleId.equals("10")) {
             	sql+=" and a.dist_id='"+distId+"'";
