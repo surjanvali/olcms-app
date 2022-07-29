@@ -287,7 +287,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="row">
 									<div class="col-md-12 col-sm-12 col-xs-12">
 										<div class="form-group">
-										<logic:present name="login_type">
+										<%-- <logic:present name="login_type"> --%>
 											<label class="ui-radio ui-radio-inline"> <html:radio
 													property="dynaForm(officerType)" styleId="officerType"
 													value="S-HOD" onclick="changeReport();">
@@ -313,8 +313,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													<b>Assign Cases to Section Officer(Other Dept.)</b>
 												</html:radio>
 											</label>
-											</logic:present>
-											<logic:present name="login_type_dc">
+											<%-- </logic:present>
+											<logic:present name="login_type_dc"> --%>
 											 <label class="ui-radio ui-radio-inline"> <html:radio
 													property="dynaForm(officerType)" styleId="officerType"
 													value="DC" onclick="changeReport();">
@@ -335,7 +335,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												</html:radio>
 											</label>
 											
-											</logic:present>
+											<%-- </logic:present> --%>
 										</div>
 									</div>
 								</div>
