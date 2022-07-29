@@ -307,7 +307,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 				
 				sql = "update ecourts_gpo_ack_depts set  dept_code='"
 						+ CommonModels.checkStringObject(cform.getDynaForm("caseDept")) + "',case_status="+newStatusCode
-						+ " where ack_no in ('" + ids_split[0] + "') and dept_code='" + login_deptId + "' and respondent_slno='"+ids_split[1]+"'  ";
+						+ " where ack_no in ('" + ids_split[0] + "') and respondent_slno='"+ids_split[1]+"'  "; // and dept_code='" + login_deptId + "'
 				System.out.println("UPDATE SQL:" + sql);
 				a += DatabasePlugin.executeUpdate(sql, con);
 				}
@@ -405,7 +405,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 
 						sql = " INSERT INTO apolcms.ecourts_gpo_ack_depts_log(ack_no, dept_code, respondent_slno, assigned, assigned_to, case_status, dist_id) "
 								+ " SELECT ack_no, dept_code, respondent_slno, assigned, assigned_to, case_status, dist_id "
-								+ "    FROM apolcms.ecourts_gpo_ack_depts where ack_no='" + ids_split[0] + "'";
+								+ "    FROM apolcms.ecourts_gpo_ack_depts where ack_no='" + ids_split[0] + "'  and respondent_slno='"+ids_split[1]+"'";
 
 						System.out.println("INSERT SQL:" + sql);
 						a += DatabasePlugin.executeUpdate(sql, con);
@@ -415,12 +415,12 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 						if (officerType.equals("DC") || officerType.equals("DC-NO") || officerType.equals("DC-SO")) {
 						sql = "update ecourts_gpo_ack_depts set dept_code='" + empDeptCode
 								+ "', assigned=true, assigned_to='" + emailId + "',case_status=" + 
-								newStatusCode + ", dist_id=" + distCode + " where ack_no='" + ids_split[0] + "' and dist_id=" + user_dist + " and respondent_slno='"+ids_split[1]+"' "; //and dept_code='"+ login_deptId + "'   and respondent_slno='1'
+								newStatusCode + ", dist_id=" + distCode + " where ack_no='" + ids_split[0] + "'  and respondent_slno='"+ids_split[1]+"' "; //and dept_code='"+ login_deptId + "'   and dist_id=" + user_dist + "
 						}else {
 						
 						sql = "update ecourts_gpo_ack_depts set dept_code='" + empDeptCode
 								+ "', assigned=true, assigned_to='" + emailId + "',case_status=" + 
-								newStatusCode + ", dist_id=" + distCode + " where ack_no='" + ids_split[0] + "'  and dept_code='"+ login_deptId +"' and respondent_slno='"+ids_split[1]+"' ";   //and respondent_slno='1'
+								newStatusCode + ", dist_id=" + distCode + " where ack_no='" + ids_split[0] + "'  and respondent_slno='"+ids_split[1]+"' ";   //and respondent_slno='1'  and dept_code='"+ login_deptId +"'
 						}
 						
 						System.out.println("UPDATE SQL:" + sql);
@@ -503,7 +503,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 						if (mobileNo != null && !mobileNo.equals("")) {
 						// mobileNo = "8500909816";
 							System.out.println("mobileNo::" + mobileNo);
-							SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
+							//SendSMSAction.sendSMS(mobileNo, smsText, templateId, con);
 						}
 						con.commit();
 						request.setAttribute("successMsg",
@@ -607,7 +607,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 
 					sql = "update ecourts_gpo_ack_depts set case_status=7, dist_id='"
 							+ CommonModels.checkStringObject(cform.getDynaForm("caseDist")) + "',dept_code='"+cform.getDynaForm("distDept")+"' " // assigned=true,
-							+ " where ack_no in ('" + ids_split[0] + "') and dist_id='"+user_dist+"'  and respondent_slno='"+ids_split[1]+"'  ";   //and and respondent_slno=1 
+							+ " where ack_no in ('" + ids_split[0] + "')   and respondent_slno='"+ids_split[1]+"'  ";   //and and respondent_slno=1 and dist_id='"+user_dist+"'
 					System.out.println("UPDATE SQL:" + sql);
 					DatabasePlugin.executeUpdate(sql, con);
 
@@ -625,7 +625,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 					sql = "update ecourts_gpo_ack_depts set dept_code='"
 							+ in.apcfss.struts.Utilities.CommonModels.checkStringObject(cform.getDynaForm("distDept")) + "',dist_id='"
 							+ in.apcfss.struts.Utilities.CommonModels.checkIntObject(cform.getDynaForm("caseDist")) + "',case_status=8    "
-							+ " where ack_no in ('" + ids_split[0] + "')  and dist_id='"+user_dist+"' and respondent_slno='"+ids_split[1]+"' ";  //and dept_code='" + login_deptId + "' and respondent_slno='1' 
+							+ " where ack_no in ('" + ids_split[0] + "')  and respondent_slno='"+ids_split[1]+"' ";  //and dept_code='" + login_deptId + "' and respondent_slno='1'    and dist_id='"+user_dist+"'
 					DatabasePlugin.executeUpdate(sql, con);
 					successMsg = "Case/Cases successfully moved to selected District Nodal Officer Login";
 				}
