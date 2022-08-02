@@ -372,5 +372,13 @@
 		<put name="content"
 			value="/jsp/reports/HCCaseDocsUploadAbstractReportNew.jsp" />
 	</definition>
+	
+	
+	
+	<definition name="EcourtsCaseMappingWithNewAckNo"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/EcourtsCaseMappingWithNewAckNo.jsp" />
+	</definition>
 
 </tiles-definitions>

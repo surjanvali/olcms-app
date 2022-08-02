@@ -476,6 +476,13 @@
 			parameter="mode" scope="request">
 			<forward name="success" path="hccasedocsuploadnew"></forward>
 		</action>
+		
+		
+		<action path="/EcourtsCaseMappingWithNewAckNo" name="CommonForm"
+			type="in.apcfss.struts.reports.EcourtsCaseMappingWithNewAckNoAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="EcourtsCaseMappingWithNewAckNo"></forward>
+		</action>
 
 	</action-mappings>
 
