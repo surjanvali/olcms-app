@@ -163,8 +163,13 @@
   <StrutsActivity path="/form/eofficeEmployeeReport.jsp" location="350,3450" dimension="207,51" />
   <StrutsActivity path="casedetailspopupview4" location="3350,3550" dimension="152,51" />
   <StrutsActivity path="/jsp/REPORTS/EcourtsDeptInstructionView.jsp" location="950,3650" dimension="271,51" />
+<<<<<<< HEAD
   <StrutsActivity path="/EcourtsCaseMappingWithNewAckNo.do" />
   <StrutsActivity path="EcourtsCaseMappingWithNewAckNo" />
+=======
+  <StrutsActivity path="/HCFinalOrdersImplemented.do" location="3050,3950" dimension="401,96" />
+  <StrutsActivity path="page.finalordersimpl" location="50,3950" dimension="139,51" />
+>>>>>>> 264713f377894fb347f887715884f30f35d95352
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,598" />
@@ -462,7 +467,11 @@
       <AbsolutePoint location="2826,4150" />
     </AutomaticBendpoints>
   </StrutsTransition>
+<<<<<<< HEAD
   <StrutsTransition id="/EcourtsCaseMappingWithNewAckNoAction.do,success,hccasedocsuploadnew,1" routingType="0">
+=======
+  <StrutsTransition id="/HCFinalOrdersImplemented.do,success,hccasedocsuploadnew,1" routingType="0">
+>>>>>>> 264713f377894fb347f887715884f30f35d95352
     <AutomaticBendpoints>
       <AbsolutePoint location="3050,3975" />
       <AbsolutePoint location="2900,3975" />
@@ -593,6 +602,14 @@
       <AbsolutePoint location="5,-25" />
       <AbsolutePoint location="5,1875" />
       <AbsolutePoint location="650,1875" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/HCFinalOrdersImplemented.do,success,page.finalordersimpl,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3250,4046" />
+      <AbsolutePoint location="3250,4121" />
+      <AbsolutePoint location="119,4121" />
+      <AbsolutePoint location="119,4001" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/HomePage.do,FrontPage,/FrontPage.jsp,1" routingType="0">
