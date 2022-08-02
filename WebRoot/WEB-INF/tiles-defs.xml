@@ -372,5 +372,10 @@
 		<put name="content"
 			value="/jsp/reports/HCCaseDocsUploadAbstractReportNew.jsp" />
 	</definition>
+	<definition name="page.finalordersimpl"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/DistWiseFinalOrdersImpl.jsp" />
+	</definition>
 
 </tiles-definitions>

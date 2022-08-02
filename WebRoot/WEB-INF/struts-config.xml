@@ -8,10 +8,10 @@
 			<set-property property="driverClassName"
 				value="org.postgresql.Driver" />
 			<!-- Live -->
-			<set-property property="url"
+			<!-- <set-property property="url"
 				value="jdbc:postgresql://10.96.192.52:5432/apolcms" />
 			<set-property property="username" value="apolcms" />
-			<set-property property="password" value="apolcms@123" />
+			<set-property property="password" value="apolcms@123" /> -->
 
 			<!-- <set-property property="url"
 				value="jdbc:postgresql://10.96.54.54:6432/apolcms" />
@@ -24,9 +24,9 @@
 				value="apolcms" /> -->
 
 			<!-- LOCAL -->
-			<!-- <set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" 
+			<set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" 
 				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
-				value="apolcms" /> -->
+				value="apolcms" />
 
 
 			<set-property property="minCount" value="5" />
@@ -481,6 +481,11 @@
 			parameter="mode" scope="request">
 			<forward name="success" path="hccasedocsuploadnew"></forward>
 		</action>
+		<action path="/HCFinalOrdersImplemented" name="CommonForm"
+			type="in.apcfss.struts.reports.DistrictWiseFinalOrdersImplementation"
+			parameter="mode" scope="request">
+			<forward name="success" path="page.finalordersimpl"></forward>
+		</action>
 
 	</action-mappings>
 
@@ -496,8 +501,7 @@
 
 	<plug-in className="plugins.DatabasePlugin"></plug-in>
 	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPluginTest"></plug-in> -->
-	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPlugin" 
-		/> <plug-in className="in.apcfss.struts.eCourts.schedulars.DialySchedularsPlugin" 
-		/> -->
+	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPlugin"/> --> 
+	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.DialySchedularsPlugin" /> -->
 
 </struts-config>
