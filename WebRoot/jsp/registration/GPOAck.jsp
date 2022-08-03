@@ -31,7 +31,7 @@ label {
 <div class="page-content fade-in-up">
 
 
-
+	<logic:notEmpty name="valExist"> ${valExist} </logic:notEmpty>
 	<div class="row">
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 			<div class="dashboard-cat-title">
@@ -91,6 +91,10 @@ label {
 				enctype="multipart/form-data">
 				<html:hidden styleId="mode" property="mode" />
 				<html:hidden styleId="ackId" property="dynaForm(ackId)" />
+
+				<%-- <html:hidden property="dynaForm(regYear)" styleId="regYear" />
+				<html:hidden property="dynaForm(caseType)" styleId="caseType" /> --%>
+
 				<html:hidden styleId="ackType" property="dynaForm(ackType)" />
 				<html:hidden styleId="respondentIds"
 					property="dynaForm(respondentIds)" value="1" />
@@ -116,7 +120,8 @@ label {
 												<th style="width: 30%;">Department/District</th>
 												<!-- <th style="width: 30%;">Department</th>
 												<th style="width: 30%;">District</th> -->
-												<th style="width: 30%;">Respondent Department / District Collector</th>
+												<th style="width: 30%;">Respondent Department /
+													District Collector</th>
 												<th style="width: 30%;">Service Type</th>
 												<!-- <th style="width: 20%;">Designation</th>
 												<th style="width: 20%;">District</th>
@@ -128,8 +133,8 @@ label {
 											<tr id="1">
 												<td>1.</td>
 												<td><html:select styleId="departmentId1"
-														property="dynaForm(departmentId1)" styleClass="select2Class"
-														style="width: 100%;"
+														property="dynaForm(departmentId1)"
+														styleClass="select2Class" style="width: 100%;"
 														onchange="chkDeptAndDist(1);">
 														<html:option value="0">---SELECT---</html:option>
 														<html:option value="Department">Department</html:option>
@@ -158,7 +163,8 @@ label {
 														</logic:notEmpty>
 													</html:select></td> --%>
 												<td>
-													<div class="deptClass" id="dispalyDept1" style="display: none;">
+													<div class="deptClass" id="dispalyDept1"
+														style="display: none;">
 														<html:select styleId="deptId1"
 															property="dynaForm(deptId1)" styleClass="select2Class"
 															style="width: 100%;"
@@ -181,7 +187,8 @@ label {
 
 														</html:select>
 													</div>
-													<div class="distClass" id="dispalyDist1" style="display: none;">
+													<div class="distClass" id="dispalyDist1"
+														style="display: none;">
 														<html:select styleId="distId1"
 															property="dynaForm(distId1)" styleClass="select2Class"
 															style="width: 100%;">
@@ -284,7 +291,7 @@ label {
 								<div class="form-group">
 									<label> Advocate CC No. <bean:message key="mandatory" />
 									</label>
-												<%-- <html:select property="dynaForm(advocateCCno)" onchange="getdatadetails();"
+									<%-- <html:select property="dynaForm(advocateCCno)" onchange="getdatadetails();"
 														styleClass="select2Class" style="width: 100%;"
 														styleId="advocateCCno">
 														<html:option value="0">---SELECT---</html:option>
@@ -295,9 +302,10 @@ label {
 																property="dynaForm(advocateCCnoList)" name="CommonForm" />
 														</logic:notEmpty>
 													</html:select> --%>
-									
+
 									<html:text styleId="advocateCCno" styleClass="form-control"
-										property="dynaForm(advocateCCno)" maxlength="6" onchange="getdatadetails();"/>
+										property="dynaForm(advocateCCno)" maxlength="6"
+										onchange="getdatadetails();" />
 								</div>
 							</div>
 
@@ -306,7 +314,9 @@ label {
 									<label> Advocate Name <bean:message key="mandatory" />
 									</label>
 									<html:text styleId="advocateName" styleClass="form-control"
-										property="dynaForm(advocateName)" maxlength="150" readonly="true"/>   <!-- readonly="true"  -->
+										property="dynaForm(advocateName)" maxlength="150"
+										readonly="true" />
+									<!-- readonly="true"  -->
 								</div>
 							</div>
 						</div>
@@ -459,10 +469,42 @@ label {
 							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 								<div class="form-group">
 									<label> Main Case No. (WP/WA/AS/CRP Nos.) </label>
-									<html:text styleId="mainCaseNo" styleClass="form-control"
-										property="dynaForm(mainCaseNo)" maxlength="25" />
+
+									<div class="row col-md-12">
+										<div class="row col-md-4">
+											<html:select property="dynaForm(caseType1)"
+												styleClass="select2Class" style="width: 100%;"
+												styleId="caseType1" onchange="getCaseTypedetails();">
+												<html:option value="0">---SELECT---</html:option>
+												<logic:notEmpty property="dynaForm(caseTypesListShrt)"
+													name="CommonForm">
+													<html:optionsCollection
+														property="dynaForm(caseTypesListShrt)" name="CommonForm" />
+												</logic:notEmpty>
+											</html:select>
+										</div>
+										<div class="col-md-4">
+											<html:select styleId="regYear1" property="dynaForm(regYear1)"
+												style="width: 100%;" onchange="getCaseTypedetails();"
+												styleClass="select2Class">
+												<html:option value="0">---SELECT---</html:option>
+												<logic:notEmpty name="CommonForm"
+													property="dynaForm(yearsList)">
+													<html:optionsCollection name="CommonForm"
+														property="dynaForm(yearsList)" />
+												</logic:notEmpty>
+											</html:select>
+										</div>
+										<div class="col-md-4">
+											<html:text styleId="mainCaseNo" styleClass="form-control"
+												style="width: 100%;" property="dynaForm(mainCaseNo)"
+												onchange="getCaseTypedetails();" maxlength="7"  onkeypress="return isNumberKey(this);"/>
+										</div>
+									</div>
+									<div id="megId"></div>
 								</div>
 							</div>
+
 							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 								<div class="form-group">
 									<label> Remarks </label>
@@ -471,6 +513,8 @@ label {
 								</div>
 							</div>
 						</div>
+
+
 						<div class="row">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<logic:present name="saveAction">
@@ -531,11 +575,10 @@ label {
 											<tr>
 												<td>${i+1 }</td>
 												<td>${map.ack_no }</td>
-												<td>
-													<logic:notEqual value="-" name="map" property="hc_ack_no">
+												<td><logic:notEqual value="-" name="map"
+														property="hc_ack_no">
 														<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
-													</logic:notEqual>
-												</td>
+													</logic:notEqual></td>
 												<td nowrap="nowrap">${map.generated_date }</td>
 												<td>${map.district_name }</td>
 												<td>${map.dept_descs }</td>
@@ -658,10 +701,10 @@ label {
 											<tr>
 												<td>${i+1 }</td>
 												<td>${map.ack_no }</td>
-												<td><logic:notEqual value="-" name="map" property="hc_ack_no">
+												<td><logic:notEqual value="-" name="map"
+														property="hc_ack_no">
 														<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
-													</logic:notEqual>
-												</td>	
+													</logic:notEqual></td>
 												<td nowrap="nowrap">${map.generated_date }</td>
 												<td>${map.district_name }</td>
 												<td>${map.case_full_name }</td>
@@ -1348,4 +1391,27 @@ label {
 	
 	 });
 	}
+	 function getCaseTypedetails()
+		{
+		 
+		 var caseType=$("#caseType1").val();
+		 var regYear=$("#regYear1").val();
+		 var mainCaseNo=$("#mainCaseNo").val();
+		 
+		 if((caseType != null && caseType != "" && caseType != "0") && 
+				 (regYear != null && regYear != "" && regYear != "0") && 
+				 (mainCaseNo != null && mainCaseNo != "" && mainCaseNo != "0") ){
+		 var caseTypeCode=caseType+"/"+regYear+"/"+mainCaseNo;
+		// alert("caseTypeCode--"+caseTypeCode)
+		var  url = "./GPOAck.do?mode=getCaseTypedetails&&caseTypeCode="+ caseTypeCode;
+		$.post(url, function(data) {
+		//alert("data--"+data);
+		
+		 $("#megId").html(data);
+		//$("#caseTypeCode").val(details['1']);
+		
+		
+		 });
+		 }
+		}
 </script>

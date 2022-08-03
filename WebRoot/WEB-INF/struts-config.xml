@@ -481,10 +481,19 @@
 			parameter="mode" scope="request">
 			<forward name="success" path="hccasedocsuploadnew"></forward>
 		</action>
+<<<<<<< HEAD
+		
+		
+		<action path="/EcourtsCaseMappingWithNewAckNo" name="CommonForm"
+			type="in.apcfss.struts.reports.EcourtsCaseMappingWithNewAckNoAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="EcourtsCaseMappingWithNewAckNo"></forward>
+=======
 		<action path="/HCFinalOrdersImplemented" name="CommonForm"
 			type="in.apcfss.struts.reports.DistrictWiseFinalOrdersImplementation"
 			parameter="mode" scope="request">
 			<forward name="success" path="page.finalordersimpl"></forward>
+>>>>>>> 264713f377894fb347f887715884f30f35d95352
 		</action>
 
 	</action-mappings>

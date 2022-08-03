@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.apache.struts.util.LabelValueBean;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
@@ -254,7 +255,13 @@ public class GPOAcknowledgementAction extends DispatchAction {
 
 			cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox( "select  sno,upper(trim(case_full_name)) as case_full_name from case_type_master order by sno", con));
 			cform.setDynaForm("serviceTypesList", DatabasePlugin.getSelectBox( "select  service_desc,upper(trim(service_desc)) as service_desc from ecourts_mst_services order by 1", con));
+			cform.setDynaForm("caseTypesListShrt", DatabasePlugin.getSelectBox( "select  upper(trim(case_short_name)) as sno,upper(trim(case_short_name)) as case_full_name from case_type_master order by sno", con));
 			
+			ArrayList selectData = new ArrayList();
+			for (int i = 2022; i > 1980; i--) {
+				selectData.add(new LabelValueBean(i + "", i + ""));
+			}
+			cform.setDynaForm("yearsList", selectData);
 			
 			// cform.setDynaForm("advocateCCnoList",DatabasePlugin.getSelectBox("select advocate_code,lpad(advocate_code::text,5,'0')||'-'||advocate_name from ecourts_mst_advocate_ccs order by advocate_code", con));
 			
@@ -349,6 +356,16 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					return displayAckForm(mapping, cform, request, response);
 				}
 				
+				cform.setDynaForm("caseTypesListShrt", DatabasePlugin.getSelectBox( "select  upper(trim(case_short_name)) as sno,upper(trim(case_short_name)) as case_full_name from case_type_master order by sno", con));
+
+				ArrayList selectData = new ArrayList();
+				for (int i = 2022; i > 1980; i--) {
+					selectData.add(new LabelValueBean(i + "", i + ""));
+				}
+				cform.setDynaForm("yearsList", selectData);
+				
+				
+				
 				cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox(
 						"select  sno,upper(trim(case_full_name)) as case_full_name from case_type_master order by sno",
 						con));
@@ -440,6 +457,13 @@ public class GPOAcknowledgementAction extends DispatchAction {
 				 * DatabasePlugin.getStringfromQuery(sql, con); }
 				 */
 				
+				String caseType=cform.getDynaForm("caseType1").toString();
+				String regyear=cform.getDynaForm("regYear1").toString();
+				String mainCase=cform.getDynaForm("mainCaseNo").toString();
+				
+				
+				String mainCaseNo=caseType+"/"+mainCase+"/"+regyear;
+				
 				if (ackNo != null && !ackNo.contentEquals("") && hcAckNo != null && !hcAckNo.contentEquals("")) {
 
 					int i = 1;
@@ -457,7 +481,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					ps.setString(++i, cform.getDynaForm("advocateName") != null ? cform.getDynaForm("advocateName").toString() : "");
 					ps.setString(++i, cform.getDynaForm("advocateCCno") != null ? cform.getDynaForm("advocateCCno").toString() : "");
 					ps.setInt(++i, Integer.parseInt( cform.getDynaForm("caseType") != null ? cform.getDynaForm("caseType").toString() : "0"));
-					ps.setString(++i, cform.getDynaForm("mainCaseNo") != null ? cform.getDynaForm("mainCaseNo").toString() : "");
+					ps.setString(++i, mainCaseNo);
 					ps.setString(++i, cform.getDynaForm("remarks") != null ? cform.getDynaForm("remarks").toString() : "");
 					ps.setString(++i, session.getAttribute("userid").toString());
 					ps.setString(++i, request.getRemoteAddr());
@@ -1241,5 +1265,43 @@ public class GPOAcknowledgementAction extends DispatchAction {
          return null;
      }
 	 
-	 
+	 public ActionForward getCaseTypedetails(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response)
+	 			throws Exception {		
+	 		
+	     	Connection con = null;
+	     	String details =null;
+	     	String sql = null;  
+	         try{
+	        	 	con = DatabasePlugin.connect();
+	         		response.setContentType("text/html");
+	             	PrintWriter pw = null;
+	             	pw = response.getWriter();
+	             	
+	 	        	String case_type = request.getParameter("caseTypeCode");
+	         		//sql = " select advocate_code||'@'||advocate_name as advocate_code from ecourts_mst_advocate_ccs where  advocate_code = '"+advocate_code+"' ";
+	 	        	sql = " select count(*) from ecourts_case_data where type_name_reg||'/'||reg_year||'/'||reg_no='"+case_type+"'  ";
+	         		details = DatabasePlugin.getStringfromQuery(sql, con);
+	         		System.out.println("sql--"+details);
+	         		
+	         		 if(Integer.parseInt(details)>0) {
+	  	 	    	   System.out.println("hai");
+	  	 	    	  pw.println("<span class=\"has-success help-block\">Case details found in APOLCMS.</span>");
+	          		}else {
+	          			pw.println("<span class=\"has-error help-block\">Case details not found in APOLCMS.</span>");
+	          		}
+	         		
+	         	//pw.println(details);
+	 	        pw.flush();
+	 	        pw.close();
+	 	       
+	 	      
+	 	        
+	         }catch (Exception e) {
+	             e.printStackTrace();
+	         }
+	 		finally{
+	 			DatabasePlugin.closeConnection(con);
+	 		}
+	         return null;
+	     }
 }
