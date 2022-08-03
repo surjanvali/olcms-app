@@ -373,12 +373,23 @@
 			value="/jsp/reports/HCCaseDocsUploadAbstractReportNew.jsp" />
 	</definition>
 	
-	
-	
+	<definition name="page.finalordersimpl"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/DistWiseFinalOrdersImpl.jsp" />
+	</definition>
+
 	<definition name="EcourtsCaseMappingWithNewAckNo"
 		extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/reports/EcourtsCaseMappingWithNewAckNo.jsp" />
 	</definition>
+
+	<definition name="SectionOfficerWiseCaseProcessingReport"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/SectionOfficerWiseCaseProcessingReport.jsp" />
+	</definition>
+
 
 </tiles-definitions>

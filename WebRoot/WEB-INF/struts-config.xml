@@ -13,10 +13,9 @@
 			<set-property property="username" value="apolcms" />
 			<set-property property="password" value="apolcms@123" />
 
-			<!-- <set-property property="url"
-				value="jdbc:postgresql://10.96.54.54:6432/apolcms" />
-			<set-property property="username" value="apolcms" />
-			<set-property property="password" value="@p0l(m$" /> -->
+			<!-- <set-property property="url" value="jdbc:postgresql://10.96.54.54:6432/apolcms" 
+				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
+				value="@p0l(m$" /> -->
 
 			<!-- Test -->
 			<!-- <set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" 
@@ -481,21 +480,27 @@
 			parameter="mode" scope="request">
 			<forward name="success" path="hccasedocsuploadnew"></forward>
 		</action>
-<<<<<<< HEAD
-		
-		
-		<action path="/EcourtsCaseMappingWithNewAckNo" name="CommonForm"
+
+		<action path="/EcourtsCaseMappingWithNewAckNo"
+			name="CommonForm"
 			type="in.apcfss.struts.reports.EcourtsCaseMappingWithNewAckNoAction"
 			parameter="mode" scope="request">
 			<forward name="success" path="EcourtsCaseMappingWithNewAckNo"></forward>
-=======
+		</action>
+
 		<action path="/HCFinalOrdersImplemented" name="CommonForm"
 			type="in.apcfss.struts.reports.DistrictWiseFinalOrdersImplementation"
 			parameter="mode" scope="request">
 			<forward name="success" path="page.finalordersimpl"></forward>
->>>>>>> 264713f377894fb347f887715884f30f35d95352
 		</action>
-
+		<action path="/SectionOfficerWiseCaseProcessingReport"
+			name="CommonForm"
+			type="in.apcfss.struts.reports.SectionOfficerWiseCaseProcessingReportAction"
+			parameter="mode" scope="request">
+			<forward name="success"
+				path="SectionOfficerWiseCaseProcessingReport"></forward>
+		</action>
+		
 	</action-mappings>
 
 	<message-resources
@@ -510,7 +515,8 @@
 
 	<plug-in className="plugins.DatabasePlugin"></plug-in>
 	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPluginTest"></plug-in> -->
-	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPlugin"/> --> 
-	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.DialySchedularsPlugin" /> -->
+	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPlugin"/> -->
+	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.DialySchedularsPlugin" 
+		/> -->
 
 </struts-config>
