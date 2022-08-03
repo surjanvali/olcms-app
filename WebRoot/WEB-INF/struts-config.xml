@@ -8,10 +8,10 @@
 			<set-property property="driverClassName"
 				value="org.postgresql.Driver" />
 			<!-- Live -->
-			<!-- <set-property property="url"
+			<set-property property="url"
 				value="jdbc:postgresql://10.96.192.52:5432/apolcms" />
 			<set-property property="username" value="apolcms" />
-			<set-property property="password" value="apolcms@123" /> -->
+			<set-property property="password" value="apolcms@123" />
 
 			<!-- <set-property property="url"
 				value="jdbc:postgresql://10.96.54.54:6432/apolcms" />
@@ -24,9 +24,9 @@
 				value="apolcms" /> -->
 
 			<!-- LOCAL -->
-			<set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" 
+			<!-- <set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" 
 				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
-				value="apolcms" />
+				value="apolcms" /> -->
 
 
 			<set-property property="minCount" value="5" />
