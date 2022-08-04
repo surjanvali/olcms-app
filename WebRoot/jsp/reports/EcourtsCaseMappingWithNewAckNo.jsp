@@ -68,7 +68,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			<div class="ibox">
 				<div class="ibox-head">
-					<div class="ibox-title">Assignment of New Cases</div>
+					<div class="ibox-title">Case Reg No. Updation</div>
 				</div>
 				<div class="ibox-body">
 					<div class="row">
@@ -250,7 +250,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											
 												<td><div class="col-md-12 col-xs-12">
 							<input type="button" name="showcases" value="submit"
-								class="btn btn-success" onclick="return fnShowCases('${map.ack_no}');" /> </div></td>
+								class="btn btn-success" onclick="return fnShowCasesMap('${map.ack_no}');" /> </div></td>
 										</tr>
 									</logic:iterate>
 								</tbody>
@@ -312,7 +312,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#acksAbstractFormId").submit();
 		//return true;
 	}
-	function fnShowCases(val) {
+	function fnShowCasesMap(val) {
 		$("#ackNo").val(val);
 		//alert("sss"+$("#caseType1_"+val).val());
 		
@@ -342,6 +342,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		 $("#acksAbstractFormId").submit();
 		//return true;
 	}
+	
+	
+	function fnShowCases() {
+		$("#mode").val("showCaseWise");
+		$("#acksAbstractFormId").submit();
+	}
+
+	
+	
 
 	function showDeptCases(deptid) {
 		$("#districtId").val($("#districtId").val());

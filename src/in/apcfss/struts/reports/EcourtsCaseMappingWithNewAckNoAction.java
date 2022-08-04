@@ -109,7 +109,7 @@ cform.setDynaForm("caseTypesListShrt", DatabasePlugin.getSelectBox( "select  upp
 
 			if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
 					&& !cform.getDynaForm("districtId").toString().contentEquals("0")) {
-				sqlCondition += " and ad.dist_id='" + cform.getDynaForm("districtId").toString().trim() + "' ";
+				sqlCondition += " and a.distid='" + cform.getDynaForm("districtId").toString().trim() + "' ";
 			}
 
 			if (cform.getDynaForm("deptId") != null && !cform.getDynaForm("deptId").toString().contentEquals("")
@@ -125,34 +125,7 @@ cform.setDynaForm("caseTypesListShrt", DatabasePlugin.getSelectBox( "select  upp
 				sqlCondition += " and a.inserted_time::date <= to_date('" + cform.getDynaForm("toDate")
 						+ "','dd-mm-yyyy') ";
 			}
-
-			if (request.getParameter("districtId") != null
-					&& !CommonModels.checkStringObject(request.getParameter("districtId")).contentEquals("")
-					&& !CommonModels.checkStringObject(request.getParameter("districtId")).contentEquals("0")) {
-				sqlCondition += " and ad.dist_id='" + request.getParameter("districtId").toString().trim() + "' ";
-
-				cform.setDynaForm("districtId", request.getParameter("districtId"));
-			}
-			if (request.getParameter("deptId") != null
-					&& !CommonModels.checkStringObject(request.getParameter("deptId")).contentEquals("")
-					&& !CommonModels.checkStringObject(request.getParameter("deptId")).contentEquals("0")) {
-				sqlCondition += " and ad.dept_code='" + request.getParameter("deptId").toString().trim() + "' ";
-				cform.setDynaForm("deptId", request.getParameter("deptId"));
-			}
-			if (request.getParameter("fromDate") != null
-					&& !CommonModels.checkStringObject(request.getParameter("fromDate")).contentEquals("")) {
-				sqlCondition += " and a.inserted_time::date >= to_date('" + request.getParameter("fromDate")
-						+ "','dd-mm-yyyy') ";
-				cform.setDynaForm("fromDate", request.getParameter("fromDate"));
-			}
-			if (request.getParameter("toDate") != null
-					&& !CommonModels.checkStringObject(request.getParameter("toDate")).contentEquals("")) {
-				sqlCondition += " and a.inserted_time::date <= to_date('" + request.getParameter("toDate")
-						+ "','dd-mm-yyyy') ";
-				cform.setDynaForm("toDate", request.getParameter("toDate"));
-			}
-
-			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("3"))) {
+		if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("3"))) {
 				// sqlCondition += " and (dmt.dept_code='" + deptCode + "' or
 				// dmt.reporting_dept_code='"+deptCode+"') ";
 				sqlCondition += " and dmt.dept_code='" + deptCode + "' ";
@@ -215,7 +188,7 @@ cform.setDynaForm("caseTypesListShrt", DatabasePlugin.getSelectBox( "select  upp
 
 			if (roleId.equals("1") || roleId.equals("7") )
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
-						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
+						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true   order by dept_code",
 						con));
 			else if(roleId.equals("2") || roleId.equals("10"))
 				
@@ -297,7 +270,7 @@ cform.setDynaForm("caseTypesListShrt", DatabasePlugin.getSelectBox( "select  upp
 				
 				if (ackNo != null && !ackNo.contentEquals("") ) {
 
-					sql = "update ecourts_gpo_ack_dtls set maincaseno_updated='"+mainCaseNo+"',maincaseno='"+mainCaseNo+"',ackno_updated=true where ack_no='"+ackNo+"' ";
+					sql = "update ecourts_gpo_ack_dtls set maincaseno_updated='"+mainCaseNo+"',ackno_updated=true where ack_no='"+ackNo+"' ";
 					System.out.println("sql--"+sql);
 					ps = con.prepareStatement(sql);
 					int a = ps.executeUpdate();
@@ -338,10 +311,11 @@ cform.setDynaForm("caseTypesListShrt", DatabasePlugin.getSelectBox( "select  upp
 			request.removeAttribute("successMsg");
 			e.printStackTrace();
 		} finally {
-			 cform.setDynaForm("caseType1_"+ackNo,"");
-			//cform.setDynaForm("caseType1","");
-			cform.setDynaForm("regYear1_"+ackNo,"");
-			cform.setDynaForm("mainCaseNo_"+ackNo,"");
+			/*
+			 * cform.setDynaForm("caseType1_"+ackNo,"");
+			 * cform.setDynaForm("regYear1_"+ackNo,"");
+			 * cform.setDynaForm("mainCaseNo_"+ackNo,"");
+			 */
 			DatabasePlugin.close(con, ps, null);
 		}
 		return unspecified(mapping, cform, request, response);
