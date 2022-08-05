@@ -101,7 +101,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</html:select>
 							</div>
 						</div>
-
 						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 							<div class="form-group">
 								<label>District</label>
@@ -161,11 +160,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 
 					<div class="row">
-						<div class="col-md-12 col-xs-12">
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 							<input type="button" name="getreport" value="Get Report"
-								class="btn btn-info" onclick="return fnShowCases();" /> <input
-								type="button" name="updateCases" value="Update Cases Data"
+								class="btn btn-info" onclick="return fnShowCases();" />
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<input type="button" name="updateCases" value="Update Cases Data"
 								class="btn btn-warning" onclick="return fnUpdateCasesData();" />
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 							<input type="button" name="updateCases2"
 								value="Import Cases Data" class="btn btn-success"
 								onclick="return fnImportCinosData();" />
@@ -226,100 +229,102 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 									<input type="button" name="getCauseList"
 										value="Import Cause List" class="btn btn-primary"
 										onclick="return fnGetCauseList();" />
-										
+								</div>
+								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 									<input type="button" name="getCauseList"
 										value="Import Cause List Cases" class="btn btn-primary"
 										onclick="return fnGetCauseListCases();" />
-										
-										<input type="button" name="updateCauseList"
+								</div>
+								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+									<input type="button" name="updateCauseList"
 										value="Update Cases" class="btn btn-primary"
-										onclick="return fnUpdateCauseListCases();" />	
+										onclick="return fnUpdateCauseListCases();" />
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+		</div>
+		<div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
-					<div class="ibox">
-						<div class="ibox-head">
-							<div class="ibox-title">Send SMS Alerts to All</div>
-						</div>
-						<div class="ibox-body">
-							<div class="row">
-								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-									<input type="button" name="sendSMSalerts"
-										value="Send Alerts" class="btn btn-success"
-										onclick="return fnSendSMSalerts();" />
-								</div>
-
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-			</div>
-
-			<logic:notEmpty name="CASEWISEACKS">
 				<div class="ibox">
+					<div class="ibox-head">
+						<div class="ibox-title">Send SMS Alerts to All</div>
+					</div>
 					<div class="ibox-body">
-						<div class="table-responsive">
-							<table class="table table-striped table-bordered table-hover"
-								id="example">
-								<thead>
-									<tr>
-										<th>Sl.No</th>
-										<!-- <th></th> -->
-										<th>CINO.</th>
-										<th>Dept code</th>
-										<th>Description</th>
-										<th>Case Type</th>
-										<th>Main Case No.</th>
-										<th>Departments / Respondents</th>
-										<th>Advocate CC No.</th>
-										<th>Advocate Name</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									<logic:iterate id="map" name="CASEWISEACKS" indexId="i">
-										<tr>
-											<td>${i+1 }</td>
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<input type="button" name="sendSMSalerts" value="Send Alerts"
+									class="btn btn-success" onclick="return fnSendSMSalerts();" />
+							</div>
 
-											<%-- <td>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+
+		<logic:notEmpty name="CASEWISEACKS">
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered table-hover"
+							id="example">
+							<thead>
+								<tr>
+									<th>Sl.No</th>
+									<!-- <th></th> -->
+									<th>CINO.</th>
+									<th>Dept code</th>
+									<th>Description</th>
+									<th>Case Type</th>
+									<th>Main Case No.</th>
+									<th>Departments / Respondents</th>
+									<th>Advocate CC No.</th>
+									<th>Advocate Name</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<logic:iterate id="map" name="CASEWISEACKS" indexId="i">
+									<tr>
+										<td>${i+1 }</td>
+
+										<%-- <td>
 												<div class="form-group">
 													<label class="ui-checkbox"> <input type="checkbox"
 														name="caseIds" value="${map.ack_no }" id="caseIds" /> <span
 														class="input-span"></span></label>
 												</div>
 											</td> --%>
-											<td>${map.cino }</td>
-											<td nowrap="nowrap">${map.deptcode }</td>
-											<td>${map.description }</td>
-											<td>${map.total_cases }</td>
-											<td>${map.withsectdept }</td>
-											<td nowrap="nowrap">${map.withmlo }</td>
-											<td>${map.withhod }</td>
-											<td>${map.withnodal }</td>
+										<td>${map.cino }</td>
+										<td nowrap="nowrap">${map.deptcode }</td>
+										<td>${map.description }</td>
+										<td>${map.total_cases }</td>
+										<td>${map.withsectdept }</td>
+										<td nowrap="nowrap">${map.withmlo }</td>
+										<td>${map.withhod }</td>
+										<td>${map.withnodal }</td>
 
-											<td style="text-align: center;" nowrap="nowrap"><div
-													class="row">
-													<div class="col-md-12 col-xs-12">
-														<input type="submit" name="cino" id="cino"
-															class="btn btn-success"
-															onclick="return updateCino('${map.cino}');" />
-													</div>
-												</div></td>
-										</tr>
-									</logic:iterate>
-									<%-- <tr>
+										<td style="text-align: center;" nowrap="nowrap"><div
+												class="row">
+												<div class="col-md-12 col-xs-12">
+													<input type="submit" name="cino" id="cino"
+														class="btn btn-success"
+														onclick="return updateCino('${map.cino}');" />
+												</div>
+											</div></td>
+									</tr>
+								</logic:iterate>
+								<%-- <tr>
 										<td colspan="7" style="text-align: center;"><div class="row">
 												<div class="col-md-12 col-xs-12">
 													<input type="submit" name="cinoTotal" id="cinoTotal" 
@@ -328,26 +333,27 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												</div>
 											</div></td>
 									</tr> --%>
-								</tbody>
-								<tfoot>
-									<tR>
-										<logic:present name="DISPLAYOLD">
-											<td colspan="14">
-										</logic:present>
-										<logic:notPresent name="DISPLAYOLD">
-											<td colspan="12">
-										</logic:notPresent>
-										&nbsp;
-										</td>
-									</tR>
-								</tfoot>
-							</table>
-						</div>
+							</tbody>
+							<tfoot>
+								<tR>
+									<logic:present name="DISPLAYOLD">
+										<td colspan="14">
+									</logic:present>
+									<logic:notPresent name="DISPLAYOLD">
+										<td colspan="12">
+									</logic:notPresent>
+									&nbsp;
+									</td>
+								</tR>
+							</tfoot>
+						</table>
 					</div>
 				</div>
+			</div>
 
 
-			</logic:notEmpty>
+		</logic:notEmpty>
+
 	</html:form>
 </div>
 
@@ -425,16 +431,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		}
 	}
 	function fnGetCauseListCases() {
-		
-			$("#mode").val("retrieveCauseListCases");
-			$("#updateEcourtsDataFormId").submit();
-			///return true;
+
+		$("#mode").val("retrieveCauseListCases");
+		$("#updateEcourtsDataFormId").submit();
+		///return true;
 	}
 	function fnUpdateCauseListCases() {
-		
-			$("#mode").val("updateCauseListCases");
-			$("#updateEcourtsDataFormId").submit();
-			///return true;
+
+		$("#mode").val("updateCauseListCases");
+		$("#updateEcourtsDataFormId").submit();
+		///return true;
 	}
 
 	function updateCino(cino) {

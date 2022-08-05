@@ -161,7 +161,7 @@ body {
 			//$('#example').DataTable();
 		}
 	</script>
-	
+	<script src="assetsnew/js/app.min.js" type="text/javascript"></script>
 	<!-- PAGE LEVEL PLUGINS-->
 	<script src="./assetsnew/vendors/DataTables/datatables.min.js"
 		type="text/javascript"></script>
@@ -197,6 +197,19 @@ body {
 		}
 		if ($('#example2')) {
 			$('#example2').DataTable(
+					{
+						dom : 'Blfrtip',
+						buttons : [ 'print', {
+							extend : 'pdf',
+							orientation : 'landscape'
+						}, 'excel' ],
+						"lengthMenu" : [ [ 10, 25, 50, 100, -1 ],
+								[ 10, 25, 50, 100, "All" ] ]
+					});
+		}
+		
+		if ($('.example3')) {
+			$('.example3').DataTable(
 					{
 						dom : 'Blfrtip',
 						buttons : [ 'print', {

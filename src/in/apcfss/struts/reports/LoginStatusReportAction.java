@@ -87,6 +87,19 @@ public class LoginStatusReportAction extends DispatchAction {
 					else if(CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("GP"))
 					{
 						
+						sql="select u.userid, to_char(firstlogin,'DD/MM/YYYY') as firstlogin, loggedindays , to_char(lastlogin,'DD/MM/YYYY') as lastlogin ,  "
+								+ "case when (lastlogin::date-firstlogin::date) > 1 then (lastlogin::date-firstlogin::date) - (loggedindays -1) else 0 end as notlogedindays, "
+								+ "u.user_description,r.role_name, md.designation as description from ecourts_mst_gps  md "
+								+ " inner join users u on (md.emailid=u.userid) inner join user_roles ur on (u.userid=ur.userid) "
+								+ "inner join roles_mst r on (ur.role_id=r.role_id) "
+								+ "left join (select user_id, min(login_time_date) as firstlogin, count(distinct login_time_date::date) as loggedindays, max(login_time_date) as lastlogin  "
+								+ "from users_track_time group by user_id) a on (md.emailid=a.user_id) order by designation ";
+						
+						request.setAttribute("HEADING", "Government Pleders (GP) Login Status Report ");
+						
+					}
+					else if(CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("MLOS"))
+						{
 						sql = "select u.userid, to_char(firstlogin,'DD/MM/YYYY') as firstlogin, loggedindays , to_char(lastlogin,'DD/MM/YYYY') as lastlogin , "
 								+ " case when (lastlogin::date-firstlogin::date) > 1 then (lastlogin::date-firstlogin::date) - (loggedindays -1) else 0 end as notlogedindays, u.user_description,r.role_name, "
 								+ " d.dept_code as dept_code, d.description from mlo_subject_details  md inner join dept_new d on (md.user_id=d.dept_code)"
@@ -94,10 +107,8 @@ public class LoginStatusReportAction extends DispatchAction {
 								+ " left join (select user_id, min(login_time_date) as firstlogin,"
 								+ " count(distinct login_time_date::date) as loggedindays, max(login_time_date) as lastlogin "
 								+ " from users_track_time group by user_id) a on (md.emailid=a.user_id) order by d.dept_code";
-	
 						
-						
-						request.setAttribute("HEADING", "Government Pleders (GP) Login Status Report ");
+						request.setAttribute("HEADING", "MLO Subject Login Status Report ");
 						
 					}
 					else {

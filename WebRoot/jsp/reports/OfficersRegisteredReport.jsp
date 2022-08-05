@@ -69,7 +69,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<html:select styleId="districtId" property="dynaForm(districtId)"
 								styleClass="form-control">
 								<html:option value="0">---SELECT---</html:option>
-								<html:option value="ALL">ALL</html:option>
+								<%-- <html:option value="ALL">ALL</html:option> --%>
 								<logic:notEmpty name="CommonForm" property="dynaForm(DCLIST)">
 									<html:optionsCollection name="CommonForm"
 										property="dynaForm(DCLIST)" />

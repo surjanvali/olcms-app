@@ -54,7 +54,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									value="MLO" onclick="changeReport();">
 									<span class="input-span"></span>MLO (Legal)</html:radio>
 							</label>
-							 <label class="ui-radio ui-radio-inline"> <html:radio
+							<label class="ui-radio ui-radio-inline"> <html:radio
+									property="dynaForm(officerType)" styleId="officerType"
+									value="MLOS" onclick="changeReport();">
+									<span class="input-span"></span>MLO (Subject)</html:radio>
+							</label>
+							<label class="ui-radio ui-radio-inline"> <html:radio
 									property="dynaForm(officerType)" styleId="officerType"
 									value="NO" onclick="changeReport();">
 									<span class="input-span"></span>Nodal Officers (Legal)</html:radio>
@@ -76,7 +81,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<thead>
 								<tr>
 									<th>Sl.No</th>
-									<th>Department Code</th>
+									<!-- <th>Department Code</th> -->
 									<th>Department</th>
 									<th>Employee Name</th>
 									<th>First Login</th>
@@ -89,7 +94,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<logic:iterate id="map" name="MLOWISEDATA" indexId="i">
 									<tr>
 										<td>${i+1 }.</td>
-										<td>${map.dept_code }</td>
+										<%-- <td>${map.dept_code }</td> --%>
 										<td>${map.description }</td>
 										<td>${map.user_description }</td>
 										<td>${map.firstlogin }</td>
@@ -101,7 +106,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</tbody>
 							<tfoot>
 								<tR>
-									<td colspan="8">&nbsp;</td>
+									<td colspan="7">&nbsp;</td>
 								</tR>
 							</tfoot>
 						</table>

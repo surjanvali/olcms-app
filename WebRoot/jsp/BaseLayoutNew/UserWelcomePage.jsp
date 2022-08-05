@@ -327,6 +327,20 @@ label {
 
 <logic:notEmpty name="SHOWCAUSELISTPOPUP">
 	<script type="text/javascript">
+	function viewCauselistCasesPopup() {
+		var heading = "Causelist";
+		var srclink = "";
+		srclink = "./HighCourtCauseList.do?mode=usersCauseList";
+		// alert("LINK:"+srclink);
+		if (srclink != "") {
+			$("#panel-modal2 .modal-title").html(heading);
+			$("#panel-modal2-page").prop("src", srclink)
+			//$("#MyPopup .modal-body").html(body);
+			$("#panel-modal2").modal("show");
+		}
+		;
+	};
+	
 		$(function() {
 			if ($('#panel-modal2')) {
 				/*$('#panel-modal2').modal({
@@ -360,19 +374,7 @@ label {
 
 		});
 
-		function viewCauselistCasesPopup() {
-			var heading = "Today's Causelist";
-			var srclink = "";
-			srclink = "./HighCourtCauseList.do?mode=usersCauseList";
-			// alert("LINK:"+srclink);
-			if (srclink != "") {
-				$("#panel-modal2 .modal-title").html(heading);
-				$("#panel-modal2-page").prop("src", srclink)
-				//$("#MyPopup .modal-body").html(body);
-				$("#panel-modal2").modal("show");
-			}
-			;
-		};
+		
 	</script>
 </logic:notEmpty>
 </body>

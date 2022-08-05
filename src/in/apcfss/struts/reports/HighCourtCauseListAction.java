@@ -489,55 +489,99 @@ public class HighCourtCauseListAction extends DispatchAction {
 	
 	
 	public ActionForward usersCauseList(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
-        PreparedStatement ps = null;
-        CommonForm cform = (CommonForm) form;
-        Connection con = null;
-        HttpSession session = null;
-        String userId = null, roleId = null, sql = null, causelist_date = null,deptCode=null, sqlCondition = "", actionType = "", deptId = "", deptName = "", heading = "", 
-				 caseStatus = null, distId=null;
-		try {
+            HttpServletResponse response) throws Exception {PreparedStatement ps = null;
+            CommonForm cform = (CommonForm) form;
+            Connection con = null;
+            HttpSession session = null;
+            String userId = null, roleId = null, causelist_date = null,deptCode=null, sqlCondition = "", actionType = "", deptId = "", deptName = "", heading = "", 
+    				 caseStatus = null, distId=null;
+    		try {
 
-			session = request.getSession();
-			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
-			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
-            con = DatabasePlugin.connect();
+    			session = request.getSession();
+    			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+    			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+    			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+                con = DatabasePlugin.connect();
 
-            sql = "select ecc.causelist_date::date as causelist_date ,a.*, "
-					+ " "
-					+ " ra.address "
-					+ " from ecourts_causelist_cases ecc "
-                    + " inner join ecourts_case_data a on (ecc.case_no=a.type_name_reg||'/'||a.reg_no||'/'||a.reg_year) "
-					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
-					+ " inner join dept_new d on (a.dept_code=d.dept_code) "
-					+ " where d.display = true and ecc.causelist_date::date=current_date  ";
-            
-            if(roleId.equals("2") || roleId.equals("10")) {
-            	sql+=" and a.dist_id='"+distId+"'";
+                String sqlYesterday="";
+                String sqlToday="";
+                String sqlTomorrow="";
+                
+                sqlYesterday = "select ecc.causelist_date::date as causelist_date ,a.*, "
+    					+ " ra.address "
+    					+ " from ecourts_causelist_cases ecc "
+                        + " inner join ecourts_case_data a on (ecc.case_no=a.type_name_reg||'/'||a.reg_no||'/'||a.reg_year) "
+    					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
+    					+ " inner join dept_new d on (a.dept_code=d.dept_code) "
+    					+ " where d.display = true  and ecc.causelist_date::date=current_date-1 ";
+                if(roleId.equals("2") || roleId.equals("10")) {
+                	sqlYesterday+=" and a.dist_id='"+distId+"'";
+                }
+                if(!roleId.equals("2")) {
+                	sqlYesterday+=" and a.dept_code='"+deptCode+"'";
+                }
+                sqlYesterday+=" order by ecc.causelist_date::date desc ";
+                System.out.println("sqlYesterday:" + sqlYesterday);
+                List<Map<String, Object>> data = DatabasePlugin.executeQuery(sqlYesterday, con);
+                if (data != null && !data.isEmpty() && data.size() > 0)
+                	request.setAttribute("CAUSELISTCASESYESTERDAY", data);
+                else
+                	request.setAttribute("errorMsgYesterday", "No Causelist details received for Yesterday.");
+                
+                sqlToday = "select ecc.causelist_date::date as causelist_date ,a.*, "
+    					+ " ra.address "
+    					+ " from ecourts_causelist_cases ecc "
+                        + " inner join ecourts_case_data a on (ecc.case_no=a.type_name_reg||'/'||a.reg_no||'/'||a.reg_year) "
+    					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
+    					+ " inner join dept_new d on (a.dept_code=d.dept_code) "
+    					+ " where d.display = true  and ecc.causelist_date::date=current_date ";
+                if(roleId.equals("2") || roleId.equals("10")) {
+                	sqlToday+=" and a.dist_id='"+distId+"'";
+                }
+                if(!roleId.equals("2")) {
+                	sqlToday+=" and a.dept_code='"+deptCode+"'";
+                }
+                sqlToday+=" order by ecc.causelist_date::date desc ";
+                System.out.println("sqlToday:" + sqlToday);
+                data = DatabasePlugin.executeQuery(sqlToday, con);
+                if (data != null && !data.isEmpty() && data.size() > 0)
+                	request.setAttribute("CAUSELISTCASESTODAY", data);
+                else
+                	request.setAttribute("errorMsgToday", "No Causelist details received for Today.");
+                
+                
+                sqlTomorrow = "select ecc.causelist_date::date as causelist_date ,a.*, "
+    					+ " ra.address "
+    					+ " from ecourts_causelist_cases ecc "
+                        + " inner join ecourts_case_data a on (ecc.case_no=a.type_name_reg||'/'||a.reg_no||'/'||a.reg_year) "
+    					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
+    					+ " inner join dept_new d on (a.dept_code=d.dept_code) "
+    					+ " where d.display = true  and ecc.causelist_date::date=current_date+1 ";
+                if(roleId.equals("2") || roleId.equals("10")) {
+                	sqlTomorrow+=" and a.dist_id='"+distId+"'";
+                }
+                if(!roleId.equals("2")) {
+                	sqlTomorrow+=" and a.dept_code='"+deptCode+"'";
+                }
+                sqlTomorrow+=" order by ecc.causelist_date::date desc ";
+                System.out.println("sqlTomorrow:" + sqlTomorrow);
+                 data = DatabasePlugin.executeQuery(sqlTomorrow, con);
+
+                if (data != null && !data.isEmpty() && data.size() > 0)
+                	request.setAttribute("CAUSELISTCASESTOMORROW", data);
+                else
+                	request.setAttribute("errorMsgTomorow", "No Causelist details received for Tomorrow.");
+                
+                
+                request.setAttribute("HEADING", "High Court Cause List ");
+
+            } catch (Exception e) {
+                request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
+                e.printStackTrace();
+            } finally {
+                DatabasePlugin.closeConnection(con);
             }
-            
-            if(!roleId.equals("2")) {
-            	sql+=" and a.dept_code='"+deptCode+"'";
-            }
-            
-            sql+=" order by ecc.causelist_date::date desc ";
-            System.out.println("SQL:" + sql);
-            List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-
-            if (data != null && !data.isEmpty() && data.size() > 0)
-            	request.setAttribute("CAUSELISTCASES", data);
-            else
-            	request.setAttribute("errorMsg", "No Causelist details received for Today.");
-            request.setAttribute("HEADING", "High Court Cause List ");
-
-        } catch (Exception e) {
-            request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
-            e.printStackTrace();
-        } finally {
-            DatabasePlugin.closeConnection(con);
-        }
-        return mapping.findForward("causelistpopup");
-    }
+            return mapping.findForward("causelistpopup");
+      }
 	
 }
