@@ -46,25 +46,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				styleId="MLOAbstractForm">
 				<html:hidden styleId="mode" property="mode" />
 				<html:hidden property="dynaForm(deptId)" styleId="deptId" />
-
-
-				<%-- <div class="row">
-					<div class="col-md-12 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label> Change Request For <bean:message key="mandatory" />
-							</label>
-							<html:select styleId="officerType"
-								property="dynaForm(officerType)" styleClass="select2Class"
-								style="width : 100%;" onchange="changeReport();">
-								<html:option value="0">---SELECT---</html:option>
-								<html:option value="MLO">Middle Level Officer (Legal)</html:option>
-								<html:option value="NO">Nodal Officer (Legal)</html:option>
-							</html:select>
-						</div>
-
-					</div>
-				</div> --%>
-
 				<div class="row">
 					<div class="col-md-12 col-sm-12 col-xs-12">
 						<div class="form-group">
@@ -72,10 +53,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									property="dynaForm(officerType)" styleId="officerType"
 									value="MLO" onclick="changeReport();">
 									<span class="input-span"></span>MLO (Legal)</html:radio>
-							</label> <label class="ui-radio ui-radio-inline"> <html:radio
+							</label>
+							 <label class="ui-radio ui-radio-inline"> <html:radio
 									property="dynaForm(officerType)" styleId="officerType"
 									value="NO" onclick="changeReport();">
 									<span class="input-span"></span>Nodal Officers (Legal)</html:radio>
+							</label>
+							<label class="ui-radio ui-radio-inline"> <html:radio
+									property="dynaForm(officerType)" styleId="officerType"
+									value="GP" onclick="changeReport();">
+									<span class="input-span"></span>Government Pleaders (Gp)</html:radio>
 							</label>
 						</div>
 					</div>

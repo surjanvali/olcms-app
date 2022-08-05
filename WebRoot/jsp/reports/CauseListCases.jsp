@@ -15,6 +15,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <title>Insert title here</title>
 </head>
 <body>
+	<logic:notPresent name="CAUSELISTCASES">
+
+		<logic:notEmpty name="errorMsg">
+			<div class="alert alert-danger" role="alert">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<i class="mdi mdi-block-helper"></i> <strong>${errorMsg}</strong>
+			</div>
+		</logic:notEmpty>
+
+	</logic:notPresent>
 	<logic:present name="CAUSELISTCASES">
 		<div class="table-responsive">
 			<table id="example" class="table table-striped table-bordered"
@@ -33,7 +46,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</tr>
 				</thead>
 				<tbody>
-
 					<logic:iterate id="map" name="CAUSELISTCASES" indexId="i">
 						<tr>
 							<td>${i+1 }.</td>
@@ -53,7 +65,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<td>${map.res_name },${map.address}</td>
 
 							<td>${map.pet_adv }</td>
-							<td>${map.res_adv }</td> </tr>
+							<td>${map.res_adv }</td>
+						</tr>
 					</logic:iterate>
 				</tbody>
 				<tfoot>

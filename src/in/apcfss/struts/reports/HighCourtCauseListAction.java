@@ -103,7 +103,7 @@ public class HighCourtCauseListAction extends DispatchAction {
 			if (data != null && !data.isEmpty() && data.size() > 0)
 				request.setAttribute("causelist", data);
 			else
-				request.setAttribute("errorMsg", "No Records found to display");
+				request.setAttribute("errorMsg", "No Causelist details received for Today.");
 
 			request.setAttribute("HEADING", "High Court Cause List ");
 			cform.setDynaForm("list_date" , cform.getDynaForm("list_date"));
@@ -324,12 +324,13 @@ public class HighCourtCauseListAction extends DispatchAction {
             List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 
             System.out.println("data=" + data);
-            if (data != null && !data.isEmpty() && data.size() > 0)
+            if (data != null && !data.isEmpty() && data.size() > 0) {
                 request.setAttribute("DEPTCAUSELISTCASES", data);
+            }
             else
-                request.setAttribute("errorMsg", "No Records found to display");
+            	request.setAttribute("errorMsg", "No Causelist details received for Today.");
 
-            request.setAttribute("HEADING", "Dpet. Wise Cause List Cases on Dt.:"+date);
+            request.setAttribute("HEADING", "Dept. Wise Cause List Cases on Dt.:"+date);
             cform.setDynaForm("list_date" , cform.getDynaForm("list_date"));
 
         } catch (Exception e) {
@@ -401,7 +402,7 @@ public class HighCourtCauseListAction extends DispatchAction {
             if (data != null && !data.isEmpty() && data.size() > 0)
             	request.setAttribute("CASESLIST", data);
             else
-                request.setAttribute("errorMsg", "No Records found to display");
+            	request.setAttribute("errorMsg", "No Causelist details received for Today.");
 
             request.setAttribute("HEADING", "High Court Cause List ");
             cform.setDynaForm("list_date" , cform.getDynaForm("list_date"));
@@ -470,7 +471,7 @@ public class HighCourtCauseListAction extends DispatchAction {
             if (data != null && !data.isEmpty() && data.size() > 0)
             	request.setAttribute("CASESLIST", data);
             else
-                request.setAttribute("errorMsg", "No Records found to display");
+                request.setAttribute("errorMsg", "No Causelist details received for Today.");
 
             request.setAttribute("HEADING", "High Court Cause List ");
             cform.setDynaForm("list_date" , cform.getDynaForm("list_date"));
@@ -504,8 +505,8 @@ public class HighCourtCauseListAction extends DispatchAction {
             con = DatabasePlugin.connect();
 
             sql = "select ecc.causelist_date::date as causelist_date ,a.*, "
-					+ ""
-					+ "  ra.address "
+					+ " "
+					+ " ra.address "
 					+ " from ecourts_causelist_cases ecc "
                     + " inner join ecourts_case_data a on (ecc.case_no=a.type_name_reg||'/'||a.reg_no||'/'||a.reg_year) "
 					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
@@ -527,7 +528,7 @@ public class HighCourtCauseListAction extends DispatchAction {
             if (data != null && !data.isEmpty() && data.size() > 0)
             	request.setAttribute("CAUSELISTCASES", data);
             else
-                request.setAttribute("errorMsg", "No Records found to display");
+            	request.setAttribute("errorMsg", "No Causelist details received for Today.");
             request.setAttribute("HEADING", "High Court Cause List ");
 
         } catch (Exception e) {

@@ -80,7 +80,7 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 					+ " inner join ecourts_case_finalorder b on (a.cino=b.cino)  "
 					+ " inner join dept_new dn on (a.dept_code=dn.dept_code) " + " "
 					+ " left join ecourts_olcms_case_details ocd on (a.cino=ocd.cino) "
-					+ " where dn.reporting_dept_code='" + userId + "' " +sqlCondition
+					+ " where 1=1 " +sqlCondition
 					+ " group by dist_id, dm.district_name) a1 order by casescount desc";
 
 			request.setAttribute("HEADING", "District Wise Cases Final Orders Implementation Report");

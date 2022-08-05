@@ -1302,10 +1302,14 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 			}
 
 			if (resp != null && !resp.equals("")) {
-				HighCourtCauseListBenchAPI.processApiResponse(resp, estCode, causelistDate, con);
-				retrieveCauseList(estCode, causelistDate, con);
-				con.commit();
-				request.setAttribute("successMsg", "Successfully saved/ Updated Causelist data from ecourts.");
+				boolean causelistStatus = HighCourtCauseListBenchAPI.processApiResponse(resp, estCode, causelistDate, con);
+				if(causelistStatus) {
+					retrieveCauseList(estCode, causelistDate, con);
+					con.commit();
+					request.setAttribute("successMsg", "Successfully saved/ Updated Causelist data from ecourts.");
+				}else {
+					request.setAttribute("errorMsg", "Error No Causelist data received from ecourts.");
+				}
 			}
 
 			System.out.println("CAUSE LIST BENCH END");

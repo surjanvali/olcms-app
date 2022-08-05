@@ -31,40 +31,34 @@ public class OfficersRegisteredReport extends DispatchAction {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			String dist="";
 
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			} else {
 
 				con = DatabasePlugin.connect();
+				cform.setDynaForm("DCLIST", DatabasePlugin.getSelectBox("select district_id,upper(district_name) from district_mst order by district_name", con));
+				 dist=CommonModels.checkStringObject(cform.getDynaForm("districtId"));
 
-				cform.setDynaForm("DCLIST", DatabasePlugin
-						.getSelectBox("select district_id,upper(district_name) from district_mst order by district_name", con));
-						//.getSelectBox("select short_name,upper(district_name) from district_mst order by 1", con));
-
-				if (CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("DNO")) {
+				if ((CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("DNO") && dist.equals("ALL") )) {
 					
-					String dist=CommonModels.checkStringObject(cform.getDynaForm("districtId"));
+					
+					 System.out.println("distdist..."+dist);
+					
+					sql = "select m.dept_id,upper(d.description) as description,trim(nd.fullname_en) as fullname_en, trim(nd.designation_name_en) as designation_name_en,m.mobileno,m.emailid from nodal_officer_details m "
+							+ "inner join (select distinct employee_id,fullname_en,designation_name_en, designation_id from nic_data) nd on (m.employeeid=nd.employee_id and m.designation=nd.designation_id)"
+							+ "inner join users u on (m.emailid=u.userid)"
+							+ "inner join dept_new d on (m.dept_id=d.dept_code)";
+							
+
+					request.setAttribute("HEADING", "Nodal Officer (Legal - District Level) Details ");
+
+						} 
+				
+				else if (CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("DNO") ) {
 					String tableName="";
-					
 					tableName = AjaxModels.getTableName(CommonModels.checkStringObject(dist), con);
-					
-					/*
-					 * if(dist!=null && dist.equals("DC-ATP")) tableName="nic_data_atp"; else
-					 * if(dist!=null && dist.equals("DC-CHT")) tableName="nic_data_ctr"; else
-					 * if(dist!=null && dist.equals("DC-EG")) tableName="nic_data_eg"; else
-					 * if(dist!=null && dist.equals("DC-GNT")) tableName="nic_data_gnt"; else
-					 * if(dist!=null && dist.equals("DC-KDP")) tableName="nic_data_kdp"; else
-					 * if(dist!=null && dist.equals("DC-KNL")) tableName="nic_data_knl"; else
-					 * if(dist!=null && dist.equals("DC-KRS")) tableName="nic_data_krishna"; else
-					 * if(dist!=null && dist.equals("DC-NLR")) tableName="nic_data_nlr"; else
-					 * if(dist!=null && dist.equals("DC-PRK")) tableName="nic_data_pksm"; else
-					 * if(dist!=null && dist.equals("DC-SKL")) tableName="nic_data_sklm"; else
-					 * if(dist!=null && dist.equals("DC-VSP")) tableName="nic_data_vspm"; else
-					 * if(dist!=null && dist.equals("DC-VZM")) tableName="nic_data_vznm"; else
-					 * if(dist!=null && dist.equals("DC-WG")) tableName="nic_data_wg";
-					 */
-					
 
 					sql = "select m.dept_id,upper(d.description) as description,trim(nd.fullname_en) as fullname_en, trim(nd.designation_name_en) as designation_name_en,m.mobileno,m.emailid from nodal_officer_details m "
 							+ "inner join (select distinct employee_id,fullname_en,designation_name_en, designation_id from "+tableName+") nd on (m.employeeid=nd.employee_id and m.designation=nd.designation_id)"
@@ -74,7 +68,9 @@ public class OfficersRegisteredReport extends DispatchAction {
 
 					request.setAttribute("HEADING", "Nodal Officer (Legal - District Level) Details ");
 
-				} else if (CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("NO")) {
+				} 
+				
+				else if (CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("NO")) {
 
 					sql = "select m.dept_id,upper(d.description) as description,trim(nd.fullname_en) as fullname_en, trim(nd.designation_name_en) as designation_name_en,m.mobileno,m.emailid from nodal_officer_details m "
 							+ "    inner join (select distinct employee_id,fullname_en,designation_name_en from nic_data) nd on (m.employeeid=nd.employee_id)"
@@ -84,7 +80,21 @@ public class OfficersRegisteredReport extends DispatchAction {
 
 					request.setAttribute("HEADING", "Nodal Officer (Legal) Details ");
 
-				} else {
+				} 
+				
+				
+			 else if (CommonModels.checkStringObject(cform.getDynaForm("officerType")).equals("MLOSUBJECT")) {
+
+				 		sql="select d.dept_code as dept_id,upper(d.description) as description,b.fullname_en, b.designation_name_en,m.mobileno,m.emailid from mlo_subject_details m " + 
+						" inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en from nic_data) b" + 
+						" on (m.employeeid=b.employee_id and m.designation=b.designation_id)" + 
+						" inner join users u on (m.emailid=u.userid)" + 
+						" inner join dept_new d on (m.user_id=d.dept_code) order by 1";
+
+				request.setAttribute("HEADING", "Middle Level Officers (MLO Subject) Details ");
+
+			} 
+				else {
 					sql = "select d.dept_code as dept_id,upper(d.description) as description,b.fullname_en, b.designation_name_en,m.mobileno,m.emailid from mlo_details m "
 							+ "inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en from nic_data) b on (m.employeeid=b.employee_id and m.designation=b.designation_id)"
 							+ "inner join users u on (m.emailid=u.userid)"

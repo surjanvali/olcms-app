@@ -5,8 +5,7 @@
 String path = request.getContextPath();
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
-<!-- <link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet"
-	type="text/css" /> -->
+
 
 <div class="page-content fade-in-up">
 
@@ -59,6 +58,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<html:option value="MLO">Middle Level Officer (Legal)</html:option>
 								<html:option value="NO">Nodal Officer (Legal)</html:option>
 								<html:option value="DNO">Nodal Officer (Legal - District Level)</html:option>
+								<html:option value="MLOSUBJECT">Middle Level Officer (MLO Subject)</html:option>
 							</html:select>
 						</div>
 
@@ -69,6 +69,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<html:select styleId="districtId" property="dynaForm(districtId)"
 								styleClass="form-control">
 								<html:option value="0">---SELECT---</html:option>
+								<html:option value="ALL">ALL</html:option>
 								<logic:notEmpty name="CommonForm" property="dynaForm(DCLIST)">
 									<html:optionsCollection name="CommonForm"
 										property="dynaForm(DCLIST)" />
@@ -77,39 +78,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 					<div class="col-md-4 col-sm-6 col-xs-12">
-						<button class="btn btn-md btn-success" onclick="changeReport();">Show
+							<div class="form-group">
+						<button class="btn btn-md btn-success" onclick="changeReport();" style="margin-bottom: -67px;">Show
 							Details</button>
+							</div>
 					</div>
 				</div>
-
-				<%-- <div class="row">
-					<div class="col-md-12 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label class="ui-radio ui-radio-inline"> <html:radio
-									property="dynaForm(officerType)" styleId="officerType"
-									value="MLO">
-									<span class="input-span"></span>MLO (Legal)</html:radio>
-							</label> <label class="ui-radio ui-radio-inline"> <html:radio
-									property="dynaForm(officerType)" styleId="officerType"
-									value="NO">
-									<span class="input-span"></span>Nodal Officers (Legal)</html:radio>
-							</label> <label class="ui-radio ui-radio-inline"> <html:radio
-									property="dynaForm(officerType)" styleId="officerType"
-									value="DNO">
-									<span class="input-span"></span>Nodal Officers (Legal - District Level)</html:radio>
-							</label>
-						</div>
-					</div>
-				</div> 
-				<div class="row">
-					<div class="col-md-12 col-sm-12 col-xs-12">
-						<button class="btn btn-md btn-success pull-right"
-							onclick="changeReport();">Show Details</button>
-					</div>
-				</div>
---%>
-
-
 				<logic:notEmpty name="EMPWISEDATA">
 					<hr />
 					<div class="table-responsive">
@@ -176,3 +150,4 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#MLOAbstractForm").submit();
 	}
 </script>
+

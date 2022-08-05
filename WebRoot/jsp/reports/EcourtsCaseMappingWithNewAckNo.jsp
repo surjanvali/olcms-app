@@ -38,8 +38,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden styleId="selectedCaseIds"
 			property="dynaForm(selectedCaseIds)" />
-			<html:hidden styleId="ackNo"
-			property="dynaForm(ackNo)" />
+		<html:hidden styleId="ackNo" property="dynaForm(ackNo)" />
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -168,7 +167,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<div class="ibox">
 					<div class="ibox-body">
 						<div class="table-responsive">
-							<table class="table table-striped table-bordered table-hover"  
+							<table class="table table-striped table-bordered table-hover"
 								id="example">
 								<thead>
 									<tr>
@@ -182,8 +181,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Download / Print</th>
 										<!-- <th>Advocate CC No.</th>
 										<th>Advocate Name</th> -->
-										 <th>Main Case No</th> 
-										
+										<th>Main Case No</th>
+
 										<th>Action</th>
 									</tr>
 								</thead>
@@ -211,8 +210,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td nowrap="nowrap">${map.dept_descs}</td>
 											<%-- <td>${map.advocateccno }</td>
 											<td>${map.advocatename }</td> --%>
-<td style="text-align: center;" nowrap="nowrap">
-											 <logic:notEqual value="-" name="map" property="hc_ack_no">
+											<td style="text-align: center;" nowrap="nowrap"><logic:notEqual
+													value="-" name="map" property="hc_ack_no">
 													<a
 														href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
 														target="_new" title="Scanned Affidavit"
@@ -223,34 +222,43 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 														target="_new" title="Scanned Affidavit"
 														class="btn btn-sm btn-info">
 												</logic:equal> <i class="fa fa-save"></i> <span>Scanned Affidavit</span> </a></td>
-											 <td>
-											<div class="row col-md-12">
-										<div class="row col-md-4">
-											<html:select property="dynaForm(caseType1_${map.ack_no})"
-												styleClass="select2Class" 
-												styleId="caseType1_${map.ack_no}" onchange="getCaseTypedetails();">
-												<html:option value="0">-type select-</html:option>
-												<logic:notEmpty property="dynaForm(caseTypesListShrt)"
-													name="CommonForm">
-													<html:optionsCollection
-														property="dynaForm(caseTypesListShrt)" name="CommonForm" />
-												</logic:notEmpty>
-											</html:select></div>
-										<div class="row col-md-4">
-											
-												
-												<html:text styleId="regYear1_${map.ack_no}" styleClass="form-control"
-												property="dynaForm(regYear1_${map.ack_no})" value="2022" />
-											</div>
-										<div class="row col-md-4">
-											<html:text styleId="mainCaseNo_${map.ack_no}" styleClass="form-control"
-												property="dynaForm(mainCaseNo_${map.ack_no})"  maxlength="7"  onkeypress="return isNumberKey(this);"/></div></div>
-											 
-											 </td> 
-											
-												<td><div class="col-md-12 col-xs-12">
-							<input type="button" name="showcases" value="submit"
-								class="btn btn-success" onclick="return fnShowCasesMap('${map.ack_no}');" /> </div></td>
+											<td>
+												<div class="row col-md-12">
+													<div class="row">
+														<div class="col-md-4">
+															<html:select property="dynaForm(caseType1_${map.ack_no})"
+																styleClass="select2Class"
+																styleId="caseType1_${map.ack_no}"
+																onchange="getCaseTypedetails();">
+																<html:option value="0">---SELECT---</html:option>
+																<logic:notEmpty property="dynaForm(caseTypesListShrt)"
+																	name="CommonForm">
+																	<html:optionsCollection
+																		property="dynaForm(caseTypesListShrt)"
+																		name="CommonForm" />
+																</logic:notEmpty>
+															</html:select>
+														</div>
+														<div class="col-md-4">
+															<html:text styleId="regYear1_${map.ack_no}"
+																styleClass="form-control"
+																property="dynaForm(regYear1_${map.ack_no})" value="2022"
+																readonly="true" />
+														</div>
+														<div class="col-md-4">
+															<html:text styleId="mainCaseNo_${map.ack_no}"
+																styleClass="form-control"
+																property="dynaForm(mainCaseNo_${map.ack_no})"
+																maxlength="7" onkeypress="return isNumberKey(this);" />
+														</div>
+													</div>
+												</div>
+											</td>
+											<td><div class="col-md-12 col-xs-12">
+													<input type="button" name="showcases" value="submit"
+														class="btn btn-success"
+														onclick="return fnShowCasesMap('${map.ack_no}');" />
+												</div></td>
 										</tr>
 									</logic:iterate>
 								</tbody>
@@ -265,7 +273,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										&nbsp;
 										</td>
 									</tR>
-									
+
 								</tfoot>
 							</table>
 						</div>
@@ -315,42 +323,37 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	function fnShowCasesMap(val) {
 		$("#ackNo").val(val);
 		//alert("sss"+$("#caseType1_"+val).val());
-		
-		if ($("#caseType1_"+val).val() == null
-				|| $("#caseType1_"+val).val() == ""
-				|| $("#caseType1_"+val).val() == "0") {
+
+		if ($("#caseType1_" + val).val() == null
+				|| $("#caseType1_" + val).val() == ""
+				|| $("#caseType1_" + val).val() == "0") {
 			alert("Select case Type");
 			return false;
 		}
-		
-		if ($("#regYear1_"+val).val() == null
-				|| $("#regYear1_"+val).val() == ""
-					|| $("#regYear1_"+val).val() == "0") {
+
+		if ($("#regYear1_" + val).val() == null
+				|| $("#regYear1_" + val).val() == ""
+				|| $("#regYear1_" + val).val() == "0") {
 			alert("Select year");
 			return false;
 		}
-		
-		if ($("#mainCaseNo_"+val).val() == null
-				|| $("#mainCaseNo_"+val).val() == ""
-					|| $("#mainCaseNo_"+val).val() == "0") {
+
+		if ($("#mainCaseNo_" + val).val() == null
+				|| $("#mainCaseNo_" + val).val() == ""
+				|| $("#mainCaseNo_" + val).val() == "0") {
 			alert("Enter case No");
 			return false;
 		}
-		
-		
+
 		$("#mode").val("submitDetails");
-		 $("#acksAbstractFormId").submit();
+		$("#acksAbstractFormId").submit();
 		//return true;
 	}
-	
-	
+
 	function fnShowCases() {
 		$("#mode").val("showCaseWise");
 		$("#acksAbstractFormId").submit();
 	}
-
-	
-	
 
 	function showDeptCases(deptid) {
 		$("#districtId").val($("#districtId").val());
@@ -377,6 +380,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	}
 
+	function isNumberKey(evt) {
+		var charCode = (evt.which) ? evt.which : event.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57))
+			return false;
+		return true;
+	}
+
 	function showDepts() {
 		var chkdVal = $("#officerType:checked").val();
 		/* if($("#caseDept"))
@@ -393,7 +403,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				.post("AjaxModels.do", data)
 				.done(
 						function(res) {
-							
+
 							if (res != ''
 									&& (chkdVal == "S-HOD"
 											|| chkdVal == "D-HOD" || chkdVal == "DC-NO")) {
@@ -562,14 +572,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	}
 
 	function fnAssign2DistHOD() {
-		
-	//alert("fnAssign2DistHOD");
-		
+
+		//alert("fnAssign2DistHOD");
+
 		var testval = [];
 		$('#caseIds:checked').each(function() {
 			testval.push($(this).val());
 		});
-		
+
 		//alert("testval--"+testval);
 		$("#selectedCaseIds").val(testval);
 		var chkdVal = $("#officerType:checked").val();
@@ -581,20 +591,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			alert("Select atleast a case to submit.");
 			return false;
 		}
-		
-		
-		
+
 		//alert("chkdVal--"+chkdVal);
-		
+
 		if ($("#caseDist").val() == null || $("#caseDist").val() == ""
 				|| $("#caseDist").val() == "0") {
 			alert("Select District.");
 			$("#caseDist").focus();
 			return false;
 		}
-		
 
-		else if ((chkdVal == "DC-NO" || chkdVal == "DC") && ($("#distDept").val() == null || $("#distDept").val() == "" || $("#distDept").val() == "0")) {
+		else if ((chkdVal == "DC-NO" || chkdVal == "DC")
+				&& ($("#distDept").val() == null || $("#distDept").val() == "" || $(
+						"#distDept").val() == "0")) {
 			alert("Select Department.");
 			$("#distDept").focus();
 			return false;
@@ -607,9 +616,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	}
 
 	function fnAssign2DeptHOD2() {
-		
+
 		//alert("fnAssign2DeptHOD2 ");
-		
+
 		var testval = [];
 		$('#caseIds:checked').each(function() {
 			testval.push($(this).val());

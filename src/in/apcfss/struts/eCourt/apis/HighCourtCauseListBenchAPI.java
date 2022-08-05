@@ -79,7 +79,7 @@ public class HighCourtCauseListBenchAPI {
 		}
 	}
 
-	public static void processApiResponse(String resp, String estCode, String causelistDate, Connection con)
+	public static boolean processApiResponse(String resp, String estCode, String causelistDate, Connection con)
 			throws Exception {
 		String response_str = "";
 		String response_token = "";
@@ -87,7 +87,7 @@ public class HighCourtCauseListBenchAPI {
 		String decryptedRespStr = "";
 		String sql = "";
 		resp = resp.trim();
-
+		boolean causelistStatus= false;
 		System.out.println("processMastersResponse"+resp);
 		if ((resp != null) && (!resp.equals("")) && (!resp.contains("INVALID_"))) {
 			JSONObject jObj = new JSONObject(resp);
@@ -103,38 +103,44 @@ public class HighCourtCauseListBenchAPI {
 			if ((response_str != null) && (!response_str.equals(""))) {
 				decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
 			}
-			//System.out.println("decryptedRespStr:"+decryptedRespStr);
-			JSONObject jObjCaseData = new JSONObject(decryptedRespStr);
-			ArrayList<String> sqls = new ArrayList();
-
-			JSONObject jObjActsInnerData = new JSONObject();
-			if ((jObjCaseData != null)) {
-				for (int i = 1; i <= jObjCaseData.length(); i++) {//jObjActsData.length()
-					
-					if(jObjCaseData.has("case" + i))
-					{
-						jObjActsInnerData = new JSONObject(jObjCaseData.get("case" + i).toString());
+			System.out.println("decryptedRespStr:"+decryptedRespStr);
+			
+			if(decryptedRespStr!=null && !decryptedRespStr.equals("") && !decryptedRespStr.equals("[]")) {
+				JSONObject jObjCaseData = new JSONObject(decryptedRespStr);
+				ArrayList<String> sqls = new ArrayList();
 	
-						sql = "INSERT INTO apolcms.ecourts_causelist_data(est_code, causelist_date , bench_id , judge_name) VALUES('"+estCode+"',to_date('"+causelistDate+"','yyyy-mm-dd'),'"
-								+ ImportECourtsData.checkStringJSONObj(jObjActsInnerData, "bench_id") + "',  '"
-								+ ImportECourtsData.checkStringJSONObj(jObjActsInnerData, "judge_name") + "')";
-						sqls.add(sql);
+				JSONObject jObjActsInnerData = new JSONObject();
+				if ((jObjCaseData != null)) {
+					for (int i = 1; i <= jObjCaseData.length(); i++) {//jObjActsData.length()
+						
+						if(jObjCaseData.has("case" + i))
+						{
+							jObjActsInnerData = new JSONObject(jObjCaseData.get("case" + i).toString());
+		
+							sql = "INSERT INTO apolcms.ecourts_causelist_data(est_code, causelist_date , bench_id , judge_name) VALUES('"+estCode+"',to_date('"+causelistDate+"','yyyy-mm-dd'),'"
+									+ ImportECourtsData.checkStringJSONObj(jObjActsInnerData, "bench_id") + "',  '"
+									+ ImportECourtsData.checkStringJSONObj(jObjActsInnerData, "judge_name") + "')";
+							sqls.add(sql);
+						}
 					}
 				}
+	
+				int executedSqls = 0;
+				if (sqls.size() > 0) {
+					//System.out.println("SQLS:"+sqls);
+					executedSqls = DatabasePlugin.executeBatchSQLs(sqls, con);
+					causelistStatus = true;
+				}
+	
+				System.out.println("Successfully saved..CAUSE LIST .executedSqls:" + executedSqls);
 			}
-
-			int executedSqls = 0;
-			if (sqls.size() > 0) {
-				//System.out.println("SQLS:"+sqls);
-				executedSqls = DatabasePlugin.executeBatchSQLs(sqls, con);
+			else {
+				System.out.println("No Cause List.");
 			}
-
-			System.out.println("Successfully saved..CAUSE LIST .executedSqls:" + executedSqls);
-
 			System.out.println("END");
 		} else {
-			
 			System.out.println("Invalid/Empty Response::" + "SQL:" + sql);
 		}
+		return causelistStatus;
 	}
 }
