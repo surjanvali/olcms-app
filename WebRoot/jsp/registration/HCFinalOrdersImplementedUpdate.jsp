@@ -284,9 +284,12 @@ body {
 							property="dynaForm(judgementOrderOld)">
 							<a
 								href='<bean:write name="CommonForm" property="dynaForm(judgementOrderOld)"/>'
-								target='_new' class="btn btn-sm btn-info">Issued Order</a>
+								target='_new' class="btn btn-sm btn-info">View Uploaded File</a>
 						</logic:notEmpty>
-
+						<logic:notEmpty name="final_order">
+									<%-- <a href="https://apolcms.ap.gov.in/${final_order}" target="_blank"><i class="glyphicon glyphicon-download-alt" aria-hidden="true"></i></a> --%>
+									<a href="https://apolcms.ap.gov.in/${final_order}" target="_blank" class="btn btn-sm btn-info">Issued Order</a>
+								</logic:notEmpty>
 					</div>
 					
 					
@@ -376,21 +379,6 @@ body {
 
 					</div>
 					
-					
-					
-			<%-- 
-						<div class="col-sm-6 form-group counteruploaddiv">
-							<label>Counter File Approve Date</label>
-
-							<div class="input-group date">
-								<span class="input-group-addon bg-white"><i
-									class="fa fa-calendar"></i></span>
-								<html:text styleId="counterApprovedDt"
-									property="dynaForm(counterApprovedDt)"
-									styleClass="form-control datepicker" />
-							</div>
-						</div> --%>
-					
 				
 
 				<div class="row">
@@ -416,77 +404,12 @@ body {
 				<hr />
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<logic:present name="SHOWBACKBTN">
-							<button class="btn btn-md btn-primary" type="submit"
-								name="update" onclick="return sendbackFn();">Send Back</button>
-						</logic:present>
-
-						<logic:empty name="STATUSUPDATEBTN">
+						
+						<%-- <logic:empty name="STATUSUPDATEBTN"> --%>
 							<button class="btn btn-md btn-success" type="submit"
 								name="update" onclick="return updateCaseDetails();">Update
 								Case Details</button>
-						</logic:empty>
-
-						<logic:notEmpty name="STATUSUPDATEBTN">
-							<button class="btn btn-md btn-success" type="submit"
-								name="update" onclick="return updateCaseDetails2();">Update
-								Case Details</button>
-						</logic:notEmpty>
-
-						<logic:notEmpty name="SHOWNOBTN">
-							<button class="btn btn-md btn-success" type="submit"
-								name="forward" onclick="return forwardCase();">Forward
-								to Nodal Officer</button>
-						</logic:notEmpty>
-
-						<logic:notEmpty name="SHOWMLOBTN">
-							<button class="btn btn-md btn-success" type="submit"
-								name="forward" onclick="return forwardCase();">Forward
-								to MLO</button>
-						</logic:notEmpty>
-
-						<logic:notEmpty name="SHOWHODDEPTBTN">
-							<button class="btn btn-md btn-success" type="submit"
-								name="forward" onclick="return forwardCase();">Forward
-								to HOD</button>
-						</logic:notEmpty>
-
-
-						<logic:notEmpty name="SHOWSECDEPTBTN">
-							<button class="btn btn-md btn-success" type="submit"
-								name="forward" onclick="return forwardCase();">Forward
-								to Secretary</button>
-						</logic:notEmpty>
-
-						<logic:notEmpty name="SHOWGPBTN">
-
-							<div class="form-group">
-								<label>Select GP</label>
-								<html:select styleId="gpCode" property="dynaForm(gpCode)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---SELECT GP---</html:option>
-									<logic:notEmpty name="CommonForm" property="dynaForm(GPSLIST)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(GPSLIST)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-
-							<button class="btn btn-md btn-success" type="button"
-								name="forward" onclick="return forwardCase2GP();">Forward
-								to GP for Approval.</button>
-						</logic:notEmpty>
-
-
-						<logic:notEmpty name="SHOWGPAPPROVEBTN">
-
-							<button class="btn btn-md btn-success" type="button"
-								name="forward" onclick="return gpApprove();">Approve</button>
-
-							<button class="btn btn-md btn-danger" type="button"
-								name="forward" onclick="return gpReject();">Return</button>
-
-						</logic:notEmpty>
+						<%-- </logic:empty> --%>
 
 
 					</div>

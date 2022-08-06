@@ -137,179 +137,6 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 		return mapping.findForward("success");
 	}
 
-	public ActionForward getFinalOrdersImplReport(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		Connection con = null;
-		HttpSession session = null;
-		CommonForm cform = (CommonForm) form;
-		String userId = null, roleId = null, sql = null, sqlCondition = "";
-		String  empId = null, empSection = null, empPost = null, condition="", deptId="", deptCode="", distId="";
-
-		try {
-			System.out.println("heiii");
-			session = request.getSession();
-			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
-			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-			
-			
-			deptId = CommonModels.checkStringObject(session.getAttribute("dept_id"));
-			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
-
-			empId = CommonModels.checkStringObject(session.getAttribute("empId"));
-			empSection = CommonModels.checkStringObject(session.getAttribute("empSection"));
-			empPost = CommonModels.checkStringObject(session.getAttribute("empPost"));
-			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
-			
-
-			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
-				return mapping.findForward("Logout");
-			}
-
-			con = DatabasePlugin.connect();
-
-			if (cform.getDynaForm("fromDate") != null && !cform.getDynaForm("fromDate").toString().contentEquals("")) {
-				sqlCondition += " and order_date >= to_date('" + cform.getDynaForm("fromDate") + "','dd-mm-yyyy') ";
-			}
-			if (cform.getDynaForm("toDate") != null && !cform.getDynaForm("toDate").toString().contentEquals("")) {
-				sqlCondition += " and order_date <= to_date('" + cform.getDynaForm("toDate") + "','dd-mm-yyyy') ";
-			}
-			
-			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))
-				sqlCondition += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or a.dept_code='"
-						+ session.getAttribute("dept_code") + "')";
-
-			if (roleId.equals("2") || roleId.equals("10")) {
-				sqlCondition += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
-				cform.setDynaForm("districtId", session.getAttribute("dist_id"));
-			}
-			
-			
-			
-			
-			
-			if(roleId!=null && roleId.equals("4")) { // MLO
-				condition=" and a.dept_code='"+deptCode+"' and a.case_status=2";
-			}
-			else if(roleId!=null && roleId.equals("5")) { // NO
-				condition=" and a.dept_code='"+deptCode+"' and a.case_status=4";
-			}
-			else if(roleId!=null && roleId.equals("8")) { // SECTION OFFICER - SECT. DEPT
-				condition=" and a.dept_code='"+deptCode+"' and a.case_status=5 and a.assigned_to='"+userId+"'";
-			}
-			else if(roleId!=null && roleId.equals("11")) { // SECTION OFFICER - HOD
-				condition=" and a.dept_code='"+deptCode+"' and a.case_status=9 and a.assigned_to='"+userId+"'";
-			}
-			else if(roleId!=null && roleId.equals("12")) { // SECTION OFFICER - DISTRICT
-				condition=" and a.dept_code='"+deptCode+"' and dist_id='"+distId+"' and a.case_status=10 and a.assigned_to='"+userId+"'";
-			}
-			
-			
-			else if(roleId!=null && roleId.equals("3")) { // SECT DEPT
-				condition=" and a.dept_code='"+deptCode+"' and a.case_status=1";
-			}
-			else if(roleId!=null && roleId.equals("9")) { // HOD
-				condition=" and a.dept_code='"+deptCode+"' and a.case_status=3";
-			}
-			else if(roleId!=null && roleId.equals("2")) { // DC
-				condition=" and a.case_status=7 and dist_id='"+distId+"'";
-			}
-			else if(roleId!=null && roleId.equals("10")) { // DC-NO
-				condition=" and a.dept_code='"+deptCode+"' and a.case_status=8 and a.dist_id='"+distId+"'";
-			}
-			else if(roleId!=null && roleId.equals("6")) { // GPO
-				
-				String counter_pw_flag = CommonModels.checkStringObject(request.getParameter("pwCounterFlag"));
-				
-				condition=" and a.case_status=6 and e.gp_id='"+userId+"' ";
-				
-				if(counter_pw_flag.equals("PR")) {
-					// pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6'
-					condition+=" and pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' )";
-				}
-				if(counter_pw_flag.equals("COUNTER")) {
-					//pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6'
-					condition+=" and pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F'";
-				}
-			}
-			
-			if(!roleId.equals("2")) {
-			sql = "select dist_id, district_name, casescount,order_implemented,appeal_filed,  "
-					+ " casescount-(order_implemented + appeal_filed) as pending,   "
-					+ " (order_implemented + appeal_filed)/(4*100) as actoin_taken_percent " + " from ( "
-					+ " select dist_id,dm.district_name,count(distinct a.cino) as casescount,  "
-					+ " sum(case when length(action_taken_order)> 10 then 1 else 0 end) as order_implemented , "
-					+ " sum(case when length(appeal_filed_copy)> 10 then 1 else 0 end) as appeal_filed " + "  "
-					+ " from district_mst dm left join ecourts_case_data a on (a.dist_id=dm.district_id)"
-					+ " inner join ecourts_case_finalorder b on (a.cino=b.cino)  "
-					+ " inner join dept_new dn on (a.dept_code=dn.dept_code) " + " "
-					+ " left join ecourts_olcms_case_details ocd on (a.cino=ocd.cino) "
-					+ " where 1=1  " +sqlCondition+ " "   //dn.reporting_dept_code='" + userId + "'
-					+ " group by dist_id, dm.district_name) a1 order by casescount desc";
-			
-
-			request.setAttribute("HEADING", "District Wise Cases Final Orders Implementation Report");
-
-			System.out.println("SQL:" + sql);
-			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
-			if (data != null && !data.isEmpty() && data.size() > 0)
-				request.setAttribute("FINALORDERSREPORT", data);
-			else
-				request.setAttribute("errorMsg", "No Records found to display");
-			
-			
-			
-			}else {
-				
-
-				sql = "select a.*, b.orderpaths , od.pwr_uploaded, od.counter_filed, od.pwr_approved_gp, coalesce(od.counter_approved_gp,'-') as counter_approved_gp "
-						+ " ,case when pwr_uploaded='Yes' then 'Parawise Remarks Uploaded' else 'Parawise Remarks not Submitted' end as casestatus1,"
-						+ " case when pwr_approved_gp='Yes' then 'Parawise Remarks Approved by GP' else 'Parawise Remarks Not Approved by GP' end as casestatus2,"
-						+ " case when counter_filed='Yes' then 'Counter Filed' else 'Counter Not Filed' end as casestatus3,"
-						+ " case when counter_approved_gp='T' then 'Counter Approved by GP' else 'Counter Not Approved by GP' end as casestatus4 "
-						+ " ,coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, prayer, ra.address "
-						+ " from ecourts_case_data a "
-						+ " left join nic_prayer_data np on (a.cino=np.cino) "
-						+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
-						+ "left join" + " ("
-						+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
-						+ " from "
-						+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-						+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1"
-						+ " union"
-						+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
-						+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-						+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
-						+ " on (a.cino=b.cino) "
-						+ " "
-						+ " left join ecourts_olcms_case_details od on (a.cino=od.cino)"
-						+ " where assigned=true "+condition
-						+ " and coalesce(a.ecourts_case_status,'')!='Closed' "
-						+ " order by a.cino";
-				
-				System.out.println("AssignedCasesToSectionAction unspecified SQL:" + sql);
-				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-				// System.out.println("data=" + data);
-				if (data != null && !data.isEmpty() && data.size() > 0) {
-					request.setAttribute("CASESLIST", data);
-					request.setAttribute("HEADING", "Assigned Cases List");
-				} else {
-					request.setAttribute("errorMsg", "You have Zero cases to Process.");
-				}
-			}
-			
-			
-			
-			
-			
-		} catch (Exception e) {
-			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
-			e.printStackTrace();
-		} finally {
-			DatabasePlugin.closeConnection(con);
-		}
-		return mapping.findForward("success");
-	}
 	
 	public ActionForward caseStatusUpdate(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -333,7 +160,7 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 			}
 
 			cIno = CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
-
+			request.setAttribute("HEADING", "Case Final Order Inmlemented for :" + cIno);
 			if (cIno != null && !cIno.equals("")) {
 				
 				System.out.println("IN CASE STATUS UPDATE METHOD :"+cIno);
@@ -458,11 +285,16 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 				data = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("ACTIVITIESDATA", data);
 				
-				/*
-					sql=" select * from ecourts_olcms_case_details_log where cino='"+cIno+"'";
-					data = DatabasePlugin.executeQuery(sql, con);
-					request.setAttribute("OLCMSCASEDATALOG", data);
-				*/
+				sql="select order_document_path from ecourts_case_finalorder where cino='" + cIno + "' ";
+				System.out.println("ecourts final order SQL:" + sql);
+				List<Map<String, Object>> data_final = DatabasePlugin.executeQuery(sql, con);
+				
+				String final_order=CommonModels.checkStringObject(((Map) data_final.get(0)).get("order_document_path"));
+				
+				request.setAttribute("final_order", final_order);
+
+				
+				System.out.println("url--"+"https://apolcms.ap.gov.in/"+final_order);
 				
 				sql = "SELECT cino, petition_document, counter_filed_document, judgement_order, action_taken_order, last_updated_by, last_updated_on, counter_filed, remarks, ecourts_case_status, corresponding_gp, "
 						+ " pwr_uploaded, to_char(pwr_submitted_date,'dd/mm/yyyy') as pwr_submitted_date, to_char(pwr_received_date,'dd/mm/yyyy') as pwr_received_date, pwr_approved_gp, to_char(pwr_gp_approved_date,'dd/mm/yyyy') as pwr_gp_approved_date, appeal_filed, "
@@ -548,6 +380,8 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 
 			cIno = CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
 			
+			request.setAttribute("HEADING", "Case Final Order Inmlemented for :" + cIno);
+			
 			
 			if (cIno != null && !cIno.equals("")) {
 				
@@ -629,7 +463,7 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 					
 					int a = DatabasePlugin.executeUpdate(sql, con);
 					
-					sql="update ecourts_case_data set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"',section_officer_updated='T' where cino='"+cIno+"'";
+					sql="update ecourts_case_data set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"',section_officer_updated='T',case_status='99' where cino='"+cIno+"'";
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
 					/*
@@ -701,7 +535,7 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 						a += DatabasePlugin.executeUpdate(sql, con);
 					}
 					else {
-						sql="update ecourts_case_data set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"', section_officer_updated='T' where cino='"+cIno+"'";
+						sql="update ecourts_case_data set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"', section_officer_updated='T',case_status='99' where cino='"+cIno+"'";
 						a += DatabasePlugin.executeUpdate(sql, con);
 					}
 					/*
@@ -768,7 +602,7 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 						a += DatabasePlugin.executeUpdate(sql, con);
 					}
 					else {
-						sql="update ecourts_case_data set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"', section_officer_updated='T' where cino='"+cIno+"'";
+						sql="update ecourts_case_data set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"', section_officer_updated='T',case_status='99' where cino='"+cIno+"'";
 						a += DatabasePlugin.executeUpdate(sql, con);
 					}
 					/*

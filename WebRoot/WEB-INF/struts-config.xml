@@ -8,24 +8,21 @@
 			<set-property property="driverClassName"
 				value="org.postgresql.Driver" />
 			<!-- Live -->
-			<set-property property="url"
-				value="jdbc:postgresql://10.96.192.52:5432/apolcms" />
+			<!-- <set-property property="url"
+				value="jdbc:postgresql://10.96.54.54:6432/apolcms" />
 			<set-property property="username" value="apolcms" />
-			<set-property property="password" value="apolcms@123" />
-
-			<!-- <set-property property="url" value="jdbc:postgresql://10.96.54.54:6432/apolcms" 
-				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
-				value="@p0l(m$" /> -->
+			<set-property property="password" value="@p0l(m$" /> -->
 
 			<!-- Test -->
-			<!-- <set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" 
+			<set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" 
 				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
-				value="apolcms" /> -->
+				value="apolcms" />
 
 			<!-- LOCAL -->
-			<!-- <set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" 
-				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
-				value="apolcms" /> -->
+			<!-- <set-property property="url"
+				value="jdbc:postgresql://localhost:5432/apolcms" />
+			<set-property property="username" value="apolcms" />
+			<set-property property="password" value="apolcms" /> -->
 
 
 			<set-property property="minCount" value="5" />
@@ -123,6 +120,7 @@
 			scope="request">
 			<forward name="registerMLO" path="registerMLO"></forward>
 		</action>
+
 
 		<action path="/registerNodal" name="CommonForm"
 			type="in.apcfss.struts.Actions.RegisterNodalOfficerAction"
@@ -284,7 +282,6 @@
 			type="in.apcfss.struts.reports.HighCourtCauseListAction"
 			parameter="mode" scope="request">
 			<forward name="success" path="highcourtcauselist"></forward>
-			<forward name="causelistpopup" path="causelistpopup"></forward>
 		</action>
 
 		<action path="/HCCaseStatusAbstractReport" name="CommonForm"
@@ -335,7 +332,7 @@
 			type="in.apcfss.struts.reports.AcknowledgementAbstractReport"
 			parameter="mode" scope="request">
 			<forward name="success" path="acksabstract"></forward>
-			<forward name="caseview1" path="acksabstractView"></forward>
+			 <forward name="caseview1" path="acksabstractView"></forward>
 		</action>
 
 		<action path="/HCCaseDocsUploadAbstract" name="CommonForm"
@@ -396,22 +393,24 @@
 		</action>
 
 
-
+	
 		<action path="/HighCourtCasesCategoryUpdation"
 			name="CommonForm"
 			type="in.apcfss.struts.reports.HighCourtCasesCategoryUpdationAction"
 			parameter="mode" scope="request">
 			<forward name="success" path="HighCourtCasesCategoryUpdation"></forward>
+			
 		</action>
-
-		<action path="/GPReport" name="CommonForm"
-			type="in.apcfss.struts.reports.GPReportAction" parameter="mode"
-			scope="request">
+		
+		<action path="/GPReport"
+			name="CommonForm"
+			type="in.apcfss.struts.reports.GPReportAction"
+			parameter="mode" scope="request">
 			<forward name="success" path="gpsReport"></forward>
 			<forward name="viewCaseData" path="viewCaseDataPage"></forward>
 		</action>
-
-
+		
+		
 		<action path="/AdvocateRegistation" name="CommonForm"
 			type="in.apcfss.struts.reports.AdvocateRegistationAction"
 			parameter="mode" scope="request">
@@ -419,93 +418,57 @@
 				path="/jsp/BaseLayout/AdvocateRegistration.jsp"></forward>
 			<forward name="regSuccess" path="/Login.do"></forward>
 		</action>
-
-
-
+		
+		
+		
 		<action path="/HighCourtCasesCategoryUpdationReport"
 			name="CommonForm"
 			type="in.apcfss.struts.reports.HighCourtCasesCategoryUpdationReportAction"
 			parameter="mode" scope="request">
 			<forward name="success"
 				path="HighCourtCasesCategoryUpdationReport"></forward>
-			<forward name="caseview1" path="casedetailsview1"></forward>
+			 <forward name="caseview1" path="casedetailsview1"></forward>
 			<forward name="casepopupview1" path="casedetailspopupview1"></forward>
 			<forward name="filecounter" path="filecounter"></forward>
 			<forward name="casestatusupdate" path="casestatusupdate"></forward>
 		</action>
-
-
-
-		<action path="/EcourtsDeptInstruction" name="CommonForm"
+		
+		
+		
+		<action path="/EcourtsDeptInstruction"
+			name="CommonForm"
+			type="in.apcfss.struts.reports.EcourtsDeptInstructionAction"
+			parameter="mode" scope="request">
+			<forward name="success"
+				path="EcourtsDeptInstruction"></forward>
+			 <forward name="caseview1" path="casedetailsview2"></forward>
+			<forward name="casepopupview1" path="casedetailspopupview2"></forward>
+		</action>
+		
+		
+		
+		<action path="/DailyStatusEntry"
+			name="CommonForm"
+			type="in.apcfss.struts.reports.DailyStatusEntryAction"
+			parameter="mode" scope="request">
+			<forward name="success"
+				path="DailyStatusEntry"></forward>
+			 <forward name="caseview1" path="casedetailsview3"></forward>
+			<forward name="casepopupview1" path="casedetailspopupview3"></forward>
+		</action>
+		
+		
+		<!-- <action path="/EcourtsDeptInstruction" name="CommonForm"
 			type="in.apcfss.struts.reports.EcourtsDeptInstructionAction"
 			parameter="mode" scope="request">
 			<forward name="success" path="EcourtsDeptInstruction"></forward>
-			<!-- <forward name="caseview1" path="casedetailsview2"></forward> -->
-			<forward name="casepopupview1" path="casedetailspopupview2"></forward>
-			<forward name="casepopupreport"
-				path="/jsp/reports/EcourtsDeptInstructionView.jsp"></forward>
-		</action>
-
-		<action path="/DailyStatusEntry" name="CommonForm"
-			type="in.apcfss.struts.reports.DailyStatusEntryAction"
-			parameter="mode" scope="request">
-			<forward name="success" path="DailyStatusEntry"></forward>
-			<!-- <forward name="caseview1" path="casedetailsview3"></forward> -->
-			<forward name="casepopupview1" path="casedetailspopupview3"></forward>
-		</action>
-
-		<action path="/HCNewCaseStatusAbstractReport" name="CommonForm"
-			type="in.apcfss.struts.reports.HCNewCaseStatusAbstractReport"
-			parameter="mode" scope="request">
-			<forward name="success" path="HCNewCaseStatusAbstractReport" />
-			<forward name="newcaseview" path="newcasedetailsview" />
-			<forward name="newcasepopupview"
-				path="newcasedetailspopupview" />
-		</action>
-
-		<action path="/ScannedDocumentrReport" name="CommonForm"
-			type="in.apcfss.struts.reports.ScannedDocumentrReportAction"
-			parameter="mode" scope="request">
-			<forward name="success" path="ScannedDocumentrReport"></forward>
-		</action>
-
-		<action path="/registerMLOSubject" name="CommonForm"
-			type="in.apcfss.struts.Actions.RegisterMLOSubjectAction"
-			parameter="mode" scope="request">
-			<forward name="registerMLO" path="registerMLOsub"></forward>
-		</action>
-
-		<action path="/HCCaseDocsUploadAbstractNew" name="CommonForm"
-			type="in.apcfss.struts.reports.HCCaseDocsUploadStatusAbstractReportNew"
-			parameter="mode" scope="request">
-			<forward name="success" path="hccasedocsuploadnew"></forward>
-		</action>
-
-		<action path="/EcourtsCaseMappingWithNewAckNo"
-			name="CommonForm"
-			type="in.apcfss.struts.reports.EcourtsCaseMappingWithNewAckNoAction"
-			parameter="mode" scope="request">
-			<forward name="success" path="EcourtsCaseMappingWithNewAckNo"></forward>
-		</action>
-
-		<action path="/HCFinalOrdersImplemented" name="CommonForm"
-			type="in.apcfss.struts.reports.DistrictWiseFinalOrdersImplementation"
-			parameter="mode" scope="request">
-			<forward name="success" path="page.finalordersimpl"></forward>
-		</action>
-		<action path="/SectionOfficerWiseCaseProcessingReport"
-			name="CommonForm"
-			type="in.apcfss.struts.reports.SectionOfficerWiseCaseProcessingReportAction"
-			parameter="mode" scope="request">
-			<forward name="success"
-				path="SectionOfficerWiseCaseProcessingReport"></forward>
-		</action>
-
+		</action> -->
+		
 		<action path="/HCFinalOrdersImplementedForm" name="CommonForm"
 			type="in.apcfss.struts.Actions.DistrictWiseFinalOrdersImplementationAction"
 			parameter="mode" scope="request">
 			<forward name="success"
-				path="page.HCFinalOrdersImplementedForm"></forward>
+				path="HCFinalOrdersImplementedForm"></forward>
 			<forward name="casestatusupdate"
 				path="HCFinalOrdersImplementedUpdate"></forward>
 		</action>
@@ -521,11 +484,6 @@
 		<set-property property="definitions-parser-validate"
 			value="false" />
 	</plug-in>
-
 	<plug-in className="plugins.DatabasePlugin"></plug-in>
-	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPluginTest"></plug-in> -->
-	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPlugin"/> -->
-	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.DialySchedularsPlugin" 
-		/> -->
-
+	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPlugin" />  -->
 </struts-config>

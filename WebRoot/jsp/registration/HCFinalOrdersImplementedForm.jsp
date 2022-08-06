@@ -58,6 +58,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 	
 		<logic:present name="CASESLIST">
+		<div class="ibox">
+		<div class="ibox-head">
+				<div class="ibox-title">
+					Final order Implemented Cases
+				</div>
+			</div>
 			<div class="ibox-body">
 
 				<div class="table-responsive">
@@ -115,7 +121,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</table>
 				</div>
 
-			</div>
+			</div></div>
 		</logic:present>
 </div>
 	</html:form>
