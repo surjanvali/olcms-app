@@ -97,19 +97,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 										<td>${map.prayer}</td>
 										<td style="text-align: center;">${map.orderpaths }</td>
-										<td style="min-width: 150px !important;color: navy;"><logic:notEqual
-												value="-" name="map" property="counter_approved_gp">
-												<b>${map.casestatus1 } <br />${map.casestatus2 }<br />
-													${map.casestatus3 } <br />${map.casestatus4 }
-												</b>
-											</logic:notEqual> <logic:notEqual value="T" name="map"
-												property="counter_approved_gp">
-												<br />
+										<td style="min-width: 150px !important;color: navy;">
 
 												<button class="btn btn-sm btn-primary"
 													onclick="caseStatusUpdate('${map.cino}');">Update
 													Status</button>
-											</logic:notEqual></td>
+											</td>
 								</logic:iterate>
 							</logic:notEmpty>
 						</tbody>
