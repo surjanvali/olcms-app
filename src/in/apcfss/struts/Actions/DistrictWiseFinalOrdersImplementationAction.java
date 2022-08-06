@@ -285,14 +285,10 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 				data = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("ACTIVITIESDATA", data);
 				
-				sql="select order_document_path from ecourts_case_finalorder where cino='" + cIno + "' ";
+				sql="select * from ecourts_case_finalorder where cino='" + cIno + "' ";
 				System.out.println("ecourts final order SQL:" + sql);
 				List<Map<String, Object>> data_final = DatabasePlugin.executeQuery(sql, con);
-				
-				String final_order=CommonModels.checkStringObject(((Map) data_final.get(0)).get("order_document_path"));
-				
-				request.setAttribute("final_order", final_order);
-
+				String final_order="";
 				
 				System.out.println("url--"+"https://apolcms.ap.gov.in/"+final_order);
 				
@@ -318,6 +314,11 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 				if (data != null) {
 					
 					Map caseData1 = (Map)data.get(0);
+					
+					if (data_final != null && !data_final.isEmpty() && data_final.size() > 0) {
+						///request.setAttribute("RESEXTRAPARTYLIST", data);
+						request.setAttribute("final_order", (((Map) data_final.get(0)).get("order_document_path")).toString());
+					}
 					
 					//cform.setDynaForm("petitionDocumentOld" , CommonModels.checkStringObject(caseData1.get("petition_document")));
 					//cform.setDynaForm("counterFileCopyOld" , CommonModels.checkStringObject(caseData1.get("counter_filed_document")));
