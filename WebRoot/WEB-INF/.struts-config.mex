@@ -140,8 +140,11 @@
   <StrutsActivity path="page.finalordersimpl" location="2150,3250" dimension="139,51" />
   <StrutsActivity path="/EcourtsCaseMappingWithNewAckNo.do" location="2450,3250" dimension="392,96" />
   <StrutsActivity path="EcourtsCaseMappingWithNewAckNo" location="3050,3250" dimension="227,51" />
-  <StrutsActivity path="/SectionOfficerWiseCaseProcessingReport.do" />
-  <StrutsActivity path="SectionOfficerWiseCaseProcessingReport" />
+  <StrutsActivity path="/SectionOfficerWiseCaseProcessingReport.do" location="50,3450" dimension="412,96" />
+  <StrutsActivity path="SectionOfficerWiseCaseProcessingReport" location="650,3450" dimension="247,51" />
+  <StrutsActivity path="/HCFinalOrdersImplementedForm.do" location="3350,1450" dimension="405,96" />
+  <StrutsActivity path="HCFinalOrdersImplementedUpdate" location="3350,1850" dimension="216,51" />
+  <StrutsActivity path="page.HCFinalOrdersImplementedForm" location="3350,2050" dimension="235,51" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,98" />
@@ -155,9 +158,11 @@
     <AutomaticBendpoints>
       <AbsolutePoint location="1556,946" />
       <AbsolutePoint location="1556,1391" />
-      <AbsolutePoint location="3400,1391" />
-      <AbsolutePoint location="3400,2776" />
-      <AbsolutePoint location="2252,2776" />
+      <AbsolutePoint location="3129,1391" />
+      <AbsolutePoint location="3129,1561" />
+      <AbsolutePoint location="3660,1561" />
+      <AbsolutePoint location="3660,2546" />
+      <AbsolutePoint location="2252,2546" />
       <AbsolutePoint location="2252,2501" />
     </AutomaticBendpoints>
   </StrutsTransition>
@@ -224,10 +229,10 @@
   <StrutsTransition id="/DeptMaster.do,success,deptMaster,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="178,946" />
-      <AbsolutePoint location="178,1021" />
-      <AbsolutePoint location="3470,1021" />
-      <AbsolutePoint location="3470,2406" />
-      <AbsolutePoint location="995,2406" />
+      <AbsolutePoint location="178,961" />
+      <AbsolutePoint location="3800,961" />
+      <AbsolutePoint location="3800,2346" />
+      <AbsolutePoint location="995,2346" />
       <AbsolutePoint location="995,2450" />
     </AutomaticBendpoints>
   </StrutsTransition>
@@ -285,8 +290,8 @@
   <StrutsTransition id="/ChangeRequestAbstract.do,success,changereqabstract,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="3412,298" />
-      <AbsolutePoint location="3440,298" />
-      <AbsolutePoint location="3440,2376" />
+      <AbsolutePoint location="3770,298" />
+      <AbsolutePoint location="3770,2376" />
       <AbsolutePoint location="414,2376" />
       <AbsolutePoint location="414,2301" />
     </AutomaticBendpoints>
@@ -313,11 +318,13 @@
   </StrutsTransition>
   <StrutsTransition id="/GPReport.do,viewCaseData,viewCaseDataPage,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="2621,1450" />
-      <AbsolutePoint location="2621,1445" />
-      <AbsolutePoint location="3418,1445" />
-      <AbsolutePoint location="3418,3030" />
-      <AbsolutePoint location="114,3030" />
+      <AbsolutePoint location="2637,1450" />
+      <AbsolutePoint location="2637,1443" />
+      <AbsolutePoint location="3285,1443" />
+      <AbsolutePoint location="3285,1597" />
+      <AbsolutePoint location="3620,1597" />
+      <AbsolutePoint location="3620,3034" />
+      <AbsolutePoint location="114,3034" />
       <AbsolutePoint location="114,3050" />
     </AutomaticBendpoints>
   </StrutsTransition>
@@ -373,6 +380,12 @@
       <AbsolutePoint location="950,3075" />
     </AutomaticBendpoints>
   </StrutsTransition>
+  <StrutsTransition id="/HCFinalOrdersImplementedForm.do,casestatusupdate,HCFinalOrdersImplementedUpdate,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3458,1546" />
+      <AbsolutePoint location="3458,1850" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
   <StrutsTransition id="/HighCourtCasesList.do,success,highcourtcases,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1250,528" />
@@ -392,11 +405,13 @@
   <StrutsTransition id="/AssignedCasesToSection.do,casepopupview,casedetailspopupview,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1443,850" />
-      <AbsolutePoint location="1443,821" />
-      <AbsolutePoint location="2915,821" />
-      <AbsolutePoint location="2915,1421" />
-      <AbsolutePoint location="3370,1421" />
-      <AbsolutePoint location="3370,2516" />
+      <AbsolutePoint location="1443,761" />
+      <AbsolutePoint location="3590,761" />
+      <AbsolutePoint location="3590,1421" />
+      <AbsolutePoint location="3309,1421" />
+      <AbsolutePoint location="3309,1621" />
+      <AbsolutePoint location="3720,1621" />
+      <AbsolutePoint location="3720,2516" />
       <AbsolutePoint location="2520,2516" />
       <AbsolutePoint location="2520,2501" />
     </AutomaticBendpoints>
@@ -430,12 +445,12 @@
   </StrutsTransition>
   <StrutsTransition id="/UpdateCaseDept.do,success,updatecasedept,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="791,946" />
-      <AbsolutePoint location="791,961" />
-      <AbsolutePoint location="3560,961" />
-      <AbsolutePoint location="3560,2346" />
-      <AbsolutePoint location="1307,2346" />
-      <AbsolutePoint location="1307,2450" />
+      <AbsolutePoint location="791,850" />
+      <AbsolutePoint location="791,821" />
+      <AbsolutePoint location="3890,821" />
+      <AbsolutePoint location="3890,2576" />
+      <AbsolutePoint location="1307,2576" />
+      <AbsolutePoint location="1307,2501" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/SearchCase.do,displayAckForm,/GPOAck.do,1" routingType="0">
@@ -484,6 +499,12 @@
       <AbsolutePoint location="2920,1561" />
       <AbsolutePoint location="2920,2475" />
       <AbsolutePoint location="2837,2475" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/HCFinalOrdersImplementedForm.do,success,page.HCFinalOrdersImplementedForm,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3581,1546" />
+      <AbsolutePoint location="3581,2050" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/HighCourtCasesCategoryUpdationReport.do,casepopupview1,casedetailspopupview1,1" routingType="0">
@@ -598,8 +619,8 @@
   </StrutsTransition>
   <StrutsTransition id="/SectionOfficerWiseCaseProcessingReport.do,success,SectionOfficerWiseCaseProcessingReport,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="0,0" />
-      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="462,3475" />
+      <AbsolutePoint location="650,3475" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/LoginStatusReport.do,success,loginstatusreport,1" routingType="0">
@@ -779,10 +800,10 @@
   <StrutsTransition id="/CaseTypesMaster.do,success,casetypesreport,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="3335,698" />
-      <AbsolutePoint location="3530,698" />
-      <AbsolutePoint location="3530,2576" />
-      <AbsolutePoint location="706,2576" />
-      <AbsolutePoint location="706,2501" />
+      <AbsolutePoint location="3860,698" />
+      <AbsolutePoint location="3860,2406" />
+      <AbsolutePoint location="706,2406" />
+      <AbsolutePoint location="706,2450" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/HCCaseStatusAbstractReport.do,success,hccasestatusabstract,1" routingType="0">
@@ -879,8 +900,8 @@
   <StrutsTransition id="/registerNodal.do,success,regNodalOfficer,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="3358,98" />
-      <AbsolutePoint location="3500,98" />
-      <AbsolutePoint location="3500,1991" />
+      <AbsolutePoint location="3830,98" />
+      <AbsolutePoint location="3830,1991" />
       <AbsolutePoint location="1907,1991" />
       <AbsolutePoint location="1907,2050" />
     </AutomaticBendpoints>

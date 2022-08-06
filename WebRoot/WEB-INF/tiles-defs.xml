@@ -372,7 +372,7 @@
 		<put name="content"
 			value="/jsp/reports/HCCaseDocsUploadAbstractReportNew.jsp" />
 	</definition>
-	
+
 	<definition name="page.finalordersimpl"
 		extends="UserLayoutNew">
 		<put name="content"
@@ -391,5 +391,17 @@
 			value="/jsp/reports/SectionOfficerWiseCaseProcessingReport.jsp" />
 	</definition>
 
+	<definition name="page.HCFinalOrdersImplementedForm"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/HCFinalOrdersImplementedForm.jsp" />
+	</definition>
+      
+      
+	<definition name="HCFinalOrdersImplementedUpdate"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/HCFinalOrdersImplementedUpdate.jsp" />
+	</definition>
 
 </tiles-definitions>

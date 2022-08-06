@@ -500,7 +500,16 @@
 			<forward name="success"
 				path="SectionOfficerWiseCaseProcessingReport"></forward>
 		</action>
-		
+
+		<action path="/HCFinalOrdersImplementedForm" name="CommonForm"
+			type="in.apcfss.struts.Actions.DistrictWiseFinalOrdersImplementationAction"
+			parameter="mode" scope="request">
+			<forward name="success"
+				path="page.HCFinalOrdersImplementedForm"></forward>
+			<forward name="casestatusupdate"
+				path="HCFinalOrdersImplementedUpdate"></forward>
+		</action>
+
 	</action-mappings>
 
 	<message-resources
