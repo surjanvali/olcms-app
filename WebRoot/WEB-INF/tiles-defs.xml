@@ -1,12 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
-       "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
-
-<tiles-definitions>
-
-	<!-- DEFINITIONS -->
-
+<?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+<tiles-definitions><!-- DEFINITIONS -->
 	<definition name="UserLayout"
 		page="/jsp/BaseLayout/UserWelcomePage.jsp">
 		<put name="Menu" value="/jsp/BaseLayout/Menu.jsp" />
@@ -210,11 +203,11 @@
 	<definition name="acksabstract" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/AcksAbstractReport.jsp" />
 	</definition>
-<definition name="acksabstractView"
-		extends="modalLayout">
-		<put name="content" value="/jsp/reports/AcksAbstractReportView.jsp" />
-	</definition>
 
+	<definition name="acksabstractView" extends="modalLayout">
+		<put name="content"
+			value="/jsp/reports/AcksAbstractReportView.jsp" />
+	</definition>
 
 	<definition name="hccasedocsupload" extends="UserLayoutNew">
 		<put name="content"
@@ -269,10 +262,6 @@
 		<put name="content"
 			value="/jsp/reports/HighCourtCasesCategoryUpdation.jsp" />
 	</definition>
-	
-	<definition name="casedetailsview3" extends="modalLayout">
-		<put name="content" value="/jsp/reports/HighCourtCasesCategoryUpdationView.jsp" />
-	</definition>
 
 	<definition name="gpdashboard" extends="UserLayoutNew">
 		<put name="content" value="/jsp/BaseLayoutNew/GPContent.jsp" />
@@ -281,7 +270,7 @@
 	<definition name="gpsReport" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/GPsReport.jsp" />
 	</definition>
-	
+
 	<definition name="viewCaseDataPage" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/GPcaseView.jsp" />
 	</definition>
@@ -305,46 +294,107 @@
 		extends="modalLayout">
 		<put name="content" value="/jsp/reports/CategoryUpdationView.jsp" />
 	</definition>
-	
-	
+
+
 	<definition name="EcourtsDeptInstruction"
 		extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/reports/EcourtsDeptInstruction.jsp" />
 	</definition>
-	
-		 <definition name="casedetailsview2" extends="modalLayout">
-		<put name="content" value="/jsp/reports/EcourtsDeptInstructionView.jsp" />
-	</definition>
+
+	<!-- <definition name="casedetailsview2" extends="modalLayout"> <put name="content" 
+		value="/jsp/reports/EcourtsDeptInstructionView.jsp" /> </definition> -->
 
 	<definition name="casedetailspopupview2"
 		extends="modalLayout">
-		<put name="content" value="/jsp/reports/EcourtsDeptInstructionView.jsp" />
-	</definition>
-	
-	
-	<definition name="DailyStatusEntry"
-		extends="UserLayoutNew">
 		<put name="content"
-			value="/jsp/reports/DailyStatusEntry.jsp" />
-	</definition>
-	
-	
-	
-	
-	<definition name="casedetailsview3" extends="UserLayoutNew">
-		<put name="content" value="/jsp/reports/DailyStatusEntryView.jsp" />
-	</definition>
-	
-	<definition name="HCFinalOrdersImplementedForm" extends="UserLayoutNew">
-		<put name="content" value="/jsp/registration/HCFinalOrdersImplementedForm.jsp" />
-	</definition>
-	
-	<definition name="HCFinalOrdersImplementedUpdate" extends="UserLayoutNew">
-		<put name="content" value="/jsp/registration/HCFinalOrdersImplementedUpdate.jsp" />
+			value="/jsp/reports/EcourtsDeptInstructionView.jsp" />
 	</definition>
 
-	
-	
+	<definition name="casedetailspopupview4"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/EcourtsDeptInstructionView.jsp" />
+	</definition>
+
+	<definition name="DailyStatusEntry" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/DailyStatusEntry.jsp" />
+	</definition>
+
+	<!-- <definition name="casedetailsview3" extends="modalLayout"> <put name="content" 
+		value="/jsp/reports/DailyStatusEntryView.jsp" /> </definition> -->
+
+	<definition name="casedetailspopupview3"
+		extends="modalLayout">
+		<put name="content" value="/jsp/reports/DailyStatusEntryView.jsp" />
+	</definition>
+
+	<definition name="HCNewCaseStatusAbstractReport"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/HCNewCaseStatusAbstractReport.jsp" />
+	</definition>
+
+	<definition name="newcasedetailsview"
+		extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/NewCaseDetailsView.jsp" />
+	</definition>
+
+	<definition name="newcasedetailspopupview"
+		extends="modalLayout">
+		<put name="content" value="/jsp/reports/NewCaseDetailsView.jsp" />
+	</definition>
+
+
+	<definition name="ScannedDocumentrReport"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/ScannedDocumentrReport.jsp" />
+	</definition>
+
+	<definition name="registerMLOsub" extends="UserLayoutNew">
+		<put name="content" value="/jsp/registration/registerSubMLO.jsp" />
+	</definition>
+
+	<definition name="causelistpopup" extends="modalLayout">
+		<put name="content" value="/jsp/reports/CauseListCases.jsp" />
+	</definition>
+
+	<definition name="hccasedocsuploadnew"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/HCCaseDocsUploadAbstractReportNew.jsp" />
+	</definition>
+
+	<definition name="page.finalordersimpl"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/DistWiseFinalOrdersImpl.jsp" />
+	</definition>
+
+	<definition name="EcourtsCaseMappingWithNewAckNo"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/EcourtsCaseMappingWithNewAckNo.jsp" />
+	</definition>
+
+	<definition name="SectionOfficerWiseCaseProcessingReport"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/SectionOfficerWiseCaseProcessingReport.jsp" />
+	</definition>
+
+	<definition name="page.HCFinalOrdersImplementedForm"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/HCFinalOrdersImplementedForm.jsp" />
+	</definition>
+      
+      
+	<definition name="HCFinalOrdersImplementedUpdate"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/HCFinalOrdersImplementedUpdate.jsp" />
+	</definition>
 
 </tiles-definitions>

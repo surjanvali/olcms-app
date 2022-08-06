@@ -454,7 +454,7 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 					
 					int a = DatabasePlugin.executeUpdate(sql, con);
 					
-					sql="update ecourts_case_data set final_order_status='"+cform.getDynaForm("ecourtsCaseStatus")+"',no_district_updated='T',case_status='99' where cino='"+cIno+"'";
+					sql="update ecourts_case_data set case_status='99' where cino='"+cIno+"'";
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
 					/*
@@ -521,7 +521,7 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 					
 					int a = DatabasePlugin.executeUpdate(sql, con);
 					
-					sql="update ecourts_case_data set final_order_status='"+cform.getDynaForm("ecourtsCaseStatus")+"',no_district_updated='T',case_status='99' where cino='"+cIno+"'";
+					sql="update ecourts_case_data set case_status='99' where cino='"+cIno+"'";
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
 					/*
@@ -583,7 +583,7 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 					
 					int a = DatabasePlugin.executeUpdate(sql, con);
 					
-					sql="update ecourts_case_data set final_order_status='"+cform.getDynaForm("ecourtsCaseStatus")+"',no_district_updated='T',case_status='99' where cino='"+cIno+"'";
+					sql="update ecourts_case_data set case_status='99' where cino='"+cIno+"'";
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
 					
