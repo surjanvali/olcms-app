@@ -82,6 +82,21 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 					+ " left join ecourts_olcms_case_details ocd on (a.cino=ocd.cino) "
 					+ " where 1=1 " +sqlCondition
 					+ " group by dist_id, dm.district_name) a1 order by casescount desc";
+			
+			sql=" select dm.district_id, dm.district_name, coalesce(d.casescount,'0') casescount,"
+					+ " coalesce(d.order_implemented,'0') order_implemented,  coalesce(d.appeal_filed,'0') appeal_filed,  "
+					+ " coalesce(casescount-(order_implemented + appeal_filed),'0')     as pending,   "
+					+ "  coalesce( (order_implemented + appeal_filed)/(4*100),'0')    as actoin_taken_percent  "
+					+ " from district_mst dm left join ("
+					+ " select dist_id,count(distinct a.cino) as casescount,   "
+					+ " sum(case when length(action_taken_order)> 10 then 1 else 0 end) as order_implemented , "
+					+ " sum(case when length(appeal_filed_copy)> 10 then 1 else 0 end) as appeal_filed    "
+					+ "from  ecourts_case_data a  "
+					+ "inner join ecourts_case_finalorder b on (a.cino=b.cino)  "
+					+ "LEFT join dept_new dn on (a.dept_code=dn.dept_code)  "
+					+ "LEFT join ecourts_olcms_case_details ocd on (a.cino=ocd.cino) "
+					+ "  where 1=1   " +sqlCondition
+					+ " group by dist_id ) d on (dist_id=dm.district_id) order by casescount desc";
 
 			request.setAttribute("HEADING", "District Wise Cases Final Orders Implementation Report");
 
@@ -144,6 +159,16 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 					+ " left join ecourts_olcms_case_details ocd on (a.cino=ocd.cino) "
 					+ " where type_name_reg='CC' " +sqlCondition
 					+ " group by dist_id, dm.district_name) a1 order by casescount desc";
+			
+			sql= "select  district_id,dm.district_name,coalesce(d.casescount,'0') as casescount,coalesce(d.counterscount,'0') as counterscount  "
+					+ "  from district_mst dm left join "
+					+ "( select dist_id,count(distinct a.cino) as casescount,   "
+					+ " sum(case when length(counter_filed_document)> 10 then 1 else 0 end) as counterscount  "
+					+ " from ecourts_case_data a  "
+					+ " LEFT join dept_new dn on (a.dept_code=dn.dept_code)   "
+					+ " LEFT join ecourts_olcms_case_details ocd on (a.cino=ocd.cino)  "
+					+ " where type_name_reg='CC' " +sqlCondition
+					+ " group by a.dist_id  ) d on  (d.dist_id=dm.district_id) order by casescount desc" ;
 
 			request.setAttribute("HEADING", "District Wise Cases Contempt Cases Report");
 
@@ -198,6 +223,15 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 					+ " left join ecourts_olcms_case_details ocd on (a.cino=ocd.cino) "
 					+ " where dt_regis >= current_date - 30  "+sqlCondition 
 					+ " group by dist_id, dm.district_name) a1 order by casescount desc";
+			
+			sql= "select district_id, district_name,coalesce(d.casescount,'0') casescount,coalesce(d.counterscount,'0') counterscount  "
+					+ " from district_mst dm left join  "
+					+ " ( select dist_id,count(distinct a.cino) as casescount,   "
+					+ "  sum(case when length(counter_filed_document)> 10 then 1 else 0 end) as counterscount     "
+					+ " from  ecourts_case_data a inner join dept_new dn on (a.dept_code=dn.dept_code)   "
+					+ " inner join ecourts_olcms_case_details ocd on (a.cino=ocd.cino) "
+					+ " where dt_regis >= current_date - 30   "+sqlCondition 
+					+ "group by dist_id ) d on d.dist_id=dm.district_id order by casescount desc  ";
 
 			request.setAttribute("HEADING", "District Wise Contempt Cases Report");
 
@@ -259,6 +293,15 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 					+ " left join ecourts_olcms_case_details ocd on (a.cino=ocd.cino) "
 					+ " where 1=1 "+sqlCondition
 					+ " group by dist_id, dm.district_name) a1 order by casescount desc";
+			
+			sql ="select district_id, district_name,coalesce(d.casescount,'0') casescount,coalesce(d.counterscount,'0') counterscount "
+					+ " from district_mst dm left join "
+					+ " (select dist_id,count(distinct a.cino) as casescount,   "
+					+ " sum(case when length(counter_filed_document)> 10 then 1 else 0 end) as counterscount      "
+					+ " from  ecourts_case_data a  inner join dept_new dn on (a.dept_code=dn.dept_code)  "
+					+ " left join ecourts_olcms_case_details ocd on (a.cino=ocd.cino)  "
+					+ " where 1=1  "+sqlCondition
+					+ " group by dist_id ) d on d.dist_id=dm.district_id order by casescount desc ";
 
 			request.setAttribute("HEADING", "District Wise Legacy Cases Report");
 

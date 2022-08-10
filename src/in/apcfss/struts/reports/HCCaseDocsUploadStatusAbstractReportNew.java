@@ -25,12 +25,12 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 			HttpServletResponse response) throws Exception {
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql = null;
+		String userId = null, roleId = null, sql = null,deptId=null;
 		try {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-
+			deptId = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			}
@@ -72,11 +72,12 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 					+ "	from ecourts_gpo_ack_depts  a "
 					+ " left join ecourts_olcms_case_details ecod on(a.ack_no=ecod.cino and a.respondent_slno=ecod.respondent_slno)"
 					+ "	left join ecourts_gpo_ack_dtls  b using(ack_no) inner join dept_new dn on (a.dept_code=dn.dept_code)"
-					+ " where  b.ack_type='NEW' "
+					+ " where  b.ack_type='NEW' and a.dept_code='"+deptId+"' "
 					+ "	group by dn.reporting_dept_code,a.dept_code,dn.description "
 					
 					+ ") a1 inner join dept_new dn1 on (a1.reporting_dept_code=dn1.dept_code)  group by a1.reporting_dept_code,dn1.description order by 1";
 			
+			System.out.println("un--->"+sql);
 			
 			request.setAttribute("HEADING", "Sect. Dept. Wise Case processing Abstract Report");
 			

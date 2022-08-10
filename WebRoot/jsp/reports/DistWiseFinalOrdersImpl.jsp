@@ -159,6 +159,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<bean:define id="order_implementedTot" value="0"></bean:define>
 								<bean:define id="appeal_filedTot" value="0"></bean:define>
 								<bean:define id="pendingTot" value="0"></bean:define>
+								<bean:define id="actionTakenTot" value="0"></bean:define>
 
 								<logic:iterate id="map" name="FINALORDERSREPORT" indexId="i">
 									<tr>
@@ -178,6 +179,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										value="${map.appeal_filed + appeal_filedTot}"></bean:define>
 									<bean:define id="pendingTot"
 										value="${map.pending + pendingTot}"></bean:define>
+										<bean:define id="actionTakenTot"
+										value="${map.actoin_taken_percent + actionTakenTot}"></bean:define>
 								</logic:iterate>
 							</tbody>
 							<tfoot>
@@ -187,7 +190,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<td colspan="1" style="text-align: right;">${order_implementedTot }</td>
 									<td colspan="1" style="text-align: right;">${appeal_filedTot }</td>
 									<td colspan="1" style="text-align: right;">${pendingTot }</td>
-									<td colspan="1">&nbsp;</td>
+									<td colspan="1" style="text-align: right;">${actionTakenTot}</td>
 								</tR>
 							</tfoot>
 						</table>
