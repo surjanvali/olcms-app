@@ -152,6 +152,10 @@ body {
 
 <script type="text/javascript">
 	function fnSubmitCategory() {
+		if (($("#instructions").val() == "" || $("#instructions").val() == "0")) {
+			alert("Please Enter Instructions");
+			return false;
+		}
 		$("#mode").val("getSubmitCategory");
 		$("#HighCourtCasesListForm").submit();
 	}
