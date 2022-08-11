@@ -230,7 +230,7 @@ public class AjaxModels extends DispatchAction {
 				String deptCode = (String) request.getParameter("empDept");// DatabasePlugin.getStringfromQuery(sql,
 																			// con);
 				String distCode = (String) request.getParameter("distCode");
-
+				deptCode = deptCode != null && !deptCode.equals("") && !deptCode.equals("0") ? deptCode.substring(0, 5) : "0";
 				tableName = getTableName(distCode, con);
 
 				if (deptCode != null && deptCode != "")
@@ -256,7 +256,7 @@ public class AjaxModels extends DispatchAction {
 				String deptCode = (String) request.getParameter("empDept");// DatabasePlugin.getStringfromQuery(sql,
 																			// con);
 				String distCode = (String) request.getParameter("distCode");
-
+				deptCode = deptCode != null && !deptCode.equals("") && !deptCode.equals("0") ? deptCode.substring(0, 5) : "0";
 				tableName = getTableName(distCode, con);
 
 				if (deptCode != null && deptCode != "")
@@ -285,7 +285,7 @@ public class AjaxModels extends DispatchAction {
 																			// con);
 
 				String distCode = (String) request.getParameter("distCode");
-
+				deptCode = deptCode != null && !deptCode.equals("") && !deptCode.equals("0") ? deptCode.substring(0, 5) : "0";
 				tableName = getTableName(distCode, con);
 
 				if (deptCode != null && deptCode != "")
@@ -313,7 +313,7 @@ public class AjaxModels extends DispatchAction {
 				String sql = "";
 				String deptCode = (String) request.getSession().getAttribute("dept_code");
 				String typeCode = (String) request.getParameter("typeCode");
-
+				// deptCode = deptCode != null && !deptCode.equals("") && !deptCode.equals("0") ? deptCode.substring(0, 5) : "0";
 				if (typeCode != null && !typeCode.equals("") && !typeCode.equals("0")) {
 					// chkdVal=="S-HOD" || chkdVal=="D-HOD"
 					// chkdVal=="SD-SO" || chkdVal=="OD-SO"
@@ -349,7 +349,7 @@ public class AjaxModels extends DispatchAction {
 							// dept where dept_id!=null order by sdeptcode,deptcode";
 							sql = "select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code";
 						}
-						System.out.println(deptCode + ":getEmpsList :sql" + sql);
+						System.out.println(deptCode + ":getDeptList :sql" + sql);
 						ps = con.prepareStatement(sql);
 						rs = ps.executeQuery();
 						if (rs != null) {
