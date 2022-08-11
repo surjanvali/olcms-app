@@ -226,11 +226,11 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 			
 			sql= "select district_id, district_name,coalesce(d.casescount,'0') casescount,coalesce(d.counterscount,'0') counterscount  "
 					+ " from district_mst dm left join  "
-					+ " ( select dist_id,count(distinct a.cino) as casescount,   "
+					+ " ( select dist_id,count(distinct a.ack_no) as casescount,   "
 					+ "  sum(case when length(counter_filed_document)> 10 then 1 else 0 end) as counterscount     "
-					+ " from  ecourts_case_data a inner join dept_new dn on (a.dept_code=dn.dept_code)   "
-					+ " inner join ecourts_olcms_case_details ocd on (a.cino=ocd.cino) "
-					+ " where dt_regis >= current_date - 30   "+sqlCondition 
+					+ " from  ecourts_gpo_ack_depts a inner join ecourts_gpo_ack_dtls b on (a.ack_no=b.ack_no)    "
+					+ " left join ecourts_olcms_case_details ocd on (a.ack_no=ocd.cino) inner join dept_new dn on (a.dept_code=dn.dept_code) "
+					+ " where inserted_time::date >= current_date - 30   "+sqlCondition 
 					+ "group by dist_id ) d on d.dist_id=dm.district_id order by casescount desc  ";
 
 			request.setAttribute("HEADING", "District Wise Contempt Cases Report");
