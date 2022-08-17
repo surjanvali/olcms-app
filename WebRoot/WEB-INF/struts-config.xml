@@ -5,8 +5,7 @@
 	<data-sources>
 		<data-source key="dbsource"
 			type="org.apache.commons.dbcp.BasicDataSource">
-			<set-property property="driverClassName"
-				value="org.postgresql.Driver" />
+			<set-property property="driverClassName" value="org.postgresql.Driver" />
 			<!-- Live -->
 			<set-property property="url"
 				value="jdbc:postgresql://10.96.192.52:5432/apolcms" />
@@ -23,9 +22,10 @@
 				value="apolcms" /> -->
 
 			<!-- LOCAL -->
-			<!-- <set-property property="url" value="jdbc:postgresql://localhost:5432/apolcms" 
-				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
-				value="apolcms" /> -->
+			<!-- <set-property property="url"
+				value="jdbc:postgresql://localhost:5432/apolcms" />
+			<set-property property="username" value="apolcms" />
+			<set-property property="password" value="apolcms" /> -->
 
 
 			<set-property property="minCount" value="5" />
