@@ -244,7 +244,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 			// String cIno = CommonModels.checkStringObject(request.getParameter("cino"));
 			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
 			System.out.println("cIno---"+cIno);
-
+			String instructionsData = cform.getDynaForm("instructions") != null ? cform.getDynaForm("instructions").toString().replace("'", "") : "";
 			/*String fileSeperator=ApplicationVariables.filesepartor;
 			String destinationPath = ApplicationVariables.contextPath + "HighCourtsCaseOrders"+fileSeperator;
 			System.out.println("destinationPath:" + destinationPath);
@@ -267,7 +267,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 			ps = con.prepareStatement(sql);
 			int i = 1;
 			ps.setString(i, cIno);
-			ps.setString(++i, cform.getDynaForm("instructions") != null ? cform.getDynaForm("instructions").toString() : "");
+			ps.setString(++i, instructionsData);
 			ps.setObject(++i, uploadedFilePath);
 			ps.setString(++i, CommonModels.checkStringObject(session.getAttribute("dept_code")));
 			ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
@@ -281,7 +281,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 			System.out.println("a--->"+a);
 			if(a>0) {
 				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks) "
-						+ " values ('" + cIno + "','SUBMITTED INSTRUCTIONS TO GP', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("instructions").toString()+"')";
+						+ " values ('" + cIno + "','SUBMITTED INSTRUCTIONS TO GP', '"+userId+"', '"+request.getRemoteAddr()+"', '"+instructionsData+"')";
 				DatabasePlugin.executeUpdate(sql, con);
 				
 				request.setAttribute("successMsg", "Instructions data saved successfully.");
