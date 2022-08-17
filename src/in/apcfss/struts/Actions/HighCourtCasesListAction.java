@@ -667,7 +667,6 @@ public class HighCourtCasesListAction extends DispatchAction {
 					b+=DatabasePlugin.executeUpdate(sql, con);
 
 					if(b==3){	
-						// String smsText="Your Userid on Finance Department Portal is:"+emailId+" and olcms@2021 is Password. Please do not share your Userid and Password with Others.  -APFINANCE";
 						String smsText="Your User Id is "+emailId+" and Password is olcms@2021 to Login to https://apolcms.ap.gov.in/ Portal. Please do not share with anyone. \r\n-APOLCMS";
 						String templateId="1007784197678878760";
 						
