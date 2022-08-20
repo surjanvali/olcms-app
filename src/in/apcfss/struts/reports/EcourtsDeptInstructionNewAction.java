@@ -72,7 +72,7 @@ public class EcourtsDeptInstructionNewAction extends DispatchAction {
 
 			cform.setDynaForm("caseTypesListShrt", DatabasePlugin.getSelectBox( "select  upper(trim(case_short_name)) as sno,upper(trim(case_short_name)) as case_full_name from case_type_master order by sno", con));
 			cform.setDynaForm("AckList", DatabasePlugin.getSelectBox( "select b.ack_no,b.ack_no from ecourts_gpo_ack_dtls a "
-					+ " inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no) where 1=1  "+sqlCondition+" order by b.ack_no", con));
+					+ " inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no) where 1=1 and respondent_slno='1'  "+sqlCondition+"  order by b.ack_no", con));
 			cform.setDynaForm("oldNewType", "Legacy");
 			ArrayList selectData = new ArrayList();
 			for (int i = 2022; i > 1980; i--) {
@@ -179,10 +179,10 @@ public class EcourtsDeptInstructionNewAction extends DispatchAction {
 
 
 				if(roleId.equals("5") || roleId.equals("9")) {//NO & HOD
-					sqlCondition +=" and dept_code='" + deptCode + "' ";
+					sqlCondition +=" and a.dept_code='" + deptCode + "' ";
 				}
 				else if(roleId.equals("3") || roleId.equals("4")) {//MLO & Sect. Dept.
-					sqlCondition +=" and dept_code='" + deptCode + "' ";
+					sqlCondition +=" and a.dept_code='" + deptCode + "' ";
 				}
 				else if(roleId.equals("8") || roleId.equals("11") || roleId.equals("12")) {
 					sqlCondition +="  and assigned_to='"+userid+"'";
@@ -215,7 +215,15 @@ public class EcourtsDeptInstructionNewAction extends DispatchAction {
 				data = DatabasePlugin.executeQuery(sql, con);
 				if (data != null && !data.isEmpty() && data.size() > 0) {
 					request.setAttribute("CASESLISTOLD", data);
-
+					cform.setDynaForm("cino", ((Map) data.get(0)).get("cino"));
+					
+					sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + ((Map) data.get(0)).get("cino") + "'  order by 1 ";
+					System.out.println("sql--" + sql);
+					List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
+					request.setAttribute("existDataOld", existData);
+					
+					
+					
 				} else {
 					request.setAttribute("errorMsg", "No Records Found");
 				}
@@ -237,6 +245,14 @@ public class EcourtsDeptInstructionNewAction extends DispatchAction {
 				data = DatabasePlugin.executeQuery(sql, con);
 				if (data != null && !data.isEmpty() && data.size() > 0) {
 					request.setAttribute("CASESLISTNEW", data);
+					
+					cform.setDynaForm("cino", ackNoo);
+					//	request.setAttribute("cinooo", ackNoo);
+
+					sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + ackNoo + "'  order by 1 ";
+					System.out.println("sql--" + sql);
+					List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
+					request.setAttribute("existDataNew", existData);
 
 				} else {
 					request.setAttribute("errorMsg", "No Records Found");
@@ -244,7 +260,7 @@ public class EcourtsDeptInstructionNewAction extends DispatchAction {
 			}
 			
 			cform.setDynaForm("AckList", DatabasePlugin.getSelectBox( "select b.ack_no,b.ack_no from ecourts_gpo_ack_dtls a "
-					+ " inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no) where 1=1  "+Condition+" order by b.ack_no", con));
+					+ " inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no) where 1=1 and respondent_slno='1'   "+Condition+" order by b.ack_no", con));
 
 			cform.setDynaForm("caseTypesListShrt", DatabasePlugin.getSelectBox( "select  upper(trim(case_short_name)) as sno,upper(trim(case_short_name)) as case_full_name from case_type_master order by sno", con));
 
@@ -253,29 +269,6 @@ public class EcourtsDeptInstructionNewAction extends DispatchAction {
 				selectData.add(new LabelValueBean(i+"",i+""));
 			}
 			cform.setDynaForm("yearsList", selectData);
-
-			request.setAttribute("deptCode", deptCode);
-
-			cform.setDynaForm("currentDeptId", deptCode);
-
-			if(caseType.equals("New")) {
-				cform.setDynaForm("cino", ackNoo);
-				//	request.setAttribute("cinooo", ackNoo);
-
-				sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + ackNoo + "'  order by 1 ";
-				System.out.println("sql--" + sql);
-				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
-				request.setAttribute("existDataNew", existData);
-
-			}else {
-				cform.setDynaForm("cino", ((Map) data.get(0)).get("cino"));
-				//request.setAttribute("cinooo", ((Map) data.get(0)).get("cino"));
-
-				sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + ((Map) data.get(0)).get("cino") + "'  order by 1 ";
-				System.out.println("sql--" + sql);
-				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
-				request.setAttribute("existDataOld", existData);
-			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -326,10 +319,10 @@ public class EcourtsDeptInstructionNewAction extends DispatchAction {
 
 
 			if(roleId.equals("5") || roleId.equals("9")) {//NO & HOD
-				Condition +=" and dept_code='" + deptCode + "' ";
+				Condition +=" and a.dept_code='" + deptCode + "' ";
 			}
 			else if(roleId.equals("3") || roleId.equals("4")) {//MLO & Sect. Dept.
-				Condition +=" and dept_code='" + deptCode + "' ";
+				Condition +=" and a.dept_code='" + deptCode + "' ";
 			}
 			else if(roleId.equals("8") || roleId.equals("11") || roleId.equals("12")) {
 				Condition +="  and assigned_to='"+userid+"'";
