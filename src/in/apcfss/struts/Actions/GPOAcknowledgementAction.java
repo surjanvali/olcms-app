@@ -285,7 +285,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 					"select distinct designation_id,upper(trim(designation_name_en)) designation_name_en from nic_Data where designation_id is not null and designation_id!='' and designation_name_en  is not null  and designation_name_en!='' order by 2",
 					con));
 			cform.setDynaForm("gpsList", DatabasePlugin.getSelectBox(
-					"select emailid,first_name||' '||last_name||' - '||designation from ecourts_mst_gps",
+					"select emailid, full_name||' - '||coalesce(designation,'') from ecourts_mst_gps",
 					con));
 			if(CommonModels.checkStringObject(cform.getDynaForm("ackType")).equals("") || CommonModels.checkStringObject(cform.getDynaForm("ackType")).equals("0")) {
 				cform.setDynaForm("ackType", "NEW");

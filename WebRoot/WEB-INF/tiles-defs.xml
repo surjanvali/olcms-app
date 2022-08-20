@@ -397,4 +397,10 @@
 			value="/jsp/registration/HCFinalOrdersImplementedUpdate.jsp" />
 	</definition>
 
+	<definition name="nextlistdtreport"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/NextListingDtAbstractReport.jsp" />
+	</definition>
+	
 </tiles-definitions>

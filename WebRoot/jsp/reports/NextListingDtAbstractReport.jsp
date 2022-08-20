@@ -9,7 +9,7 @@ String path = request.getContextPath();
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <div class="page-content fade-in-up">
-	<html:form action="/HCCaseDocsUploadAbstract"
+	<html:form action="/NextListingDtAbstract"
 		styleId="HCCaseStatusAbstract">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden property="dynaForm(deptId)" styleId="deptId" />
@@ -61,13 +61,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Sect. Department Code</th>
 									<th>Sect. Department Name</th>
 									<th>Total Cases</th>
-
-									<th>Scanned by APOLCMS Cell</th>
-									<th>Petition Uploaded by Dept.</th>
-									<th>Closed</th>
-									<th>Counter filed</th>
-									<th>Parawise Remarks Uploaded</th>
-									<th>Parawise Remarks Approved by GP</th>
+									<th>Hearing Today</th>
+									<th>Hearing Tomorrow</th>
+									<th>With in this week</th>
+									<th>7 - 14 days.</th>
+									<th>14 - 21 days</th>
+									<th>21 - 28 days</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -85,33 +84,27 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${map.deptcode }</td>
 										<td><a
 											href="javascript:ShowHODWise('${map.deptcode}','${map.description }');">${map.description }</a></td>
+										<td style="text-align: right;">${map.total }</td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','ALL');">${map.total_cases }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','today');">${map.today }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','SCANNEDDOC');">${map.olcms_uploads }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','tomorrow');">${map.tomorrow }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','PET');">${map.petition_uploaded }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','week1');">${map.week1 }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','CLOSED');">${map.closed_cases }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','week2');">${map.week2 }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','COUNTERUPLOADED');">${map.counter_uploaded }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','week3');">${map.week3 }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','PWRUPLOADED');">${map.pwrcounter_uploaded }</a></td>
-										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','GPCOUNTER');">${map.counter_approved_gp }</a></td>
-											
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','week4');">${map.week4 }</a></td>
 									</tr>
-									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
-									<bean:define id="pettTotals" value="${pettTotals + map.petition_uploaded }"></bean:define>
-									<bean:define id="scanTotals" value="${scanTotals + map.olcms_uploads }"></bean:define>
-									<bean:define id="closedTotals"
-										value="${closedTotals + map.closed_cases }"></bean:define>
-									<bean:define id="countersTotals"
-										value="${countersTotals + map.counter_uploaded }"></bean:define>
-									<bean:define id="pwrTotals"
-										value="${pwrTotals + map.pwrcounter_uploaded }"></bean:define>
-									<bean:define id="gpoTotals"
-										value="${gpoTotals + map.gpoTotals }"></bean:define>
+									<bean:define id="Totals" value="${Totals + map.total }"></bean:define>
+									<bean:define id="pettTotals" value="${pettTotals + map.tomorrow }"></bean:define>
+									<bean:define id="scanTotals" value="${scanTotals + map.today }"></bean:define>
+									<bean:define id="closedTotals" value="${closedTotals + map.week1 }"></bean:define>
+									<bean:define id="countersTotals" value="${countersTotals + map.week2 }"></bean:define>
+									<bean:define id="pwrTotals" value="${pwrTotals + map.week3 }"></bean:define>
+									<bean:define id="gpoTotals" value="${gpoTotals + map.week4 }"></bean:define>
 								</logic:iterate>
 							</tbody>
 							<tfoot>
@@ -139,14 +132,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Department Code</th>
 									<th>Department Name</th>
 									<th>Total Cases</th>
+									<th>Hearing Today</th>
+									<th>Hearing Tomorrow</th>
+									<th>With in this week</th>
+									<th>7 - 14 days.</th>
+									<th>14 - 21 days</th>
+									<th>21 - 28 days</th>
 
-									<th>Scanned by APOLCMS Cell</th>
-									<th>Petition Uploaded by Dept.</th>
-									
-									<th>Closed</th>
-									<th>Counter filed</th>
-									<th>Parawise Remarks Uploaded</th>
-									<th>Parawise Remarks Approved by GP</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -163,33 +155,27 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${i+1 }</td>
 										<td>${map.deptcode }</td>
 										<td>${map.description }</td>
+										<td style="text-align: right;">${map.total }</td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','ALL');">${map.total_cases }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','today');">${map.today }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','SCANNEDDOC');">${map.olcms_uploads }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','tomorrow');">${map.tomorrow }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','PET');">${map.petition_uploaded }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','week1');">${map.week1 }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','CLOSED');">${map.closed_cases }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','week2');">${map.week2 }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','COUNTERUPLOADED');">${map.counter_uploaded }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','week3');">${map.week3 }</a></td>
 										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','PWRUPLOADED');">${map.pwrcounter_uploaded }</a></td>
-										<td style="text-align: right;"><a
-											href="javascript:showCasesWise('${map.deptcode}','${map.description }','GPCOUNTER');">${map.counter_approved_gp }</a></td>
+											href="javascript:showCasesWise('${map.deptcode}','${map.description }','week4');">${map.week4 }</a></td>
 									</tr>
-									<bean:define id="Totals" value="${Totals + map.total_cases }"></bean:define>
-									<bean:define id="scanTotals" value="${scanTotals + map.olcms_uploads }"></bean:define>
-									<bean:define id="pettTotals"
-										value="${pettTotals + map.petition_uploaded }"></bean:define>
-									<bean:define id="closedTotals"
-										value="${closedTotals + map.closed_cases }"></bean:define>
-									<bean:define id="countersTotals"
-										value="${countersTotals + map.counter_uploaded }"></bean:define>
-									<bean:define id="pwrTotals"
-										value="${pwrTotals + map.pwrcounter_uploaded }"></bean:define>
-									<bean:define id="gpoTotals"
-										value="${gpoTotals + map.gpoTotals }"></bean:define>
+									<bean:define id="Totals" value="${Totals + map.total }"></bean:define>
+									<bean:define id="pettTotals" value="${pettTotals + map.tomorrow }"></bean:define>
+									<bean:define id="scanTotals" value="${scanTotals + map.today }"></bean:define>
+									<bean:define id="closedTotals" value="${closedTotals + map.week1 }"></bean:define>
+									<bean:define id="countersTotals" value="${countersTotals + map.week2 }"></bean:define>
+									<bean:define id="pwrTotals" value="${pwrTotals + map.week3 }"></bean:define>
+									<bean:define id="gpoTotals" value="${gpoTotals + map.week4 }"></bean:define>
 								</logic:iterate>
 							</tbody>
 							<tfoot>

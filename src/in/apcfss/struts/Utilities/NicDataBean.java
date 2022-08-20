@@ -2,14 +2,11 @@ package in.apcfss.struts.Utilities;
 
 public class NicDataBean {
 
-	private String employee_code, employee_id, entity, global_org_id,
-			global_org_name, fullname_en, designation_id, designation_name_en,
-			post_name_en, org_unit_name_en, parentou, marking_abbr, mobile1,
-			mobile2, uid, email, address_type, address1, address2, city,
-			post_office, is_primary, is_ou_head, statecode, state,
-			districtcode, district, tehsilcode, tehsil, villagecode, village,
-			panchayatcode, panchayat, habitationcode, habitation,
-			constituencycode, constituency;
+	private String employee_code, employee_id, entity, global_org_id, global_org_name, fullname_en, designation_id,
+			designation_name_en, post_name_en, org_unit_name_en, parentou, marking_abbr, mobile1, mobile2, uid, email,
+			address_type, address1, address2, city, post_office, is_primary, is_ou_head, statecode, state, districtcode,
+			district, tehsilcode, tehsil, villagecode, village, panchayatcode, panchayat, habitationcode, habitation,
+			constituencycode, constituency, dist_id;
 
 	public String getEmployee_code() {
 		return employee_code;
@@ -305,6 +302,14 @@ public class NicDataBean {
 
 	public void setConstituency(String constituency) {
 		this.constituency = constituency;
+	}
+
+	public String getDist_id() {
+		return dist_id;
+	}
+
+	public void setDist_id(String dist_id) {
+		this.dist_id = dist_id;
 	}
 
 }

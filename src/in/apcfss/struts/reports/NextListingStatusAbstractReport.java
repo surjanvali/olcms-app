@@ -19,7 +19,7 @@ import org.apache.struts.actions.DispatchAction;
 
 import plugins.DatabasePlugin;
 
-public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
+public class NextListingStatusAbstractReport extends DispatchAction {
 	@Override
 	public ActionForward unspecified(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -44,16 +44,18 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 			{
 			con = DatabasePlugin.connect();
 				
-				sql="select a1.reporting_dept_code as deptcode,dn1.description,sum(total_cases) as  total_cases,sum(olcms_uploads) as olcms_uploads, sum(petition_uploaded) as petition_uploaded,sum(closed_cases) as closed_cases, "
-						+ " sum(counter_uploaded) as counter_uploaded, sum(pwrcounter_uploaded) as pwrcounter_uploaded,sum(counter_approved_gp) as counter_approved_gp "
+				sql="select a1.reporting_dept_code as deptcode,dn1.description,sum(total) as  total,sum(today) as today, sum(tomorrow) as tomorrow,sum(week1) as week1, "
+						+ " sum(week2) as week2, sum(week3) as week3,sum(week4) as week4 "
 						+ " from ( "
-						+ " select case when reporting_dept_code='CAB01' then a.dept_code else reporting_dept_code end as reporting_dept_code,a.dept_code,count(*) as total_cases"
-						+ ",sum(case when scanned_document_path is not null and length(scanned_document_path)>10 then 1 else 0 end) as olcms_uploads, sum(case when petition_document is not null and length(petition_document)>10 then 1 else 0 end) as petition_uploaded "
-						+ ", sum(case when a.ecourts_case_status='Closed' then 1 else 0 end) as closed_cases "
-						+ ", sum(case when a.ecourts_case_status='Pending' and counter_filed_document is not null and length(counter_filed_document)>10  then 1 else 0 end) as counter_uploaded"
-						+ ", sum(case when a.ecourts_case_status='Pending' and pwr_uploaded_copy is not null and length(pwr_uploaded_copy)>10  then 1 else 0 end) as pwrcounter_uploaded "
-						+ ", sum(case when counter_approved_gp='Yes' then 1 else 0 end) as counter_approved_gp from ecourts_case_data a "
-						+ " left join apolcms.ecourts_olcms_case_details b using (cino)inner join dept_new dn on (a.dept_code=dn.dept_code) ";
+						+ " select case when reporting_dept_code='CAB01' then a.dept_code else reporting_dept_code end as reporting_dept_code,a.dept_code,count(*) as total"
+						+ ",sum(case when date_next_list = current_date then 1 else 0 end) as today,"
+						+ "sum(case when date_next_list = current_date+1 then 1 else 0 end) as tomorrow,"
+						+ "sum(case when date_next_list > current_date and date_next_list <= current_date+7  then 1 else 0 end) as week1,  "
+						+ "sum(case when date_next_list > current_date+7 and date_next_list <= current_date+14  then 1 else 0 end) as week2,  "
+						+ "sum(case when date_next_list > current_date+14 and date_next_list <= current_date+21  then 1 else 0 end) as week3,  "
+						+ "sum(case when date_next_list > current_date+21 and date_next_list <= current_date+28  then 1 else 0 end) as week4"
+						+ " from ecourts_case_data a "
+						+ " inner join dept_new dn on (a.dept_code=dn.dept_code) ";
 						
 
 						if(roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
@@ -69,7 +71,7 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 						+ " group by a1.reporting_dept_code,dn1.description"
 						+ " order by 1";
 
-			request.setAttribute("HEADING", "Sect. Dept. Wise Case processing Abstract Report");
+			request.setAttribute("HEADING", "Sect. Dept. Wise Cases Hearing Abstract Report");
 
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -120,13 +122,18 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 			
 			
 			
-			sql = "select a.dept_code as deptcode,dn.description,count(*) as total_cases,sum(case when scanned_document_path is not null and length(scanned_document_path)>10 then 1 else 0 end) as olcms_uploads, "
-					+ "sum(case when petition_document is not null and length(petition_document)>10  then 1 else 0 end) as petition_uploaded  "
-					+ ", sum(case when a.ecourts_case_status='Closed' then 1 else 0 end) as closed_cases "
-					+ ",sum(case when a.ecourts_case_status='Pending' and counter_filed_document is not null  and length(counter_filed_document)>10 then 1 else 0 end) as counter_uploaded ,"
-					+ " sum(case when a.ecourts_case_status='Pending' and pwr_uploaded_copy is not null  and length(pwr_uploaded_copy)>10 then 1 else 0 end) as pwrcounter_uploaded  ,"
-					+ " sum(case when counter_approved_gp='Yes' then 1 else 0 end) as counter_approved_gp from ecourts_case_data a "
-					+ " left join apolcms.ecourts_olcms_case_details b using (cino) "
+			sql = "select a.dept_code as deptcode,dn.description,"
+					
+				+ " count(*) as total"
+				+ ",sum(case when date_next_list = current_date then 1 else 0 end) as today,"
+				+ "sum(case when date_next_list = current_date+1 then 1 else 0 end) as tomorrow,"
+				+ "sum(case when date_next_list > current_date and date_next_list <= current_date+7  then 1 else 0 end) as week1,  "
+				+ "sum(case when date_next_list > current_date+7 and date_next_list <= current_date+14  then 1 else 0 end) as week2,  "
+				+ "sum(case when date_next_list > current_date+14 and date_next_list <= current_date+21  then 1 else 0 end) as week3,  "
+				+ "sum(case when date_next_list > current_date+21 and date_next_list <= current_date+28  then 1 else 0 end) as week4"
+				+ " from ecourts_case_data a "
+
+
 					+ " inner join dept_new dn on (a.dept_code=dn.dept_code) "
 					+ " where dn.display = true and (dn.reporting_dept_code='" + deptId + "' or a.dept_code='" + deptId
 					+ "') ";
@@ -139,7 +146,7 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 					// + "where dn.reporting_dept_code='AGC01' or a.dept_code='AGC01' "
 					sql+= "group by a.dept_code,dn.description order by 1";
 
-			request.setAttribute("HEADING", "HOD Wise Case processing Abstract for " + deptName);
+			request.setAttribute("HEADING", "HOD Wise Cases Abstract (Hearing) for " + deptName);
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			System.out.println("data=" + data);
@@ -182,63 +189,37 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 			heading="Cases List for "+deptName;
 			
 			if(!caseStatus.equals("")) {
-				if(caseStatus.equals("CLOSED")){
-						sqlCondition= " and coalesce(a.ecourts_case_status,'')='Closed' ";
-						heading+=" Closed Cases List";
+				if(caseStatus.equals("today")){
+						sqlCondition= " and date_next_list = current_date ";
+						heading+=" Hearing on Today";
 					}
-				if(caseStatus.equals("PET")) {
-					sqlCondition=" and petition_document is not null and length(petition_document)>10 ";
-					heading+=" Petition Documets Uploaded";
+				if(caseStatus.equals("tomorrow")) {
+					sqlCondition=" and date_next_list = current_date+1 ";
+					heading+=" Hearing on Tomorrow";
 				}
-				if(caseStatus.equals("COUNTERUPLOADED")) {
-					sqlCondition=" and counter_filed_document is not null  and length(counter_filed_document)>10  ";
-					heading+=" Counter Uploaded Cases";
+				if(caseStatus.equals("week1")) {
+					sqlCondition=" and date_next_list > current_date and date_next_list <= current_date+7  ";
+					heading+=" Hearing on next 7 days";
 				}
-				if(caseStatus.equals("PWRUPLOADED")) {
-					sqlCondition= " and pwr_uploaded_copy is not null  and length(pwr_uploaded_copy)>10 ";
-					heading+=" Parawise Remarks Uploaded Cases List";
+				if(caseStatus.equals("week2")) {
+					sqlCondition= " and date_next_list > current_date+7 and date_next_list <= current_date+14 ";
+					heading+=" Hearing on next 8 - 14 days";
 				}
-				if(caseStatus.equals("GPCOUNTER")) {
-					sqlCondition=" and counter_approved_gp='Yes' ";
-					heading+=" and Counters Filed";
+				if(caseStatus.equals("week3")) {
+					sqlCondition=" and date_next_list > current_date+14 and date_next_list <= current_date+21 ";
+					heading+=" Hearing on next 15 - 21 days";
 				}
-				if(caseStatus.equals("SCANNEDDOC")) {
-					sqlCondition=" and scanned_document_path is not null and length(scanned_document_path)>10 ";
-					heading+=" and Documents Scanned at APOLCMS Cell, High Court";
+				if(caseStatus.equals("week4")) {
+					sqlCondition=" and date_next_list > current_date+21 and date_next_list <= current_date+28 ";
+					heading+=" Hearing on next 21 - 28 days";
 				}
 			}
-			
-			if(actionType.equals("SDWISE")) {
-			}
-			else if(actionType.equals("HODWISE")) {
-			}
-			
-			sql = "select a.*, b.orderpaths from ecourts_case_data a left join"
-					+ " ("
-					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
-					+ " from "
-					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1"
-					+ " union"
-					+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
-					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
-					+ " on (a.cino=b.cino) "
-					+ " left join apolcms.ecourts_olcms_case_details cd on (a.cino=cd.cino) "
-					+ "	inner join dept_new d on (a.dept_code=d.dept_code) where d.display = true "
-					+ "";
-			
-			
-			
 			
 			sql = "select a.*, "
-					+ ""
-					// + "n.global_org_name as globalorgname, n.fullname_en as fullname, n.designation_name_en as designation, n.mobile1 as mobile, n.email as email, "
 					+ ""
 					+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer, ra.address from ecourts_case_data a "
 					+ " left join nic_prayer_data np on (a.cino=np.cino)"
 					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
-					//+ "inner join nic_data n on (a.assigned_to=n.email) "
 					+ " left join"
 					+ " ("
 					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
@@ -256,6 +237,8 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 			}
 			
 			sql += " and (reporting_dept_code='" + deptCode + "' or a.dept_code='" + deptCode + "') " + sqlCondition;
+			
+			sql +=" order by date_next_list asc";
 			
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

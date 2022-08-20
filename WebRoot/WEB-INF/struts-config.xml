@@ -7,14 +7,15 @@
 			type="org.apache.commons.dbcp.BasicDataSource">
 			<set-property property="driverClassName" value="org.postgresql.Driver" />
 			<!-- Live -->
-			<set-property property="url"
+			<!-- <set-property property="url"
 				value="jdbc:postgresql://10.96.192.52:5432/apolcms" />
 			<set-property property="username" value="apolcms" />
-			<set-property property="password" value="apolcms@123" />
+			<set-property property="password" value="apolcms@123" /> -->
 
-			<!-- <set-property property="url" value="jdbc:postgresql://10.96.54.54:6432/apolcms" 
-				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
-				value="@p0l(m$" /> -->
+			<!-- <set-property property="url" 
+					value="jdbc:postgresql://10.96.54.54:6432/apolcms" /> 
+			<set-property property="username" value="apolcms" /> 
+			<set-property property="password" value="@p0l(m$" /> -->
 
 			<!-- Test -->
 			<!-- <set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" 
@@ -22,10 +23,10 @@
 				value="apolcms" /> -->
 
 			<!-- LOCAL -->
-			<!-- <set-property property="url"
+			<set-property property="url"
 				value="jdbc:postgresql://localhost:5432/apolcms" />
 			<set-property property="username" value="apolcms" />
-			<set-property property="password" value="apolcms" /> -->
+			<set-property property="password" value="apolcms" />
 
 
 			<set-property property="minCount" value="5" />
@@ -508,6 +509,12 @@
 				path="page.HCFinalOrdersImplementedForm"></forward>
 			<forward name="casestatusupdate"
 				path="HCFinalOrdersImplementedUpdate"></forward>
+		</action>
+
+		<action path="/NextListingDtAbstract" name="CommonForm"
+			type="in.apcfss.struts.reports.NextListingStatusAbstractReport"
+			parameter="mode" scope="request">
+			<forward name="success" path="nextlistdtreport"></forward>
 		</action>
 
 	</action-mappings>
