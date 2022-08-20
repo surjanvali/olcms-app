@@ -318,8 +318,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<!-- <th>Assigned to</th> -->
 										<th>Date of Filing</th>
 										<!-- <th>Case Type</th>
-									<th>Reg.No.</th>
-									<th>Reg. Year</th> -->
+										<th>Reg.No.</th>
+										<th>Reg. Year</th> -->
 
 										<th>Case Reg No.</th>
 										<th>Prayer</th>
@@ -378,7 +378,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												${map.fullname} - ${map.designation} <br />
 												${map.mobile} - ${map.email}
 											</td> --%>
-											<td><logic:notEmpty name="map" property="date_of_filing">
+											
+											
+											<td nowrap="nowrap"><logic:notEmpty name="map" property="date_of_filing">
 													<logic:notEqual value="0001-01-01" name="map"
 														property="date_of_filing">
 																	${map.date_of_filing }
@@ -388,15 +390,32 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<%-- <td>${map.type_name_fil }</td>
 										<td>${map.reg_no}</td>
 										<td>${map.reg_year }</td> prayer --%>
-											<td>${map.type_name_fil }/${map.reg_no} / ${map.reg_year }</td>
-											<td style="width: 300px;">${map.prayer }</td>
+											<td nowrap="nowrap" >${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
+											<td style="min-width: 300px;text-align: justify;"><logic:notEmpty
+												name="map" property="prayer">
+
+												<logic:equal value="-" name="map" property="prayer">
+												N/A
+												</logic:equal>
+
+												<logic:notEqual value="-" name="map" property="prayer">
+										
+										
+										${map.prayer }
+										
+										<button class="btn btn-info btn-xs" data-container="body"
+														data-toggle="popover" data-trigger="hover"
+														data-placement="top" data-content="${map.prayer_full }"
+														data-original-title="" title="">View More</button>
+												</logic:notEqual>
+											</logic:notEmpty></td>
 
 											<td>${map.fil_no}</td>
 											<td>${map.fil_year }</td>
-											<td><logic:notEmpty name="map" property="date_next_list">
+											<td nowrap="nowrap"><logic:notEmpty name="map" property="date_next_list">
 													<logic:notEqual value="0001-01-01" name="map"
 														property="date_next_list">
-																	${map.date_of_filing }
+																	${map.date_next_list }
 																</logic:notEqual>
 												</logic:notEmpty></td>
 											<td>${map.bench_name }</td>

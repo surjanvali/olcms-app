@@ -556,14 +556,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 															Affidavit</span></a>
 												</logic:notEqual>
 											</logic:notEmpty></td>
-										<td nowrap="nowrap">${map.current_status}<logic:notEmpty
-												name="map" property="fullname">
-												<br />
-												<%-- ${map.globalorgname}<br /> --%>
-												${map.fullname} <br /> ${map.designation} <br />
-												${map.mobile} <br /> ${map.email}</logic:notEmpty>
+										<td nowrap="nowrap"><span style="color: navy;font-weight: bold;text-align: center;"> ${map.current_status}</span>
+										
+											<logic:notEmpty name="map" property="fullname"><logic:notEqual value=" " name="map" property="fullname"><br />${map.fullname}</logic:notEqual></logic:notEmpty>
+											<logic:notEmpty name="map" property="designation"><logic:notEqual value=" " name="map" property="designation"><br /> ${map.designation}</logic:notEqual></logic:notEmpty>
+											<logic:notEmpty name="map" property="mobile"><logic:notEqual value=" " name="map" property="mobile"><br /> ${map.mobile}</logic:notEqual></logic:notEmpty>
+											<logic:notEmpty name="map" property="email"><logic:notEqual value=" " name="map" property="email"><br /> ${map.email}</logic:notEqual></logic:notEmpty>
+											<logic:notEmpty name="map" property="district_name"><logic:notEqual value=" " name="map" property="district_name"><br /> ${map.district_name}</logic:notEqual></logic:notEmpty>
+												<%-- ${map.globalorgname}<br /> 
+												 ${map.designation} <br />
+												${map.mobile} <br /> ${map.email} <br /> ${map.district_name }--%>
 										</td>
-										<td><logic:notEmpty name="map" property="date_of_filing">
+										<td nowrap="nowrap"><logic:notEmpty name="map" property="date_of_filing">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_of_filing">
 																	${map.date_of_filing }
@@ -573,12 +577,29 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<%-- <td>${map.type_name_fil }</td>
 										<td>${map.reg_no}</td>
 										<td>${map.reg_year }</td> prayer --%>
-										<td>${map.type_name_fil }/${map.reg_no} / ${map.reg_year }</td>
-										<td style="width: 300px;">${map.prayer }</td>
+										<td nowrap="nowrap">${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
+										<td style="min-width: 350px;text-align: justify;"><logic:notEmpty
+												name="map" property="prayer">
+
+												<logic:equal value="-" name="map" property="prayer">
+												N/A
+												</logic:equal>
+
+												<logic:notEqual value="-" name="map" property="prayer">
+										
+										
+										${map.prayer }
+										
+										<button class="btn btn-info btn-xs" data-container="body"
+														data-toggle="popover" data-trigger="hover"
+														data-placement="top" data-content="${map.prayer_full }"
+														data-original-title="" title="">View More</button>
+												</logic:notEqual>
+											</logic:notEmpty></td>
 
 										<td>${map.fil_no}</td>
 										<td>${map.fil_year }</td>
-										<td><logic:notEmpty name="map" property="date_next_list">
+										<td nowrap="nowrap"><logic:notEmpty name="map" property="date_next_list">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_next_list">
 																	${map.date_next_list }

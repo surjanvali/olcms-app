@@ -5,38 +5,14 @@
 String path = request.getContextPath();
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
-<link rel='stylesheet'
-	href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
-<link rel='stylesheet'
-	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
+
 <link rel='stylesheet'
 	href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 
 <link href="./assetsnew/vendors/select2/dist/css/select2.min.css"
 	rel="stylesheet" />
-<!-- <link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet" type="text/css" /> -->
-
-<!-- PLUGINS STYLES-->
-<link href="./assetsnew/vendors/DataTables/datatables.min.css"
-	rel="stylesheet" />
 <!-- THEME STYLES-->
 <link href="assetsnew/css/main.min.css" rel="stylesheet" />
-<style>
-.myDiv {
-	border: 5px outset red;
-	background-color: lightblue;
-	text-align: center;
-}
-</style>
-<!-- START PAGE CONTENT-->
-<div class="page-heading">
-	<h1 class="page-title">
-		<logic:notEmpty name="HEADING">
-					High Court Cases List
-				</logic:notEmpty>
-	</h1>
-
-</div>
 <div class="page-content fade-in-up">
 	<html:form method="post" action="/EcourtsDeptInstructionNew"
 		styleId="HighCourtCasesListForm" enctype="multipart/form-data">
@@ -86,15 +62,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="form-group">
 								<label class="ui-radio ui-radio-inline"> <html:radio
 										property="dynaForm(oldNewType)" styleId="oldNewType"
-										value="New" onchange="caseTypeSelect();">
-										<span class="input-span"></span>
-										<b>New Cases</b>
-									</html:radio>
-								</label> <label class="ui-radio ui-radio-inline"> <html:radio
-										property="dynaForm(oldNewType)" styleId="oldNewType"
 										value="Legacy" onchange="caseTypeSelect();">
 										<span class="input-span"></span>
 										<b>Legacy Cases</b>
+									</html:radio>
+								</label> <label class="ui-radio ui-radio-inline"> <html:radio
+										property="dynaForm(oldNewType)" styleId="oldNewType"
+										value="New" onchange="caseTypeSelect();">
+										<span class="input-span"></span>
+										<b>New Cases</b>
 									</html:radio>
 								</label>
 
@@ -106,8 +82,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="form-group">
 								<label> Main Case No. (WP/WA/AS/CRP Nos.) </label>
 
-								<div class="row col-md-12">
-									<div class="row col-md-4">
+								<div class="row">
+									<div class="col-md-4">
 										<html:select property="dynaForm(caseType1)"
 											styleClass="select2Class" style="width: 100%;"
 											styleId="caseType1" onchange="getCaseTypedetails();">
@@ -157,15 +133,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</html:select>
 						</div>
 					</div>
-					<br>
 					<div class="row">
 						<div class="col-md-12 col-xs-12">
-							<input type="submit" name="submit" value="Get Cases"
+							<input type="submit" name="submit" value="Get Case Details"
 								class="btn btn-success" onclick="return fnShowCases();" />
 						</div>
 					</div>
-
-
 				</div>
 			</div>
 
@@ -183,6 +156,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>CINo</th>
 										<th>Scanned Affidavit</th>
 										<!-- <th>Assigned to</th> -->
+										<th>Current Status</th>
 										<th>Date of Filing</th>
 										<!-- <th>Case Type</th>
 									<th>Reg.No.</th>
@@ -227,29 +201,68 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 																Affidavit</span></a>
 													</logic:notEqual>
 												</logic:notEmpty></td>
-											<%-- <td nowrap="nowrap">${map.globalorgname}<br />
-												${map.fullname} - ${map.designation} <br />
-												${map.mobile} - ${map.email}
-											</td> --%>
-											<td><logic:notEmpty name="map" property="date_of_filing">
+
+											<td nowrap="nowrap"><span
+												style="color: navy;font-weight: bold;text-align: center;">
+													${map.current_status}</span> <logic:notEmpty name="map"
+													property="fullname">
+													<logic:notEqual value=" " name="map" property="fullname">
+														<br />${map.fullname}</logic:notEqual>
+												</logic:notEmpty> <logic:notEmpty name="map" property="designation">
+													<logic:notEqual value=" " name="map" property="designation">
+														<br /> ${map.designation}</logic:notEqual>
+												</logic:notEmpty> <logic:notEmpty name="map" property="mobile">
+													<logic:notEqual value=" " name="map" property="mobile">
+														<br /> ${map.mobile}</logic:notEqual>
+												</logic:notEmpty> <logic:notEmpty name="map" property="email">
+													<logic:notEqual value=" " name="map" property="email">
+														<br /> ${map.email}</logic:notEqual>
+												</logic:notEmpty> <logic:notEmpty name="map" property="district_name">
+													<logic:notEqual value=" " name="map"
+														property="district_name">
+														<br /> ${map.district_name}</logic:notEqual>
+												</logic:notEmpty> <%-- ${map.globalorgname}<br /> 
+												 ${map.designation} <br />
+												${map.mobile} <br /> ${map.email} <br /> ${map.district_name }--%>
+											</td>
+											<td nowrap="nowrap"><logic:notEmpty name="map"
+													property="date_of_filing">
 													<logic:notEqual value="0001-01-01" name="map"
 														property="date_of_filing">
 																	${map.date_of_filing }
 																</logic:notEqual>
 												</logic:notEmpty></td>
 
-											<%-- <td>${map.type_name_fil }</td>
-										<td>${map.reg_no}</td>
-										<td>${map.reg_year }</td> prayer --%>
-											<td>${map.type_name_fil }/${map.reg_no}/ ${map.reg_year }</td>
-											<td style="width: 300px;">${map.prayer }</td>
+											<td nowrap="nowrap">${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
+											<td
+												style="min-width: 350px;t
+											ext-align: justify;">
+												<logic:notEmpty name="map" property="prayer">
+
+													<logic:equal value="-" name="map" property="prayer">
+												N/A
+												</logic:equal>
+
+													<logic:notEqual value="-" name="map" property="prayer">
+										
+										
+										${map.prayer }
+										
+										<button class="btn btn-info btn-xs" data-container="body"
+															data-toggle="popover" data-trigger="hover"
+															data-placement="top" data-content="${map.prayer_full }"
+															data-original-title="" title="">View More</button>
+													</logic:notEqual>
+												</logic:notEmpty>
+											</td>
 
 											<td>${map.fil_no}</td>
 											<td>${map.fil_year }</td>
-											<td><logic:notEmpty name="map" property="date_next_list">
+											<td nowrap="nowrap"><logic:notEmpty name="map"
+													property="date_next_list">
 													<logic:notEqual value="0001-01-01" name="map"
 														property="date_next_list">
-																	${map.date_of_filing }
+																	${map.date_next_list }
 																</logic:notEqual>
 												</logic:notEmpty></td>
 											<td>${map.bench_name }</td>
@@ -268,7 +281,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</tbody>
 								<tfoot>
 									<tR>
-										<td colspan="19">&nbsp;</td>
+										<td colspan="20">&nbsp;</td>
 									</tR>
 								</tfoot>
 							</table>
@@ -276,17 +289,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 				<div class="ibox oldTypediv">
-					<%-- <div class="ibox-head">
-				<div class="ibox-title">
-					<h4 class="m-t-0 header-title">
-						<b>Submit New Instruction for ${cinooo}</b>
-					</h4>
-				</div>
-			</div> --%>
 					<div class="ibox-body">
 						<html:hidden styleId="cino" property="dynaForm(cino)" />
 						<div class="row oldTypediv">
-							<div class="col-md-6 col-xs-12">
+							<div class="col-md-6 col-xs-12 pull-right">
 								<b> Instructions: </b>
 							</div>
 							<div class="col-md-6 col-xs-12">
@@ -295,13 +301,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									cols="50" rows="5">
 								</html:textarea>
 							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
+						</div>
+						<div class="row oldTypediv">
+							<div class="col-md-6 col-xs-12 pull-right">
 								<b> Upload file: </b>
 							</div>
-
-
-
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+							<div class="col-md-6 col-xs-12">
 								<html:file property="changeLetter" styleId="changeLetter"
 									styleClass="form-control"></html:file>
 							</div>
@@ -400,12 +405,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<tfoot>
 								<tR>
 									<logic:present name="DISPLAYOLD">
-										<td colspan="14">
+										<td colspan="14">&nbsp;
 									</logic:present>
 									<logic:notPresent name="DISPLAYOLD">
-										<td colspan="12">
+										<td colspan="12">&nbsp;
 									</logic:notPresent>
-									&nbsp;
 									</td>
 								</tR>
 							</tfoot>
@@ -416,17 +420,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 
 			<div class="ibox NewTypediv">
-				<%-- <div class="ibox-head">
-				<div class="ibox-title">
-					<h4 class="m-t-0 header-title">
-						<b>Submit New Instruction for ${cinooo}</b>
-					</h4>
-				</div>
-			</div> --%>
 				<div class="ibox-body">
 					<html:hidden styleId="cino" property="dynaForm(cino)" />
 					<div class="row NewTypediv">
-						<div class="col-md-6 col-xs-12">
+						<div class="col-md-6 col-xs-12 pull-right">
 							<b> Instructions: </b>
 						</div>
 						<div class="col-md-6 col-xs-12">
@@ -435,13 +432,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								cols="50" rows="5">
 							</html:textarea>
 						</div>
-						<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
+						<div class="col-md-6 col-xs-12 pull-right">
 							<b> Upload file: </b>
 						</div>
-
-
-
-						<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+						<div class="col-md-6 col-xs-12">
 							<html:file property="changeLetter" styleId="changeLetter"
 								styleClass="form-control"></html:file>
 						</div>
@@ -456,8 +450,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 			</div>
-			<%-- </logic:notEmpty> --%>
-
 		</logic:notEmpty>
 </div>
 
@@ -589,8 +581,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script
 	src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
-<script
-	src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js'></script>
 
 <script src="./assetsnew/vendors/select2/dist/js/select2.full.min.js"
 	type="text/javascript"></script>
@@ -602,23 +592,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	$(document).ready(function() {
 		$(".select2Class").select2();
-		$('.input-group.date').datepicker({
-			format : "dd-mm-yyyy"
-		});
 		if ($('#example2')) {
 			$('#example2').DataTable();
 		}
-
-		// alert("Cases filed in the year 2021 listed below. To view and process other cases please use the Year filter or select From and To dates. Press the 'Get Cases' button for the Cases List.");
-		$('#panel-modal').modal({
-			backdrop : 'static',
-			keyboard : false
-		});
-		$('#panel-modal').modal('show');
-
-		$(".btnClosePopup").click(function() {
-			$("#panel-modal").modal("hide");
-		});
 	});
 
 	function backFn() {
@@ -630,56 +606,55 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		var chkdVal = $("#oldNewType:checked").val();
 		//alert (chkdVal);
-		
+
 		//caseTypeSelect();
-		
+
 		if ((chkdVal == null || chkdVal == "" || chkdVal == "0")) {
-	alert("Select Type Of Case");
-	$("#oldNewType").focus();
-	return false;
-}
+			alert("Select Type Of Case");
+			$("#oldNewType").focus();
+			return false;
+		}
 
-		if(chkdVal=="Legacy"){
+		if (chkdVal == "Legacy") {
 
-		if (($("#caseType1").val() == null || $("#caseType1").val() == "" || $(
-		"#caseType1").val() == "0")) {
-	alert("Select Case Type");
-	$("#caseType1").focus();
-	return false;
-}
+			if (($("#caseType1").val() == null || $("#caseType1").val() == "" || $(
+					"#caseType1").val() == "0")) {
+				alert("Select Case Type");
+				$("#caseType1").focus();
+				return false;
+			}
 
-		if (($("#regYear1").val() == null || $("#regYear1").val() == "" || $(
-		"#regYear1").val() == "0")) {
-	alert("Select Reg Year");
-	$("#regYear1").focus();
-	return false;
-}
+			if (($("#regYear1").val() == null || $("#regYear1").val() == "" || $(
+					"#regYear1").val() == "0")) {
+				alert("Select Reg Year");
+				$("#regYear1").focus();
+				return false;
+			}
 
-		if (($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $(
-		"#mainCaseNo").val() == "0")) {
-	alert("Enter Case No");
-	$("#mainCaseNo").focus();
-	return false;
-}
-		
-		}else{
-			
+			if (($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $(
+					"#mainCaseNo").val() == "0")) {
+				alert("Enter Case No");
+				$("#mainCaseNo").focus();
+				return false;
+			}
+
+		} else {
+
 			if (($("#ackNoo").val() == null || $("#ackNoo").val() == "" || $(
-			"#ackNoo").val() == "0")) {
-		alert("Select Ack No");
-		$("#ackNoo").focus();
-		return false;
-	}
-			
-		}	
-		
+					"#ackNoo").val() == "0")) {
+				alert("Select Ack No");
+				$("#ackNoo").focus();
+				return false;
+			}
+
+		}
+
 		// alert("Please select a filter to get the data.");
 
 		$("#mode").val("getCasesList");
 		$("#HighCourtCasesListForm").submit();
 	}
-	
-	
+
 	function viewCaseDetailsPopup(cino) {
 		var heading = "View Case Details for CINO : " + cino;
 		var srclink = "";
@@ -697,64 +672,53 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		}
 		;
 	};
-	
-	 function getCaseTypedetails()
-		{
-		 
-		 var caseType=$("#caseType1").val();
-		 var regYear=$("#regYear1").val();
-		 var mainCaseNo=$("#mainCaseNo").val();
-		 
-		 if((caseType != null && caseType != "" && caseType != "0") && 
-				 (regYear != null && regYear != "" && regYear != "0") && 
-				 (mainCaseNo != null && mainCaseNo != "" && mainCaseNo != "0") ){
-		 var caseTypeCode=caseType+"/"+regYear+"/"+mainCaseNo;
-		// alert("caseTypeCode--"+caseTypeCode)
-		var  url = "./GPOAck.do?mode=getCaseTypedetails&&caseTypeCode="+ caseTypeCode;
-		$.post(url, function(data) {
-		//alert("data--"+data);
-		
-		 $("#megId").html(data);
-		//$("#caseTypeCode").val(details['1']);
-		
-		
-		 });
-		 }
-		}
-	
-	 
-	 
-	
 
-/* $("#oldNewType").change(function() {
-										
-			//alert("--"+$("#oldNewType").val())
-		$(".oldTypediv").hide();
-		$(".NewTypediv").hide();
+	function getCaseTypedetails() {
 
-		if($("#oldNewType").val()=="New"){
-	$(".NewTypediv").show();
-	$(".oldTypediv").hide();
-}else{
-	$(".NewTypediv").hide();
-	$(".oldTypediv").show();
-}
+		var caseType = $("#caseType1").val();
+		var regYear = $("#regYear1").val();
+		var mainCaseNo = $("#mainCaseNo").val();
+
+		if ((caseType != null && caseType != "" && caseType != "0")
+				&& (regYear != null && regYear != "" && regYear != "0")
+				&& (mainCaseNo != null && mainCaseNo != "" && mainCaseNo != "0")) {
+			var caseTypeCode = caseType + "/" + regYear + "/" + mainCaseNo;
+			// alert("caseTypeCode--"+caseTypeCode)
+			var url = "./GPOAck.do?mode=getCaseTypedetails&&caseTypeCode="
+					+ caseTypeCode;
+			$.post(url, function(data) {
+				//alert("data--"+data);
+
+				$("#megId").html(data);
+				//$("#caseTypeCode").val(details['1']);
+
+			});
 		}
-		); */
-					
-					
-					
-					
-					
-					
+	}
+
+	/* $("#oldNewType").change(function() {
+	
+	 //alert("--"+$("#oldNewType").val())
+	 $(".oldTypediv").hide();
+	 $(".NewTypediv").hide();
+
+	 if($("#oldNewType").val()=="New"){
+	 $(".NewTypediv").show();
+	 $(".oldTypediv").hide();
+	 }else{
+	 $(".NewTypediv").hide();
+	 $(".oldTypediv").show();
+	 }
+	 }
+	 ); */
+
 	//-----------------------
-	
 	function caseTypeSelect() {
-			//$(".oldTypediv").hide();
-			//$(".NewTypediv").hide();
+		//$(".oldTypediv").hide();
+		//$(".NewTypediv").hide();
 
 		var chkdVal = $("#oldNewType:checked").val();
-		
+
 		//alert("chkdVal--"+chkdVal);
 
 		if (chkdVal == "New") {
@@ -766,42 +730,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$(".NewTypediv").hide();
 			//alert("2--"+chkdVal);
 		}
-		
+
 		//showDepts();
 	}
-	
-	
-	
-	$(document)
-			.ready(
-					function() {
-						
-						caseTypeSelect();		
 
-					});
-	
-	
-		function fnSubmitCategory() {
-			if (($("#instructions").val() == "" || $("#instructions").val() == "0")) {
-				alert("Please Enter Instructions");
-				return false;
-			}
-			$("#mode").val("getSubmitCategory");
-			$("#HighCourtCasesListForm").submit();
+	$(document).ready(function() {
+
+		caseTypeSelect();
+
+	});
+
+	function fnSubmitCategory() {
+		if (($("#instructions").val() == "" || $("#instructions").val() == "0")) {
+			alert("Please Enter Instructions");
+			return false;
 		}
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-				
-	
+		$("#mode").val("getSubmitCategory");
+		$("#HighCourtCasesListForm").submit();
+	}
 </script>

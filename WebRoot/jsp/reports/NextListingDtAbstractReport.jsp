@@ -201,7 +201,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Sl.No</th>
 									<th>CINo</th>
 									<th>Scanned Affidavit</th>
-									<!-- <th>Assigned to</th> -->
+									<th>Current Status</th>
 									<th>Date of Filing</th>
 									<!-- <th>Case Type</th>
 									<th>Reg.No.</th>
@@ -246,10 +246,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 															Affidavit</span></a>
 												</logic:notEqual>
 											</logic:notEmpty></td>
-										<%-- <td nowrap="nowrap">${map.globalorgname}<br />
-												${map.fullname} - ${map.designation} <br />
-												${map.mobile} - ${map.email}
-											</td> --%>
+										<td nowrap="nowrap"><span style="color: navy;font-weight: bold;text-align: center;"> ${map.current_status}</span>
+										
+											<logic:notEmpty name="map" property="fullname"><logic:notEqual value=" " name="map" property="fullname"><br />${map.fullname}</logic:notEqual></logic:notEmpty>
+											<logic:notEmpty name="map" property="designation"><logic:notEqual value=" " name="map" property="designation"><br /> ${map.designation}</logic:notEqual></logic:notEmpty>
+											<logic:notEmpty name="map" property="mobile"><logic:notEqual value=" " name="map" property="mobile"><br /> ${map.mobile}</logic:notEqual></logic:notEmpty>
+											<logic:notEmpty name="map" property="email"><logic:notEqual value=" " name="map" property="email"><br /> ${map.email}</logic:notEqual></logic:notEmpty>
+											<logic:notEmpty name="map" property="district_name"><logic:notEqual value=" " name="map" property="district_name"><br /> ${map.district_name}</logic:notEqual></logic:notEmpty>
+												<%-- ${map.globalorgname}<br /> 
+												 ${map.designation} <br />
+												${map.mobile} <br /> ${map.email} <br /> ${map.district_name }--%>
+										</td>
 										<td><logic:notEmpty name="map" property="date_of_filing">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_of_filing">
@@ -260,8 +267,25 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<%-- <td>${map.type_name_fil }</td>
 										<td>${map.reg_no}</td>
 										<td>${map.reg_year }</td> prayer --%>
-										<td>${map.type_name_fil }/ ${map.reg_no} / ${map.reg_year }</td>
-										<td style="width: 300px;">${map.prayer }</td>
+										<td nowrap="nowrap">${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
+										<td style="min-width: 350px;text-align: justify;"><logic:notEmpty
+												name="map" property="prayer">
+
+												<logic:equal value="-" name="map" property="prayer">
+												N/A
+												</logic:equal>
+
+												<logic:notEqual value="-" name="map" property="prayer">
+										
+										
+										${map.prayer }
+										
+										<button class="btn btn-info btn-xs" data-container="body"
+														data-toggle="popover" data-trigger="hover"
+														data-placement="top" data-content="${map.prayer_full }"
+														data-original-title="" title="">View More</button>
+												</logic:notEqual>
+											</logic:notEmpty></td>
 
 										<td>${map.fil_no}</td>
 										<td>${map.fil_year }</td>
@@ -287,87 +311,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</tbody>
 							<tfoot>
 								<tR>
-									<td colspan="19">&nbsp;</td>
-								</tR>
-							</tfoot>
-						</table>
-					</logic:present>
-					
-					<!--<logic:present name="CASESLIST">
-						<table id="example" class="table table-striped table-bordered"
-							style="width:100%">
-							<thead>
-								<tr>
-									<th>Sl.No</th>
-									<th>CINo</th>
-									<th>Date of Filing</th>
-									<th>Case Type</th>
-									<th>Reg.No.</th>
-									<th>Reg. Year</th>
-									<th>Filing No.</th>
-									<th>Filing Year</th>
-									<th>Date of Next List</th>
-									<th>Bench</th>
-									<th>Judge Name</th>
-									<th>Petitioner</th>
-									<th>District</th>
-									<th>Purpose</th>
-									<th>Respondents</th>
-									<th>Petitioner Advocate</th>
-									<th>Respondent Advocate</th>
-									<th>Orders</th>
-								</tr>
-							</thead>
-							<tbody>
-
-								<logic:iterate id="map" name="CASESLIST" indexId="i">
-									<tr>
-										<td>${i+1 }.</td>
-										<td><input type="button" id="btnShowPopup"
-											value="${map.cino}"
-											class="btn btn-sm btn-info waves-effect waves-light"
-											onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
-
-										</td>
-										<td><logic:notEmpty name="map" property="date_of_filing">
-												<logic:notEqual value="0001-01-01" name="map"
-													property="date_of_filing">
-																	${map.date_of_filing }
-																</logic:notEqual>
-											</logic:notEmpty></td>
-										<td>${map.type_name_fil }</td>
-										<td>${map.reg_no}</td>
-										<td>${map.reg_year }</td>
-										<td>${map.fil_no}</td>
-										<td>${map.fil_year }</td>
-										<td><logic:notEmpty name="map" property="date_next_list">
-												<logic:notEqual value="0001-01-01" name="map"
-													property="date_next_list">
-																	${map.date_of_filing }
-																</logic:notEqual>
-											</logic:notEmpty></td>
-										<td>${map.bench_name }</td>
-										<td>Hon'ble Judge : ${map.coram }</td>
-										<td>${map.pet_name }</td>
-										<td>${map.dist_name }</td>
-										<td>${map.purpose_name }</td>
-										<td>${map.res_name }</td>
-
-										<td>${map.pet_adv }</td>
-										<td>${map.res_adv }</td>
-										<td style="text-align: center;">${map.orderpaths }</td>
-									</tr>
-
-								</logic:iterate>
-							</tbody>
-							<tfoot>
-								<tR>
 									<td colspan="20">&nbsp;</td>
 								</tR>
 							</tfoot>
 						</table>
-					</logic:present> -->
-
+					</logic:present>
 				</div>
 			</div>
 		</div>

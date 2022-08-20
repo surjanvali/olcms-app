@@ -305,9 +305,8 @@ label {
 						buttons : [ 'print', {
 							extend : 'pdf',
 							orientation : 'landscape'
-						}, 'excel' ],
-						"lengthMenu" : [ [ 10, 25, 50, 100, -1 ],
-								[ 10, 25, 50, 100, "All" ] ]
+						}, 'excel' ]
+					 , "lengthMenu" : [ [ 10, 25, 50, 100, -1 ], [ 10, 25, 50, 100, "All" ] ]
 					});
 		}
 		if ($('#example2')) {
@@ -317,9 +316,9 @@ label {
 						buttons : [ 'print', {
 							extend : 'pdf',
 							orientation : 'landscape'
-						}, 'excel' ],
-						"lengthMenu" : [ [ 10, 25, 50, 100, -1 ],
-								[ 10, 25, 50, 100, "All" ] ]
+						}, 'excel' ]
+					 , "lengthMenu" : [ [ 10, 25, 50, 100, -1 ], [ 10, 25, 50, 100, "All" ] ]
+					
 					});
 		}
 	</script>

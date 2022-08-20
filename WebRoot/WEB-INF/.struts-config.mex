@@ -62,6 +62,7 @@
   <StrutsActivity path="/HCFinalOrdersImplemented.do" location="650,1850" dimension="367,96" />
   <StrutsActivity path="/SectionOfficerWiseCaseProcessingReport.do" location="50,3450" dimension="412,96" />
   <StrutsActivity path="/HCFinalOrdersImplementedForm.do" location="3350,1450" dimension="405,96" />
+  <StrutsActivity path="/NextListingDtAbstract.do" location="3350,2250" dimension="331,96" />
   <StrutsActivity path="Login;6" location="1250,1850" dimension="92,81" />
   <StrutsActivity path="Logout;6" location="1550,1850" dimension="100,81" />
   <StrutsActivity path="Welcome;6" location="1850,1850" dimension="217,81" />
@@ -145,8 +146,11 @@
   <StrutsActivity path="SectionOfficerWiseCaseProcessingReport" location="650,3450" dimension="247,51" />
   <StrutsActivity path="HCFinalOrdersImplementedUpdate" location="3350,1850" dimension="216,51" />
   <StrutsActivity path="page.HCFinalOrdersImplementedForm" location="3350,2050" dimension="235,51" />
-  <StrutsActivity path="/NextListingDtAbstract.do" location="3350,2250" dimension="331,96" />
   <StrutsActivity path="nextlistdtreport" location="3350,2450" dimension="111,51" />
+  <StrutsActivity path="/EcourtsDeptInstructionNew.do" location="3350,2650" dimension="340,96" />
+  <StrutsActivity path="/EcourtsCaseSearch.do" location="3350,2850" dimension="294,96" />
+  <StrutsActivity path="EcourtsDeptInstructionNew" location="3350,3050" dimension="175,51" />
+  <StrutsActivity path="EcourtsCaseSearch" location="3350,3250" dimension="129,51" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,98" />
@@ -247,14 +251,6 @@
       <AbsolutePoint location="1665,2250" />
     </AutomaticBendpoints>
   </StrutsTransition>
-  <StrutsTransition id="/NextListingDtAbstract.do,success,hccasedocsupload,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="3515,2346" />
-      <AbsolutePoint location="3515,2842" />
-      <AbsolutePoint location="114,2842" />
-      <AbsolutePoint location="114,2850" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
   <StrutsTransition id="/HCOrdersIssuedReport.do,success,hcordersissuedreport,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1390,1346" />
@@ -334,8 +330,8 @@
       <AbsolutePoint location="2637,1443" />
       <AbsolutePoint location="3089,1443" />
       <AbsolutePoint location="3089,1643" />
-      <AbsolutePoint location="3688,1643" />
-      <AbsolutePoint location="3688,3034" />
+      <AbsolutePoint location="3742,1643" />
+      <AbsolutePoint location="3742,3034" />
       <AbsolutePoint location="114,3034" />
       <AbsolutePoint location="114,3050" />
     </AutomaticBendpoints>
@@ -555,6 +551,13 @@
       <AbsolutePoint location="3050,2475" />
     </AutomaticBendpoints>
   </StrutsTransition>
+  <StrutsTransition id="/EcourtsCaseSearch.do,success,EcourtsCaseSearch,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3540,2946" />
+      <AbsolutePoint location="3540,3275" />
+      <AbsolutePoint location="3479,3275" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
   <StrutsTransition id="/ContemptCasesAbstract.do,success,contemptcasesreport,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,1298" />
@@ -667,6 +670,13 @@
       <AbsolutePoint location="1440,1821" />
       <AbsolutePoint location="1440,2475" />
       <AbsolutePoint location="1550,2475" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
+  <StrutsTransition id="/EcourtsDeptInstructionNew.do,success,EcourtsDeptInstructionNew,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3659,2746" />
+      <AbsolutePoint location="3659,3075" />
+      <AbsolutePoint location="3525,3075" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/HCCaseDocsUploadAbstractNew.do,success,hccasedocsuploadnew,1" routingType="0">

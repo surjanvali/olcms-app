@@ -5,17 +5,16 @@
 	<data-sources>
 		<data-source key="dbsource"
 			type="org.apache.commons.dbcp.BasicDataSource">
-			<set-property property="driverClassName" value="org.postgresql.Driver" />
+			<set-property property="driverClassName"
+				value="org.postgresql.Driver" />
 			<!-- Live -->
-			<!-- <set-property property="url"
-				value="jdbc:postgresql://10.96.192.52:5432/apolcms" />
-			<set-property property="username" value="apolcms" />
-			<set-property property="password" value="apolcms@123" /> -->
+			<!-- <set-property property="url" value="jdbc:postgresql://10.96.192.52:5432/apolcms" 
+				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
+				value="apolcms@123" /> -->
 
-			<!-- <set-property property="url" 
-					value="jdbc:postgresql://10.96.54.54:6432/apolcms" /> 
-			<set-property property="username" value="apolcms" /> 
-			<set-property property="password" value="@p0l(m$" /> -->
+			<!-- <set-property property="url" value="jdbc:postgresql://10.96.54.54:6432/apolcms" 
+				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
+				value="@p0l(m$" /> -->
 
 			<!-- Test -->
 			<!-- <set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" 
@@ -494,6 +493,7 @@
 			parameter="mode" scope="request">
 			<forward name="success" path="page.finalordersimpl"></forward>
 		</action>
+		
 		<action path="/SectionOfficerWiseCaseProcessingReport"
 			name="CommonForm"
 			type="in.apcfss.struts.reports.SectionOfficerWiseCaseProcessingReportAction"
@@ -517,22 +517,30 @@
 			<forward name="success" path="nextlistdtreport"></forward>
 		</action>
 
+		<action path="/EcourtsDeptInstructionNew" name="CommonForm"
+			type="in.apcfss.struts.reports.EcourtsDeptInstructionNewAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="EcourtsDeptInstructionNew"></forward>
+		</action>
+		
+		<action path="/EcourtsCaseSearch" name="CommonForm"
+			type="in.apcfss.struts.reports.EcourtsCaseSearchAction"
+			parameter="mode" scope="request">
+			<forward name="success" path="EcourtsCaseSearch"></forward>
+		</action>
+		
 	</action-mappings>
 
-	<message-resources
-		parameter="in.apcfss.struts.ApplicationResources" />
+	<message-resources parameter="in.apcfss.struts.ApplicationResources" />
 	<plug-in className="org.apache.struts.tiles.TilesPlugin">
-		<set-property property="definitions-config"
-			value="/WEB-INF/tiles-defs.xml" />
+		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
 		<set-property property="moduleAware" value="true" />
-		<set-property property="definitions-parser-validate"
-			value="false" />
+		<set-property property="definitions-parser-validate" value="false" />
 	</plug-in>
 
 	<plug-in className="plugins.DatabasePlugin"></plug-in>
 	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPluginTest"></plug-in> -->
 	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.QuartzPlugin"/> -->
-	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.DialySchedularsPlugin" 
-		/> -->
+	<!-- <plug-in className="in.apcfss.struts.eCourts.schedulars.DialySchedularsPlugin" /> -->
 
 </struts-config>

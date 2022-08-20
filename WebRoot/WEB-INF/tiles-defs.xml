@@ -403,4 +403,13 @@
 			value="/jsp/reports/NextListingDtAbstractReport.jsp" />
 	</definition>
 	
+	<definition name="EcourtsDeptInstructionNew" extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/EcourtsDeptInstructionNew.jsp" />
+	</definition>
+	
+	<definition name="EcourtsCaseSearch" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/EcourtsCaseSearch.jsp" />
+	</definition>
+	
 </tiles-definitions>
