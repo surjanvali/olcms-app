@@ -36,7 +36,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					High Court Cases List
 				</logic:notEmpty>
 	</h1>
-
 </div>
 <div class="page-content fade-in-up">
 	<html:form method="post" action="/EcourtsCaseSearch"
