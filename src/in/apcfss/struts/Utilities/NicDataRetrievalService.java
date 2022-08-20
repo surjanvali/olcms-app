@@ -66,7 +66,7 @@ public class NicDataRetrievalService {
 		};
 		String resp = "";
 
-		  final String dbUrl = "jdbc:postgresql://172.16.98.2:9432/apolcms", dbUserName = "apolcms", dbPassword = "apolcms";
+		  final String dbUrl = "jdbc:postgresql://localhost/apolcms", dbUserName = "apolcms", dbPassword = "apolcms";
 		  // final String dbUrl = "jdbc:postgresql://10.96.54.54:6432/apolcms", dbUserName = "apolcms", dbPassword = "@p0l(m$";
 		 
 		String sql = "";

@@ -1,14 +1,14 @@
 package in.apcfss.struts.Actions;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,10 +21,13 @@ import org.apache.struts.upload.FormFile;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import in.apcfss.struts.Forms.CommonForm;
 import in.apcfss.struts.Utilities.NicDataBean;
+import in.apcfss.struts.Utilities.NicDataRetrievalService;
 import in.apcfss.struts.Utilities.NicDataRetrievalService2;
 import in.apcfss.struts.commons.AjaxModels;
 import in.apcfss.struts.commons.CommonModels;
@@ -306,4 +309,44 @@ public class UploadEofficeDataAction extends DispatchAction {
 		}
 		return mapping.findForward("success");
 	}
+	
+	
+	public static boolean updateEofficeData(Connection con) {
+		
+		String sql = "select * from nic_eoffice_data_mst order by district_id";
+		
+		sql="delete from nic_data_all";
+		
+		return true;
+	}
+	
+
+	// final static String dbUrl = "jdbc:postgresql://localhost:5432/apolcms", dbUserName = "apolcms", dbPassword = "apolcms";
+	public static void main(String[] args) {
+		String sql = "", mobileNo=null;
+		Connection con = null;
+		ResultSet rs = null;
+		Statement st = null;
+		try {
+			sql="select mobile_no, emailid from ecourts_gps_latest order by slno ";
+			// Class.forName("org.postgresql.Driver");
+			//con = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
+			// String myURL="https://demo.eoffice.ap.gov.in/TTReports/Apsecretariat.php";
+			String myURL="https://demo.eoffice.ap.gov.in/TTReports/Annamayya.php";
+			String resp = NicDataRetrievalService.sendPostRequest(myURL);
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			// NicDataBean someclass = objectMapper.readValue(resp, NicDataBean.class);
+			List<NicDataBean> deptList = objectMapper.readValue(resp,
+					new TypeReference<List<NicDataBean>>() { });
+			
+			for (NicDataBean c : deptList) {
+				System.out.println("NAME:"+c.getFullname_en());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	
 }

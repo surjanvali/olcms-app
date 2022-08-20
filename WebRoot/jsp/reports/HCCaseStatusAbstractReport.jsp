@@ -511,7 +511,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Sl.No</th>
 									<th>CINo</th>
 									<th>Scanned Affidavit</th>
-									<!-- <th>Assigned to</th> -->
+									<th>Current Status</th>
 									<th>Date of Filing</th>
 									<!-- <th>Case Type</th>
 									<th>Reg.No.</th>
@@ -556,10 +556,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 															Affidavit</span></a>
 												</logic:notEqual>
 											</logic:notEmpty></td>
-										<%-- <td nowrap="nowrap">${map.globalorgname}<br />
-												${map.fullname} - ${map.designation} <br />
-												${map.mobile} - ${map.email}
-											</td> --%>
+										<td nowrap="nowrap">${map.current_status}<logic:notEmpty
+												name="map" property="fullname">
+												<br />
+												<%-- ${map.globalorgname}<br /> --%>
+												${map.fullname} <br /> ${map.designation} <br />
+												${map.mobile} <br /> ${map.email}</logic:notEmpty>
+										</td>
 										<td><logic:notEmpty name="map" property="date_of_filing">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_of_filing">
@@ -570,7 +573,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<%-- <td>${map.type_name_fil }</td>
 										<td>${map.reg_no}</td>
 										<td>${map.reg_year }</td> prayer --%>
-										<td>${map.type_name_fil }/ ${map.reg_no} / ${map.reg_year }</td>
+										<td>${map.type_name_fil }/${map.reg_no} / ${map.reg_year }</td>
 										<td style="width: 300px;">${map.prayer }</td>
 
 										<td>${map.fil_no}</td>
@@ -578,7 +581,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td><logic:notEmpty name="map" property="date_next_list">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_next_list">
-																	${map.date_of_filing }
+																	${map.date_next_list }
 																</logic:notEqual>
 											</logic:notEmpty></td>
 										<td>${map.bench_name }</td>
@@ -586,7 +589,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${map.pet_name }</td>
 										<td>${map.dist_name }</td>
 										<td>${map.purpose_name }</td>
-										<td>${map.res_name }, ${map.address}</td>
+										<td>${map.res_name },${map.address}</td>
 
 										<td>${map.pet_adv }</td>
 										<td>${map.res_adv }</td>
@@ -597,7 +600,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</tbody>
 							<tfoot>
 								<tR>
-									<td colspan="19">&nbsp;</td>
+									<td colspan="20">&nbsp;</td>
 								</tR>
 							</tfoot>
 						</table>
@@ -722,23 +725,23 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	}
 
 	function ShowHODWise(deptId, deptDesc) {
-		document.forms["HCCaseStatusAbstract"].elements["deptId"].value=deptId;
-		document.forms["HCCaseStatusAbstract"].elements["deptName"].value=deptDesc;
-		document.forms["HCCaseStatusAbstract"].elements["mode"].value="HODwisedetails";
+		document.forms["HCCaseStatusAbstract"].elements["deptId"].value = deptId;
+		document.forms["HCCaseStatusAbstract"].elements["deptName"].value = deptDesc;
+		document.forms["HCCaseStatusAbstract"].elements["mode"].value = "HODwisedetails";
 		/*
 		$("#deptId").val(deptId);
 		$("#deptName").val(deptDesc);
 		$("#mode").val("HODwisedetails");*/
 		$("#HCCaseStatusAbstract").submit();
 	}
-	function showCasesWise(deptId, deptDesc, status,level) {
-		
-		document.forms["HCCaseStatusAbstract"].elements["deptId"].value=deptId;
-		document.forms["HCCaseStatusAbstract"].elements["deptName"].value=deptDesc;
-		document.forms["HCCaseStatusAbstract"].elements["mode"].value="getCasesList";
-		document.forms["HCCaseStatusAbstract"].elements["caseStatus"].value=status;
-		document.forms["HCCaseStatusAbstract"].elements["reportLevel"].value=level;
-		
+	function showCasesWise(deptId, deptDesc, status, level) {
+
+		document.forms["HCCaseStatusAbstract"].elements["deptId"].value = deptId;
+		document.forms["HCCaseStatusAbstract"].elements["deptName"].value = deptDesc;
+		document.forms["HCCaseStatusAbstract"].elements["mode"].value = "getCasesList";
+		document.forms["HCCaseStatusAbstract"].elements["caseStatus"].value = status;
+		document.forms["HCCaseStatusAbstract"].elements["reportLevel"].value = level;
+
 		/*$("#deptId").val(deptId);
 		$("#deptName").val(deptDesc);
 		$("#caseStatus").val(status);

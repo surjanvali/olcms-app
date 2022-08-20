@@ -96,9 +96,11 @@ label {
 						<input type="button" name="Submit" value="Submit"
 							class="btn btn-success pull-right" onclick="saveAck();" />
 							
-						<input type="button" name="Submit" value="Save NIC Data table"
+						<input type="button" name="Submit1" value="Save NIC Data table"
 							class="btn btn-success pull-right" onclick="saveNicData();" />
-								
+						
+						<input type="button" name="Submit2" value="Update EOffice Data"
+							class="btn btn-success pull-right" onclick="updateEOfficeData();" />		
 					</div>
 				</div>
 			</html:form>
@@ -114,6 +116,11 @@ label {
 	}
 	function saveNicData() {
 		document.forms[0].mode.value = "saveDataIntoSectDept";
+		document.forms[0].submit();
+	}
+	
+	function updateEOfficeData() {
+		document.forms[0].mode.value = "updateEOfficeData";
 		document.forms[0].submit();
 	}
 	
