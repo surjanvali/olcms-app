@@ -63,6 +63,8 @@
   <StrutsActivity path="/SectionOfficerWiseCaseProcessingReport.do" location="50,3450" dimension="412,96" />
   <StrutsActivity path="/HCFinalOrdersImplementedForm.do" location="3350,1450" dimension="405,96" />
   <StrutsActivity path="/NextListingDtAbstract.do" location="3350,2250" dimension="331,96" />
+  <StrutsActivity path="/EcourtsDeptInstructionNew.do" location="3350,2650" dimension="340,96" />
+  <StrutsActivity path="/EcourtsCaseSearch.do" location="3350,2850" dimension="294,96" />
   <StrutsActivity path="Login;6" location="1250,1850" dimension="92,81" />
   <StrutsActivity path="Logout;6" location="1550,1850" dimension="100,81" />
   <StrutsActivity path="Welcome;6" location="1850,1850" dimension="217,81" />
@@ -147,10 +149,8 @@
   <StrutsActivity path="HCFinalOrdersImplementedUpdate" location="3350,1850" dimension="216,51" />
   <StrutsActivity path="page.HCFinalOrdersImplementedForm" location="3350,2050" dimension="235,51" />
   <StrutsActivity path="nextlistdtreport" location="3350,2450" dimension="111,51" />
-  <StrutsActivity path="/EcourtsDeptInstructionNew.do" />
-  <StrutsActivity path="/EcourtsCaseSearch.do" />
-  <StrutsActivity path="EcourtsDeptInstructionNew" />
-  <StrutsActivity path="EcourtsCaseSearch" />
+  <StrutsActivity path="EcourtsDeptInstructionNew" location="50,3650" dimension="175,51" />
+  <StrutsActivity path="EcourtsCaseSearch" location="350,3650" dimension="129,51" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,98" />

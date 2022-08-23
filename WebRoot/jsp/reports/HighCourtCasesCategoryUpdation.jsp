@@ -8,8 +8,8 @@
 String path = request.getContextPath();
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
-<link rel='stylesheet'
-	href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+<!-- <link rel='stylesheet'
+	href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'> -->
 <link rel='stylesheet'
 	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
 <link rel='stylesheet'
@@ -61,9 +61,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="ibox-head">
 				<div class="ibox-title">Finance Category Updation Report</div>
 			</div>
-		
-				
-			<br />
+
+			<div class="ibox-body">
 				<div class="row">
 					<div class="col-md-12 col-xs-12">
 						<div class="table-responsive">
@@ -80,7 +79,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<th>B1</th>
 											<th>B2</th>
 											<th>C1</th>
-											<th>C2</th>	
+											<th>C2</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -96,28 +95,28 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												<%-- <td>${map.deptcode }</td> --%>
 												<td><a
 													href="javascript:ShowHODWise('${map.deptcode}','${map.description }');">${map.description }</a></td>
-												
+
 												<%-- <td style="text-align: right;">${map.a1 }</td>
 												<td style="text-align: right;">${map.a2 }</td>
 												<td style="text-align: right;">${map.b1 }</td>
 												<td style="text-align: right;">${map.b2 }</td>
 												<td style="text-align: right;">${map.c1 }</td>
 												<td style="text-align: right;">${map.c2 }</td> --%>
-												
+
 												<td style="text-align: right;"><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','A1');">${map.a1 }</a></td>
-													<td style="text-align: right;"><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','A2');">${map.a2 }</a></td>
-													<td style="text-align: right;"><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','B1');">${map.b1 }</a></td>
-													<td style="text-align: right;"><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','B2');">${map.b2 }</a></td>
-													<td style="text-align: right;"><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','C1');">${map.c1 }</a></td>
-													<td style="text-align: right;"><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','C2');">${map.c2 }</a></td>
-												
-												
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','A1','SD');">${map.a1 }</a></td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','A2','SD');">${map.a2 }</a></td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','B1','SD');">${map.b1 }</a></td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','B2','SD');">${map.b2 }</a></td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','C1','SD');">${map.c1 }</a></td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','C2','SD');">${map.c2 }</a></td>
+
+
 												<bean:define id="A1" value="${A1 + map.a1 }"></bean:define>
 												<bean:define id="A2" value="${A2 + map.a2 }"></bean:define>
 												<bean:define id="B1" value="${B1 + map.b1 }"></bean:define>
@@ -126,7 +125,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												<bean:define id="C2" value="${C2 + map.c2 }"></bean:define>
 
 											</tr>
-											
+
 										</logic:iterate>
 									</tbody>
 
@@ -139,7 +138,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td colspan="1" style="text-align: right;">${B2 }</td>
 											<td colspan="1" style="text-align: right;">${C1 }</td>
 											<td colspan="1" style="text-align: right;">${C2 }</td>
-												
+
 										</tR>
 									</tfoot>
 
@@ -160,7 +159,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<th>B1</th>
 											<th>B2</th>
 											<th>C1</th>
-											<th>C2</th>	
+											<th>C2</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -170,30 +169,30 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<bean:define id="B2" value="0"></bean:define>
 										<bean:define id="C1" value="0"></bean:define>
 										<bean:define id="C2" value="0"></bean:define>
-										
-										
+
+
 										<logic:iterate id="map" name="deptwise" indexId="i">
 											<tr>
 												<td>${i+1 }</td>
 												<%-- <td>${map.deptcode }</td> --%>
 												<td><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','All');">${map.description }</a></td>
-												
-												
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','All','HOD');">${map.description }</a></td>
+
+
 												<td style="text-align: right;"><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','A1');">${map.a1 }</a></td>
-													<td style="text-align: right;"><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','A2');">${map.a2 }</a></td>
-													<td style="text-align: right;"><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','B1');">${map.b1 }</a></td>
-													<td style="text-align: right;"><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','B2');">${map.b2 }</a></td>
-													<td style="text-align: right;"><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','C1');">${map.c1 }</a></td>
-													<td style="text-align: right;"><a
-													href="javascript:showCasesWise('${map.deptcode}','${map.description }','C2');">${map.c2 }</a></td>
-												
-												
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','A1','HOD');">${map.a1 }</a></td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','A2','HOD');">${map.a2 }</a></td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','B1','HOD');">${map.b1 }</a></td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','B2','HOD');">${map.b2 }</a></td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','C1','HOD');">${map.c1 }</a></td>
+												<td style="text-align: right;"><a
+													href="javascript:showCasesWise('${map.deptcode}','${map.description }','C2','HOD');">${map.c2 }</a></td>
+
+
 												<bean:define id="A1" value="${A1 + map.a1 }"></bean:define>
 												<bean:define id="A2" value="${A2 + map.a2 }"></bean:define>
 												<bean:define id="B1" value="${B1 + map.b1 }"></bean:define>
@@ -201,7 +200,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												<bean:define id="C1" value="${C1 + map.c1 }"></bean:define>
 												<bean:define id="C2" value="${C2 + map.c2 }"></bean:define>
 											</tr>
-											
+
 										</logic:iterate>
 									</tbody>
 
@@ -253,7 +252,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<th>Respondents</th>
 											<th>Petitioner Advocate</th>
 											<th>Respondent Advocate</th>
-											
+
 										</tr>
 									</thead>
 									<tbody>
@@ -304,10 +303,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 												<td>${map.pet_adv }</td>
 												<td>${map.res_adv }</td>
-												
-												<bean:define id="est_cost_tot" value="${est_cost_tot + map.est_cost}"></bean:define>
-												<bean:define id="bill_amount_tot" value="${bill_amount_tot + map.bill_amount}"></bean:define>
-												
+
+												<bean:define id="est_cost_tot"
+													value="${est_cost_tot + map.est_cost}"></bean:define>
+												<bean:define id="bill_amount_tot"
+													value="${bill_amount_tot + map.bill_amount}"></bean:define>
+
 											</tr>
 
 										</logic:iterate>
@@ -319,7 +320,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td colspan="3" style="text-align: right;"></td>
 											<td colspan="1" style="text-align: right;">${bill_amount_tot}</td>
 											<td colspan="20" style="text-align: right;"></td>
-											
+
 										</tR>
 									</tfoot>
 
@@ -388,15 +389,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#deptName").val(deptDesc);
 		$("#mode").val("HODwisedetails");
 		$("#HCCaseStatusAbstract").submit();*/
-		$(location).attr("href", "./HighCourtCasesCategoryUpdation.do?mode=HODwisedetails&deptName="+deptDesc+"&deptId="+deptId);
+		$(location).attr(
+				"href",
+				"./HighCourtCasesCategoryUpdation.do?mode=HODwisedetails&deptName="
+						+ deptDesc + "&deptId=" + deptId);
 	}
-	function showCasesWise(deptId, deptDesc, repType) {
+	function showCasesWise(deptId, deptDesc, repType, fromRep) {
 		/*$("#deptId").val(deptId);
 		$("#deptName").val(deptDesc);
 		$("#caseStatus").val(status);
 		$("#mode").val("getCasesList");
 		$("#HCCaseStatusAbstract").submit();*/
-		$(location).attr("href", "./HighCourtCasesCategoryUpdation.do?mode=getCasesList&reportType="+repType+"&deptName="+deptDesc+"&deptId="+deptId);
+		$(location).attr(
+				"href",
+				"./HighCourtCasesCategoryUpdation.do?mode=getCasesList&reportType="
+						+ repType + "&deptName=" + deptDesc + "&deptId="
+						+ deptId+"&fromRep="+fromRep);
 	}
 
 	function viewCaseDetailsPopup(cino) {

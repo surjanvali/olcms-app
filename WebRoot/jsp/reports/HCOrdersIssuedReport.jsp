@@ -8,20 +8,12 @@
 String path = request.getContextPath();
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
-<link rel='stylesheet'
-	href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
-<link rel='stylesheet'
-	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
-<link rel='stylesheet'
-	href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
-
-<link href="./assetsnew/vendors/select2/dist/css/select2.min.css"
-	rel="stylesheet" />
-<!-- <link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet" type="text/css" /> -->
-
+<!-- <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'> -->
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
+<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+<link href="./assetsnew/vendors/select2/dist/css/select2.min.css" rel="stylesheet" />
 <!-- PLUGINS STYLES-->
-<link href="./assetsnew/vendors/DataTables/datatables.min.css"
-	rel="stylesheet" />
+<link href="./assetsnew/vendors/DataTables/datatables.min.css" rel="stylesheet" />
 <!-- THEME STYLES-->
 <link href="assetsnew/css/main.min.css" rel="stylesheet" />
 
@@ -333,25 +325,39 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												${map.fullname} - ${map.designation} <br />
 												${map.mobile} - ${map.email}
 											</td> --%>
-										<td><logic:notEmpty name="map" property="date_of_filing">
+										<td nowrap="nowrap"><logic:notEmpty name="map" property="date_of_filing">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_of_filing">
 																	${map.date_of_filing }
 																</logic:notEqual>
 											</logic:notEmpty></td>
 
-										<%-- <td>${map.type_name_fil }</td>
-										<td>${map.reg_no}</td>
-										<td>${map.reg_year }</td> prayer --%>
-										<td>${map.type_name_fil }/ ${map.reg_no} / ${map.reg_year }</td>
-										<td style="width: 300px;">${map.prayer }</td>
+										<td nowrap="nowrap">${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
+										<td style="min-width: 350px;text-align: justify;"><logic:notEmpty
+												name="map" property="prayer">
+
+												<logic:equal value="-" name="map" property="prayer">
+												N/A
+												</logic:equal>
+
+												<logic:notEqual value="-" name="map" property="prayer">
+										
+										
+										${map.prayer }
+										
+										<button class="btn btn-info btn-xs" data-container="body"
+														data-toggle="popover" data-trigger="hover"
+														data-placement="top" data-content="${map.prayer_full }"
+														data-original-title="" title="">View More</button>
+												</logic:notEqual>
+											</logic:notEmpty></td>
 
 										<td>${map.fil_no}</td>
 										<td>${map.fil_year }</td>
-										<td><logic:notEmpty name="map" property="date_next_list">
+										<td nowrap="nowrap"><logic:notEmpty name="map" property="date_next_list">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_next_list">
-																	${map.date_of_filing }
+																	${map.date_next_list }
 																</logic:notEqual>
 											</logic:notEmpty></td>
 										<td>${map.bench_name }</td>
@@ -415,11 +421,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 <script src="./assetsnew/vendors/select2/dist/js/select2.full.min.js"
 	type="text/javascript"></script>
-<!-- <script src="https://apbudget.apcfss.in/js/select2.js"></script> -->
 <script>
-	$('.datepicker').datepicker({
+	/* $('.datepicker').datepicker({
 		uiLibrary : 'bootstrap4'
-	});
+	}); */
 
 	$(document).ready(function() {
 		$(".select2Class").select2();

@@ -511,7 +511,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Sl.No</th>
 									<th>CINo</th>
 									<th>Scanned Affidavit</th>
-									<th>Current Status</th>
+									<th>Currently Pending at</th>
+									<th>Office Name</th>
 									<th>Date of Filing</th>
 									<!-- <th>Case Type</th>
 									<th>Reg.No.</th>
@@ -556,17 +557,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 															Affidavit</span></a>
 												</logic:notEqual>
 											</logic:notEmpty></td>
-										<td nowrap="nowrap"><span style="color: navy;font-weight: bold;text-align: center;"> ${map.current_status}</span>
+										<td nowrap="nowrap">
+										
+										<%-- <span style="color: navy;font-weight: bold;text-align: center;"> ${map.current_status}</span> --%>
 										
 											<logic:notEmpty name="map" property="fullname"><logic:notEqual value=" " name="map" property="fullname"><br />${map.fullname}</logic:notEqual></logic:notEmpty>
 											<logic:notEmpty name="map" property="designation"><logic:notEqual value=" " name="map" property="designation"><br /> ${map.designation}</logic:notEqual></logic:notEmpty>
-											<logic:notEmpty name="map" property="mobile"><logic:notEqual value=" " name="map" property="mobile"><br /> ${map.mobile}</logic:notEqual></logic:notEmpty>
+											
+											<%-- <logic:notEmpty name="map" property="mobile"><logic:notEqual value=" " name="map" property="mobile"><br /> ${map.mobile}</logic:notEqual></logic:notEmpty> --%>
 											<logic:notEmpty name="map" property="email"><logic:notEqual value=" " name="map" property="email"><br /> ${map.email}</logic:notEqual></logic:notEmpty>
-											<logic:notEmpty name="map" property="district_name"><logic:notEqual value=" " name="map" property="district_name"><br /> ${map.district_name}</logic:notEqual></logic:notEmpty>
+											<%-- <logic:notEmpty name="map" property="district_name"><logic:notEqual value=" " name="map" property="district_name"><br /> ${map.district_name}</logic:notEqual></logic:notEmpty> --%>
 												<%-- ${map.globalorgname}<br /> 
 												 ${map.designation} <br />
 												${map.mobile} <br /> ${map.email} <br /> ${map.district_name }--%>
 										</td>
+										<td><logic:notEmpty name="map" property="org_unit_name_en"><logic:notEqual value=" " name="map" property="org_unit_name_en"><br /> ${map.org_unit_name_en}</logic:notEqual></logic:notEmpty></td>
 										<td nowrap="nowrap"><logic:notEmpty name="map" property="date_of_filing">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_of_filing">

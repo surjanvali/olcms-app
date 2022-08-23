@@ -181,7 +181,7 @@ public class WelcomePageAction extends DispatchAction{
 					
 					
 				}
-				else if(roleId.equals("3") || roleId.equals("4")  || roleId.equals("5") || roleId.equals("9") || roleId.equals("15")) {
+				else if(roleId.equals("3") || roleId.equals("4")  || roleId.equals("5") || roleId.equals("9") || roleId.equals("10") || roleId.equals("15")) {
 					
 					if(roleId.equals("3") || roleId.equals("4") || roleId.equals("15")) {
 						sql="select count(*) "
@@ -209,8 +209,13 @@ public class WelcomePageAction extends DispatchAction{
 							+ "sum(case when case_status=98 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as privatetot "
 							+ "from ecourts_case_data a "
 							+ "inner join dept_new d on (a.dept_code=d.dept_code) "
-							+ "where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') "
-							+ "group by a.dept_code , d.description order by 1";
+							+ "where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
+							
+							if(roleId.equals("10")) {
+								sql+=" and a.dist_id='"+distId+"'";
+							}
+					
+							sql+= "group by a.dept_code , d.description order by 1";
 
 					System.out.println("SQL:" + sql);
 					request.setAttribute("HEADING", "Abstract Report");
@@ -238,6 +243,10 @@ public class WelcomePageAction extends DispatchAction{
 							+ "from ecourts_gpo_ack_depts  a "
 							+ " inner join ecourts_gpo_ack_dtls b on (a.ack_no=b.ack_no) inner join dept_new d on (a.dept_code=d.dept_code)"
 							+ " where b.ack_type='NEW'  and respondent_slno=1 and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"')  " ;
+					
+					if(roleId.equals("10")) {
+						sql+=" and a.dist_id='"+distId+"'";
+					}
 
 					sql += " group by a.dept_code,d.dept_code ,description order by 1";
 					data = DatabasePlugin.executeQuery(sql, con);

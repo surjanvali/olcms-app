@@ -6,8 +6,12 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 
 <style>
-li{
-margin-top: 0px; margin-bottom: 0px;border: 0;border-top: 1px solid rgb(55 79 101);}
+.page-sidebar li {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	border: 0;
+	border-top: 1px solid rgb(55, 79, 101);
+}
 </style>
 
 <nav class="page-sidebar" id="sidebar">
@@ -27,18 +31,21 @@ margin-top: 0px; margin-bottom: 0px;border: 0;border-top: 1px solid rgb(55 79 10
 					<div class="font-strong">District Collector</div>
 					<small>${sessionScope.userName }</small>
 				</c:if>
-				<c:if test="${sessionScope.role_id eq 3 || sessionScope.role_id eq 4 || sessionScope.role_id eq 5 || sessionScope.role_id eq 8  
+				<c:if
+					test="${sessionScope.role_id eq 3 || sessionScope.role_id eq 4 || sessionScope.role_id eq 5 || sessionScope.role_id eq 8  
 				|| sessionScope.role_id eq 9 || sessionScope.role_id eq 10 || sessionScope.role_id eq 11 || sessionScope.role_id eq 12  || sessionScope.role_id eq 13 || sessionScope.role_id eq 14|| sessionScope.role_id eq 15}">
 
 					<div class="font-strong">${sessionScope.userName }</div>
-					<small>${sessionScope.role_desc }</small><br />
+					<small>${sessionScope.role_desc }</small>
+					<br />
 					<small>${sessionScope.dept_desc }</small>
 
 				</c:if>
 				<c:if test="${sessionScope.role_id eq 6}">
 					<!-- <div class="font-strong">GP Office</div> -->
 					<div class="font-strong">${sessionScope.userName }</div>
-					<small>${sessionScope.role_desc }</small><br />
+					<small>${sessionScope.role_desc }</small>
+					<br />
 					<small>${sessionScope.dept_desc }</small>
 
 				</c:if>
@@ -58,7 +65,7 @@ margin-top: 0px; margin-bottom: 0px;border: 0;border-top: 1px solid rgb(55 79 10
 		<!-- <hr
 			style="margin-top: 0px; margin-bottom: 0px;border: 0;border-top: 1px solid rgb(55 79 101);"> -->
 
-		<ul class="side-menu metismenu">
+		<ul class="side-menu metismenu" style="padding-bottom: 50px;">
 			<!-- <li><a class="active" href="index.html"><i
 					class="sidebar-item-icon fa fa-th-large"></i> <span
 					class="nav-label">Dashboard</span> </a></li>
@@ -121,28 +128,27 @@ margin-top: 0px; margin-bottom: 0px;border: 0;border-top: 1px solid rgb(55 79 10
 					<li class="nav-2-level collapse"><a href="${manual.usermanual_path }" target="_blank">${manual.description }</a></li>
 				</logic:iterate>
 			</logic:notEmpty> --%>
-			
+
 		</ul>
-		
-		
-		<%-- <logic:notEmpty name="user_manuals" scope="session">
+
+
+		<logic:notEmpty name="user_manuals" scope="session">
 			<div class="row">
 				<div class="col-md-12">
-					<div class="ibox ibox-success">
-						<div class="ibox-head">Download User Manuals</div>
-						<div class="ibox-body">
-							<ul class="user-manual-class">
-								<logic:iterate id="manual" name="user_manuals" scope="session">
-									<li style="word-wrap: break-word;"><a
-										href="${manual.usermanual_path }" target="_blank">${manual.description }</a></li>
-								</logic:iterate>
-							</ul>
-						</div>
-
-					</div>
+					<ul class="side-menu metismenu">
+						<li
+							style="color: #fff;font-weight: bold;text-align: center;padding: 3px;"><i
+							class="sidebar-item-icon fa fa-download"></i><span
+							class="nav-label">Download User Manuals</span></li>
+						<logic:iterate id="manual" name="user_manuals" scope="session">
+							<li><a href="${manual.usermanual_path }" target="_blank"
+								style="word-wrap: break-word;">${manual.description }</a></li>
+						</logic:iterate>
+					</ul>
 				</div>
+
 			</div>
-		</logic:notEmpty> --%>
-		
+		</logic:notEmpty>
+
 	</div>
 </nav>

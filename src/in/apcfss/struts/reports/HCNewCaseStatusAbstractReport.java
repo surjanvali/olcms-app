@@ -41,7 +41,7 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 				return mapping.findForward("Logout");
 			}
 
-			else if (roleId.equals("5") || roleId.equals("9")) {
+			else if (roleId.equals("5") || roleId.equals("9") || roleId.equals("10")) {
 
 				return HODwisedetails(mapping, form, request, response);
 			} else // if(roleId.equals("3") || roleId.equals("4"))
@@ -120,11 +120,11 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 						+ " inner join ecourts_gpo_ack_dtls b on (a.ack_no=b.ack_no) inner join dept_new d on (a.dept_code=d.dept_code)"
 						+ " where b.ack_type='NEW'  and respondent_slno=1  " + sqlCondition;
 
-				if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
+				if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))
 					sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or a.dept_code='"
 							+ session.getAttribute("dept_code") + "')";
 
-				if (roleId.equals("2")) {
+				if (roleId.equals("2") || roleId.equals("10")) {
 					sql += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
 					cform.setDynaForm("districtId", session.getAttribute("dist_id"));
 				}
@@ -148,22 +148,31 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 		} finally {
 			try {
 				if (con != null) {
-					if (roleId.equals("2")) {
+					if (roleId.equals("2") || roleId.equals("10")) {
 						cform.setDynaForm("distList",
 								DatabasePlugin.getSelectBox(
 										"select district_id,upper(district_name) from district_mst where district_id='"
 												+ session.getAttribute("dist_id") + "' order by district_name",
-										con));
-					} else {
-						sql = "select district_id,upper(district_name) from district_mst order by 1";
-						System.out.println("DIST SQL:" + sql);
-						System.out.println("DIST SQL CON:" + con);
+												con));
+					}
+					else {
+						sql="select district_id,upper(district_name) from district_mst order by 1";
 						cform.setDynaForm("distList", DatabasePlugin.getSelectBox(sql, con));
 					}
 
+					if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9")
+							|| roleId.equals("10")) {
+						sql = "select dept_code,dept_code||'-'||upper(description) from dept_new where display=true";
+						sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or dept_code='"
+								+ session.getAttribute("dept_code") + "')";
+						sql += "  order by dept_code ";
+						cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(sql, con));
+					}
+					else {
 					cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 							"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 							con));
+					}
 					cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox(
 							"select case_short_name,case_full_name from case_type_master order by sno", con));
 					ArrayList selectData = new ArrayList();
@@ -207,7 +216,7 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 				return mapping.findForward("Logout");
 			}
 			con = DatabasePlugin.connect();
-			if (roleId.equals("5") || roleId.equals("9")) {
+			if (roleId.equals("5") || roleId.equals("9") || roleId.equals("10")) {
 				deptId = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 				deptName = DatabasePlugin.getStringfromQuery(
 						"select upper(description) as description from dept_new where dept_code='" + deptId + "'", con);
@@ -262,7 +271,7 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 			 * }
 			 */
 
-			if (roleId.equals("2")) {
+			if (roleId.equals("2") || roleId.equals("10")) {
 				sqlCondition += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
 				cform.setDynaForm("districtId", session.getAttribute("dist_id"));
 			}
@@ -301,19 +310,31 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (roleId.equals("2"))
+				if (roleId.equals("2") || roleId.equals("10")) {
 					cform.setDynaForm("distList",
 							DatabasePlugin.getSelectBox(
 									"select district_id,upper(district_name) from district_mst where district_id='"
 											+ session.getAttribute("dist_id") + "' order by district_name",
-									con));
-				else
-					cform.setDynaForm("distList", DatabasePlugin
-							.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+											con));
+				}
+				else {
+					sql="select district_id,upper(district_name) from district_mst order by 1";
+					cform.setDynaForm("distList", DatabasePlugin.getSelectBox(sql, con));
+				}
 
+				if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9")
+						|| roleId.equals("10")) {
+					sql = "select dept_code,dept_code||'-'||upper(description) from dept_new where display=true";
+					sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or dept_code='"
+							+ session.getAttribute("dept_code") + "')";
+					sql += "  order by dept_code ";
+					cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(sql, con));
+				}
+				else {
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
+				}
 				cform.setDynaForm("caseTypesList", DatabasePlugin
 						.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
 				ArrayList selectData = new ArrayList();
@@ -519,19 +540,31 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (roleId.equals("2"))
+			if (roleId.equals("2") || roleId.equals("10")) {
 				cform.setDynaForm("distList",
 						DatabasePlugin.getSelectBox(
 								"select district_id,upper(district_name) from district_mst where district_id='"
 										+ session.getAttribute("dist_id") + "' order by district_name",
-								con));
-			else
-				cform.setDynaForm("distList", DatabasePlugin
-						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+										con));
+			}
+			else {
+				sql="select district_id,upper(district_name) from district_mst order by 1";
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(sql, con));
+			}
 
+			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9")
+					|| roleId.equals("10")) {
+				sql = "select dept_code,dept_code||'-'||upper(description) from dept_new where display=true";
+				sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or dept_code='"
+						+ session.getAttribute("dept_code") + "')";
+				sql += "  order by dept_code ";
+				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(sql, con));
+			}
+			else {
 			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 					con));
+			}
 			cform.setDynaForm("caseTypesList", DatabasePlugin
 					.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
 			ArrayList selectData = new ArrayList();
@@ -810,7 +843,7 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 			sql = "select disposal_type,b.dept_code,b.description,count(*) as casescount from ecourts_case_data a "
 					+ condition + " inner join dept_new b on a.dept_code=b.dept_code   where 1=1 " + sqlCondition;
 
-			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
+			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))
 				sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
 
 			sql += " group by disposal_type,b.description,b.dept_code";
@@ -830,19 +863,31 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (roleId.equals("2"))
+			if (roleId.equals("2") || roleId.equals("10")) {
 				cform.setDynaForm("distList",
 						DatabasePlugin.getSelectBox(
 								"select district_id,upper(district_name) from district_mst where district_id='"
 										+ session.getAttribute("dist_id") + "' order by district_name",
-								con));
-			else
-				cform.setDynaForm("distList", DatabasePlugin
-						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+										con));
+			}
+			else {
+				sql="select district_id,upper(district_name) from district_mst order by 1";
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(sql, con));
+			}
 
+			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9")
+					|| roleId.equals("10")) {
+				sql = "select dept_code,dept_code||'-'||upper(description) from dept_new where display=true";
+				sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or dept_code='"
+						+ session.getAttribute("dept_code") + "')";
+				sql += "  order by dept_code ";
+				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(sql, con));
+			}
+			else {
 			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 					con));
+			}
 			cform.setDynaForm("caseTypesList", DatabasePlugin
 					.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
 			ArrayList selectData = new ArrayList();
@@ -1023,7 +1068,7 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 			sql = "select disposal_type, count(*) as casescount from ecourts_case_data a " + condition + " where 1=1 "
 					+ sqlCondition;
 
-			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
+			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))
 				sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
 
 			sql += " group by disposal_type";
@@ -1045,19 +1090,31 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (roleId.equals("2"))
+			if (roleId.equals("2") || roleId.equals("10")) {
 				cform.setDynaForm("distList",
 						DatabasePlugin.getSelectBox(
 								"select district_id,upper(district_name) from district_mst where district_id='"
 										+ session.getAttribute("dist_id") + "' order by district_name",
-								con));
-			else
-				cform.setDynaForm("distList", DatabasePlugin
-						.getSelectBox("select district_id,upper(district_name) from district_mst order by 1", con));
+										con));
+			}
+			else {
+				sql="select district_id,upper(district_name) from district_mst order by 1";
+				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(sql, con));
+			}
 
+			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9")
+					|| roleId.equals("10")) {
+				sql = "select dept_code,dept_code||'-'||upper(description) from dept_new where display=true";
+				sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or dept_code='"
+						+ session.getAttribute("dept_code") + "')";
+				sql += "  order by dept_code ";
+				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(sql, con));
+			}
+			else {
 			cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 					"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 					con));
+			}
 			cform.setDynaForm("caseTypesList", DatabasePlugin
 					.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
 			ArrayList selectData = new ArrayList();
