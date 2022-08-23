@@ -128,7 +128,8 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					+ " case when counter_filed='Yes' then 'Counter Filed' else 'Counter Not Filed' end as casestatus3,"
 					+ " case when counter_approved_gp='T' then 'Counter Approved by GP' else 'Counter Not Approved by GP' end as casestatus4 "
 					+ " " //sql = "select a.*, prayer from ecourts_case_data a left join nic_prayer_data np on (a.cino=np.cino) where a.cino='" + cIno + "'";
-					+ " ,coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, prayer, ra.address "
+					+ " ,coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, ra.address, "
+					+ " case when (prayer is not null and coalesce(trim(prayer),'')!='' and length(prayer) > 2) then substr(prayer,1,250) else '-' end as prayer, prayer as prayer_full"
 					+ " from ecourts_case_data a "
 					+ " left join nic_prayer_data np on (a.cino=np.cino) "
 					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "

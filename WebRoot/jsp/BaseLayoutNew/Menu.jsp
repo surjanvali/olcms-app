@@ -5,6 +5,10 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 
+<style>
+li{
+margin-top: 0px; margin-bottom: 0px;border: 0;border-top: 1px solid rgb(55 79 101);}
+</style>
 
 <nav class="page-sidebar" id="sidebar">
 	<div id="sidebar-collapse">
@@ -51,8 +55,8 @@
 				</logic:notEmpty>
 			</div>
 		</div>
-		<hr
-			style="margin-top: 0px; margin-bottom: 0px;border: 0;border-top: 1px solid rgb(55 79 101);">
+		<!-- <hr
+			style="margin-top: 0px; margin-bottom: 0px;border: 0;border-top: 1px solid rgb(55 79 101);"> -->
 
 		<ul class="side-menu metismenu">
 			<!-- <li><a class="active" href="index.html"><i
@@ -74,7 +78,7 @@
 			<logic:notEmpty name='services' scope="session">
 				<logic:iterate id="service" name="services" scope="session">
 					<c:if test="${service.parent_id eq 0 && service.has_child eq true}">
-<!-- fa fa-edit -->
+						<!-- fa fa-edit -->
 						<li><a href="javascript:;"><i
 								class="sidebar-item-icon ${service.icon}"></i> <span
 								class="nav-label">${service.service_name}</span><i
@@ -85,7 +89,7 @@
 									scope="session">
 									<c:if test="${service.service_id eq inner_service.parent_id }">
 										<li><a href="${inner_service.target }"><i
-												class="${inner_service.icon }"></i>
+												class="sidebar-item-icon ${inner_service.icon }"></i>
 												${inner_service.service_name}</a></li>
 									</c:if>
 								</logic:iterate>
@@ -95,25 +99,50 @@
 						test="${service.parent_id eq 0 && service.has_child eq false}">
 
 						<c:if test="${service.target ne 'Logout.do'}">
-<!-- fa fa-bookmark -->
+							<!-- fa fa-bookmark -->
 							<li><a href="${service.target }"><i
 									class="sidebar-item-icon ${service.icon}"></i> <span
 									class="nav-label">${service.service_name}</span> </a></li>
 						</c:if>
 
 						<c:if test="${service.target eq 'Logout.do'}">
-<!-- fa fa-power-off -->
+							<!-- fa fa-power-off -->
 							<li><a href="${service.target }"><i
 									class="sidebar-item-icon ${service.icon}"></i> <span
 									class="nav-label">${service.service_name}</span> </a></li>
 						</c:if>
 
-
-
 					</c:if>
 				</logic:iterate>
 			</logic:notEmpty>
-
+			<%-- <logic:notEmpty name="user_manuals" scope="session">
+				<li class="heading">User Manuals</li>
+				<logic:iterate id="manual" name="user_manuals" scope="session">
+					<li class="nav-2-level collapse"><a href="${manual.usermanual_path }" target="_blank">${manual.description }</a></li>
+				</logic:iterate>
+			</logic:notEmpty> --%>
+			
 		</ul>
+		
+		
+		<%-- <logic:notEmpty name="user_manuals" scope="session">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="ibox ibox-success">
+						<div class="ibox-head">Download User Manuals</div>
+						<div class="ibox-body">
+							<ul class="user-manual-class">
+								<logic:iterate id="manual" name="user_manuals" scope="session">
+									<li style="word-wrap: break-word;"><a
+										href="${manual.usermanual_path }" target="_blank">${manual.description }</a></li>
+								</logic:iterate>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</logic:notEmpty> --%>
+		
 	</div>
 </nav>

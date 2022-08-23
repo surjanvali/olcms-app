@@ -147,10 +147,10 @@
   <StrutsActivity path="HCFinalOrdersImplementedUpdate" location="3350,1850" dimension="216,51" />
   <StrutsActivity path="page.HCFinalOrdersImplementedForm" location="3350,2050" dimension="235,51" />
   <StrutsActivity path="nextlistdtreport" location="3350,2450" dimension="111,51" />
-  <StrutsActivity path="/EcourtsDeptInstructionNew.do" location="3350,2650" dimension="340,96" />
-  <StrutsActivity path="/EcourtsCaseSearch.do" location="3350,2850" dimension="294,96" />
-  <StrutsActivity path="EcourtsDeptInstructionNew" location="3350,3050" dimension="175,51" />
-  <StrutsActivity path="EcourtsCaseSearch" location="3350,3250" dimension="129,51" />
+  <StrutsActivity path="/EcourtsDeptInstructionNew.do" />
+  <StrutsActivity path="/EcourtsCaseSearch.do" />
+  <StrutsActivity path="EcourtsDeptInstructionNew" />
+  <StrutsActivity path="EcourtsCaseSearch" />
   <StrutsTransition id="/ChangePassword.do,changepswdpage,page.changePswd,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1850,98" />
@@ -330,8 +330,8 @@
       <AbsolutePoint location="2637,1443" />
       <AbsolutePoint location="3089,1443" />
       <AbsolutePoint location="3089,1643" />
-      <AbsolutePoint location="3742,1643" />
-      <AbsolutePoint location="3742,3034" />
+      <AbsolutePoint location="3688,1643" />
+      <AbsolutePoint location="3688,3034" />
       <AbsolutePoint location="114,3034" />
       <AbsolutePoint location="114,3050" />
     </AutomaticBendpoints>
@@ -553,9 +553,8 @@
   </StrutsTransition>
   <StrutsTransition id="/EcourtsCaseSearch.do,success,EcourtsCaseSearch,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="3540,2946" />
-      <AbsolutePoint location="3540,3275" />
-      <AbsolutePoint location="3479,3275" />
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="0,0" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/ContemptCasesAbstract.do,success,contemptcasesreport,1" routingType="0">
@@ -674,9 +673,8 @@
   </StrutsTransition>
   <StrutsTransition id="/EcourtsDeptInstructionNew.do,success,EcourtsDeptInstructionNew,1" routingType="0">
     <AutomaticBendpoints>
-      <AbsolutePoint location="3659,2746" />
-      <AbsolutePoint location="3659,3075" />
-      <AbsolutePoint location="3525,3075" />
+      <AbsolutePoint location="0,0" />
+      <AbsolutePoint location="0,0" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/HCCaseDocsUploadAbstractNew.do,success,hccasedocsuploadnew,1" routingType="0">

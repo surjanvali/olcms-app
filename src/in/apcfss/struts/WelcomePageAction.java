@@ -61,7 +61,18 @@ public class WelcomePageAction extends DispatchAction{
 			List<Map<String, Object>> services = DatabasePlugin.processResultSet(rs);
 			session.setAttribute("services", services);
 			
+			
 			if(roleId!=null && !roleId.equals("")){
+				
+				if(!roleId.equals("1") && !roleId.equals("7")) { 
+					sql="select * from ecourts_user_manuals where roleid='"+roleId+"' and display_flag=true order by slno";
+					session.setAttribute("user_manuals", DatabasePlugin.executeQuery(con, sql));
+				}
+				else {
+					sql="select * from ecourts_user_manuals where  display_flag=true order by slno";
+					session.setAttribute("user_manuals", DatabasePlugin.executeQuery(con, sql));
+				}
+				
 				target="UserWelcomePageNew";
 				
 				if(roleId.equals("1") || roleId.equals("7")) { // ADMIN LOGIN

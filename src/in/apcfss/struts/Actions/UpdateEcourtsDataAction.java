@@ -1676,9 +1676,9 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 
 			String opVal = ECourtAPIs.getSelectParam(1);
 			String cino = "";
-			sql = "select aa.cino from ecourts_causelist_cases ecc "
+			sql = "select a.cino from ecourts_causelist_cases ecc "
                     + " inner join ecourts_case_data a on (ecc.case_no=a.type_name_reg||'/'||a.reg_no||'/'||a.reg_year) "
-					+ " where ecc.causelist_date::date=to_date('"+cauesListDate+"','yyyy-mm-dd')";
+					+ " where ecc.causelist_date::date=to_date('"+cauesListDate+"','yyyy-mm-dd') and last_updated_ecourts::date < current_date";
 			System.out.println("SQLLLLLLLLLLLLLL:::::::"+sql);
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
@@ -1716,8 +1716,7 @@ public class UpdateEcourtsDataAction extends DispatchAction {
 					boolean b = processCNRsearchResponse(resp, opVal, con, cino);
 				}
 			}
-			System.out.println("FINAL END : Records fetched:" + totalCount);
-			
+			System.out.println("FINAL END : updateCauselistCases Records fetched:" + totalCount);
 	
 	}
 	
