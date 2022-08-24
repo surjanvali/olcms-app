@@ -276,6 +276,10 @@ public class WelcomePageAction extends DispatchAction{
 							+ "inner join dept_new d on (a.dept_code=d.dept_code) "
 							+ "where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
 					
+					if(roleId.equals("10")) {
+						sql+=" and a.dist_id='"+distId+"'";
+					}
+					
 					request.setAttribute("FINALORDERS", DatabasePlugin.getStringfromQuery(sql, con));
 					
 					sql="select count(distinct a.cino) ||','||sum(case when length(order_document_path) > 10 then 1 else 0 end) as orders from ecourts_case_interimorder b "
@@ -283,11 +287,17 @@ public class WelcomePageAction extends DispatchAction{
 							+ "inner join dept_new d on (a.dept_code=d.dept_code) "
 							+ "where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
 					
-					String interimData[]=DatabasePlugin.getStringfromQuery(sql, con).split(",");
+					if(roleId.equals("10")) {
+						sql+=" and a.dist_id='"+distId+"'";
+					}
 					
-					request.setAttribute("INTERIMCASES", interimData[0]);
-					request.setAttribute("INTERIMORDERS", interimData[1]);
+					String interims = DatabasePlugin.getStringfromQuery(sql, con);
 					
+					String interimData[]=interims!=null && !interims.equals("") ? interims.split(",") : null;
+					if(interimData!=null && interimData.length > 0) {
+						request.setAttribute("INTERIMCASES", interimData[0]);
+						request.setAttribute("INTERIMORDERS", interimData[1]);
+					}
 					sql="select "
 							+ " sum(case when disposal_type='DISPOSED OF NO COSTS' or disposal_type='DISPOSED OF AS INFRUCTUOUS' then 1 else 0 end) as disposed,"
 							+ " sum(case when disposal_type='ALLOWED NO COSTS' or disposal_type='PARTLY ALLOWED NO COSTS' then 1 else 0 end) as allowed,"
@@ -299,6 +309,10 @@ public class WelcomePageAction extends DispatchAction{
 							+ " inner join dept_new d on (a.dept_code=d.dept_code) "
 							+ " where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
 					
+					if(roleId.equals("10")) {
+						sql+=" and a.dist_id='"+distId+"'";
+					}
+					
 					List<Map<Object, String>> disposedCasesStatus = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("disposedCasesStatus", disposedCasesStatus);
 					
@@ -306,6 +320,9 @@ public class WelcomePageAction extends DispatchAction{
 					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_gpo_daily_status) b on (a.cino=b.cino) "
 							+ " inner join dept_new d on (a.dept_code=d.dept_code) "
 							+ " where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
+					if(roleId.equals("10")) {
+						sql+=" and a.dist_id='"+distId+"'";
+					}
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 				}
 				

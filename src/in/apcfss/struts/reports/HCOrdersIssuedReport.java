@@ -69,10 +69,10 @@ public class HCOrdersIssuedReport extends DispatchAction {
 						+ " left join (select cino, count(*) as final_orders from ecourts_case_finalorder  where 1=1 "+sqlCondition+" group by cino) fo on (a.cino=fo.cino) "
 						+ " where d.display = true ";
 				
-				if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
+				if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))
 					sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or a.dept_code='"
 							+ session.getAttribute("dept_code") + "')";
-				else if(roleId.equals("2")){
+				else if(roleId.equals("2") || roleId.equals("10")){
 					sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
 				}
 
@@ -113,7 +113,7 @@ public class HCOrdersIssuedReport extends DispatchAction {
 				return mapping.findForward("Logout");
 			}
 			con = DatabasePlugin.connect();
-			if(roleId.equals("5") || roleId.equals("9"))
+			if(roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))
 			{
 				deptId = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 				deptName = DatabasePlugin.getStringfromQuery("select upper(description) as description from dept_new where dept_code='"+deptId+"'", con);
@@ -290,12 +290,12 @@ public class HCOrdersIssuedReport extends DispatchAction {
 			if(roleId.equals("3") || roleId.equals("4")) {
 				sql += " and (reporting_dept_code='" + session.getAttribute("dept_code") + "' or a.dept_code='" + session.getAttribute("dept_code") + "') ";
 			}
-			if(roleId.equals("5") || roleId.equals("9")) {
+			if(roleId.equals("5") || roleId.equals("9") || roleId.equals("10")) {
 				sql += " and (a.dept_code='" + session.getAttribute("dept_code") + "') ";
 			}
 			
 			
-			if(roleId.equals("2")){
+			if(roleId.equals("2") || roleId.equals("10")){
 				sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
 			}
 			

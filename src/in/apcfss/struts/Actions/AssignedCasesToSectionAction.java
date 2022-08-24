@@ -375,7 +375,7 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 	
 						sql="select emailid, first_name||' '||last_name||' - '||designation from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b using (gp_id) where b.dept_code='"+deptCode+"' order by emailid";
 						sql="select emailid, first_name||' '||last_name||' - '||designation from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b on (a.emailid=b.gp_id) where b.dept_code='"+deptCode+"' order by emailid";
-						sql = "select emailid, short_name from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b on (a.emailid=b.gp_id) where b.dept_code='"+deptCode+"' order by emailid";
+						sql = "select emailid, full_name||' ('|| replace(emailid,'@ap.gov.in','') ||')' from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b on (a.emailid=b.gp_id) where b.dept_code='"+deptCode+"' order by emailid";
 						cform.setDynaForm("GPSLIST", DatabasePlugin.getSelectBox(sql, con));
 						request.setAttribute("SHOWGPBTN", "SHOWGPBTN");
 					}

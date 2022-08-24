@@ -134,11 +134,11 @@ public class AjaxModels extends DispatchAction {
 
 						sql = "select distinct employee_id, fullname_en ||' - '||org_unit_name_en from " + tableName
 								+ " where substring(global_org_name,1,5)='" + deptId
-								+ "' and designation_id=? and employee_id not in (select employeeid from mlo_details) order by 2";
+								+ "' and designation_id=? and email not in (select emailid from mlo_details) order by 2";
 					} else if (userType.equals("NO")) {
 						sql = "select distinct employee_id, fullname_en||' - '||org_unit_name_en from " + tableName
 								+ " where substring(global_org_name,1,5)='" + deptId
-								+ "' and designation_id=? and employee_id not in (select employeeid from nodal_officer_details where dept_id='"
+								+ "' and designation_id=? and email not in (select emailid from nodal_officer_details where dept_id='"
 								+ deptId + "') order by 2";
 					}
 				}

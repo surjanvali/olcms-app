@@ -183,19 +183,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		</logic:present>
 
-		<div class="ibox">
-			<div class="ibox-head">
-				<div class="ibox-title">
-					<h4 class="m-t-0 header-title">
-						<b><logic:notEmpty name="HEADING">
+
+		<logic:present name="secdeptwise">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b><logic:notEmpty name="HEADING">
 									${HEADING } (Legacy Cases)
 								</logic:notEmpty> </b>
-					</h4>
+						</h4>
+					</div>
 				</div>
-			</div>
-			<div class="ibox-body">
-				<div class="table-responsive">
-					<logic:present name="secdeptwise">
+				<div class="ibox-body">
+					<div class="table-responsive">
 						<table class="table table-striped table-bordered table-hover"
 							id="example" cellspacing="0" width="100%">
 							<thead>
@@ -339,10 +340,23 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</tfoot>
 
 						</table>
-
-					</logic:present>
-					<logic:present name="deptwise">
-
+					</div>
+				</div>
+			</div>
+		</logic:present>
+		<logic:present name="deptwise">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b><logic:notEmpty name="HEADING">
+									${HEADING } (Legacy Cases)
+								</logic:notEmpty> </b>
+						</h4>
+					</div>
+				</div>
+				<div class="ibox-body">
+					<div class="table-responsive">
 						<table class="table table-striped table-bordered table-hover"
 							id="example" cellspacing="0" width="100%">
 							<thead>
@@ -499,11 +513,24 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 						</table>
 
+					</div>
+				</div>
+			</div>
+		</logic:present>
 
-					</logic:present>
-
-					<logic:present name="CASESLIST">
-
+		<logic:present name="CASESLIST">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b><logic:notEmpty name="HEADING">
+									${HEADING } (Legacy Cases)
+								</logic:notEmpty> </b>
+						</h4>
+					</div>
+				</div>
+				<div class="ibox-body">
+					<div class="table-responsive">
 						<table id="example" class="table table-striped table-bordered"
 							style="width:100%">
 							<thead>
@@ -558,21 +585,31 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												</logic:notEqual>
 											</logic:notEmpty></td>
 										<td nowrap="nowrap">
-										
-										<%-- <span style="color: navy;font-weight: bold;text-align: center;"> ${map.current_status}</span> --%>
-										
-											<logic:notEmpty name="map" property="fullname"><logic:notEqual value=" " name="map" property="fullname"><br />${map.fullname}</logic:notEqual></logic:notEmpty>
-											<logic:notEmpty name="map" property="designation"><logic:notEqual value=" " name="map" property="designation"><br /> ${map.designation}</logic:notEqual></logic:notEmpty>
-											
-											<%-- <logic:notEmpty name="map" property="mobile"><logic:notEqual value=" " name="map" property="mobile"><br /> ${map.mobile}</logic:notEqual></logic:notEmpty> --%>
-											<logic:notEmpty name="map" property="email"><logic:notEqual value=" " name="map" property="email"><br /> ${map.email}</logic:notEqual></logic:notEmpty>
-											<%-- <logic:notEmpty name="map" property="district_name"><logic:notEqual value=" " name="map" property="district_name"><br /> ${map.district_name}</logic:notEqual></logic:notEmpty> --%>
-												<%-- ${map.globalorgname}<br /> 
+											<%-- <span style="color: navy;font-weight: bold;text-align: center;"> ${map.current_status}</span> --%>
+
+											<logic:notEmpty name="map" property="fullname">
+												<logic:notEqual value=" " name="map" property="fullname">
+													<br />${map.fullname}</logic:notEqual>
+											</logic:notEmpty> <logic:notEmpty name="map" property="designation">
+												<logic:notEqual value=" " name="map" property="designation">
+													<br /> ${map.designation}</logic:notEqual>
+											</logic:notEmpty> <%-- <logic:notEmpty name="map" property="mobile"><logic:notEqual value=" " name="map" property="mobile"><br /> ${map.mobile}</logic:notEqual></logic:notEmpty> --%>
+											<logic:notEmpty name="map" property="email">
+												<logic:notEqual value=" " name="map" property="email">
+													<br /> ${map.email}</logic:notEqual>
+											</logic:notEmpty> <%-- <logic:notEmpty name="map" property="district_name"><logic:notEqual value=" " name="map" property="district_name"><br /> ${map.district_name}</logic:notEqual></logic:notEmpty> --%>
+											<%-- ${map.globalorgname}<br /> 
 												 ${map.designation} <br />
 												${map.mobile} <br /> ${map.email} <br /> ${map.district_name }--%>
 										</td>
-										<td><logic:notEmpty name="map" property="org_unit_name_en"><logic:notEqual value=" " name="map" property="org_unit_name_en"><br /> ${map.org_unit_name_en}</logic:notEqual></logic:notEmpty></td>
-										<td nowrap="nowrap"><logic:notEmpty name="map" property="date_of_filing">
+										<td><logic:notEmpty name="map"
+												property="org_unit_name_en">
+												<logic:notEqual value=" " name="map"
+													property="org_unit_name_en">
+													<br /> ${map.org_unit_name_en}</logic:notEqual>
+											</logic:notEmpty></td>
+										<td nowrap="nowrap"><logic:notEmpty name="map"
+												property="date_of_filing">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_of_filing">
 																	${map.date_of_filing }
@@ -604,7 +641,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 										<td>${map.fil_no}</td>
 										<td>${map.fil_year }</td>
-										<td nowrap="nowrap"><logic:notEmpty name="map" property="date_next_list">
+										<td nowrap="nowrap"><logic:notEmpty name="map"
+												property="date_next_list">
 												<logic:notEqual value="0001-01-01" name="map"
 													property="date_next_list">
 																	${map.date_next_list }
@@ -630,9 +668,24 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</tR>
 							</tfoot>
 						</table>
-					</logic:present>
+					</div>
+				</div>
+			</div>
+		</logic:present>
 
-					<logic:present name="DISPWISE">
+		<logic:present name="DISPWISE">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b><logic:notEmpty name="HEADING">
+									${HEADING } (Legacy Cases)
+								</logic:notEmpty> </b>
+						</h4>
+					</div>
+				</div>
+				<div class="ibox-body">
+					<div class="table-responsive">
 						<table id="example" class="table table-striped table-bordered"
 							style="width:100%">
 							<thead>
@@ -663,9 +716,24 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</tR>
 							</tfoot>
 						</table>
-					</logic:present>
+					</div>
+				</div>
+			</div>
+		</logic:present>
 
-					<logic:present name="DIPTWISECASES">
+		<logic:present name="DIPTWISECASES">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b><logic:notEmpty name="HEADING">
+									${HEADING } (Legacy Cases)
+								</logic:notEmpty> </b>
+						</h4>
+					</div>
+				</div>
+				<div class="ibox-body">
+					<div class="table-responsive">
 						<table id="example" class="table table-striped table-bordered"
 							style="width:100%">
 							<thead>
@@ -698,11 +766,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</tR>
 							</tfoot>
 						</table>
-					</logic:present>
-
+					</div>
 				</div>
 			</div>
-		</div>
+		</logic:present>
+
+
 	</html:form>
 </div>
 <div id="MyPopup" class="modal fade" role="dialog"

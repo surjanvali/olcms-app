@@ -447,9 +447,9 @@ public class NodalOfficerChangeRequestAction extends DispatchAction{
 				System.out.println("SQL:" + sql);
 				a += DatabasePlugin.executeUpdate(sql, con);
 				
-				int userRole=10;
+				int userRole=5;//State Nodal Officer
 				if(distId > 0)
-					userRole=5;
+					userRole=10;// District Nodal Officer
 				
 				sql = "insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id , dept_code, user_type, dist_id) "
 						+ "select a.emailid, md5('olcms@2021'), b.fullname_en, '" + deptCode

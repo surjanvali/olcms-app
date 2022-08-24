@@ -10,16 +10,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 %>
 
 <!-- <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'> -->
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
-<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>	
+<link rel='stylesheet'
+	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
+<link rel='stylesheet'
+	href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 
-<link href="./assetsnew/vendors/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="./assetsnew/vendors/select2/dist/css/select2.min.css"
+	rel="stylesheet" />
 <!-- <link href="https://apbudget.apcfss.in/css/select2.css" rel="stylesheet" type="text/css" /> -->
 
 <!-- PLUGINS STYLES-->
 <!-- <link href="./assetsnew/vendors/DataTables/datatables.min.css" rel="stylesheet" /> -->
 <!-- THEME STYLES-->
-<link href="assetsnew/css/main.min.css" rel="stylesheet" /> 
+<link href="assetsnew/css/main.min.css" rel="stylesheet" />
 
 <div class="page-content fade-in-up">
 	<html:form action="/HCNewCaseStatusAbstractReport"
@@ -180,17 +183,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		</logic:present>
 
-		<div class="ibox">
-			<div class="ibox-head">
-				<div class="ibox-title">
-					<h4 class="m-t-0 header-title">
-						<b><logic:notEmpty name="HEADING"> ${HEADING } (New Cases) </logic:notEmpty> </b>
-					</h4>
+
+		<logic:present name="secdeptwisenewcases">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b><logic:notEmpty name="HEADING"> ${HEADING } (New Cases) </logic:notEmpty>
+							</b>
+						</h4>
+					</div>
 				</div>
-			</div>
-			<div class="ibox-body">
-				<div class="table-responsive">
-					<logic:present name="secdeptwisenewcases">
+				<div class="ibox-body">
+					<div class="table-responsive">
 						<table class="table table-striped table-bordered table-hover"
 							id="example2" cellspacing="0" width="100%">
 							<thead>
@@ -291,11 +296,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 									<bean:define id="closedcases"
 										value="${closedcases + map.closedcases }"></bean:define>
-										<bean:define id="goiTotals"
-										value="${goiTotals + map.goi }"></bean:define>
-										<bean:define id="psuTotals"
-										value="${psuTotals + map.psu }"></bean:define>
-										<bean:define id="privateTotals"
+									<bean:define id="goiTotals" value="${goiTotals + map.goi }"></bean:define>
+									<bean:define id="psuTotals" value="${psuTotals + map.psu }"></bean:define>
+									<bean:define id="privateTotals"
 										value="${privateTotals + map.privatetot }"></bean:define>
 
 									<bean:define id="hodSecTotals"
@@ -331,15 +334,27 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<td colspan="1" style="text-align: right;">${goiTotals }</td>
 									<td colspan="1" style="text-align: right;">${psuTotals }</td>
 									<td colspan="1" style="text-align: right;">${privateTotals }</td>
-									
+
 								</tR>
 							</tfoot>
 
 						</table>
-
-					</logic:present>
-					<logic:present name="deptwisenewcases">
-
+					</div>
+				</div>
+			</div>
+		</logic:present>
+		<logic:present name="deptwisenewcases">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b><logic:notEmpty name="HEADING"> ${HEADING } (New Cases) </logic:notEmpty>
+							</b>
+						</h4>
+					</div>
+				</div>
+				<div class="ibox-body">
+					<div class="table-responsive">
 						<table class="table table-striped table-bordered table-hover"
 							id="example2" cellspacing="0" width="100%">
 							<thead>
@@ -453,11 +468,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 									<bean:define id="closedcases"
 										value="${closedcases + map.closedcases }"></bean:define>
-										<bean:define id="goiTotals"
-										value="${goiTotals + map.goi }"></bean:define>
-										<bean:define id="psuTotals"
-										value="${psuTotals + map.psu }"></bean:define>
-										<bean:define id="privateTotals"
+									<bean:define id="goiTotals" value="${goiTotals + map.goi }"></bean:define>
+									<bean:define id="psuTotals" value="${psuTotals + map.psu }"></bean:define>
+									<bean:define id="privateTotals"
 										value="${privateTotals + map.privatetot }"></bean:define>
 
 									<bean:define id="hodSecTotals"
@@ -497,12 +510,24 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</tfoot>
 
 						</table>
+					</div>
+				</div>
+			</div>
 
+		</logic:present>
 
-					</logic:present>
-
-					<logic:present name="CASESLIST">
-
+		<logic:present name="CASESLIST">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b><logic:notEmpty name="HEADING"> ${HEADING } (New Cases) </logic:notEmpty>
+							</b>
+						</h4>
+					</div>
+				</div>
+				<div class="ibox-body">
+					<div class="table-responsive">
 						<table id="example" class="table table-striped table-bordered"
 							style="width:100%">
 							<thead>
@@ -533,15 +558,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											value="${map.ack_no}"
 											class="btn btn-sm btn-info waves-effect waves-light"
 											onclick="javascript:viewCaseDetailsPopup('${map.ack_no}');" />
-											</td>
-											<%-- <td>${map.ack_no }<logic:notEqual value="-" name="map"
+										</td>
+										<%-- <td>${map.ack_no }<logic:notEqual value="-" name="map"
 													property="hc_ack_no">
 
 													<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
 
 												</logic:notEqual>
 											</td> --%>
-										
+
 										<%-- <td><logic:notEmpty name="map"
 												property="scanned_document_path1">
 												<logic:notEqual value="-" name="map"
@@ -552,7 +577,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 															Affidavit</span></a>
 												</logic:notEqual>
 											</logic:notEmpty></td> --%>
-											
+
 										<td>${map.case_short_name }</td>
 										<%-- <td>${map.reg_no}</td>
 										<td>${map.reg_year}</td> --%>
@@ -564,44 +589,44 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${map.advocateccno}</td>
 										<td>${map.district_name}</td>
 										<td style="text-align: center;" nowrap="nowrap"><logic:present
-													name="map" property="ack_file_path">
-													<a href="./${map.ack_file_path}" target="_new"
-														title="Print Acknowledgement" class="btn btn-sm btn-info">
-														<i class="fa fa-save"></i> <span>Acknowledgement</span> <!-- <span>Download</span> -->
-													</a>
-												</logic:present> <logic:present name="map" property="barcode_file_path">
-													<a href="./${map.barcode_file_path}" target="_new"
-														title="Print Barcode" class="btn btn-sm btn-info"> <i
-														class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
-													</a>
-												</logic:present> <!-- //id="btnShowPopup"  --> <%-- <input type="button"
+												name="map" property="ack_file_path">
+												<a href="./${map.ack_file_path}" target="_new"
+													title="Print Acknowledgement" class="btn btn-sm btn-info">
+													<i class="fa fa-save"></i> <span>Acknowledgement</span> <!-- <span>Download</span> -->
+												</a>
+											</logic:present> <logic:present name="map" property="barcode_file_path">
+												<a href="./${map.barcode_file_path}" target="_new"
+													title="Print Barcode" class="btn btn-sm btn-info"> <i
+													class="fa fa-save"></i> <span>Barcode</span> <!-- <span>Download</span> -->
+												</a>
+											</logic:present> <!-- //id="btnShowPopup"  --> <%-- <input type="button"
 												id="btnShowPopup" value="Scanned Affidavit"
 												class="btn btn-sm btn-info waves-effect waves-light"
 												onclick="javascript:viewCaseDetailsPopup('${map.ack_no}');" /> --%>
 
-												<logic:present name="map" property="ack_no">
+											<logic:present name="map" property="ack_no">
 
 
-													<logic:notEqual value="-" name="map" property="hc_ack_no">
-														<a
-															href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
-															target="_new" title="Print Barcode"
-															class="btn btn-sm btn-info">
-													</logic:notEqual>
+												<logic:notEqual value="-" name="map" property="hc_ack_no">
+													<a
+														href="./uploads/scandocs/${map.hc_ack_no}/${map.hc_ack_no}.pdf"
+														target="_new" title="Print Barcode"
+														class="btn btn-sm btn-info">
+												</logic:notEqual>
 
 
-													<logic:equal value="-" name="map" property="hc_ack_no">
-														<a
-															href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
-															target="_new" title="Print Barcode"
-															class="btn btn-sm btn-info">
-													</logic:equal>
+												<logic:equal value="-" name="map" property="hc_ack_no">
+													<a
+														href="./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf"
+														target="_new" title="Print Barcode"
+														class="btn btn-sm btn-info">
+												</logic:equal>
 
-													<i class="fa fa-save"></i>
-													<span>Scanned Affidavit</span>
-													</a>
-												</logic:present></td>
-										
+												<i class="fa fa-save"></i>
+												<span>Scanned Affidavit</span>
+												</a>
+											</logic:present></td>
+
 									</tr>
 
 								</logic:iterate>
@@ -612,9 +637,23 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</tR>
 							</tfoot>
 						</table>
-					</logic:present>
+					</div>
+				</div>
+			</div>
+		</logic:present>
 
-					<logic:present name="DISPWISE">
+		<logic:present name="DISPWISE">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b><logic:notEmpty name="HEADING"> ${HEADING } (New Cases) </logic:notEmpty>
+							</b>
+						</h4>
+					</div>
+				</div>
+				<div class="ibox-body">
+					<div class="table-responsive">
 						<table id="example" class="table table-striped table-bordered"
 							style="width:100%">
 							<thead>
@@ -645,9 +684,23 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</tR>
 							</tfoot>
 						</table>
-					</logic:present>
-					
-					<logic:present name="DIPTWISECASES">
+					</div>
+				</div>
+			</div>
+		</logic:present>
+
+		<logic:present name="DIPTWISECASES">
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b><logic:notEmpty name="HEADING"> ${HEADING } (New Cases) </logic:notEmpty>
+							</b>
+						</h4>
+					</div>
+				</div>
+				<div class="ibox-body">
+					<div class="table-responsive">
 						<table id="example" class="table table-striped table-bordered"
 							style="width:100%">
 							<thead>
@@ -680,11 +733,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</tR>
 							</tfoot>
 						</table>
-					</logic:present>
-
+					</div>
 				</div>
 			</div>
-		</div>
+		</logic:present>
 	</html:form>
 </div>
 <div id="MyPopup" class="modal fade" role="dialog"
@@ -710,11 +762,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js'></script>
-<script src="./assetsnew/vendors/select2/dist/js/select2.full.min.js" type="text/javascript"></script>
-	
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script
+	src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
+<script
+	src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js'></script>
+<script src="./assetsnew/vendors/select2/dist/js/select2.full.min.js"
+	type="text/javascript"></script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		$(".select2Class").select2();
@@ -734,7 +790,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#mode").val("HODwisedetails");
 		$("#HCNewCaseStatusAbstract").submit();
 	}
-	function showCasesWiseNew(deptId, deptDesc, status,level) {
+	function showCasesWiseNew(deptId, deptDesc, status, level) {
 		$("#deptId").val(deptId);
 		$("#deptName").val(deptDesc);
 		$("#caseStatus").val(status);
