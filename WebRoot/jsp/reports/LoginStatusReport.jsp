@@ -53,21 +53,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									property="dynaForm(officerType)" styleId="officerType"
 									value="MLO" onclick="changeReport();">
 									<span class="input-span"></span>MLO (Legal)</html:radio>
-							</label>
-							<label class="ui-radio ui-radio-inline"> <html:radio
+							</label> <label class="ui-radio ui-radio-inline"> <html:radio
 									property="dynaForm(officerType)" styleId="officerType"
 									value="MLOS" onclick="changeReport();">
 									<span class="input-span"></span>MLO (Subject)</html:radio>
-							</label>
-							<label class="ui-radio ui-radio-inline"> <html:radio
+							</label> <label class="ui-radio ui-radio-inline"> <html:radio
 									property="dynaForm(officerType)" styleId="officerType"
 									value="NO" onclick="changeReport();">
 									<span class="input-span"></span>Nodal Officers (Legal)</html:radio>
-							</label>
-							<label class="ui-radio ui-radio-inline"> <html:radio
+							</label> <label class="ui-radio ui-radio-inline"> <html:radio
 									property="dynaForm(officerType)" styleId="officerType"
 									value="GP" onclick="changeReport();">
-									<span class="input-span"></span>Government Pleaders (Gp)</html:radio>
+									<span class="input-span"></span>Government Pleaders (GPs)</html:radio>
 							</label>
 						</div>
 					</div>
@@ -84,6 +81,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<!-- <th>Department Code</th> -->
 									<th>Department</th>
 									<th>Employee Name</th>
+									<logic:present name="GPREPORT">
+										<th>e-Mail</th>
+										<th>Mobile No.</th>
+									</logic:present>
 									<th>First Login</th>
 									<th>Logged-In Days</th>
 									<th>Not Logged-In Days</th>
@@ -95,8 +96,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<tr>
 										<td>${i+1 }.</td>
 										<%-- <td>${map.dept_code }</td> --%>
-										<td>${map.description }</td>
+										<td style="max-width: 350px;">${map.description }</td>
 										<td>${map.user_description }</td>
+										<logic:present name="GPREPORT">
+											<td>${map.emailid }</td>
+											<td>${map.mobile_no }</td>
+
+										</logic:present>
+
 										<td>${map.firstlogin }</td>
 										<td style="text-align: right;">${map.loggedindays }</td>
 										<td style="text-align: right;">${map.notlogedindays }</td>
@@ -106,7 +113,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</tbody>
 							<tfoot>
 								<tR>
-									<td colspan="7">&nbsp;</td>
+									<logic:present name="GPREPORT">
+										<td colspan="9">&nbsp;</td>
+									</logic:present>
+									<logic:notPresent name="GPREPORT">
+										<td colspan="7">&nbsp;</td>
+									</logic:notPresent>
 								</tR>
 							</tfoot>
 						</table>
