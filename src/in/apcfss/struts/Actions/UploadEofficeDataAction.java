@@ -340,8 +340,9 @@ public class UploadEofficeDataAction extends DispatchAction {
 			*/
 			
 			// Unirest.setTimeouts(0, 0);
-			HttpResponse<String> response = Unirest.post("http://demo.eoffice.ap.gov.in/TTReports/Nandyal.php").asString();
-			//.body("").asString();
+			HttpResponse<String> response = Unirest.post("https://demo.eoffice.ap.gov.in/TTReports/Nandyal.php")
+					  .body("")
+					  .asString();
 			
 			ObjectMapper objectMapper = new ObjectMapper();
 			// NicDataBean someclass = objectMapper.readValue(resp, NicDataBean.class);
