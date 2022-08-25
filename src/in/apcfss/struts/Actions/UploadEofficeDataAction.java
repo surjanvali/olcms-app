@@ -24,6 +24,8 @@ import org.json.JSONObject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
 
 import in.apcfss.struts.Forms.CommonForm;
 import in.apcfss.struts.Utilities.NicDataBean;
@@ -320,25 +322,30 @@ public class UploadEofficeDataAction extends DispatchAction {
 		return true;
 	}
 	
-
 	// final static String dbUrl = "jdbc:postgresql://localhost:5432/apolcms", dbUserName = "apolcms", dbPassword = "apolcms";
+	
 	public static void main(String[] args) {
-		String sql = "", mobileNo=null;
+		String sql = "", mobileNo = null;
 		Connection con = null;
 		ResultSet rs = null;
 		Statement st = null;
 		try {
+			/* 
 			sql="select mobile_no, emailid from ecourts_gps_latest order by slno ";
 			// Class.forName("org.postgresql.Driver");
-			//con = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
+			// con = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
 			// String myURL="https://demo.eoffice.ap.gov.in/TTReports/Apsecretariat.php";
-			String myURL="https://demo.eoffice.ap.gov.in/TTReports/Annamayya.php";
-			String resp = NicDataRetrievalService.sendPostRequest(myURL);
+			   String myURL="https://demo.eoffice.ap.gov.in/TTReports/Annamayya.php";
+			   String resp = NicDataRetrievalService.sendPostRequest(myURL); 
+			*/
+			
+			// Unirest.setTimeouts(0, 0);
+			HttpResponse<String> response = Unirest.post("http://demo.eoffice.ap.gov.in/TTReports/Nandyal.php").asString();
+			//.body("").asString();
 			
 			ObjectMapper objectMapper = new ObjectMapper();
 			// NicDataBean someclass = objectMapper.readValue(resp, NicDataBean.class);
-			List<NicDataBean> deptList = objectMapper.readValue(resp,
-					new TypeReference<List<NicDataBean>>() { });
+			List<NicDataBean> deptList = objectMapper.readValue(response.toString(), new TypeReference<List<NicDataBean>>() { });
 			
 			for (NicDataBean c : deptList) {
 				System.out.println("NAME:"+c.getFullname_en());
@@ -347,6 +354,4 @@ public class UploadEofficeDataAction extends DispatchAction {
 			e.printStackTrace();
 		}
 	}
-
-	
 }

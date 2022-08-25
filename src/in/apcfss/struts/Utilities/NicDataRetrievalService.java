@@ -147,7 +147,7 @@ public class NicDataRetrievalService {
 
 			//connection.setDoInput(true);
 			connection.setDoOutput(true);
-			connection.setRequestMethod("GET");
+			connection.setRequestMethod("POST");
 			// connection.setRequestProperty("Accept", "application/json");
 			connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 			// OutputStreamWriter writer = new

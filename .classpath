@@ -43,6 +43,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/com.fasterxml.jackson.annotations.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/com.fasterxml.jackson.core.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/com.fasterxml.jackson.databind.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/unirest-java-1.4.9.jar"/>
 	<classpathentry kind="con" path="com.genuitec.runtime.library/com.genuitec.jstl_1.2.1">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="WEB-INF/lib"/>

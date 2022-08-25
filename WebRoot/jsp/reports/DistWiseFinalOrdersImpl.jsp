@@ -13,8 +13,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
-<link rel='stylesheet'
-	href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+<!-- <link rel='stylesheet'
+	href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'> -->
 <link rel='stylesheet'
 	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
 <link rel='stylesheet'

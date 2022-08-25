@@ -35,7 +35,7 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 				return mapping.findForward("Logout");
 			}
 			
-			else  if(roleId.equals("5") || roleId.equals("9")) {
+			else  if(roleId.equals("5") || roleId.equals("9") || roleId.equals("10")) {
 				
 				 return HODwisedetails(mapping, form, request, response); 
 			}
@@ -110,7 +110,7 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 			}
 			con = DatabasePlugin.connect();
 			
-			if (roleId.equals("5") || roleId.equals("9")) {
+			if (roleId.equals("5") || roleId.equals("9") || roleId.equals("10")) {
 				deptId = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 				deptName = DatabasePlugin.getStringfromQuery(
 						"select upper(description) as description from dept_new where dept_code='" + deptId + "'", con);
@@ -255,7 +255,7 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 				condition = " inner join ecourts_mst_gp_dept_map egm on (egm.dept_code=ad.dept_code) ";
 			}
 
-			if (roleId.equals("2")) {
+			if (roleId.equals("2") || roleId.equals("10")) {
 				sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
 			}
 
@@ -372,7 +372,5 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 		}
 		return mapping.findForward(target);
 	}
-	
-	
 
 }
