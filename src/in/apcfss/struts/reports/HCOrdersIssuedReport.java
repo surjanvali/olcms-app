@@ -249,9 +249,8 @@ public class HCOrdersIssuedReport extends DispatchAction {
 			//if (roleId.equals("6") )
 				//condition= " inner join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) ";
 			
-			
-			
-			sql = "select a.*, b.orderpaths, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, case when (prayer is not null and coalesce(trim(prayer),'')!='' and length(prayer) > 2) then substr(prayer,1,250) else '-' end as prayer, prayer as prayer_full, ra.address from ecourts_case_data a "
+			sql = "select a.*, b.orderpaths, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, case when (prayer is not null and coalesce(trim(prayer),'')!='' and length(prayer) > 2) then substr(prayer,1,250) else '-' end as prayer, prayer as prayer_full, ra.address"
+					+ " from ecourts_case_data a "
 					+ " left join nic_prayer_data np on (a.cino=np.cino)"
 					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
 					

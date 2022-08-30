@@ -179,32 +179,32 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 			actionType = CommonModels.checkStringObject(cform.getDynaForm("actionType"));
 			deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
 			
-			heading="Cases List for "+deptName;
+			heading="Cases List for Dept. :"+deptName;
 			
 			if(!caseStatus.equals("")) {
 				if(caseStatus.equals("CLOSED")){
 						sqlCondition= " and coalesce(a.ecourts_case_status,'')='Closed' ";
-						heading+=" Closed Cases List";
+						heading+=", Closed Cases List";
 					}
 				if(caseStatus.equals("PET")) {
 					sqlCondition=" and petition_document is not null and length(petition_document)>10 ";
-					heading+=" Petition Documets Uploaded";
+					heading+=" (Petition Documents Uploaded)";
 				}
 				if(caseStatus.equals("COUNTERUPLOADED")) {
 					sqlCondition=" and counter_filed_document is not null  and length(counter_filed_document)>10  ";
-					heading+=" Counter Uploaded Cases";
+					heading+=" (Counter Uploaded)";
 				}
 				if(caseStatus.equals("PWRUPLOADED")) {
 					sqlCondition= " and pwr_uploaded_copy is not null  and length(pwr_uploaded_copy)>10 ";
-					heading+=" Parawise Remarks Uploaded Cases List";
+					heading+=" (Parawise Remarks Uploaded)";
 				}
 				if(caseStatus.equals("GPCOUNTER")) {
 					sqlCondition=" and counter_approved_gp='Yes' ";
-					heading+=" and Counters Filed";
+					heading+=" (Counters Filed)";
 				}
 				if(caseStatus.equals("SCANNEDDOC")) {
 					sqlCondition=" and scanned_document_path is not null and length(scanned_document_path)>10 ";
-					heading+=" and Documents Scanned at APOLCMS Cell, High Court";
+					heading+=" (Documents Scanned at APOLCMS Cell, High Court)";
 				}
 			}
 			
@@ -236,8 +236,9 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 					// + "n.global_org_name as globalorgname, n.fullname_en as fullname, n.designation_name_en as designation, n.mobile1 as mobile, n.email as email, "
 					+ ""
 					+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer, ra.address from ecourts_case_data a "
+					+ " left join  ecourts_olcms_case_details a1 on (a.cino=a1.cino)"
 					+ " left join nic_prayer_data np on (a.cino=np.cino)"
-					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
+					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and ra.party_no=1) "
 					//+ "inner join nic_data n on (a.assigned_to=n.email) "
 					+ " left join"
 					+ " ("

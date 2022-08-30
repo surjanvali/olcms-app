@@ -1,0 +1,7 @@
+1. Mismatch of Section Officer District Codes with cases and users 
+
+select assigned_to, userid,count(*) from ecourts_case_data a inner join users b on (assigned_to=userid) where case_status='10' and a.dist_id!=b.dist_id group by assigned_to, userid
+
+begin
+update ecourts_case_data set dist_id=users.dist_id from users where assigned_to=users.userid and ecourts_case_data.case_status='10' and ecourts_case_data.dist_id!=users.dist_id
+commit
