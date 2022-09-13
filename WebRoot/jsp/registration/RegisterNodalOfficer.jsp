@@ -215,9 +215,26 @@
 							<tbody>
 
 								<logic:iterate id="map" name="List_data" indexId="i">
-									<tr>
-										<td>${i+1 }</td>
-										<td>${map.description }</td>
+
+									<logic:present name="map" property="status">
+										<logic:equal value="TRANSFERRED" name="map" property="status">
+											<tr class="warning">
+										</logic:equal>
+
+										<logic:notEqual value="TRANSFERRED" name="map"
+											property="status">
+											<tr>
+										</logic:notEqual>
+
+									</logic:present>
+									<logic:notPresent name="map" property="status">
+										<tr>
+									</logic:notPresent>
+
+
+
+									<td>${i+1 }</td>
+										<td>${map.dept_code } - ${map.description }</td>
 										<td>${map.fullname_en }</td>
 										<td>${map.designation_name_en }</td>
 										<td>${map.mobileno }</td>
@@ -238,7 +255,7 @@
 											<div id="SMSBTNDIV${map.aadharno}">
 												<button type="button" class="btn btn-sm btn-warning"
 													onclick="sendSMS('${map.aadharno}','${map.emailid}','NO')">
-													Send SMS</span>
+													Send SMS
 												</button>
 											</div>
 										</td>

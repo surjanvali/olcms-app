@@ -415,12 +415,13 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 						
 						updateSql += ", judgement_order='"+judgement_order+"'";
 						
-						/*
-						 * sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
-						 * + "values ('" + cIno +
-						 * "','Uploaded Judgement Order','"+userId+"', '"+request.getRemoteAddr()+"', '"
-						 * +remarks+"', '"+judgement_order+"')"; DatabasePlugin.executeUpdate(sql, con);
-						 */
+						
+						  sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
+						  + "values ('" + cIno +
+						  "','Uploaded Judgement Order','"+userId+"', '"+request.getRemoteAddr()+"', '"
+						  +remarks+"', '"+judgement_order+"')"; 
+						  DatabasePlugin.executeUpdate(sql, con);
+						 
 					}
 					
 					
@@ -457,12 +458,13 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 					sql="update ecourts_case_data set case_status='99' where cino='"+cIno+"'";
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
-					/*
-					 * sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks ) "
-					 * + "values ('" + cIno +
-					 * "','"+actionPerformed+"','"+userId+"', '"+request.getRemoteAddr()+"', '"
-					 * +remarks+"')"; a += DatabasePlugin.executeUpdate(sql, con);
-					 */
+					
+					  sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks ) "
+					  + "values ('" + cIno +
+					  "','"+actionPerformed+"','"+userId+"', '"+request.getRemoteAddr()+"', '"
+					  +remarks+"')"; 
+					  a += DatabasePlugin.executeUpdate(sql, con);
+					 
 					
 					if (a > 0) {
 						request.setAttribute("successMsg", "Case details updated successfully for Cino :" + cIno);
@@ -483,15 +485,14 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 						
 						updateSql += ", appeal_filed_copy='"+appeal_filed_copy+"'";
 						
-						/*
-						 * sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
-						 * + "values ('" + cIno +
-						 * "','Uploaded Appeal Copy','"+userId+"', '"+request.getRemoteAddr()+"', '"
-						 * +remarks+"', '"+appeal_filed_copy+"')"; DatabasePlugin.executeUpdate(sql,
-						 * con);
-						 */
+						
+						  sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
+						  + "values ('" + cIno +
+						  "','Uploaded Appeal Copy','"+userId+"', '"+request.getRemoteAddr()+"', '"
+						  +remarks+"', '"+appeal_filed_copy+"')"; 
+						  DatabasePlugin.executeUpdate(sql,con);
+						 
 					}
-					
 					
 					
 					if(Integer.parseInt(DatabasePlugin.getSingleValue(con, "select count(*) from ecourts_olcms_case_details where cino='"+cIno+"'")) > 0) {
@@ -505,7 +506,7 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 						sql = "update ecourts_olcms_case_details set final_order_status='"
 								+ cform.getDynaForm("ecourtsCaseStatus") + "', appeal_filed_copy='"
 								+ appeal_filed_copy+ "',appeal_filed_date=to_date('"+ CommonModels.checkStringObject(cform.getDynaForm("appealFiledDt")) + "','mm/dd/yyyy') ,"
-								+ "last_updated_by='" + userId + "', last_updated_on=now(),no_district_updated='T' "
+								+ "last_updated_by='" + userId + "', last_updated_on=now(),no_district_updated='T' ,remarks='" + remarks + "' "
 								+ " where cino='" + cIno + "'";
 						
 					}
@@ -513,7 +514,7 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 						
 						sql = "insert into ecourts_olcms_case_details (cino, final_order_status, appeal_filed_copy, last_updated_by, last_updated_on, "
 								+ " remarks,  appeal_filed_date,no_district_updated) "
-								+ " values ('" + cIno + "', '" + cform.getDynaForm("ecourtsCaseStatus") + "', '"+appeal_filed_copy+"', '"+userId+"',now(),'" + remarks + "', '"
+								+ " values ('" + cIno + "', '" + cform.getDynaForm("ecourtsCaseStatus") + "', '"+appeal_filed_copy+"', '"+userId+"',now(),'" + remarks + "', "
 								+ " to_date('"+ CommonModels.checkStringObject(cform.getDynaForm("appealFiledDt")) +"','mm/dd/yyyy'),'T')";
 					
 					}
@@ -524,12 +525,14 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 					sql="update ecourts_case_data set case_status='99' where cino='"+cIno+"'";
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
+					
 					/*
-					 * sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks ) "
+					 * sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
 					 * + "values ('" + cIno +
-					 * "','"+actionPerformed+"','"+userId+"', '"+request.getRemoteAddr()+"', '"
-					 * +remarks+"')"; a += DatabasePlugin.executeUpdate(sql, con);
+					 * "','Uploaded Judgement Order','"+userId+"', '"+request.getRemoteAddr()+"', '"
+					 * +remarks+"', '"+judgement_order+"')"; DatabasePlugin.executeUpdate(sql, con);
 					 */
+					 
 					
 					if (a > 0) {
 						request.setAttribute("successMsg", "Case details updated successfully for Cino :" + cIno);
@@ -549,15 +552,14 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 						
 						//updateSql += ", appeal_filed_copy='"+dismissedFileCopy+"'";
 						
-						/*
-						 * sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
-						 * + "values ('" + cIno +
-						 * "','Uploaded Appeal Copy','"+userId+"', '"+request.getRemoteAddr()+"', '"
-						 * +remarks+"', '"+appeal_filed_copy+"')"; DatabasePlugin.executeUpdate(sql,
-						 * con);
-						 */
+						
+						  sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
+						  + "values ('" + cIno +
+						  "','Uploaded Appeal Copy','"+userId+"', '"+request.getRemoteAddr()+"', '"
+						  +remarks+"', '"+dismissedFileCopy+"')"; 
+						  DatabasePlugin.executeUpdate(sql,con);
+						 
 					}
-					
 					
 					
 					if(Integer.parseInt(DatabasePlugin.getSingleValue(con, "select count(*) from ecourts_olcms_case_details where cino='"+cIno+"'")) > 0) {
@@ -568,13 +570,13 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 						DatabasePlugin.executeUpdate(sql, con);
 						
 						sql = "update ecourts_olcms_case_details set final_order_status='"
-								+ cform.getDynaForm("ecourtsCaseStatus") + "', dismissed_copy='"
+								+ cform.getDynaForm("ecourtsCaseStatus") + "',remarks='" + remarks + "', dismissed_copy='"
 								+ dismissedFileCopy+ "', last_updated_by='" + userId + "', last_updated_on=now(),no_district_updated='T'  where cino='" + cIno + "'";
 						
 					}
 					else {
 						
-						sql = "insert into ecourts_olcms_case_details (cino, ecourts_case_status, dismissed_copy,  last_updated_by, last_updated_on,  remarks,no_district_updated) "
+						sql = "insert into ecourts_olcms_case_details (cino, final_order_status, dismissed_copy,  last_updated_by, last_updated_on,  remarks,no_district_updated) "
 								+ " values ('" + cIno + "', '" + cform.getDynaForm("ecourtsCaseStatus") + "', '"
 								+ dismissedFileCopy + "','" + userId + "', now(),'" + remarks + "','T')";
 					

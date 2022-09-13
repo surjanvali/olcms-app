@@ -189,7 +189,7 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 					+ " left join district_mst dm on (ad.dist_id=dm.district_id) "
 					+ " left join dept_new dmt on (ad.dept_code=dmt.dept_code)"
 					+ " inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "+condition1+"   "
-					+ " where a.delete_status is false and ack_type='NEW'    " + sqlCondition
+					+ " where a.delete_status is false and ack_type='NEW'  and coalesce(ad.ecourts_case_status,'')!='Closed'  " + sqlCondition
 					+ " order by a.inserted_time desc";
 
 			System.out.println("CASES SQL:" + sql);
@@ -259,16 +259,12 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			}
-			
-			 
 			System.out.println("cIno-0-"+cIno1[0]);
 			System.out.println("cIno-1-"+cIno1[1]);
 			cIno = cIno1[0];
 			if (cIno != null && !cIno.equals("")) {
 				con = DatabasePlugin.connect();
 
-				//sql = "select * from ecourts_gpo_ack_dtls where ack_no='" + cIno + "'";//user list
-				
 				String sqlCondition = "";
 
 				if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
@@ -431,6 +427,8 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 						sql="select emailid, first_name||' '||last_name||' - '||designation from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b using (gp_id) where b.dept_code='"+deptCode+"' order by emailid";
 						sql="select emailid, first_name||' '||last_name||' - '||designation from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b on (a.emailid=b.gp_id) where b.dept_code='"+deptCode+"' order by emailid";
 						sql = "select emailid, short_name from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b on (a.emailid=b.gp_id) where b.dept_code='"+deptCode+"' order by emailid";
+						sql = "select emailid, full_name||' ('|| replace(emailid,'@ap.gov.in','') ||')' from ecourts_mst_gps a inner join ecourts_mst_gp_dept_map b on (a.emailid=b.gp_id) where b.dept_code='"+deptCode+"' order by emailid";
+
 						cform.setDynaForm("GPSLIST", DatabasePlugin.getSelectBox(sql, con));
 						request.setAttribute("SHOWGPBTN", "SHOWGPBTN");
 					}
@@ -455,9 +453,9 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 							+ " case when length(judgement_order) > 0 then judgement_order else null end as judgement_order,"
 							+ " case when length(action_taken_order) > 0 then action_taken_order else null end as action_taken_order,"
 							+ " last_updated_by, last_updated_on, counter_filed, remarks, ecourts_case_status, corresponding_gp, "
-							+ " pwr_uploaded, to_char(pwr_submitted_date,'dd/mm/yyyy') as pwr_submitted_date, to_char(pwr_received_date,'dd/mm/yyyy') as pwr_received_date, "
-							+ " pwr_approved_gp, to_char(pwr_gp_approved_date,'dd/mm/yyyy') as pwr_gp_approved_date, appeal_filed, "
-							+ " appeal_filed_copy, to_char(appeal_filed_date,'dd/mm/yyyy') as appeal_filed_date, pwr_uploaded_copy "
+							+ " pwr_uploaded, to_char(pwr_submitted_date,'mm/dd/yyyy') as pwr_submitted_date, to_char(pwr_received_date,'mm/dd/yyyy') as pwr_received_date, "
+							+ " pwr_approved_gp, to_char(pwr_gp_approved_date,'mm/dd/yyyy') as pwr_gp_approved_date, appeal_filed, "
+							+ " appeal_filed_copy, to_char(appeal_filed_date,'mm/dd/yyyy') as appeal_filed_date, pwr_uploaded_copy "
 							+ " FROM apolcms.ecourts_olcms_case_details where cino='" + cIno + "' and respondent_slno='"+cIno1[1]+"' ";
 					
 					System.out.println("sql_set-------"+sql_set);
@@ -494,10 +492,6 @@ public class AssignedNewCasesToEmpAction extends DispatchAction {
 						
 					}	
 					
-					
-					
-					
-
 				}				
 				request.setAttribute("HEADING", "Update Status for Case :" + cIno);
 			} else {
@@ -555,23 +549,6 @@ System.out.println("resident_id--"+resident_id);
 				String remarks = "";
 				actionPerformed = !CommonModels.checkStringObject(cform.getDynaForm("actionToPerform")).equals("") ?  cform.getDynaForm("actionToPerform").toString()  : "CASE DETAILS UPDATED";
 				remarks = cform.getDynaForm("remarks").toString().replace("'", "");
-				/*
-				 * if(cform.getDynaForm("petitionDocument")!=null &&
-				 * !cform.getDynaForm("petitionDocument").toString().equals("")) { myDoc =
-				 * (FormFile)cform.getDynaForm("petitionDocument");
-				 * filePath="uploads/petitions/";
-				 * newFileName="petition_"+CommonModels.randomTransactionNo(); petition_document
-				 * = fuu.saveFile(myDoc, filePath, newFileName);
-				 * 
-				 * updateSql += ", petition_document='"+petition_document+"'";
-				 * 
-				 * sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
-				 * + "values ('" + cIno +
-				 * "','Uploaded Petition','"+userId+"', '"+request.getRemoteAddr()+"', '"
-				 * +remarks+"', '"+petition_document+"')"; DatabasePlugin.executeUpdate(sql,
-				 * con); }
-				 */
-
 
 				// STATUS CLOSED
 				if(cform.getDynaForm("ecourtsCaseStatus")!=null && cform.getDynaForm("ecourtsCaseStatus").toString().equals("Closed"))
@@ -617,13 +594,18 @@ System.out.println("resident_id--"+resident_id);
 
 					if(Integer.parseInt(DatabasePlugin.getSingleValue(con, "select count(*) from ecourts_olcms_case_details where cino='"+cIno+"'")) > 0) {
 
-						sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"'";
+						sql="insert into ecourts_olcms_case_details_log (cino ,  petition_document   ,    counter_filed_document  ,    judgement_order  , action_taken_order  ,last_updated_by ,  last_updated_on ,  counter_filed , remarks  , "
+								+ "ecourts_case_status ,  corresponding_gp, pwr_uploaded , pwr_submitted_date, pwr_received_date , pwr_approved_gp ,  pwr_gp_approved_date , appeal_filed ,  appeal_filed_copy, appeal_filed_date, pwr_uploaded_copy, "
+								+ " counter_approved_gp ,action_to_perfom, counter_approved_date ,counter_approved_by , respondent_slno, cordered_impl_date , dismissed_copy , final_order_status  ,no_district_updated)"
+								+ " select cino ,  petition_document   ,    counter_filed_document  ,    judgement_order  , action_taken_order  ,last_updated_by ,  last_updated_on ,  counter_filed , remarks  ,"
+								+ "ecourts_case_status ,  corresponding_gp, pwr_uploaded , pwr_submitted_date, pwr_received_date , pwr_approved_gp ,  pwr_gp_approved_date , appeal_filed ,  appeal_filed_copy, appeal_filed_date, pwr_uploaded_copy, "
+								+ " counter_approved_gp ,action_to_perfom, counter_approved_date ,counter_approved_by , respondent_slno, cordered_impl_date , dismissed_copy , final_order_status  ,no_district_updated from ecourts_olcms_case_details where cino='"+cIno+"'";
 						DatabasePlugin.executeUpdate(sql, con);
 
 						sql = "update ecourts_olcms_case_details set ecourts_case_status='"
 								+ cform.getDynaForm("ecourtsCaseStatus") + "', appeal_filed='"
 								+ cform.getDynaForm("appealFiled") + "',appeal_filed_date=to_date('"
-								+ CommonModels.checkStringObject(cform.getDynaForm("appealFiledDt")) + "','dd/mm/yyyy'), remarks='"
+								+ CommonModels.checkStringObject(cform.getDynaForm("appealFiledDt")) + "','mm/dd/yyyy'), remarks='"
 								+ remarks + "', last_updated_by='" + userId
 								+ "', last_updated_on=now(), action_to_perfom='"+cform.getDynaForm("actionToPerform")
 								+"' " + updateSql + " where cino='" + cIno + "' and respondent_slno='"+resident_id+"' ";
@@ -643,7 +625,7 @@ System.out.println("resident_id--"+resident_id);
 								+ action_taken_order + "', '" 
 								+ userId + "', now(),'" 
 								+ remarks + "',to_date('"
-								+ CommonModels.checkStringObject(cform.getDynaForm("appealFiledDt"))+"','dd/mm/yyyy'),"
+								+ CommonModels.checkStringObject(cform.getDynaForm("appealFiledDt"))+"','mm/dd/yyyy'),"
 										+ " '"+cform.getDynaForm("actionToPerform")+"','"+resident_id+"')";
 					}
 
@@ -706,7 +688,14 @@ System.out.println("resident_id--"+resident_id);
 
 					if(Integer.parseInt(DatabasePlugin.getSingleValue(con, "select count(*) from ecourts_olcms_case_details where cino='"+cIno+"'")) > 0) {
 
-						sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"'";
+						//sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"'";
+						sql="insert into ecourts_olcms_case_details_log (cino ,  petition_document   ,    counter_filed_document  ,    judgement_order  , action_taken_order  ,last_updated_by ,  last_updated_on ,  counter_filed , remarks  , "
+								+ "ecourts_case_status ,  corresponding_gp, pwr_uploaded , pwr_submitted_date, pwr_received_date , pwr_approved_gp ,  pwr_gp_approved_date , appeal_filed ,  appeal_filed_copy, appeal_filed_date, pwr_uploaded_copy, "
+								+ " counter_approved_gp ,action_to_perfom, counter_approved_date ,counter_approved_by , respondent_slno, cordered_impl_date , dismissed_copy , final_order_status  ,no_district_updated)"
+								+ " select cino ,  petition_document   ,    counter_filed_document  ,    judgement_order  , action_taken_order  ,last_updated_by ,  last_updated_on ,  counter_filed , remarks  ,"
+								+ "ecourts_case_status ,  corresponding_gp, pwr_uploaded , pwr_submitted_date, pwr_received_date , pwr_approved_gp ,  pwr_gp_approved_date , appeal_filed ,  appeal_filed_copy, appeal_filed_date, pwr_uploaded_copy, "
+								+ " counter_approved_gp ,action_to_perfom, counter_approved_date ,counter_approved_by , respondent_slno, cordered_impl_date , dismissed_copy , final_order_status  ,no_district_updated from ecourts_olcms_case_details where cino='"+cIno+"'";
+						
 
 						DatabasePlugin.executeUpdate(sql, con);
 
@@ -717,11 +706,11 @@ System.out.println("resident_id--"+resident_id);
 								+ ", corresponding_gp='" + cform.getDynaForm("relatedGp") + "', pwr_uploaded='"
 								+ cform.getDynaForm("parawiseRemarksSubmitted") + "', pwr_submitted_date=to_date('"
 								+ CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksDt"))
-								+ "','dd/mm/yyyy'), pwr_received_date=to_date('"
-								+ CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksDt")) + "','dd/mm/yyyy'),pwr_approved_gp='"
+								+ "','mm/dd/yyyy'), pwr_received_date=to_date('"
+								+ CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksDt")) + "','mm/dd/yyyy'),pwr_approved_gp='"
 								+ cform.getDynaForm("pwr_gp_approved") + "',"
 								+ " pwr_gp_approved_date=to_date('" + CommonModels.checkStringObject(cform.getDynaForm("dtPRApprovedToGP"))
-								+ "','dd/mm/yyyy'), action_to_perfom='"+cform.getDynaForm("actionToPerform")  + "' "
+								+ "','mm/dd/yyyy'), action_to_perfom='"+cform.getDynaForm("actionToPerform")  + "' "
 										+ " where cino='" + cIno + "' and respondent_slno='"+resident_id+"'";
 
 					}
@@ -737,11 +726,11 @@ System.out.println("resident_id--"+resident_id);
 								+ cform.getDynaForm("relatedGp") + "', '"
 								+ cform.getDynaForm("parawiseRemarksSubmitted") + "'," 
 
-								+ " to_date('" + CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksDt")) + "','dd/mm/yyyy'), " 
-								+ " to_date('" + CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksDt")) + "','dd/mm/yyyy'), '"
+								+ " to_date('" + CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksDt")) + "','mm/dd/yyyy'), " 
+								+ " to_date('" + CommonModels.checkStringObject(cform.getDynaForm("parawiseRemarksDt")) + "','mm/dd/yyyy'), '"
 								+ cform.getDynaForm("pwr_gp_approved") + "'," 
 
-								+ " to_date('" + cform.getDynaForm("dtPRApprovedToGP") + "','dd/mm/yyyy'), '" 
+								+ " to_date('" + cform.getDynaForm("dtPRApprovedToGP") + "','mm/dd/yyyy'), '" 
 								+ pwr_uploaded_copy + "','"+cform.getDynaForm("actionToPerform")+"','"+resident_id+"')";
 
 					}
@@ -854,8 +843,6 @@ System.out.println("resident_id--"+resident_id);
 					sql="update ecourts_gpo_ack_depts set case_status="+newStatus+", assigned_to='"+fwdOfficer+"' where ack_no='"+cIno+"' and section_officer_updated='T' and mlo_no_updated='T' and case_status='8'  and dept_code='"+deptCode+"' and respondent_slno='"+resident_id+"'";
 					
 				}
-				
-				
 				
 				else if((roleId!=null && roleId.equals("8")) && (deptCode.substring(3, 5)=="01" || deptCode.substring(3, 5).equals("01"))) { //FROM SECTION-SECT. TO MLO
 					fwdOfficer = DatabasePlugin.selectString("select trim(emailid) from mlo_details where user_id='"+deptCode+"'", con);
@@ -1117,7 +1104,17 @@ System.out.println("resident_id--"+resident_id);
 				
 				msg = "Case details ("+cIno+") updated successfully.";
 				
-				sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"' and respondent_slno='"+resident_id+"'";
+				//sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"' and respondent_slno='"+resident_id+"'";
+				
+				sql="insert into ecourts_olcms_case_details_log (cino ,  petition_document   ,    counter_filed_document  ,    judgement_order  , action_taken_order  ,last_updated_by ,  last_updated_on ,  counter_filed , remarks  , "
+						+ "ecourts_case_status ,  corresponding_gp, pwr_uploaded , pwr_submitted_date, pwr_received_date , pwr_approved_gp ,  pwr_gp_approved_date , appeal_filed ,  appeal_filed_copy, appeal_filed_date, pwr_uploaded_copy, "
+						+ " counter_approved_gp ,action_to_perfom, counter_approved_date ,counter_approved_by , respondent_slno, cordered_impl_date , dismissed_copy , final_order_status  ,no_district_updated)"
+						+ " select cino ,  petition_document   ,    counter_filed_document  ,    judgement_order  , action_taken_order  ,last_updated_by ,  last_updated_on ,  counter_filed , remarks  ,"
+						+ "ecourts_case_status ,  corresponding_gp, pwr_uploaded , pwr_submitted_date, pwr_received_date , pwr_approved_gp ,  pwr_gp_approved_date , appeal_filed ,  appeal_filed_copy, appeal_filed_date, pwr_uploaded_copy, "
+						+ " counter_approved_gp ,action_to_perfom, counter_approved_date ,counter_approved_by , respondent_slno, cordered_impl_date , dismissed_copy , final_order_status  ,no_district_updated "
+						+ "from ecourts_olcms_case_details where cino='"+cIno+"'  and respondent_slno='"+resident_id+"' ";
+				
+				
 				a += DatabasePlugin.executeUpdate(sql, con);
 				
 				if(cform.getDynaForm("actionToPerform").toString().equals("Parawise Remarks")) {
@@ -1307,7 +1304,17 @@ System.out.println("resident_id--"+resident_id);
 					//msg = "Parawise Remarks Returned for Case ("+cIno+").";
 				}
 				
-				sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"' and respondent_slno='"+resident_id+"' ";
+				//sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"' and respondent_slno='"+resident_id+"' ";
+				
+				sql="insert into ecourts_olcms_case_details_log (cino ,  petition_document   ,    counter_filed_document  ,    judgement_order  , action_taken_order  ,last_updated_by ,  last_updated_on ,  counter_filed , remarks  , "
+						+ "ecourts_case_status ,  corresponding_gp, pwr_uploaded , pwr_submitted_date, pwr_received_date , pwr_approved_gp ,  pwr_gp_approved_date , appeal_filed ,  appeal_filed_copy, appeal_filed_date, pwr_uploaded_copy, "
+						+ " counter_approved_gp ,action_to_perfom, counter_approved_date ,counter_approved_by , respondent_slno, cordered_impl_date , dismissed_copy , final_order_status  ,no_district_updated)"
+						+ " select cino ,  petition_document   ,    counter_filed_document  ,    judgement_order  , action_taken_order  ,last_updated_by ,  last_updated_on ,  counter_filed , remarks  ,"
+						+ "ecourts_case_status ,  corresponding_gp, pwr_uploaded , pwr_submitted_date, pwr_received_date , pwr_approved_gp ,  pwr_gp_approved_date , appeal_filed ,  appeal_filed_copy, appeal_filed_date, pwr_uploaded_copy, "
+						+ " counter_approved_gp ,action_to_perfom, counter_approved_date ,counter_approved_by , respondent_slno, cordered_impl_date , dismissed_copy , "
+						+ "final_order_status  ,no_district_updated from ecourts_olcms_case_details where cino='"+cIno+"' and respondent_slno='"+resident_id+"' ";
+				
+				
 				a += DatabasePlugin.executeUpdate(sql, con);
 				
 				if (a > 0) {

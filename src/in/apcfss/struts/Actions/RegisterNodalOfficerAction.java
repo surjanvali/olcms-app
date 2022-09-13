@@ -86,16 +86,15 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 				
 				if(roleId.trim().equals("2"))
 				{
-					sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(trim(d.description)) as description,d.dept_code " +
-						"from nodal_officer_details a " +
-						"inner join ( " +
-						"select distinct employee_id,fullname_en from "+tableName+" " +
-						") b on (a.employeeid=b.employee_id) " +
-						"inner join ( " +
-						"select distinct designation_id, designation_name_en from "+tableName+" " +
-						") c on (a.designation=c.designation_id) " +
-						"inner join dept_new d on (a.dept_id=d.dept_code) " +
-						"where a.user_id='"+ userId + "' order by d.dept_code";
+					sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, case when b.fullname_en is null then 'TRANSFERRED / PROMOTED' else b.fullname_en end as fullname_en, designation_name_en,upper(trim(d.description)) as description,d.dept_code"
+							+ ", case when b.fullname_en is null then 'TRANSFERRED' else null end as status "
+							+ "from nodal_officer_details a " + "left join ( "
+							+ "select distinct employee_id,fullname_en from " + tableName + " "
+							+ ") b on (a.employeeid=b.employee_id) " + "left join ( "
+							+ "select distinct designation_id, designation_name_en from " + tableName + " "
+							+ ") c on (a.designation=c.designation_id) "
+							+ "inner join dept_new d on (a.dept_id=d.dept_code) " + "where a.user_id='" + userId
+							+ "' order by d.reporting_dept_code, d.dept_code";
 					
 					
 				}else
@@ -116,15 +115,16 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 							+ " left join dept_new d on (a.dept_id=d.dept_code) where d.reporting_dept_code='"+ userId + "' and a.dist_id is null";
 					*/
 					
-					sql = "select d.dept_code, upper(trim(d.description)) as description,slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en "
+					sql = "select d.dept_code, upper(trim(d.description)) as description,slno, user_id, designation, employeeid, mobileno, emailid, aadharno, case when b.fullname_en is null then 'TRANSFERRED / PROMOTED' else b.fullname_en end as fullname_en, designation_name_en "
+							+ ", case when b.fullname_en is null then 'TRANSFERRED' else null end as status "
 							+ "from dept_new d "
-							+ "inner join (select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en, a.dept_id from nodal_officer_details a "
-							+ "inner join (select distinct employee_id,fullname_en,designation_name_en, designation_id from nic_data) b on (a.employeeid=b.employee_id and a.designation=b.designation_id)"
+							+ "left join (select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en, a.dept_id from nodal_officer_details a  on (a.dept_id=d.dept_code) "
+							+ "left join (select distinct employee_id,fullname_en,designation_name_en, designation_id from nic_data) b on (a.employeeid=b.employee_id and a.designation=b.designation_id)"
 							+ " "
 							// + "inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id) "
 							// + "inner join (select distinct designation_id, designation_name_en from nic_data ) c on (a.designation=c.designation_id) "
 							+ "where coalesce(a.dist_id,0)=0 ) b on (d.dept_code = b.dept_id) where (reporting_dept_code='"
-							+ deptCode + "' or dept_code='" + deptCode + "') and substr(dept_code,4,2)!='01' and d.display= true   order by d.dept_code";
+							+ deptCode + "' or dept_code='" + deptCode + "') and substr(dept_code,4,2)!='01' and d.display= true   order by d.reporting_dept_code, d.dept_code";
 					
 				}
 				
@@ -222,6 +222,17 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 								") c on (a.designation=c.designation_id) " +
 								" inner join dept_new d on (a.dept_id=d.dept_code)  " +
 								"where a.user_id='"+ userId+ "' and a.dept_id='" + deptId + "'";
+						
+						sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, case when b.fullname_en is null then 'TRANSFERRED / PROMOTED' else b.fullname_en end as fullname_en, designation_name_en,upper(trim(d.description)) as description,d.dept_code"
+								+ ", case when b.fullname_en is null then 'TRANSFERRED' else null end as status "
+								+ "from nodal_officer_details a " + "left join ( "
+								+ "select distinct employee_id,fullname_en from " + tableName + " "
+								+ ") b on (a.employeeid=b.employee_id) " + "left join ( "
+								+ "select distinct designation_id, designation_name_en from " + tableName + " "
+								+ ") c on (a.designation=c.designation_id) "
+								+ "inner join dept_new d on (a.dept_id=d.dept_code) " + "where a.user_id='" + userId
+								+ "'  and a.dept_id='" + deptId + "'";
+						
 					}else
 					{
 						sql = "select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(trim(d.description)) as description from nodal_officer_details a "
@@ -235,10 +246,12 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 								+ userId
 								+ "' and a.dept_id='" + deptId + "'";
 						
-						sql="select d.dept_code, upper(trim(d.description)) as description,slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en from dept_new d "
-								+ "inner join (select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en, a.dept_id from nodal_officer_details a "
-								+ "inner join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id)   "
-								+ "inner join (select distinct designation_id, designation_name_en from nic_data ) c on (a.designation=c.designation_id)   "
+						sql="select d.dept_code, upper(trim(d.description)) as description,slno, user_id, designation, employeeid, mobileno, emailid, aadharno, case when b.fullname_en is null then 'TRANSFERRED / PROMOTED' else b.fullname_en end as fullname_en, designation_name_en "
+								+ ", case when b.fullname_en is null then 'TRANSFERRED' else null end as status "
+								+ "from dept_new d "
+								+ "left join (select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en, a.dept_id from nodal_officer_details a  on (a.dept_id=d.dept_code) "
+								+ "left join (select distinct employee_id,fullname_en from nic_data) b on (a.employeeid=b.employee_id)   "
+								+ "left join (select distinct designation_id, designation_name_en from nic_data ) c on (a.designation=c.designation_id)   "
 								+ "where user_id='"+userId+"' and coalesce(a.dist_id,0)=0) b on (d.dept_code = b.dept_id) where reporting_dept_code='"+userId+"'  and b.dept_id='" + deptId + "' and d.display= true order by 1"
 								+ "";
 						

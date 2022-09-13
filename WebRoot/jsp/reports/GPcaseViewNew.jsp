@@ -40,7 +40,7 @@ body {
 </style>
 <!-- START PAGE CONTENT-->
 <div class="page-content fade-in-up">
-	<html:form action="/GPReport" styleId="AssignedCasesToSectionForm"
+	<html:form action="/GPsReportNew" styleId="AssignedCasesToSectionForm"
 		enctype="multipart/form-data">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden property="dynaForm(fileCino)" styleId="fileCino" />
@@ -95,7 +95,7 @@ body {
 							class="d-none d-sm-block">Instructions / Dialy Case Status</span>
 					</a></li>
 
-					<!-- <li class="nav-item"><a class="nav-link"
+				<!-- 	<li class="nav-item"><a class="nav-link"
 						id="dialycasestatus-tab" data-toggle="tab" href="#dialycasestatus"
 						role="tab" aria-controls="dialycasestatus" aria-selected="true">
 							<span class="d-block d-sm-none"><i class="fas fa-user"></i></span>
@@ -113,12 +113,12 @@ body {
 							class="d-block d-sm-none"><i class="fas fa-user"></i></span> <span
 							class="d-none d-sm-block">Respondents</span>
 					</a></li> -->
-					<li class="nav-item"><a class="nav-link" id="message-tab"
+					<!-- <li class="nav-item"><a class="nav-link" id="message-tab"
 						data-toggle="tab" href="#message" role="tab"
 						aria-controls="message" aria-selected="false"> <span
 							class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
 							<span class="d-none d-sm-block">IA Filings</span>
-					</a></li>
+					</a></li> -->
 					<li class="nav-item"><a class="nav-link" id="parawise-tab"
 						data-toggle="tab" href="#parawise" role="tab"
 						aria-controls="parawise" aria-selected="false"> <span
@@ -131,13 +131,13 @@ body {
 							class="d-block d-sm-none"><i class="fas fa-cog"></i></span> <span
 							class="d-none d-sm-block">Counter Details</span>
 					</a></li>
-					<li class="nav-item"><a class="nav-link" id="setting-tab"
+					<!-- <li class="nav-item"><a class="nav-link" id="setting-tab"
 						data-toggle="tab" href="#setting" role="tab"
 						aria-controls="setting" aria-selected="false"> <span
 							class="d-block d-sm-none"><i class="fas fa-cog"></i></span> <span
 							class="d-none d-sm-block">Interim Orders</span>
-					</a></li>
-					<li class="nav-item"><a class="nav-link" id="linkcases-tab"
+					</a></li> -->
+					<!-- <li class="nav-item"><a class="nav-link" id="linkcases-tab"
 						data-toggle="tab" href="#linkcases" role="tab"
 						aria-controls="linkcases" aria-selected="false"> <span
 							class="d-block d-sm-none"><i class="fas fa-cog"></i></span> <span
@@ -148,7 +148,7 @@ body {
 						aria-controls="objections" aria-selected="false"> <span
 							class="d-block d-sm-none"><i class="fas fa-cog"></i></span> <span
 							class="d-none d-sm-block">Objections</span>
-					</a></li>
+					</a></li> -->
 					<li class="nav-item"><a class="nav-link" id="history-tab"
 						data-toggle="tab" href="#history" role="tab"
 						aria-controls="history" aria-selected="false"> <span
@@ -196,7 +196,7 @@ body {
 													<logic:iterate id="map" name="DEPTNSTRUCTIONS" indexId="i">
 														<tr>
 															<td>${i+1 }.</td>
-															<td>${map.instructions }</td>
+															<td>${map.instructions}</td>
 															<td>${map.insert_by}</td>
 															<td>${map.insert_time}</td>
 															<td><logic:notEqual value="-" name="map"
@@ -278,7 +278,7 @@ body {
 													<logic:notEqual value=" " name="map"
 														property="scanned_document_path">
 
-														<a href="./${map.scanned_document_path}" target="_new"
+														<a href="./${map.ack_file_path}" target="_new"
 															title="Affidavit" class="btn btn-sm btn-info"> <i
 															class="fa fa-save"></i> <span>Affidavit</span>
 														</a>
@@ -292,148 +292,79 @@ body {
 												<b> Date of filing: </b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.date_of_filing}</div>
+												${map.inserted_time}</div>
 
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
 												<b> Case Type : </b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.type_name_reg}</div>
+												${map.casetype}</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
 												<b> Filing No.: </b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.fil_no}</div>
+												${map.mode_filing}</div>
 										</div>
-										<div class="row">
-
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b> Filing Year: </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.fil_year}</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b> Registration No: </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.reg_no}</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b> Est Code: </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.est_code}</div>
-										</div>
+										
 										<div class="row">
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
 												<b>Case ID: </b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.case_type_id}</div>
-
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Cause Type: </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.causelist_type}</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b> Bench Name: </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.bench_name}</div>
-										</div>
-										<div class="row">
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Judicial Branch: </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.judicial_branch}</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Coram: </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.coram}</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Court Est. Name: </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.court_est_name}</div>
-										</div>
-										<div class="row">
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b> State Name: </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.state_name}</div>
+												${map.casetype}</div>
+											
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
 												<b>District : </b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.dist_name}</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Date Of First List : </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.date_first_list}</div>
-										</div>
-										<div class="row">
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Date Of Next List </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.date_next_list}</div>
-
-
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Date Of Decision : </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.date_of_decision}</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Purpose : </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.purpose_name}</div>
-										</div>
-										<div class="row">
+												${map.district_name}</div>
+											
+										
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
 												<b>Petitioner Name: </b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.pet_name}</div>
+												${map.petitioner_name}</div>
+
+										
+											
+										</div>
+										<div class="row">
+										
+											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
+												<b>Respondent Advocate : </b>
+											</div>
+											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+												${map.advocatename}</div>
+											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
+												<b>Respondent Advocate No: </b>
+											</div>
+											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+												${map.advocateccno}</div>
+										</div>
+										<div class="row">
+										
+										
+										<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
+												<b> Ack no</b>
+											</div>
+											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+												${map.ack_no} <br>${map.hc_ack_no}</div>
+												
 
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Petitioner Advocate : </b>
+												<b> Filing Year: </b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.pet_adv}</div>
+												${map.reg_year}</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Petitioner Legal Heir : </b>
+												<b> Registration No: </b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.pet_legal_heir}</div>
+												${map.reg_no}</div>
+										
 										</div>
-										<div class="row">
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Respondent Name : </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.res_name}, ${map.address}</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Respondent Advocate : </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.res_adv}</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
-												<b>Respondent Advocate : </b>
-											</div>
-											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-												${map.res_adv}</div>
-										</div>
-										<div class="row">
-											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-												<b>Prayer:</b> ${map.prayer}
-											</div>
-										</div>
+										
 
 									</logic:iterate>
 
@@ -528,247 +459,11 @@ body {
 						</div>
 					</div>
 
-					<%-- <div class="tab-pane" id="petitoner" role="tabpanel"
-						aria-labelledby="petitoner-tab">
-						<logic:present name="PETEXTRAPARTYLIST">
-							<div class="row">
-								<div class="col-md-12">
-									<table class="table table-striped table-bordered table-hover"
-										cellspacing="0" width="100%">
-										<thead>
-											<tr>
-												<th colspan="3">Petitioner's List</th>
-											</tr>
-											<tr>
-												<th>Sl No.</th>
-												<th>Party No</th>
-												<th>Party Name</th>
-											</tr>
-										</thead>
-										<tbody>
-											<logic:iterate id="pet" name="PETEXTRAPARTYLIST" indexId="i">
-												<tr>
-													<td>${i+1}</td>
-													<td>${pet.party_no}</td>
-													<td>${pet.party_name}</td>
-												</tr>
-											</logic:iterate>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</logic:present>
-					</div>
-					<div class="tab-pane" id="profile" role="tabpanel"
-						aria-labelledby="profile-tab">
+				
 
-						<logic:present name="RESEXTRAPARTYLIST">
-							<div class="row">
-								<div class="col-md-12">
-									<table class="table table-striped table-bordered table-hover"
-										cellspacing="0" width="100%">
-										<thead>
-											<tr>
-												<th colspan="3">Respondent List</th>
-											</tr>
-											<tr>
-												<th>Sl No.</th>
-												<th>Party No</th>
-												<th>Party Name</th>
-											</tr>
-										</thead>
-										<tbody>
-											<logic:iterate id="res" name="RESEXTRAPARTYLIST" indexId="i">
-												<tr>
-													<td>${i+1}</td>
-													<td>${res.party_no}</td>
-													<td>${res.party_name}</td>
-												</tr>
-											</logic:iterate>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</logic:present>
-
-					</div> --%>
-					<div class="tab-pane" id="message" role="tabpanel"
-						aria-labelledby="message-tab">
-						<div class="ibox">
-							<div class="ibox-body">
-								<logic:present name="IAFILINGLIST">
-									<div class="row">
-										<div class="col-md-12">
-											<table class="table table-striped table-bordered table-hover"
-												cellspacing="0" width="100%">
-												<thead>
-													<tr>
-														<th colspan="6">IAFilling List</th>
-													</tr>
-													<tr>
-														<th>Sl No.</th>
-														<th>Sr No</th>
-														<th>IA NO</th>
-														<th>IA Petitione rName</th>
-														<th>IA Petitioner Dispoasal</th>
-														<th>IA Date of Filling</th>
-													</tr>
-												</thead>
-												<tbody>
-													<logic:iterate id="iafi" name="IAFILINGLIST" indexId="i">
-														<tr>
-															<td>${i+1}</td>
-															<td>${iafi.sr_no}</td>
-															<td>${iafi.ia_no}</td>
-															<td>${iafi.ia_pet_name}</td>
-															<td>${iafi.ia_pend_disp}</td>
-															<td>${iafi.date_of_filing}</td>
-														</tr>
-													</logic:iterate>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</logic:present>
-							</div>
-						</div>
-
-					</div>
-
-					<div class="tab-pane" id="linkcases" role="tabpanel"
-						aria-labelledby="linkcases-tab">
-						<div class="ibox">
-							<div class="ibox-body">
-								<logic:present name="LINKCASESLIST">
-									<div class="row">
-										<div class="col-md-12">
-											<table class="table table-striped table-bordered table-hover"
-												cellspacing="0" width="100%">
-												<thead>
-													<tr>
-														<th colspan="4">Case Link List</th>
-													</tr>
-													<tr>
-														<th>Sl No.</th>
-														<th>Sr No</th>
-														<th>Filling NO</th>
-														<th>Case Number</th>
-													</tr>
-												</thead>
-												<tbody>
-													<logic:iterate id="link" name="LINKCASESLIST" indexId="i">
-														<tr>
-															<td>${i+1}</td>
-															<td>${link.sr_no}</td>
-															<td>${link.filing_number}</td>
-															<td>${link.case_number}</td>
-														</tr>
-													</logic:iterate>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</logic:present>
-							</div>
-						</div>
-					</div>
+					
 
 
-					<div class="tab-pane" id="objections" role="tabpanel"
-						aria-labelledby="objections-tab">
-						<div class="ibox">
-							<div class="ibox-body">
-								<logic:present name="OBJECTIONSLIST">
-									<div class="row">
-										<div class="col-md-12">
-											<table class="table table-striped table-bordered table-hover"
-												cellspacing="0" width="100%">
-												<thead>
-													<tr>
-														<th colspan="6">Objections List</th>
-													</tr>
-													<tr>
-														<th>Sl No.</th>
-														<th>Objection Number</th>
-														<th>Objection Description</th>
-														<th>Scrunity Date</th>
-														<th>Compliance Date</th>
-														<th>Receipt Date</th>
-													</tr>
-												</thead>
-												<tbody>
-													<logic:iterate id="obj" name="OBJECTIONSLIST" indexId="i">
-														<tr>
-															<td>${i+1}</td>
-															<td>${obj.objection_no}</td>
-															<td>${obj.objection_desc}</td>
-															<td>${obj.scrutiny_date}</td>
-															<td>${obj.objections_compliance_by_date}</td>
-															<td>${obj.obj_reciept_date}</td>
-														</tr>
-													</logic:iterate>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</logic:present>
-							</div>
-						</div>
-					</div>
-
-					<div class="tab-pane" id="setting" role="tabpanel"
-						aria-labelledby="setting-tab">
-						<div class="ibox">
-							<div class="ibox-body">
-								<logic:present name="INTERIMORDERSLIST">
-									<div class="row">
-										<div class="col-md-12">
-											<table class="table table-striped table-bordered table-hover"
-												cellspacing="0" width="100%">
-												<thead>
-													<tr>
-														<th colspan="6">InterimOrder List</th>
-													</tr>
-													<tr>
-														<th>Sl No.</th>
-														<th>Sr No</th>
-														<th>Order NO</th>
-														<th>Order Date</th>
-														<th>Order Details</th>
-														<th>Order Document</th>
-													</tr>
-												</thead>
-												<tbody>
-													<logic:iterate id="inter" name="INTERIMORDERSLIST"
-														indexId="i">
-														<tr>
-															<td>${i+1}</td>
-															<td>${inter.sr_no}</td>
-															<td>${inter.order_no}</td>
-															<td>${inter.order_date}</td>
-															<td>${inter.order_details}</td>
-															<td><logic:notEmpty name="inter"
-																	property="order_document_path">
-
-																	<logic:notEqual value="-" name="inter"
-																		property="order_document_path">
-
-																		<a href="./${inter.order_document_path}"
-																			class="btn btn-sm btn-info" target="_new">
-																			${inter.order_details}-${inter.order_no}</a>
-																	</logic:notEqual>
-																</logic:notEmpty></td>
-														</tr>
-													</logic:iterate>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</logic:present>
-							</div>
-						</div>
-
-					</div>
 
 					<div class="tab-pane" id="history" role="tabpanel"
 						aria-labelledby="history-tab">

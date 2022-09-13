@@ -271,7 +271,7 @@ body {
 
 
 				<div class="row finaldiv">
-					<div class="col-sm-6 form-group casecloseddiv">
+					<%-- <div class="col-sm-6 form-group casecloseddiv">
 						<label>Upload Judgement Order <bean:message
 								key="mandatory" /></label>
 
@@ -287,8 +287,27 @@ body {
 								target='_new' class="btn btn-sm btn-info">View Uploaded File</a>
 						</logic:notEmpty>
 						<logic:notEmpty name="final_order">
-									<%-- <a href="https://apolcms.ap.gov.in/${final_order}" target="_blank"><i class="glyphicon glyphicon-download-alt" aria-hidden="true"></i></a> --%>
-									<a href="https://apolcms.ap.gov.in/${final_order}" target="_blank" class="btn btn-sm btn-info">Issued Order</a>
+									<a href="https://apolcms.ap.gov.in/${final_order}" target="_blank" class="btn btn-sm btn-info">Final Order</a>
+								</logic:notEmpty>
+					</div> --%>
+					
+					<div class="col-sm-6 form-group casecloseddiv">
+						<label>Signed Copy Of Final Judgement <bean:message
+								key="mandatory" /></label>
+
+						<html:file styleClass="form-control" styleId="judgementOrder"
+							property="dynaForm(judgementOrder)" />
+						<span class="help-block"><bean:message
+								key="upload.document.validation.msg" /></span>
+
+						<logic:notEmpty name="CommonForm"
+							property="dynaForm(judgementOrderOld)">
+							<a
+								href='<bean:write name="CommonForm" property="dynaForm(judgementOrderOld)"/>'
+								target='_new' class="btn btn-sm btn-info">View Uploaded File</a>
+						</logic:notEmpty>
+						<logic:notEmpty name="final_order">
+									<a href="https://apolcms.ap.gov.in/${final_order}" target="_blank" class="btn btn-sm btn-info">Final Order</a>
 								</logic:notEmpty>
 					</div>
 					
@@ -325,6 +344,18 @@ body {
 					</div>
 					
 					<div class="row appealdiv">
+					
+				<%-- 	
+					<div class="col-sm-6 form-group appealuploaddiv">
+							<label>Appeal Filed</label>
+							<html:select styleId="appealFiled"
+								property="dynaForm(appealFiled)" styleClass="form-control">
+								<html:option value="0">---SELECT---</html:option>
+								<html:option value="No">No</html:option>
+								<html:option value="Yes">Yes</html:option>
+							</html:select>
+						</div> --%>
+					
 							<div class="col-sm-6 form-group appealuploaddiv">
 							<label>Upload Appeal Copy</label>
 

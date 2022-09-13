@@ -306,11 +306,11 @@ label {
 							extend : 'pdf',
 							orientation : 'landscape'
 						}, 'excel' ]
-					 , "lengthMenu" : [ [ 10, 25, 50, 100, -1 ], [ 10, 25, 50, 100, "All" ] ],
+					 , "lengthMenu" : [ [ 10, 25, 50, 100, -1 ], [ 10, 25, 50, 100, "All" ] ]
 					 
-					 drawCallback: function() {
+					 /* , drawCallback: function() {
 					        $('[data-toggle="popover"]').popover();
-					    }
+					    } */
 					
 					});
 		}
@@ -322,11 +322,11 @@ label {
 							extend : 'pdf',
 							orientation : 'landscape'
 						}, 'excel' ]
-					 , "lengthMenu" : [ [ 10, 25, 50, 100, -1 ], [ 10, 25, 50, 100, "All" ] ],
+					 , "lengthMenu" : [ [ 10, 25, 50, 100, -1 ], [ 10, 25, 50, 100, "All" ] ]
 					 
-					 drawCallback: function() {
+					 /* , drawCallback: function() {
 					        $('[data-toggle="popover"]').popover();
-					    }
+					    } */
 					
 					});
 		}

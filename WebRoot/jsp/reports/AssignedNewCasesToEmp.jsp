@@ -72,9 +72,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<div class="ibox-head">
 					<div class="ibox-title">Assigned New Cases</div>
 				</div>
-				
-			
-
 			<logic:notEmpty name="CASEWISEACKS">
 				<div class="ibox">
 					<div class="ibox-body">

@@ -63,7 +63,27 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="ibox bg-danger color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${INSTRUCTIONSCOUNT }</h2>
-										<div class="m-b-5">Instructions</div>
+										<div class="m-b-5">Instructions Legacy</div>
+										<i class="fa fa-file-text-o widget-stat-icon"></i>
+										<div>
+											<small> &nbsp;</small>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</logic:greaterThan>
+
+				</logic:notEmpty>
+				<logic:notEmpty name="INSTRUCTIONSCOUNTNEW">
+					<logic:greaterThan value="0" name="INSTRUCTIONSCOUNTNEW">
+						<div class="col-lg-2 col-md-3">
+							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
+							<a href="./GPsReportNew.do?mode=viewInstructionsCasesNew">
+								<div class="ibox bg-danger color-white widget-stat">
+									<div class="ibox-body">
+										<h2 class="m-b-5 font-strong">${INSTRUCTIONSCOUNTNEW}</h2>
+										<div class="m-b-5">Instructions New</div>
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
 											<small> &nbsp;</small>

@@ -223,7 +223,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td><input type="button" id="btnShowPopup"
 												value="Submit Instructions"
 												class="btn btn-sm btn-primary waves-effect waves-light"
-												onclick="javascript:viewCaseDetailsPopup1('${map.cino}');" />
+												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}');" />
 											</td>
 
 										</tr>
@@ -239,12 +239,70 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 				</div>
-				<!-- 	<div class="row" style="text-align: center">
-					<div class="col-md-12 col-xs-12">
-						<input type="submit" name="submit" value="Submit"
-							class="btn btn-success" onclick="return fnSubmitCategory();" />
+
+			</logic:notEmpty>
+		
+		
+			<logic:notEmpty name="CASESLISTNEW">
+				<div class="ibox">
+					<div class="ibox-body">
+						<div class="table-responsive">
+
+							<table id="example" class="table table-striped table-bordered"
+								style="width:100%">
+								<thead>
+									<tr>
+										<th>Sl.No</th>
+										<!-- <th></th> -->
+										<th>CINo</th>
+										<th>Case Type</th>
+										<th>Reg.No.</th>
+										<th>Reg. Year</th>
+										<th>Petitioner</th>
+										<th>District</th>
+										<th>Petitioner Advocate</th>
+										<th>Respondent Advocate</th>
+										<th>Instructions / Daily Status Action</th>
+
+									</tr>
+								</thead>
+								<tbody>
+
+									<logic:iterate id="map" name="CASESLISTNEW" indexId="i">
+										<tr>
+											<td>${i+1 }.</td>
+
+											<td><input type="button" id="btnShowPopup"
+												value="${map.ack_no}"
+												class="btn btn-sm btn-info waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup('${map.ack_no}');" />
+											</td>
+											
+											<td>${map.casetype}</td>
+											<td>${map.reg_no}</td>
+											<td>${map.reg_year }</td>
+											<td>${map.petitioner_name }</td>
+											<td>${map.distid }</td>
+											<td>${map.advocatename }</td>
+											<td>${map.advocateccno }</td>
+											<td><input type="button" id="btnShowPopup"
+												value="Submit Instructions"
+												class="btn btn-sm btn-primary waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup1('${map.ack_no}','${map.legacy_ack_flag}');" />
+											</td>
+										</tr>
+
+									</logic:iterate>
+								</tbody>
+								<tfoot>
+									<tR>
+										<td colspan="14">&nbsp;</td>
+									</tR>
+								</tfoot>
+							</table>
+						</div>
 					</div>
-				</div> -->
+				</div>
 
 			</logic:notEmpty>
 		</div>
@@ -356,12 +414,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#HighCourtCasesListForm").submit();
 	}
 
-	function viewCaseDetailsPopup1(cino) {
+	function viewCaseDetailsPopup1(cino,caseType) {
 		var heading = "Instructions Details for CINO : " + cino;
 		var srclink = "";
 		if (cino != null && cino != "" && cino != "0") {
-			srclink = "./EcourtsDeptInstruction.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino="
-					+ cino;
+			srclink = "./EcourtsDeptInstruction.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino="+cino+"&caseType="+caseType;
 			//alert("LINK:"+srclink);
 			if (srclink != "") {
 				$("#MyPopup .modal-title").html(heading);
@@ -372,7 +429,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			;
 		}
 		;
-	};
+	}; 
+	 
+	
 	function viewCaseDetailsPopup(cino) {
 		var heading = "View Case Details for CINO : " + cino;
 		var srclink = "";

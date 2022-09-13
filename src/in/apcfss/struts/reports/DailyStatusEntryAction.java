@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
@@ -27,6 +28,7 @@ import in.apcfss.struts.Forms.CommonForm;
 import in.apcfss.struts.commons.AjaxModels;
 import in.apcfss.struts.commons.ApplicationVariables;
 import in.apcfss.struts.commons.CommonModels;
+import in.apcfss.struts.commons.FileUploadUtilities;
 import in.apcfss.struts.commons.SendSMSAction;
 import in.apcfss.struts.eCourt.apis.ECourtsCryptoHelper;
 import plugins.DatabasePlugin;
@@ -88,11 +90,12 @@ public class DailyStatusEntryAction extends DispatchAction {
 		if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 			return mapping.findForward("Logout");
 		}
-		String sql = null, sqlCondition = "", roleId="", distId="", deptCode="";
+		String sql = null, sqlCondition = "", roleId="", distId="", deptCode="",userid="",condition="";;
 		try {
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
+			userid = CommonModels.checkStringObject(session.getAttribute("userid"));
 			con = DatabasePlugin.connect();
 			// cform.setDynaForm("designationList", DatabasePlugin.getSelectBox("select
 			// distinct designation_id::int4, designation_name_en from nic_data where
@@ -158,21 +161,17 @@ public class DailyStatusEntryAction extends DispatchAction {
 				//sqlCondition +=" and (case_status is null or case_status in (1, 2))";
 			}
 
-			sql = "select a.*, b.orderpaths from ecourts_case_data a left join"
-					+ " ("
-					+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
-					+ " from "
-					+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1"
-					+ " union"
-					+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
-					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
-					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
-					+ " on (a.cino=b.cino) where coalesce(assigned,'f')='f' "
-					+ sqlCondition
-					+ " and coalesce(ecourts_case_status,'')!='Closed'";
 
-			sql= " select a.* from ecourts_case_data a where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" and coalesce(ecourts_case_status,'')!='Closed'";
+			if(roleId!=null && roleId.equals("6")) { // GPO
+
+				condition =" inner join ecourts_mst_gp_dept_map emgd on (ad.dept_code=emgd.dept_code) "+
+						" inner join ecourts_olcms_case_details eocd on (eocd.cino=ad.ack_no)  and emgd.assigned_to='"+userid+"' ";
+
+				//sqlCondition += " and counter_filed='Yes' and ad.case_status='6' and coalesce(assigned,'f')='t' and ad.assigned_to='" +userid+"' "; 
+			}
+
+
+			sql= " select a.* from ecourts_case_data a  where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" and coalesce(ecourts_case_status,'')!='Closed'";
 
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -247,36 +246,39 @@ public class DailyStatusEntryAction extends DispatchAction {
 			request.setAttribute("HEADING", "Instructions Entry");
 			System.out.println("in assign2DeptHOD --- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
 			userId = CommonModels.checkStringObject(request.getSession().getAttribute("userid"));
-			// String cIno = CommonModels.checkStringObject(request.getParameter("cino"));
+			String caseType = CommonModels.checkStringObject(request.getParameter("caseType"));
 			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
 			System.out.println("cIno---"+cIno);
 
-			/*String fileSeperator=ApplicationVariables.filesepartor;
-			String destinationPath = ApplicationVariables.contextPath + "HighCourtsCaseOrders"+fileSeperator;
-			System.out.println("destinationPath:" + destinationPath);
 
-			 * String response_str = ""; String decryptedRespStr = ""; if ((response_str !=
-			 * null) && (!response_str.equals(""))) { decryptedRespStr =
-			 * ECourtsCryptoHelper.decrypt(response_str.getBytes()); } String
-			 * fileName=cform.getDynaForm("uploadfile").toString();
-			 * 
-			 * File upload_folder = new File(destinationPath); if (!upload_folder.exists())
-			 * { upload_folder.mkdirs(); } File pdfFile = new File(destinationPath +
-			 * fileName );//+ ".pdf" System.out.println("pdfFile.exists()::" +
-			 * pdfFile.exists());
-			 * 
-			 * System.out.println("pdfFile--"+pdfFile);
-			 */		
-			sql = "insert into ecourts_gpo_daily_status (cino, status_remarks , dept_code ,dist_code,insert_by ) "
-					+ " values (?,?, ?, ?, ?)";
+			FileUploadUtilities fuu = new FileUploadUtilities();
+			FormFile myDoc;
+
+			myDoc = cform.getChangeLetter();
+
+			System.out.println("myDoc---"+myDoc);
+			String filePath="uploads/DailyStatus/";
+			String newFileName="DailyStatus_"+CommonModels.randomTransactionNo();
+			String DailyStatus_file = fuu.saveFile(myDoc, filePath, newFileName);
+
+			System.out.println("pdfFile--"+DailyStatus_file);
+
+			String status_flag="D";
+
+
+			sql = "insert into ecourts_dept_instructions (cino, instructions , upload_fileno,dept_code ,dist_code,insert_by,legacy_ack_flag,status_instruction_flag ) "
+					+ " values (?,?, ?, ?, ?, ?,?,?)";
 
 			ps = con.prepareStatement(sql);
 			int i = 1;
 			ps.setString(i, cIno);
 			ps.setString(++i, cform.getDynaForm("daily_status") != null ? cform.getDynaForm("daily_status").toString() : "");
+			ps.setString(++i, DailyStatus_file);
 			ps.setString(++i, CommonModels.checkStringObject(session.getAttribute("dept_code")));
 			ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
 			ps.setString(++i, userId);
+			ps.setString(++i, caseType);
+			ps.setString(++i, status_flag);
 
 			System.out.println("sql--"+sql);
 
@@ -284,12 +286,12 @@ public class DailyStatusEntryAction extends DispatchAction {
 
 			System.out.println("a--->"+a);
 			if(a>0) {
-				
-				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks) "
-						+ " values ('" + cIno + "','SUBMITTED DAILY CASE STATUS', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("daily_status").toString()+"')";
+
+				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks,uploaded_doc_path) "
+						+ " values ('" + cIno + "','SUBMITTED DAILY CASE STATUS', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("daily_status").toString()+"','"+DailyStatus_file+"')";
 				DatabasePlugin.executeUpdate(sql, con);
-				
-				
+
+
 				request.setAttribute("successMsg", "Dialy Status details saved successfully.");
 			}else {
 				request.setAttribute("errorMsg", "Error in submission. Kindly try again.");
@@ -312,14 +314,15 @@ public class DailyStatusEntryAction extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql = null, cIno = null, target = "casepopupview1";
+		String userId = null, roleId = null, sql = null, cIno = null, target = "casepopupview1",caseType=null;
 		System.out.println("getCino");
 
 		try {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-
+			caseType = CommonModels.checkStringObject(request.getParameter("caseType"));
+			List<Map<String, Object>> data=null;
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			}
@@ -330,15 +333,84 @@ public class DailyStatusEntryAction extends DispatchAction {
 			System.out.println("cIno" + cIno);
 
 			if (cIno != null && !cIno.equals("")) {
-				
+
 				cform.setDynaForm("cino", cIno);
-				
+
 				con = DatabasePlugin.connect();
 
-				sql = "select status_remarks, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time from ecourts_gpo_daily_status where cino='" + cIno + "'  order by 1 ";
-				System.out.println("sql--" + sql);
-				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
-				request.setAttribute("existData", existData);
+				if (caseType.equals("Legacy")) {
+
+					sql = "select a.*, "
+							+ " nda.fullname_en as fullname, nda.designation_name_en as designation, nda.post_name_en as post_name, nda.email, nda.mobile1 as mobile,dim.district_name , "
+							+ " 'Pending at '||ecs.status_description||'' as current_status, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths,"
+							+ " case when (prayer is not null and coalesce(trim(prayer),'')!='' and length(prayer) > 2) then substr(prayer,1,250) else '-' end as prayer, prayer as prayer_full, ra.address from ecourts_case_data a "
+
+							+ " left join nic_prayer_data np on (a.cino=np.cino)"
+							+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
+							+ " left join district_mst dim on (a.dist_id=dim.district_id) "
+							+ " inner join ecourts_mst_case_status ecs on (a.case_status=ecs.status_id) "
+							+ " left join nic_data_all nda on (a.dept_code=substr(nda.global_org_name,1,5) and a.assigned_to=nda.email and nda.is_primary='t' and coalesce(a.dist_id,'0')=coalesce(nda.dist_id,'0')) "
+							+ " left join"
+							+ " ("
+							+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
+							+ " from "
+							+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+							+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1" + " union"
+							+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
+							+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+							+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
+							+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) where d.display = true and a.cino='"+cIno+"' ";
+
+
+					System.out.println("ecourts SQL:" + sql);
+					data = DatabasePlugin.executeQuery(sql, con);
+					if (data != null && !data.isEmpty() && data.size() > 0) {
+						request.setAttribute("CASESLISTOLD", data);
+						cform.setDynaForm("cino", ((Map) data.get(0)).get("cino"));
+
+						sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
+								+ " from ecourts_dept_instructions where cino='" + cIno + "' and legacy_ack_flag='Legacy'  order by 1 ";
+						System.out.println("sql--" + sql);
+						List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
+						request.setAttribute("existData", existData);
+
+					} else {
+						request.setAttribute("errorMsg", "No Records Found");
+					}
+
+				}else {
+
+
+					sql = "select a.slno ,ad.respondent_slno, a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , a.remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
+							+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
+							+ "to_char(a.inserted_time,'dd-mm-yyyy') as generated_date, "
+							+ "getack_dept_desc(a.ack_no::text) as dept_descs , coalesce(a.hc_ack_no,'-') as hc_ack_no "
+							+ " from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
+							+ " left join district_mst dm on (ad.dist_id=dm.district_id) "
+							+ " left join dept_new dmt on (ad.dept_code=dmt.dept_code)"
+							+ " inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name)  "
+							+ " where a.delete_status is false and ack_type='NEW'    and (a.ack_no='"+cIno+"' or a.hc_ack_no='"+cIno+"' )  and respondent_slno='1'   "
+							+ " order by a.inserted_time desc";
+
+
+					System.out.println("ecourts SQL:" + sql);
+					data = DatabasePlugin.executeQuery(sql, con);
+					if (data != null && !data.isEmpty() && data.size() > 0) {
+						request.setAttribute("CASESLISTNEW", data);
+
+						cform.setDynaForm("cino", cIno);
+						//	request.setAttribute("cinooo", ackNoo);
+						sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
+								+ " from ecourts_dept_instructions where cino='" + cIno + "' and legacy_ack_flag='New'  order by 1 ";
+						System.out.println("sql--" + sql);
+						List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
+						request.setAttribute("existDataNew", existData);
+
+					} else {
+						request.setAttribute("errorMsg", "No Records Found");
+					}
+
+				}
 
 				request.setAttribute("HEADING", "Submit status for CINO : " + cIno);
 			} else {
@@ -352,43 +424,4 @@ public class DailyStatusEntryAction extends DispatchAction {
 		}
 		return mapping.findForward(target);
 	}
-	/*
-	public ActionForward getReport(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		CommonForm cform = (CommonForm) form;
-		Connection con = null;
-		HttpSession session = null;
-		String userId = null, roleId = null, sql = null, cIno = null, viewDisplay=null, target="caseview1";
-
-		System.out.println("getCino");
-
-		try {
-			session = request.getSession();
-			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
-			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-
-
-			con = DatabasePlugin.connect();
-
-			sql = "select * from ecourts_case_category_wise_data where cino='" + cIno + "'";
-			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-
-			if (data != null && !data.isEmpty() && data.size() > 0) {
-				request.setAttribute("CASESLIST", data);
-
-			}
-
-			sql="select * from dept_instruction_mst  where cino='" +cIno+ "' ";
-			System.out.println("sql--"+sql);
-			List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
-			request.setAttribute("existData", existData);
-
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			DatabasePlugin.closeConnection(con);
-		}
-		return mapping.findForward(target);
-	}*/
 }

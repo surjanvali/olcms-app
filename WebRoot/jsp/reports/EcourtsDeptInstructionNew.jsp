@@ -48,15 +48,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 
 			<div class="ibox">
-				<div class="ibox-head">
-					<div class="ibox-title">Instructions Entry</div>
-				</div>
+				<h1 class="page-title">
+					<logic:notEmpty name="HEADING">
+									${HEADING}
+								</logic:notEmpty>
+				</h1>
+				<%-- <logic:present name="service_type"> --%>
 				<div class="ibox-body">
-					<!-- <h4 class="m-t-0 header-title">
-		<b>High Court Cases List</b>
-	</h4>
-	<hr /> -->
-
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 							<div class="form-group">
@@ -73,7 +71,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<b>New Cases</b>
 									</html:radio>
 								</label>
-
 							</div>
 						</div>
 					</div>
@@ -81,7 +78,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 							<div class="form-group">
 								<label> Main Case No. (WP/WA/AS/CRP Nos.) </label>
-
 								<div class="row">
 									<div class="col-md-4">
 										<html:select property="dynaForm(caseType1)"
@@ -114,7 +110,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											onkeypress="return isNumberKey(this);" />
 									</div>
 								</div>
-								<!-- <div id="megId"></div> -->
 							</div>
 						</div>
 					</div>
@@ -140,6 +135,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 				</div>
+				<%-- </logic:present> --%>
 			</div>
 
 			<logic:notEmpty name="CASESLISTOLD">
@@ -293,7 +289,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<html:hidden styleId="cino" property="dynaForm(cino)" />
 						<div class="row oldTypediv">
 							<div class="col-md-6 col-xs-12 pull-right">
-								<b> Instructions: </b>
+
+								<logic:notEmpty name="status_entry">
+									${status_entry}
+								</logic:notEmpty>
+
 							</div>
 							<div class="col-md-6 col-xs-12">
 								<html:textarea styleId="instructions"
@@ -424,7 +424,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<html:hidden styleId="cino" property="dynaForm(cino)" />
 					<div class="row NewTypediv">
 						<div class="col-md-6 col-xs-12 pull-right">
-							<b> Instructions: </b>
+							<logic:notEmpty name="status_entry">
+									${status_entry}
+								</logic:notEmpty>
+
 						</div>
 						<div class="col-md-6 col-xs-12">
 							<html:textarea styleId="instructions"
@@ -607,8 +610,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		var chkdVal = $("#oldNewType:checked").val();
 		//alert (chkdVal);
 
-		//caseTypeSelect();
-
 		if ((chkdVal == null || chkdVal == "" || chkdVal == "0")) {
 			alert("Select Type Of Case");
 			$("#oldNewType").focus();
@@ -695,22 +696,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			});
 		}
 	}
-
-	/* $("#oldNewType").change(function() {
-	
-	 //alert("--"+$("#oldNewType").val())
-	 $(".oldTypediv").hide();
-	 $(".NewTypediv").hide();
-
-	 if($("#oldNewType").val()=="New"){
-	 $(".NewTypediv").show();
-	 $(".oldTypediv").hide();
-	 }else{
-	 $(".NewTypediv").hide();
-	 $(".oldTypediv").show();
-	 }
-	 }
-	 ); */
 
 	//-----------------------
 	function caseTypeSelect() {

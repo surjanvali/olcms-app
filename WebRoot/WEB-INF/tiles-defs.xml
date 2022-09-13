@@ -274,6 +274,15 @@
 	<definition name="viewCaseDataPage" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/GPcaseView.jsp" />
 	</definition>
+	
+	
+	<definition name="GPsReportNew" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/GPsReportNew.jsp" />
+	</definition>
+
+	<definition name="viewCaseDataPageNew" extends="UserLayoutNew">
+		<put name="content" value="/jsp/reports/GPcaseViewNew.jsp" />
+	</definition>
 
 	<definition name="HighCourtCasesCategoryUpdationReport"
 		extends="UserLayoutNew">
@@ -397,19 +406,36 @@
 			value="/jsp/registration/HCFinalOrdersImplementedUpdate.jsp" />
 	</definition>
 
-	<definition name="nextlistdtreport"
-		extends="UserLayoutNew">
+	<definition name="nextlistdtreport" extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/reports/NextListingDtAbstractReport.jsp" />
 	</definition>
-	
-	<definition name="EcourtsDeptInstructionNew" extends="UserLayoutNew">
+
+	<definition name="EcourtsDeptInstructionNew"
+		extends="UserLayoutNew">
 		<put name="content"
 			value="/jsp/reports/EcourtsDeptInstructionNew.jsp" />
 	</definition>
 	
+	<definition name="EcourtsDeptInstructionNewPopup" extends="modalLayout">
+		<put name="content"
+			value="/jsp/reports/EcourtsDeptInstructionNew.jsp" />
+	</definition>
+
 	<definition name="EcourtsCaseSearch" extends="UserLayoutNew">
 		<put name="content" value="/jsp/reports/EcourtsCaseSearch.jsp" />
 	</definition>
-	
+
+	<definition name="HCCaseDistWiseAbstract"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/reports/HCCaseDistWiseAbstract.jsp" />
+	</definition>
+
+	<definition name="highcourtcasesfinalorderimpl"
+		extends="UserLayoutNew">
+		<put name="content"
+			value="/jsp/registration/HighCourtCasesListFinalOrdersImpl.jsp" />
+	</definition>
+
 </tiles-definitions>
