@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FlowViewLayout Version="1.2">
+  <StrutsActivity path="/Welcome.do" location="50,50" dimension="231,96" />
+  <StrutsActivity path="/sessionExpired.do" location="350,50" dimension="117,66" />
   <StrutsActivity path="/HomePage.do" location="650,50" dimension="214,96" />
   <StrutsActivity path="/Login.do" location="950,50" dimension="228,96" />
   <StrutsActivity path="/Logout.do" location="1250,50" dimension="236,96" />
@@ -48,6 +50,7 @@
   <StrutsActivity path="/AssignedNewCasesToEmp.do" location="1250,1450" dimension="333,96" />
   <StrutsActivity path="/HighCourtCasesCategoryUpdation.do" location="1850,1450" dimension="378,96" />
   <StrutsActivity path="/GPReport.do" location="2450,1450" dimension="245,96" />
+  <StrutsActivity path="/GPsReportNew.do" location="2150,3450" dimension="245,96" />
   <StrutsActivity path="/AdvocateRegistation.do" location="2750,1450" dimension="304,96" />
   <StrutsActivity path="/HighCourtCasesCategoryUpdationReport.do" location="50,1650" dimension="413,96" />
   <StrutsActivity path="/EcourtsDeptInstruction.do" location="650,1650" dimension="316,96" />
@@ -63,6 +66,13 @@
   <StrutsActivity path="/NextListingDtAbstract.do" location="3350,2250" dimension="331,96" />
   <StrutsActivity path="/EcourtsDeptInstructionNew.do" location="3350,2650" dimension="340,96" />
   <StrutsActivity path="/EcourtsCaseSearch.do" location="3350,2850" dimension="294,96" />
+  <StrutsActivity path="/HCCaseDistWiseAbstract.do" location="950,3450" dimension="326,96" />
+  <StrutsActivity path="/HighCourtCasesFinalOrdersImpl.do" location="3350,3050" dimension="302,96" />
+  <StrutsActivity path="Login;6" location="1250,1850" dimension="92,81" />
+  <StrutsActivity path="Logout;6" location="1550,1850" dimension="100,81" />
+  <StrutsActivity path="Welcome;6" location="1850,1850" dimension="217,81" />
+  <StrutsActivity path="InvalidAccess;6" location="2150,1850" dimension="117,81" />
+  <StrutsActivity path="sessionExpired;6" location="2450,1850" dimension="123,81" />
   <StrutsActivity path="UserLayout" location="2750,1850" dimension="89,51" />
   <StrutsActivity path="UserLayoutNew" location="3050,1850" dimension="113,51" />
   <StrutsActivity path="gpdashboard" location="50,2050" dimension="100,51" />
@@ -121,6 +131,8 @@
   <StrutsActivity path="HighCourtCasesCategoryUpdation" location="2750,2850" dimension="213,51" />
   <StrutsActivity path="gpsReport" location="3050,2850" dimension="84,51" />
   <StrutsActivity path="viewCaseDataPage" location="50,3050" dimension="129,51" />
+  <StrutsActivity path="GPsReportNew" location="2450,3450" dimension="109,51" />
+  <StrutsActivity path="viewCaseDataPageNew" location="2750,3450" dimension="153,51" />
   <StrutsActivity path="/jsp/BaseLayout/AdvocateRegistration.jsp" location="350,3050" dimension="251,51" />
   <StrutsActivity path="casedetailsview1" location="950,3050" dimension="117,51" />
   <StrutsActivity path="HighCourtCasesCategoryUpdationReport" location="1250,3050" dimension="248,51" />
@@ -142,23 +154,11 @@
   <StrutsActivity path="HCFinalOrdersImplementedUpdate" location="3350,1850" dimension="216,51" />
   <StrutsActivity path="page.HCFinalOrdersImplementedForm" location="3350,2050" dimension="235,51" />
   <StrutsActivity path="nextlistdtreport" location="3350,2450" dimension="111,51" />
+  <StrutsActivity path="EcourtsDeptInstructionNewPopup" location="1850,3450" dimension="210,51" />
   <StrutsActivity path="EcourtsDeptInstructionNew" location="50,3650" dimension="175,51" />
   <StrutsActivity path="EcourtsCaseSearch" location="350,3650" dimension="129,51" />
-  <StrutsActivity path="/HighCourtCasesFinalOrdersImpl.do" location="3350,3050" dimension="302,96" />
-  <StrutsActivity path="highcourtcasesfinalorderimpl" location="3350,3250" dimension="185,51" />
-  <StrutsActivity path="/HCCaseDistWiseAbstract.do" location="950,3450" dimension="326,96" />
   <StrutsActivity path="HCCaseDistWiseAbstract" location="1550,3450" dimension="161,51" />
-  <StrutsActivity path="EcourtsDeptInstructionNewPopup" location="1850,3450" dimension="210,51" />
-  <StrutsActivity path="/GPsReportNew.do" location="2150,3450" dimension="245,96" />
-  <StrutsActivity path="GPsReportNew" location="2450,3450" dimension="109,51" />
-  <StrutsActivity path="viewCaseDataPageNew" location="2750,3450" dimension="153,51" />
-  <StrutsActivity path="/Welcome.do" location="50,50" dimension="231,96" />
-  <StrutsActivity path="/sessionExpired.do" location="350,50" dimension="117,66" />
-  <StrutsActivity path="Login;6" location="1250,1850" dimension="92,81" />
-  <StrutsActivity path="Logout;6" location="1550,1850" dimension="100,81" />
-  <StrutsActivity path="Welcome;6" location="1850,1850" dimension="217,81" />
-  <StrutsActivity path="InvalidAccess;6" location="2150,1850" dimension="117,81" />
-  <StrutsActivity path="sessionExpired;6" location="2450,1850" dimension="123,81" />
+  <StrutsActivity path="highcourtcasesfinalorderimpl" location="3350,3250" dimension="185,51" />
   <StrutsTransition id="/AssignedCasesToSection.do,success,AssignedCasesToSectionAction,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="1567,850" />
@@ -492,15 +492,6 @@
       <AbsolutePoint location="566,2116" />
       <AbsolutePoint location="704,2116" />
       <AbsolutePoint location="704,2250" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
-  <StrutsTransition id="/HighCourtCasesFinalOrdersImpl.do,success,highcourtcases,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="3652,3098" />
-      <AbsolutePoint location="3776,3098" />
-      <AbsolutePoint location="3776,2428" />
-      <AbsolutePoint location="1305,2428" />
-      <AbsolutePoint location="1305,2301" />
     </AutomaticBendpoints>
   </StrutsTransition>
   <StrutsTransition id="/CaseTypesMaster.do,success,casetypesreport,1" routingType="0">
@@ -1039,6 +1030,14 @@
       <AbsolutePoint location="3094,2250" />
     </AutomaticBendpoints>
   </StrutsTransition>
+  <StrutsTransition id="/EcourtsDeptInstructionNew.do,successPopup,EcourtsDeptInstructionNewPopup,1" routingType="0">
+    <AutomaticBendpoints>
+      <AbsolutePoint location="3667,2746" />
+      <AbsolutePoint location="3667,3591" />
+      <AbsolutePoint location="1955,3591" />
+      <AbsolutePoint location="1955,3501" />
+    </AutomaticBendpoints>
+  </StrutsTransition>
   <StrutsTransition id="InvalidAccess;6,null,/Logout.do,1" routingType="0">
     <AutomaticBendpoints>
       <AbsolutePoint location="2208,1850" />
@@ -1047,14 +1046,6 @@
       <AbsolutePoint location="1029,242" />
       <AbsolutePoint location="1368,242" />
       <AbsolutePoint location="1368,146" />
-    </AutomaticBendpoints>
-  </StrutsTransition>
-  <StrutsTransition id="/EcourtsDeptInstructionNew.do,successPopup,EcourtsDeptInstructionNewPopup,1" routingType="0">
-    <AutomaticBendpoints>
-      <AbsolutePoint location="3667,2746" />
-      <AbsolutePoint location="3667,3591" />
-      <AbsolutePoint location="1955,3591" />
-      <AbsolutePoint location="1955,3501" />
     </AutomaticBendpoints>
   </StrutsTransition>
 </FlowViewLayout>

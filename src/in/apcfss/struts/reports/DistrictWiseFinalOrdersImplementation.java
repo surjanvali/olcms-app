@@ -77,8 +77,12 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 					+ " coalesce(d.appeal_filed,'0') appeal_filed, "
 					+ " coalesce(d.dismissed_copy,'0') dismissed_copy,  "
 					+ " coalesce(d.closed,'0') closed,    "
-					+ " coalesce(casescount-(order_implemented + appeal_filed+dismissed_copy+closed),'0') as pending,     "
-					+ " round(coalesce( (order_implemented::numeric + appeal_filed::numeric+dismissed_copy::numeric+closed::numeric)/(4*100::numeric),'0'),2) as actoin_taken_percent   "
+					+ " coalesce(casescount-(order_implemented + appeal_filed+dismissed_copy+closed),'0') as pending,   "
+					+ " "
+					+ " case when coalesce(d.casescount,'0') > 0 then round((((coalesce(order_implemented,'0')::int4 + coalesce(appeal_filed,'0')::int4 + coalesce(dismissed_copy,'0')::int4 + coalesce(closed,'0')::int4) * 100) / coalesce(d.casescount,'0')) , 2) else 0 end as actoin_taken_percent "
+					
+					//+ " round(coalesce( (order_implemented::numeric + appeal_filed::numeric+dismissed_copy::numeric+closed::numeric)/(4*100::numeric),'0'),2) as actoin_taken_percent   "
+					
 					+ " from district_mst dm "
 					+ " left join ( select dist_id,count( a.cino) as casescount,   "
 					+ " sum(case when length(action_taken_order)> 10   or final_order_status='final' then 1 else 0 end) as order_implemented ,  "

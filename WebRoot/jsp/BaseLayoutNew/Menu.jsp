@@ -38,7 +38,7 @@
 					<div class="font-strong">${sessionScope.userName }</div>
 					<small>${sessionScope.role_desc }</small>
 					<br />
-					<small>${sessionScope.dept_desc }</small>
+					<small>${sessionScope.dept_code } - ${sessionScope.dept_desc }</small>
 
 				</c:if>
 				<c:if test="${sessionScope.role_id eq 6}">
@@ -46,7 +46,7 @@
 					<div class="font-strong">${sessionScope.userName }</div>
 					<small>${sessionScope.role_desc }</small>
 					<br />
-					<small>${sessionScope.dept_desc }</small>
+					<small>${sessionScope.dept_code } - ${sessionScope.dept_desc }</small>
 
 				</c:if>
 				<c:if test="${sessionScope.role_id eq 7 }">
