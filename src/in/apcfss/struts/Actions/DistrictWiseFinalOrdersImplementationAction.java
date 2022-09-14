@@ -102,8 +102,7 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0  order by cino, order_date desc) c group by cino ) b"
 					+ " on (a.cino=b.cino) "
 					+ " left join ecourts_olcms_case_details od on (a.cino=od.cino)"
-					+ " where b.orderpaths is not null and assigned=true "+condition
-					+ "  "
+					+ " where b.orderpaths is not null and coalesce(a.ecourts_case_status,'')!='Closed'  and assigned=true "+condition
 					+ " order by a.cino";
 			
 			System.out.println("AssignedCasesToSectionAction unspecified SQL:" + sql);
