@@ -555,7 +555,7 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 						
 						  sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
 						  + "values ('" + cIno +
-						  "','Uploaded Appeal Copy','"+userId+"', '"+request.getRemoteAddr()+"', '"
+						  "','Uploaded Dismissed Copy','"+userId+"', '"+request.getRemoteAddr()+"', '"
 						  +remarks+"', '"+dismissedFileCopy+"')"; 
 						  DatabasePlugin.executeUpdate(sql,con);
 						 

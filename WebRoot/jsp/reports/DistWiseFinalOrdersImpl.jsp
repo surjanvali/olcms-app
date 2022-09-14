@@ -13,8 +13,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
-<!-- <link rel='stylesheet'
-	href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'> -->
 <link rel='stylesheet'
 	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
 <link rel='stylesheet'
@@ -27,9 +25,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<html:form action="/HCFinalOrdersImplemented"
 		styleId="HCOrdersIssuedReportId">
 		<html:hidden styleId="mode" property="mode" />
-		<html:hidden property="dynaForm(deptId)" styleId="deptId" />
+		<%-- <html:hidden property="dynaForm(deptId)" styleId="deptId" />
 		<html:hidden property="dynaForm(deptName)" styleId="deptName" />
+		<html:hidden property="dynaForm(caseStatus)" styleId="caseStatus" /> --%>
+		
+		<html:hidden property="dynaForm(distid)" styleId="distid" />
+		<html:hidden property="dynaForm(distName)" styleId="distName" />
 		<html:hidden property="dynaForm(caseStatus)" styleId="caseStatus" />
+		
 		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="dashboard-cat-title">
@@ -149,8 +152,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Orders Issued</th>
 									<th>Orders Implemented</th>
 									<th>Appeal Filed</th>
+									<th>Dismissed</th>
 									<th>Pending</th>
-									<th>Action Taken</th>
+									<th>Closed</th>
+									<th>Action Taken %</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -158,6 +163,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<bean:define id="casescountTot" value="0"></bean:define>
 								<bean:define id="order_implementedTot" value="0"></bean:define>
 								<bean:define id="appeal_filedTot" value="0"></bean:define>
+								<bean:define id="dissmissed_tot" value="0"></bean:define>
+								<bean:define id="closed_tot" value="0"></bean:define>
 								<bean:define id="pendingTot" value="0"></bean:define>
 								<bean:define id="actionTakenTot" value="0"></bean:define>
 
@@ -165,10 +172,30 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<tr>
 										<td>${i+1 }.</td>
 										<td>${map.district_name}</td>
-										<td style="text-align: right;">${map.casescount}</td>
-										<td style="text-align: right;">${map.order_implemented }</td>
-										<td style="text-align: right;">${map.appeal_filed}</td>
-										<td style="text-align: right;">${map.pending }</td>
+										<td style="text-align: right;">
+										<a
+											href="javascript:showCasesWise('${map.district_id}','${map.district_name }','ALL');">${map.casescount }</a>
+										</td>
+										<td style="text-align: right;">
+										<a
+											href="javascript:showCasesWise('${map.district_id}','${map.district_name }','FINALORDER');">${map.order_implemented }</a>
+										</td>
+										<td style="text-align: right;">
+										<a
+											href="javascript:showCasesWise('${map.district_id}','${map.district_name }','APPEALFILED');">${map.appeal_filed }</a>
+										</td>
+											<td style="text-align: right;">
+											<a
+											href="javascript:showCasesWise('${map.district_id}','${map.district_name }','DISMISSED');">${map.dismissed_copy }</a>
+											</td>
+										<td style="text-align: right;">
+										<a
+											href="javascript:showCasesWise('${map.district_id}','${map.district_name }','PENDING');">${map.pending }</a>
+										</td>
+											<td style="text-align: right;">
+											<a
+											href="javascript:showCasesWise('${map.district_id}','${map.district_name }','CLOSED');">${map.closed }</a>
+											</td>
 										<td style="text-align: right;">${map.actoin_taken_percent }</td>
 									</tr>
 									<bean:define id="casescountTot"
@@ -177,8 +204,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										value="${map.order_implemented + order_implementedTot}"></bean:define>
 									<bean:define id="appeal_filedTot"
 										value="${map.appeal_filed + appeal_filedTot}"></bean:define>
-									<bean:define id="pendingTot"
+									<bean:define id="dissmissed_tot"
+										value="${map.dismissed_copy + dissmissed_tot}"></bean:define>
+										<bean:define id="pendingTot"
 										value="${map.pending + pendingTot}"></bean:define>
+										<bean:define id="closed_tot"
+										value="${map.closed + closed_tot}"></bean:define>
 										<bean:define id="actionTakenTot"
 										value="${map.actoin_taken_percent + actionTakenTot}"></bean:define>
 								</logic:iterate>
@@ -189,7 +220,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<td colspan="1" style="text-align: right;">${casescountTot }</td>
 									<td colspan="1" style="text-align: right;">${order_implementedTot }</td>
 									<td colspan="1" style="text-align: right;">${appeal_filedTot }</td>
+									<td colspan="1" style="text-align: right;">${dissmissed_tot }</td>
 									<td colspan="1" style="text-align: right;">${pendingTot }</td>
+									<td colspan="1" style="text-align: right;">${closed_tot }</td>
 									<td colspan="1" style="text-align: right;">${actionTakenTot}</td>
 								</tR>
 							</tfoot>
@@ -198,6 +231,107 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 			</div>
 		</logic:present>
+		
+		<logic:present name="CASESLIST">
+						<table id="example" class="table table-striped table-bordered"
+							style="width:100%">
+							<thead>
+								<tr>
+									<th>Sl.No</th>
+									<th>CINo</th>
+									<th>Scanned Affidavit</th>
+									<!-- <th>Assigned to</th> -->
+									<th>Date of Filing</th>
+									<!-- <th>Case Type</th>
+									<th>Reg.No.</th>
+									<th>Reg. Year</th> -->
+
+									<th>Case Reg No.</th>
+									<th>Prayer</th>
+
+									<th>Filing No.</th>
+									<th>Filing Year</th>
+									<th>Date of Next List</th>
+									<th>Bench</th>
+									<th>Judge Name</th>
+									<th>Petitioner</th>
+									<th>District</th>
+									<th>Purpose</th>
+									<th>Respondents</th>
+									<th>Petitioner Advocate</th>
+									<th>Respondent Advocate</th>
+									<th>Orders</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<logic:iterate id="map" name="CASESLIST" indexId="i">
+									<tr>
+										<td>${i+1 }.</td>
+										<td><input type="button" id="btnShowPopup"
+											value="${map.cino}"
+											class="btn btn-sm btn-info waves-effect waves-light"
+											onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
+
+										</td>
+										<td><logic:notEmpty name="map"
+												property="scanned_document_path1">
+												<logic:notEqual value="-" name="map"
+													property="scanned_document_path1">
+													<%-- ./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf --%>
+													<a href="./${map.scanned_document_path}" target="_new"
+														class="btn btn-sm btn-info"><i
+														class="glyphicon glyphicon-save"></i><span>Scanned
+															Affidavit</span></a>
+												</logic:notEqual>
+											</logic:notEmpty></td>
+										<%-- <td nowrap="nowrap">${map.globalorgname}<br />
+												${map.fullname} - ${map.designation} <br />
+												${map.mobile} - ${map.email}
+											</td> --%>
+										<td><logic:notEmpty name="map" property="date_of_filing">
+												<logic:notEqual value="0001-01-01" name="map"
+													property="date_of_filing">
+																	${map.date_of_filing }
+																</logic:notEqual>
+											</logic:notEmpty></td>
+
+										<%-- <td>${map.type_name_fil }</td>
+										<td>${map.reg_no}</td>
+										<td>${map.reg_year }</td> prayer --%>
+										<td>${map.type_name_fil }/ ${map.reg_no} / ${map.reg_year }</td>
+										<td style="width: 300px;">${map.prayer }</td>
+
+										<td>${map.fil_no}</td>
+										<td>${map.fil_year }</td>
+										<td><logic:notEmpty name="map" property="date_next_list">
+												<logic:notEqual value="0001-01-01" name="map"
+													property="date_next_list">
+																	${map.date_next_list }
+																</logic:notEqual>
+											</logic:notEmpty></td>
+										<td>${map.bench_name }</td>
+										<td>Hon'ble Judge : ${map.coram }</td>
+										<td>${map.pet_name }</td>
+										<td>${map.dist_name }</td>
+										<td>${map.purpose_name }</td>
+										<td>${map.res_name }, ${map.address}</td>
+
+										<td>${map.pet_adv }</td>
+										<td>${map.res_adv }</td>
+										<td style="text-align: center;">${map.orderpaths }</td>
+									</tr>
+
+								</logic:iterate>
+							</tbody>
+							<tfoot>
+								<tR>
+									<td colspan="19">&nbsp;</td>
+								</tR>
+							</tfoot>
+						</table>
+					</logic:present>
+		
 		<logic:present name="CCCASESREPORT">
 			<div class="ibox">
 				<div class="ibox-head">
@@ -373,6 +507,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				$("#mode").val("unspecified");
 			$("#HCOrdersIssuedReportId").submit();
 		}
+		
+		
+	</script>
+	<script type="text/javascript">
+	function showCasesWise(deptId, deptDesc, status) {
+		alert("hsai");
+		$("#distid").val(deptId);
+		//alert("1");
+		$("#distName").val(deptDesc);
+		//alert("2");
+		$("#caseStatus").val(status);
+		alert("3");
+		$("#mode").val("getCasesList");
+		//alert("4"+$("#mode").val("getCasesList"));
+		$("#HCOrdersIssuedReportId").submit();
+	}
 	</script>
 </body>
 </html>
