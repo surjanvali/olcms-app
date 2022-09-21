@@ -18,9 +18,9 @@
 				value="@p0l(m$" /> -->
 
 			<!-- Test -->
-			<!-- <set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" 
-				/> <set-property property="username" value="apolcms" /> <set-property property="password" 
-				value="apolcms" /> -->
+			<!-- <set-property property="url" value="jdbc:postgresql://172.16.98.2:9432/apolcms" /> 
+				 <set-property property="username" value="apolcms" /> 
+				 <set-property property="password" value="apolcms" /> -->
 
 			<!-- LOCAL -->
 			<!-- <set-property property="url"
@@ -501,6 +501,7 @@
 			type="in.apcfss.struts.reports.DistrictWiseFinalOrdersImplementation"
 			parameter="mode" scope="request">
 			<forward name="success" path="page.finalordersimpl"></forward>
+			<forward name="successReport" path="DistWiseFinalOrdersImplPopup"></forward> 
 		</action>
 
 		<action path="/SectionOfficerWiseCaseProcessingReport"

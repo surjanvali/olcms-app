@@ -520,8 +520,8 @@ public class DistrictWiseFinalOrdersImplementationAction extends DispatchAction 
 					System.out.println("SQL:"+sql);
 					
 					int a = DatabasePlugin.executeUpdate(sql, con);
-					
-					sql="update ecourts_case_data set case_status='99' where cino='"+cIno+"'";
+					// assigned     case_status     assigned_to                 dept_code     ecourts_case_status     dist_id     section_officer_updated     mlo_no_updated  
+					sql="update ecourts_case_data set case_status='8' ,assigned=false ,assigned_to=null,ecourts_case_status=null,section_officer_updated=null,mlo_no_updated=null  where cino='"+cIno+"'";
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
 					

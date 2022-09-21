@@ -11,8 +11,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
 <link rel='stylesheet'
 	href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.min.css'>
 <link rel='stylesheet'
@@ -22,12 +20,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 </head>
 <body>
+<div class="page-content fade-in-up">
 	<html:form action="/HCFinalOrdersImplemented"
 		styleId="HCOrdersIssuedReportId">
 		<html:hidden styleId="mode" property="mode" />
-		<%-- <html:hidden property="dynaForm(deptId)" styleId="deptId" />
-		<html:hidden property="dynaForm(deptName)" styleId="deptName" />
-		<html:hidden property="dynaForm(caseStatus)" styleId="caseStatus" /> --%>
 		
 		<html:hidden property="dynaForm(distid)" styleId="distid" />
 		<html:hidden property="dynaForm(distName)" styleId="distName" />
@@ -62,30 +58,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<div class="ibox-title">District Wise Report</div>
 			</div>
 			<div class="ibox-body">
-
-				<%-- <div class="row">
-					<div class="col-md-12 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label class="ui-radio ui-radio-inline"> <html:radio
-									property="dynaForm(reportType)" styleId="reportType" value="CC"
-									onclick="changeReport();">
-									<span class="input-span"></span>CC (Contempt Cases)</html:radio>
-							</label> <label class="ui-radio ui-radio-inline"> <html:radio
-									property="dynaForm(reportType)" styleId="reportType"
-									value="FOI" onclick="changeReport();">
-									<span class="input-span"></span>Final Orders Implementation Report</html:radio>
-							</label> <label class="ui-radio ui-radio-inline"> <html:radio
-									property="dynaForm(reportType)" styleId="reportType"
-									value="NEW" onclick="changeReport();">
-									<span class="input-span"></span>Fresh Cases Report</html:radio>
-							</label> <label class="ui-radio ui-radio-inline"> <html:radio
-									property="dynaForm(reportType)" styleId="reportType"
-									value="LEGACY" onclick="changeReport();">
-									<span class="input-span"></span>Legacy Cases Report</html:radio>
-							</label>
-						</div>
-					</div>
-				</div> --%>
 				<div class="row">
 					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 						<div class="form-group">
@@ -100,8 +72,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</html:select>
 						</div>
 					</div>
-
-
 				</div>
 				<div class="row">
 					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -112,7 +82,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									class="fa fa-calendar"></i></span>
 								<html:text styleId="fromDate" property="dynaForm(fromDate)"
 									styleClass="form-control datepicker" />
-
 							</div>
 						</div>
 					</div>
@@ -152,14 +121,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Orders Issued</th>
 									<th>Orders Implemented</th>
 									<th>Appeal Filed</th>
-									<th>Dismissed</th>
+									<th>Dismissed / <br>No Action Taken</th>
 									<th>Pending</th>
-									<th>Closed</th>
+									<!-- <th>Closed</th> -->
 									<th>Action Taken %</th>
 								</tr>
 							</thead>
 							<tbody>
-
 								<bean:define id="casescountTot" value="0"></bean:define>
 								<bean:define id="order_implementedTot" value="0"></bean:define>
 								<bean:define id="appeal_filedTot" value="0"></bean:define>
@@ -167,36 +135,80 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<bean:define id="closed_tot" value="0"></bean:define>
 								<bean:define id="pendingTot" value="0"></bean:define>
 								<bean:define id="actionTakenTot" value="0"></bean:define>
-
 								<logic:iterate id="map" name="FINALORDERSREPORT" indexId="i">
 									<tr>
 										<td>${i+1 }.</td>
 										<td>${map.district_name}</td>
-										<td style="text-align: right;">
-										<a
-											href="javascript:showCasesWise('${map.district_id}','${map.district_name }','ALL');">${map.casescount }</a>
+										<%-- <td style="text-align: right;">
+										<a href="javascript:showCasesWise('${map.district_id}','${map.district_name}','ALL');">${map.casescount}</a>
+										</td> --%>
+										
+										<td style="text-align: right;"><input type="button" id="btnShowPopup"
+											value="${map.casescount}"
+											class="btn btn-sm btn-info waves-effect waves-light"
+											onclick="javascript:viewCaseDetailsPopup1('${map.district_id}','${map.district_name}','ALL');" />
 										</td>
-										<td style="text-align: right;">
+										
+										
+									<%-- 	<td style="text-align: right;">
 										<a
-											href="javascript:showCasesWise('${map.district_id}','${map.district_name }','FINALORDER');">${map.order_implemented }</a>
+											href="javascript:showCasesWise('${map.district_id}','${map.district_name}','FINALORDER');">${map.order_implemented}</a>
+										</td> --%>
+										
+										<td style="text-align: right;"><input type="button" id="btnShowPopup"
+											value="${map.order_implemented}"
+											class="btn btn-sm btn-info waves-effect waves-light"
+											onclick="javascript:viewCaseDetailsPopup1('${map.district_id}','${map.district_name}','FINALORDER');" />
 										</td>
-										<td style="text-align: right;">
+										
+										
+										<%-- <td style="text-align: right;">
 										<a
-											href="javascript:showCasesWise('${map.district_id}','${map.district_name }','APPEALFILED');">${map.appeal_filed }</a>
+											href="javascript:showCasesWise('${map.district_id}','${map.district_name}','APPEALFILED');">${map.appeal_filed}</a>
+										</td> --%>
+										
+										<td style="text-align: right;"><input type="button" id="btnShowPopup"
+											value="${map.appeal_filed}"
+											class="btn btn-sm btn-info waves-effect waves-light"
+											onclick="javascript:viewCaseDetailsPopup1('${map.district_id}','${map.district_name}','APPEALFILED');" />
 										</td>
-											<td style="text-align: right;">
+										
+										
+										<%-- 	<td style="text-align: right;">
 											<a
-											href="javascript:showCasesWise('${map.district_id}','${map.district_name }','DISMISSED');">${map.dismissed_copy }</a>
-											</td>
-										<td style="text-align: right;">
-										<a
-											href="javascript:showCasesWise('${map.district_id}','${map.district_name }','PENDING');">${map.pending }</a>
+											href="javascript:showCasesWise('${map.district_id}','${map.district_name}','DISMISSED');">${map.dismissed_copy}</a>
+											</td> --%>
+											
+											<td style="text-align: right;"><input type="button" id="btnShowPopup"
+											value="${map.dismissed_copy}"
+											class="btn btn-sm btn-info waves-effect waves-light"
+											onclick="javascript:viewCaseDetailsPopup1('${map.district_id}','${map.district_name}','DISMISSED');" />
 										</td>
-											<td style="text-align: right;">
+											
+											
+										<%-- <td style="text-align: right;">
+										<a
+											href="javascript:showCasesWise('${map.district_id}','${map.district_name}','PENDING');">${map.pending}</a>
+										</td> --%>
+										
+										<td style="text-align: right;"><input type="button" id="btnShowPopup"
+											value="${map.pending}"
+											class="btn btn-sm btn-info waves-effect waves-light"
+											onclick="javascript:viewCaseDetailsPopup1('${map.district_id}','${map.district_name}','PENDING');" />
+										</td>
+										
+											<%-- <td style="text-align: right;">
 											<a
-											href="javascript:showCasesWise('${map.district_id}','${map.district_name }','CLOSED');">${map.closed }</a>
-											</td>
-										<td style="text-align: right;">${map.actoin_taken_percent }</td>
+											href="javascript:showCasesWise('${map.district_id}','${map.district_name}','CLOSED');">${map.closed}</a>
+											</td> --%>
+											
+											<%-- <td style="text-align: right;"><input type="button" id="btnShowPopup"
+											value="${map.closed}"
+											class="btn btn-sm btn-info waves-effect waves-light"
+											onclick="javascript:viewCaseDetailsPopup1('${map.district_id}','${map.district_name}','CLOSED');" />
+										</td> --%>
+											
+										<td style="text-align: right;">${map.actoin_taken_percent}</td>
 									</tr>
 									<bean:define id="casescountTot"
 										value="${map.casescount + casescountTot}"></bean:define>
@@ -222,7 +234,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<td colspan="1" style="text-align: right;">${appeal_filedTot }</td>
 									<td colspan="1" style="text-align: right;">${dissmissed_tot }</td>
 									<td colspan="1" style="text-align: right;">${pendingTot }</td>
-									<td colspan="1" style="text-align: right;">${closed_tot }</td>
+									<%-- <td colspan="1" style="text-align: right;">${closed_tot }</td> --%>
 									<td colspan="1" style="text-align: right;">${actionTakenTot}</td>
 								</tR>
 							</tfoot>
@@ -231,7 +243,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 			</div>
 		</logic:present>
-		
 		<logic:present name="CASESLIST">
 						<table id="example" class="table table-striped table-bordered"
 							style="width:100%">
@@ -245,10 +256,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<!-- <th>Case Type</th>
 									<th>Reg.No.</th>
 									<th>Reg. Year</th> -->
-
 									<th>Case Reg No.</th>
 									<th>Prayer</th>
-
 									<th>Filing No.</th>
 									<th>Filing Year</th>
 									<th>Date of Next List</th>
@@ -264,7 +273,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</tr>
 							</thead>
 							<tbody>
-
 								<logic:iterate id="map" name="CASESLIST" indexId="i">
 									<tr>
 										<td>${i+1 }.</td>
@@ -272,7 +280,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											value="${map.cino}"
 											class="btn btn-sm btn-info waves-effect waves-light"
 											onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
-
 										</td>
 										<td><logic:notEmpty name="map"
 												property="scanned_document_path1">
@@ -321,7 +328,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${map.res_adv }</td>
 										<td style="text-align: center;">${map.orderpaths }</td>
 									</tr>
-
 								</logic:iterate>
 							</tbody>
 							<tfoot>
@@ -331,7 +337,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</tfoot>
 						</table>
 					</logic:present>
-		
 		<logic:present name="CCCASESREPORT">
 			<div class="ibox">
 				<div class="ibox-head">
@@ -417,7 +422,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<td colspan="1" style="text-align: right;">${counterscountTot }</td>
 								</tR>
 							</tfoot>
-							</tfoot>
 						</table>
 					</div>
 				</div>
@@ -467,7 +471,31 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 			</div>
 		</logic:present>
+		<div id="MyPopup" class="modal fade" role="dialog"
+	style="padding-top:200px;">
+	<div class="modal-dialog modal-lg">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header"
+				style="background-color: #3498db;color: #fff;">
+				<button type="button" class="close" data-dismiss="modal">
+					&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					<iframe src="" id="page" name="model_window"
+						style="width:100%;min-height:700px;;border:0px;"> </iframe>
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 	</html:form>
+	</div>
 	<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script
@@ -475,10 +503,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<script
 		src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js'></script>
 
-	<script src="./assetsnew/vendors/select2/dist/js/select2.full.min.js"
-		type="text/javascript"></script>
-	<!-- <script src="https://apbudget.apcfss.in/js/select2.js"></script> -->
-	<script>
+	<script src="./assetsnew/vendors/select2/dist/js/select2.full.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
 		$('.datepicker').datepicker({
 			uiLibrary : 'bootstrap4'
 		});
@@ -489,40 +515,66 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				format : "dd-mm-yyyy"
 			});
 		});
-
+		</script>
+		<script type="text/javascript">
+		
+		
 		function fnShowCases() {
-
-			// var selectedOption = $("input:radio[name=dynaForm(reportType)]:checked").val()
 			var selectedOption = $("#reportType").val();
-			//alert("selectedOption:" + selectedOption);
-			if (selectedOption == "FOI")
-				$("#mode").val("getFinalOrdersImplReport");
-			else if (selectedOption == "CC")
+			
+			alert("selectedOption:" + selectedOption);
+			if (selectedOption == "FOI"){
+				$("#mode").val("unspecified");
+				$("#HCOrdersIssuedReportId").submit();
+			}else if (selectedOption == "CC"){
 				$("#mode").val("getCCCasesReport");
-			else if (selectedOption == "NEW")
+				$("#HCOrdersIssuedReportId").submit();
+		}else if (selectedOption == "NEW"){
 				$("#mode").val("getNewCasesReport");
-			else if (selectedOption == "LEGACY")
+				$("#HCOrdersIssuedReportId").submit();
+		}else if (selectedOption == "LEGACY"){
 				$("#mode").val("getLegacyCasesReport");
-			else
+				$("#HCOrdersIssuedReportId").submit();
+			
+		}else{
 				$("#mode").val("unspecified");
 			$("#HCOrdersIssuedReportId").submit();
 		}
+		}
 		
+		function viewCaseDetailsPopup1(deptId, deptDesc, status) {
+			var heading = "View Case Details for : " + status;
+			var srclink = "";
+			if (deptId != null && deptId != "" && deptId != "0") {
+				srclink = "./HCFinalOrdersImplemented.do?mode=getCasesListReport&distid="+deptId+"&distName="+deptDesc+"&caseStatus="+status;
+				// alert("LINK:"+srclink);
+				if (srclink != "") {
+					$("#MyPopup .modal-title").html(heading);
+					$("#page").prop("src", srclink)
+					$("#MyPopup").modal("show");
+				}
+				;
+			}
+			;
+		};
 		
-	</script>
-	<script type="text/javascript">
-	function showCasesWise(deptId, deptDesc, status) {
-		alert("hsai");
-		$("#distid").val(deptId);
-		//alert("1");
-		$("#distName").val(deptDesc);
-		//alert("2");
-		$("#caseStatus").val(status);
-		alert("3");
-		$("#mode").val("getCasesList");
-		//alert("4"+$("#mode").val("getCasesList"));
-		$("#HCOrdersIssuedReportId").submit();
-	}
+		function viewCaseDetailsPopup(cino) {
+			var heading = "View Case Details for CINO : " + cino;
+			var srclink = "";
+			if (cino != null && cino != "" && cino != "0") {
+				srclink = "./AssignedCasesToSection.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino="+ cino;
+				// alert("LINK:"+srclink);
+				if (srclink != "") {
+					$("#MyPopup .modal-title").html(heading);
+					$("#page").prop("src", srclink)
+					//$("#MyPopup .modal-body").html(body);
+					$("#MyPopup").modal("show");
+				}
+				;
+			}
+			;
+		};
+	
 	</script>
 </body>
 </html>

@@ -732,6 +732,14 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("COUNTERS SQL:"+sql);
 					request.setAttribute("counterFileCount", DatabasePlugin.getStringfromQuery(sql, con));
 					
+					sql="select count(*) From ecourts_olcms_case_details a "
+							+ "inner join  ecourts_gpo_ack_dtls ad on (a.cino=ad.ack_no) inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no)  "
+							+ "inner join ecourts_mst_gp_dept_map emgd on (d.dept_code=emgd.dept_code and d.assigned_to=emgd.gp_id) "
+							+ "where pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'No')='Yes' and (counter_filed='No' or counter_filed='Yes') and coalesce(counter_approved_gp,'F')='F' and d.case_status='6' "
+							+ "and emgd.gp_id='"+userid+"'";
+					System.out.println("COUNTERS SQL:"+sql);
+					request.setAttribute("counterFileCountNew", DatabasePlugin.getStringfromQuery(sql, con));
+					
 					//System.out.println("counterFile--"+sql);
 					sql="select count(*) From ecourts_olcms_case_details a "
 							+ "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  "
@@ -740,6 +748,14 @@ public class WelcomePageAction extends DispatchAction{
 							+ "and emgd.gp_id='"+userid+"'  ";
 					System.out.println("PARAWISE COUNT SQL:"+sql);
 					request.setAttribute("parawiseCount", DatabasePlugin.getStringfromQuery(sql, con));
+					
+					sql="select count(*) From ecourts_olcms_case_details a "
+							+ "inner join  ecourts_gpo_ack_dtls ad on (a.cino=ad.ack_no) inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) "
+							+ "inner join ecourts_mst_gp_dept_map emgd on (d.dept_code=emgd.dept_code and d.assigned_to=emgd.gp_id) "
+							+ "where (pwr_uploaded='No' or pwr_uploaded='Yes') and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and d.case_status='6' "
+							+ "and emgd.gp_id='"+userid+"'  ";
+					System.out.println("PARAWISE COUNT SQL:"+sql);
+					request.setAttribute("parawiseCountNew", DatabasePlugin.getStringfromQuery(sql, con));
 					
 					target = "gpDashboard";
 				}

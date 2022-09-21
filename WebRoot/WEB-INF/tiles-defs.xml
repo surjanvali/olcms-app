@@ -380,6 +380,12 @@
 		<put name="content"
 			value="/jsp/reports/DistWiseFinalOrdersImpl.jsp" />
 	</definition>
+	
+	<definition name="DistWiseFinalOrdersImplPopup"
+		extends="modalLayout">
+		<put name="content"
+			value="/jsp/reports/DistWiseFinalOrdersImplPopup.jsp" />
+	</definition>
 
 	<definition name="EcourtsCaseMappingWithNewAckNo"
 		extends="UserLayoutNew">

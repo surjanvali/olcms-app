@@ -115,9 +115,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</a>
 						</div>
 					</logic:greaterThan>
-
 				</logic:notEmpty>
-
 				<logic:notEmpty name="parawiseCount">
 					<logic:greaterThan value="0" name="parawiseCount">
 						<div class="col-lg-2 col-md-3">
@@ -126,7 +124,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="ibox bg-danger color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${parawiseCount }</h2>
-										<div class="m-b-5">Parawise Remarks Pending for Approval</div>
+										<div class="m-b-5">Parawise Remarks Pending for Approval Legacy</div>
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
 											<small> &nbsp;</small>
@@ -147,7 +145,48 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${counterFileCount }</h2>
 										<div class="m-b-5">Counter Filed and Pending for
-											Approval</div>
+											Approval Legacy</div>
+
+										<i class="fa fa-file-text-o widget-stat-icon"></i>
+										<div>
+											<small> &nbsp;</small>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</logic:greaterThan>
+				</logic:notEmpty>
+				<logic:notEmpty name="parawiseCountNew">
+					<logic:greaterThan value="0" name="parawiseCountNew">
+						<div class="col-lg-2 col-md-3">
+							<a
+								href="./GPsReportNew.do?mode=viewGPCasesNew&pwCounterFlag=PR">
+								<div class="ibox bg-danger color-white widget-stat">
+									<div class="ibox-body">
+										<h2 class="m-b-5 font-strong">${parawiseCountNew}</h2>
+										<div class="m-b-5">Parawise Remarks Pending for Approval (New)</div>
+										<i class="fa fa-file-text-o widget-stat-icon"></i>
+										<div>
+											<small> &nbsp;</small>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</logic:greaterThan>
+				</logic:notEmpty>
+
+				<logic:notEmpty name="counterFileCountNew">
+					<logic:greaterThan value="0" name="counterFileCountNew">
+						<div class="col-lg-2 col-md-3">
+							<a
+								href="./GPsReportNew.do?mode=viewGPCasesNew&pwCounterFlag=COUNTER">
+								<div class="ibox bg-danger color-white widget-stat">
+									<div class="ibox-body">
+										<h2 class="m-b-5 font-strong">${counterFileCountNew }</h2>
+										<div class="m-b-5">Counter Filed and Pending for
+											Approval (New)</div>
 
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>

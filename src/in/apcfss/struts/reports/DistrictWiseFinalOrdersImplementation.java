@@ -27,6 +27,7 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		String userId = null, roleId = null, sql = null, sqlCondition = "";
 		try {
+			cform.setDynaForm("reportType", "FOI");
 
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
@@ -34,7 +35,8 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 		} finally {
 			DatabasePlugin.closeConnection(con);
 		}
-		return mapping.findForward("success");
+		//return mapping.findForward("success");
+		return getFinalOrdersImplReport(mapping, cform, request, response);
 	}
 
 	public ActionForward getFinalOrdersImplReport(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -44,7 +46,7 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		String userId = null, roleId = null, sql = null, sqlCondition = "";
 		try {
-			System.out.println("heiii");
+			//System.out.println("heiii");
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
@@ -76,19 +78,17 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 					+ " coalesce(d.order_implemented,'0') order_implemented, "
 					+ " coalesce(d.appeal_filed,'0') appeal_filed, "
 					+ " coalesce(d.dismissed_copy,'0') dismissed_copy,  "
-					+ " coalesce(d.closed,'0') closed,    "
-					+ " coalesce(casescount-(order_implemented + appeal_filed+dismissed_copy+closed),'0') as pending,   "
-					+ " "
-					+ " case when coalesce(d.casescount,'0') > 0 then round((((coalesce(order_implemented,'0')::int4 + coalesce(appeal_filed,'0')::int4 + coalesce(dismissed_copy,'0')::int4 + coalesce(closed,'0')::int4) * 100) / coalesce(d.casescount,'0')) , 2) else 0 end as actoin_taken_percent "
-					
+					//+ " coalesce(d.closed,'0') closed,    "
+					+ " coalesce(casescount-(order_implemented + appeal_filed+dismissed_copy),'0') as pending,   "
+					+ " case when coalesce(d.casescount,'0') > 0 then round((((coalesce(order_implemented,'0')::int4 + coalesce(appeal_filed,'0')::int4 + coalesce(dismissed_copy,'0')::int4 ) * 100) / coalesce(d.casescount,'0')) , 2) else 0 end as actoin_taken_percent "
 					//+ " round(coalesce( (order_implemented::numeric + appeal_filed::numeric+dismissed_copy::numeric+closed::numeric)/(4*100::numeric),'0'),2) as actoin_taken_percent   "
-					
 					+ " from district_mst dm "
 					+ " left join ( select dist_id,count( a.cino) as casescount,   "
 					+ " sum(case when length(action_taken_order)> 10   or final_order_status='final' then 1 else 0 end) as order_implemented ,  "
 					+ " sum(case when length(appeal_filed_copy)> 10 or final_order_status='appeal'  then 1 else 0 end) as appeal_filed ,"
-					+ " sum(case when length(dismissed_copy)> 10 or final_order_status='dismissed' or ocd.ecourts_case_status='dismissed' then 1 else 0 end) as dismissed_copy,"
-					+ " sum(case when ocd.ecourts_case_status='Closed' then 1 else 0 end) as closed   from  ecourts_case_data a  "
+					+ " sum(case when length(dismissed_copy)> 10 or final_order_status='dismissed'  then 1 else 0 end) as dismissed_copy "  //or ocd.ecourts_case_status='dismissed'
+				//	+ " sum(case when ocd.ecourts_case_status='Closed' then 1 else 0 end) as closed   "
+					+ " from  ecourts_case_data a  "
 					+ " inner join ecourts_case_finalorder b on (a.cino=b.cino)  LEFT join dept_new dn on (a.dept_code=dn.dept_code) "
 					+ " LEFT join ecourts_olcms_case_details ocd on (a.cino=ocd.cino)   "
 					+ " where 1=1  " +sqlCondition 
@@ -112,7 +112,7 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 		return mapping.findForward("success");
 	}
 	
-	public ActionForward getCasesList(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	public ActionForward getCasesListReport(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		System.out.println(
 				"HCCaseStatusAbstractReport..............................................................................getCasesList()");
@@ -130,14 +130,23 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 
 			session = request.getSession();
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-			deptCode = CommonModels.checkStringObject(cform.getDynaForm("deptId"));
-			districtId = CommonModels.checkStringObject(cform.getDynaForm("districtId"));
-			caseStatus = CommonModels.checkStringObject(cform.getDynaForm("caseStatus"));
-			actionType = CommonModels.checkStringObject(cform.getDynaForm("actionType"));
-			deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
+			/*
+			 * deptCode = CommonModels.checkStringObject(cform.getDynaForm("distid"));
+			 * districtId = CommonModels.checkStringObject(cform.getDynaForm("districtId"));
+			 * caseStatus = CommonModels.checkStringObject(cform.getDynaForm("caseStatus"));
+			 * actionType = CommonModels.checkStringObject(cform.getDynaForm("actionType"));
+			 * deptName = CommonModels.checkStringObject(cform.getDynaForm("distName"));
+			 */
 			
+			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
+			
+			districtId = request.getParameter("distid");
+			caseStatus = request.getParameter("caseStatus");
+			deptName = request.getParameter("distName");
 			
 			System.out.println("caseStatus--"+caseStatus);
+			System.out.println("deptCode--"+districtId);
+			System.out.println("deptName--"+deptName);
 			heading="Cases List for "+deptName;
 			
 			if(!caseStatus.equals("")) {
@@ -152,15 +161,15 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 				}
 				if(caseStatus.equals("APPEALFILED")) {
 					sqlCondition+=" and  (length(appeal_filed_copy)> 10 or final_order_status='appeal') ";
-					heading+="  Appeal Final orders";
+					heading+="  Appeal Filed Final orders";
 				}
 				if(caseStatus.equals("DISMISSED")) {
-					sqlCondition+=" and (length(dismissed_copy)> 10 or final_order_status='dismissed' or ocd.ecourts_case_status='dismissed') ";
+					sqlCondition+=" and (length(dismissed_copy)> 10 or final_order_status='dismissed' or eocd.ecourts_case_status='dismissed') ";
 					heading+="  Dismissed Final Orders";
 				}
 				if(caseStatus.equals("PENDING")) {
-					sqlCondition+=" and  case_status=7 ";
-					heading+="  District Collector Final Orders";
+					sqlCondition+=" and   ( action_taken_order is null or appeal_filed_copy is null or dismissed_copy is null ) ";
+					heading+="  Pending Final Orders";
 				}
 				
 			}
@@ -172,24 +181,15 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 				sqlCondition += " and (a.dept_code='" + deptCode + "') " ;
 			}
 			
-			 if(cform.getDynaForm("distid") != null
-						&& !CommonModels.checkStringObject(cform.getDynaForm("distid")).contentEquals("")) {
-					sqlCondition+=" and a.dist_id='"+cform.getDynaForm("distid")+"'";
+			 if(districtId != null && (!districtId.equals(""))) {
+					sqlCondition+=" and a.dist_id='"+districtId+"'";
+			   }
+			 
+			 if(deptCode != null && (!deptCode.equals("")) ) {
+					sqlCondition+=" and a.dept_code='"+deptCode+"'";
 			   }
 				
-			 if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
-						&& !cform.getDynaForm("districtId").toString().contentEquals("0")) {
-					sqlCondition += " and a.dist_id='" + cform.getDynaForm("districtId").toString().trim() + "' ";
-				}
 				
-				if (deptCode != null && !deptCode.toString().contentEquals("")
-						&& !deptCode.toString().contentEquals("0")) {
-					sqlCondition += " and a.dept_code='" + deptCode + "' ";
-				}
-				
-				
-				System.out.println("---"+cform.getDynaForm("distid"));
-			
 			sql = "select a.*, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer, ra.address from ecourts_case_data a  "
 					+ " left join nic_prayer_data np on (a.cino=np.cino)"
 					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1)"
@@ -217,7 +217,8 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 			DatabasePlugin.close(con, ps, null);
 		}
 
-		return mapping.findForward("success");
+		//return mapping.findForward("success");
+		return mapping.findForward("successReport");
 	}
 
 	public ActionForward getCCCasesReport(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -318,7 +319,6 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 				sqlCondition += " and a.dist_id='" + session.getAttribute("dist_id") + "' ";
 				cform.setDynaForm("districtId", session.getAttribute("dist_id"));
 			}
-			
 			
 			
 			sql= "select district_id, district_name,coalesce(d.casescount,'0') casescount,coalesce(d.counterscount,'0') counterscount  "
