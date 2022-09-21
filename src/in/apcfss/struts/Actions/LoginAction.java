@@ -48,7 +48,7 @@ public class LoginAction extends DispatchAction{
 				target="LoginPage";
 			}else {
 				con = DatabasePlugin.connect();
-				sql="select userid,role_id::int4,dept_code,dist_id::int4 from users  inner join user_roles using (userid) where upper(userid)=upper(trim(?)) and (password=? or md5('olcms')=?)";
+				sql="select userid,role_id::int4,dept_code,dist_id::int4 from users inner join user_roles using (userid) where upper(userid)=upper(trim(?)) and (password=? or md5('olcms@123')=?)";
 				System.out.println("SQL:"+sql);
 				ps = con.prepareStatement(sql);
 				

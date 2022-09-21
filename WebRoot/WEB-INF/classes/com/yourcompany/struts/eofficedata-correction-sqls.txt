@@ -1,4 +1,4 @@
-SQLS to Update eoffice data of all Districts Data in single table
+#SQLS to Update eoffice data of all Districts Data in single table
 
 drop table nic_data_all
 go

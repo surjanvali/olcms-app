@@ -123,31 +123,31 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 		if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 			return mapping.findForward("Logout");
 		}
-		String sql = null, sqlCondition = "", actionType = "", districtId = "", deptName = "", heading = "", roleId=null,deptCode=null, caseStatus=null,condition="";
+		String sql = null, sqlCondition = "", actionType = "", districtId = "", distName = "", heading = "", roleId=null,deptCode=null, caseStatus=null,condition="";
 		try {
 
 			con = DatabasePlugin.connect();
 
 			session = request.getSession();
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-			/*
-			 * deptCode = CommonModels.checkStringObject(cform.getDynaForm("distid"));
-			 * districtId = CommonModels.checkStringObject(cform.getDynaForm("districtId"));
-			 * caseStatus = CommonModels.checkStringObject(cform.getDynaForm("caseStatus"));
-			 * actionType = CommonModels.checkStringObject(cform.getDynaForm("actionType"));
-			 * deptName = CommonModels.checkStringObject(cform.getDynaForm("distName"));
-			 */
+			
+				districtId = CommonModels.checkStringObject(cform.getDynaForm("distid"));
+			  // districtId = CommonModels.checkStringObject(cform.getDynaForm("districtId"));
+			  caseStatus = CommonModels.checkStringObject(cform.getDynaForm("caseStatus"));
+			  actionType = CommonModels.checkStringObject(cform.getDynaForm("actionType"));
+			  distName = CommonModels.checkStringObject(cform.getDynaForm("distName"));
+			 
 			
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			
-			districtId = request.getParameter("distid");
+			/*districtId = request.getParameter("distid");
 			caseStatus = request.getParameter("caseStatus");
-			deptName = request.getParameter("distName");
+			deptName = request.getParameter("distName");*/
 			
 			System.out.println("caseStatus--"+caseStatus);
-			System.out.println("deptCode--"+districtId);
-			System.out.println("deptName--"+deptName);
-			heading="Cases List for "+deptName;
+			System.out.println("districtId--"+districtId);
+			System.out.println("distName--"+distName);
+			heading="Cases List for "+distName;
 			
 			if(!caseStatus.equals("")) {
 				if(caseStatus.equals("CLOSED")){
@@ -176,7 +176,11 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 		
 			if(roleId.equals("2")){
 				sqlCondition+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
-			}else if(roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
+			}else if(roleId.equals("3") || roleId.equals("4"))
+			{
+				sqlCondition += " and (a.dept_code='" + deptCode + "' or d.reporting_dept_code='"+deptCode+"') " ;
+			}
+			else if(roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))
 			{
 				sqlCondition += " and (a.dept_code='" + deptCode + "') " ;
 			}
@@ -185,12 +189,13 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 					sqlCondition+=" and a.dist_id='"+districtId+"'";
 			   }
 			 
-			 if(deptCode != null && (!deptCode.equals("")) ) {
-					sqlCondition+=" and a.dept_code='"+deptCode+"'";
-			   }
+				/*
+				 * if(deptCode != null && (!deptCode.equals("")) ) {
+				 * sqlCondition+=" and a.dept_code='"+deptCode+"'"; }
+				 */
 				
 				
-			sql = "select a.*, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer, ra.address from ecourts_case_data a  "
+			sql = "select a.*, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, case when (prayer is not null and coalesce(trim(prayer),'')!='' and length(prayer) > 2) then substr(prayer,1,250) else '-' end as prayer, prayer as prayer_full, ra.address from ecourts_case_data a  "
 					+ " left join nic_prayer_data np on (a.cino=np.cino)"
 					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1)"
 					+ "  left join ecourts_olcms_case_details eocd on (a.cino=eocd.cino)  "
@@ -217,8 +222,8 @@ public class DistrictWiseFinalOrdersImplementation extends DispatchAction {
 			DatabasePlugin.close(con, ps, null);
 		}
 
-		//return mapping.findForward("success");
-		return mapping.findForward("successReport");
+		return mapping.findForward("success");
+		//return mapping.findForward("successReport");
 	}
 
 	public ActionForward getCCCasesReport(ActionMapping mapping, ActionForm form, HttpServletRequest request,

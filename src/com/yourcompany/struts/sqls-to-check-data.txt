@@ -1,4 +1,4 @@
-1. Mismatch of Section Officer District Codes with cases and users 
+#1. Mismatch of Section Officer District Codes with cases and users 
 
 select assigned_to, userid,count(*) from ecourts_case_data a inner join users b on (assigned_to=userid) where case_status='10' and a.dist_id!=b.dist_id group by assigned_to, userid
 
@@ -6,11 +6,10 @@ begin
 update ecourts_case_data set dist_id=users.dist_id from users where assigned_to=users.userid and ecourts_case_data.case_status='10' and ecourts_case_data.dist_id!=users.dist_id
 commit
 
-
 select dept_name,count(*),'update ecourts_cinos_new set dept_code="" where inserted_time::date = current_date - 2 and dept_code is null and dept_name="'||dept_name||'"' from ecourts_cinos_new where inserted_time::date = current_date - 2 and dept_code is null group by dept_name order by 2 desc
 
 
-2. 
+#2. 
 select count(*) from ecourts_case_data where barcode_file_path is not null and scanned_document_path is null
 go
 select cino,barcode_file_path,'uploads/scandocs/'||cino||'/'||cino||'.pdf' from ecourts_case_data where barcode_file_path is not null and scanned_document_path is null
@@ -22,7 +21,7 @@ update ecourts_case_data set scanned_document_path='uploads/scandocs/'||cino||'/
 commit
 
 
-Import New cases data into db
+#Import New cases data into db
 
 insert prayer data into nic_prayer_data table
 insert respondents data into nic_resp_addr_data table
