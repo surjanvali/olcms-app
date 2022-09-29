@@ -245,12 +245,12 @@ body {
 								property="dynaForm(ecourtsCaseStatus)" styleClass="form-control">
 								<html:option value="0">---SELECT---</html:option>
 								<html:option value="Pending">Pending</html:option>
+								<html:option value="Private">Private</html:option>
 								<html:option value="Closed">Closed</html:option>
 							</html:select>
 						</div>
 					</div>
 				</div>
-
 
 				<div class="row">
 					<div class="col-sm-6 form-group casecloseddiv">
@@ -444,12 +444,9 @@ body {
 									target='_new' class="btn btn-sm btn-info">View Uploaded
 									File</a>
 							</logic:notEmpty>
-
 						</div>
 					</div>
 				</div>
-
-				
 				<div class="row">
 					<div class="col-sm-6 form-group">
 						<label>Action <bean:message key="mandatory" />
@@ -459,12 +456,11 @@ body {
 							<html:option value="0">---SELECT---</html:option>
 							<html:option value="Parawise Remarks">Parawise Remarks</html:option>
 							<html:option value="Counter Affidavit">Counter Affidavit</html:option>
-							
+							<html:option value="Private">Private</html:option>
 						</html:select>
-					</div>
+					</div>  
 					<div class="col-sm-6 form-group"></div>
 				</div>
-
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<div class="form-group">
@@ -483,8 +479,6 @@ body {
 						</div>
 					</div>
 				</div>
-
-
 				<hr />
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

@@ -461,10 +461,14 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					request.setAttribute("OLCMSCASEDATALOG", data);
 				*/
 				
-				sql = "SELECT cino, petition_document, counter_filed_document, judgement_order, action_taken_order, last_updated_by, last_updated_on, counter_filed, remarks, ecourts_case_status, corresponding_gp, "
-						+ " pwr_uploaded, to_char(pwr_submitted_date,'mm/dd/yyyy') as pwr_submitted_date, to_char(pwr_received_date,'mm/dd/yyyy') as pwr_received_date, pwr_approved_gp, to_char(pwr_gp_approved_date,'mm/dd/yyyy') as pwr_gp_approved_date, appeal_filed, "
-						+ " appeal_filed_copy, to_char(appeal_filed_date,'mm/dd/yyyy') as appeal_filed_date, pwr_uploaded_copy, action_to_perfom  "
-						+ " FROM apolcms.ecourts_olcms_case_details where cino='" + cIno + "'";
+				List<Map<String, Object>> data_status = DatabasePlugin.executeQuery(sql, con);
+				
+				sql=" select case_status,ecourts_case_status from ecourts_case_data where cino='" + cIno + "' ";
+				data_status = DatabasePlugin.executeQuery(sql, con);
+				request.setAttribute("OLCMSCASEDATA", data_status);
+				
+				String caseStatus=(String)data_status.get(0).get("ecourts_case_status").toString();
+				if( (caseStatus.equals(null)  || !caseStatus.equals("Private"))) {
 				
 				sql = "SELECT cino, case when length(petition_document) > 0 then petition_document else null end as petition_document, "
 						+ " case when length(counter_filed_document) > 0 then counter_filed_document else null end as counter_filed_document,"
@@ -506,7 +510,22 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					
 					request.setAttribute("STATUSUPDATEBTN", "STATUSUPDATEBTN");
 					
-				}				
+				}	
+				}
+				
+				if (data_status != null) {
+					
+					Map caseData1 = (Map)data_status.get(0);
+				
+					//cform.setDynaForm("remarks" , caseData1.get("remarks"));
+					cform.setDynaForm("ecourtsCaseStatus" , caseData1.get("ecourts_case_status"));
+					
+					///cform.setDynaForm("actionToPerform" , caseData1.get("action_to_perfom"));
+					
+					request.setAttribute("STATUSUPDATEBTN", "STATUSUPDATEBTN");
+					
+				}	
+				
 				request.setAttribute("HEADING", "Update Status for Case :" + cIno);
 			} else {
 				request.setAttribute("errorMsg", "Invalid Cino. / No Records Found to display.");
@@ -908,6 +927,34 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 					} else {
 						con.rollback();
 						request.setAttribute("errorMsg", "Error while updating the case details for Cino :" + cIno);
+					}
+					
+				}else if(cform.getDynaForm("ecourtsCaseStatus")!=null && cform.getDynaForm("ecourtsCaseStatus").toString().equals("Private")){
+					
+					int a=0;
+					
+					
+						sql="update ecourts_case_data set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"', case_status='98' "
+								+ " where cino='"+cIno+"' and dept_code='"+deptCode+"'  "; 
+						 a = DatabasePlugin.executeUpdate(sql, con);
+						System.out.println("a-----3------------"+a);
+					
+					
+					System.out.println("update-----4------------"+sql);
+					System.out.println("a-sql-----------"+a);
+					
+					sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks ) "
+							+ "values ('" + cIno + "','"+actionPerformed+"','"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"')";
+					a += DatabasePlugin.executeUpdate(sql, con);
+					
+					System.out.println("a----5-------------"+a);
+					
+					if (a > 0) {
+						request.setAttribute("successMsg", "Case details updated Successfully for Cino No :" + cIno);
+						con.commit();
+					} else {
+						con.rollback();
+						request.setAttribute("errorMsg", "Error while updating the case details for Cino No :" + cIno);
 					}
 					
 				}

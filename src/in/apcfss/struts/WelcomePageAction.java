@@ -594,11 +594,11 @@ public class WelcomePageAction extends DispatchAction{
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
 					
 					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy') b on (a.cino=b.cino) "
-							+ " where dept_code='"+deptCode+"' ";
+							+ " where dept_code='"+deptCode+"' and dist_id='"+distId+"' and coalesce(ecourts_case_status,'')!='Closed'  ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
 					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) \r\n"
-							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' ";
+							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' and dist_id='"+distId+"' and coalesce(ecourts_case_status,'')!='Closed' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 				}
 				
@@ -641,7 +641,7 @@ public class WelcomePageAction extends DispatchAction{
 							+ " where assigned=true and assigned_to='"+userid+"' and case_status=9 and coalesce(ecourts_case_status,'')!='Closed'";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) "
 							+ " where a.ack_type = 'NEW' and e.assigned=true and e.assigned_to='"+userid+"' and e.case_status=9 and coalesce(e.ecourts_case_status,'')!='Closed'";
 					
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
@@ -652,7 +652,8 @@ public class WelcomePageAction extends DispatchAction{
 					List<Map<Object, String>> dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("dashboardCounts", dashboardCounts);
 					
-					sql="select count(*) as assigned from ecourts_gpo_ack_dtls ad1 inner join ecourts_gpo_ack_depts ad2 on (ad1.ack_no=ad2.ack_no)  where ack_type='NEW'  and assigned=true and assigned_to='"+userid+"' and case_status=10 ";
+					sql="select count(*) as assigned from ecourts_gpo_ack_dtls ad1 inner join ecourts_gpo_ack_depts ad2 on (ad1.ack_no=ad2.ack_no)  "
+							+ " where ack_type='NEW'  and assigned=true and assigned_to='"+userid+"' and case_status=10 and ad2.dist_id='"+distId+"' and ad2.dept_code='"+deptCode+"' and coalesce(ad2.ecourts_case_status,'')!='Closed' ";
 					System.out.println("NEWCASESCOUNTS:"+sql);
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
@@ -661,7 +662,7 @@ public class WelcomePageAction extends DispatchAction{
 							+ " where assigned=true and assigned_to='"+userid+"' and case_status=10 and coalesce(ecourts_case_status,'')!='Closed'";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) "
 							+ " where a.ack_type = 'NEW' and e.assigned=true and e.assigned_to='"+userid+"' and e.case_status=10 and coalesce(e.ecourts_case_status,'')!='Closed'";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 					

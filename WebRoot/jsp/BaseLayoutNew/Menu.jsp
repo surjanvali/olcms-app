@@ -30,6 +30,8 @@
 
 					<div class="font-strong">District Collector</div>
 					<small>${sessionScope.userName }</small>
+					<br />
+						<small>${sessionScope.district_name } </small>
 				</c:if>
 				<c:if
 					test="${sessionScope.role_id eq 3 || sessionScope.role_id eq 4 || sessionScope.role_id eq 5 || sessionScope.role_id eq 8  
@@ -39,7 +41,10 @@
 					<small>${sessionScope.role_desc }</small>
 					<br />
 					<small>${sessionScope.dept_code } - ${sessionScope.dept_desc }</small>
-
+					<c:if test="${sessionScope.role_id eq 10 || sessionScope.role_id eq 12}">
+						<br />
+						<small>${sessionScope.district_name } </small>
+					</c:if>
 				</c:if>
 				<c:if test="${sessionScope.role_id eq 6}">
 					<!-- <div class="font-strong">GP Office</div> -->

@@ -96,7 +96,8 @@ public class OfficersRegisteredReport extends DispatchAction {
 			} 
 				else {
 					sql = "select d.dept_code as dept_id,upper(d.description) as description,b.fullname_en, b.designation_name_en,m.mobileno,m.emailid from mlo_details m "
-							+ "inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en from nic_data) b on (m.employeeid=b.employee_id and m.designation=b.designation_id)"
+							//+ "inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en from nic_data) b on (m.employeeid=b.employee_id and m.designation=b.designation_id)"
+							+" inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en,email from nic_data ) b on ((trim(m.emailid)=trim(b.email)) or (m.employeeid=b.employee_id and m.designation=b.designation_id)) "
 							+ "inner join users u on (m.emailid=u.userid)"
 							+ "inner join dept_new d on (m.user_id=d.dept_code)" + "order by 1";
 

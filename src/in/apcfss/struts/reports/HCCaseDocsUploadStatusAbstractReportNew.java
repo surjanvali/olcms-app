@@ -18,8 +18,6 @@ import plugins.DatabasePlugin;
 
 public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 	
-	
-	
 	@Override
 	public ActionForward unspecified(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -112,13 +110,12 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 			
 			if (roleId.equals("5") || roleId.equals("9") || roleId.equals("10")) {
 				deptId = CommonModels.checkStringObject(session.getAttribute("dept_code"));
-				deptName = DatabasePlugin.getStringfromQuery(
-						"select upper(description) as description from dept_new where dept_code='" + deptId + "'", con);
+				deptName = DatabasePlugin.getStringfromQuery("select upper(description) as description from dept_new where dept_code='" + deptId + "'", con);
 				
 			} else {
 				deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"));
 				deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
-				
+			}
 						sql="select a.dept_code,upper(trim(dn.description)) as description,sum(case when a.respondent_slno=1 then 1 else 0 end) as total_resp1,"
 						+ " sum(case when a.respondent_slno > 1 then 1 else 0 end) as total_resp_other,"
 						+ " count(*) as total,sum(case when a.ecourts_case_status='Closed' then 1 else 0 end) as closed_cases,"
@@ -128,15 +125,20 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 						+ "	 from ecourts_gpo_ack_depts  a "
 						+ "left join ecourts_olcms_case_details ecod on(a.ack_no=ecod.cino and a.respondent_slno=ecod.respondent_slno)"
 						+ "	left join ecourts_gpo_ack_dtls  b using(ack_no) inner join dept_new dn on (a.dept_code=dn.dept_code)"
-						+ " where  b.ack_type='NEW' and (a.dept_code='" + deptId +"' or reporting_dept_code='"+deptId+"')"
-						+ "	group by dn.reporting_dept_code,a.dept_code,dn.description ";
-				
+						+ " where  b.ack_type='NEW' and (a.dept_code='" + deptId +"' or reporting_dept_code='"+deptId+"')" ;
+						
+						
+						if(roleId.equals("2") || roleId.equals("10")){
+							sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
+						}
+						
+						sql+=" group by dn.reporting_dept_code,a.dept_code,dn.description ";
 
 			request.setAttribute("HEADING", "HOD Wise Case processing Abstract for " + deptName);
 			System.out.println("SQL:" + sql);
 			
 			request.setAttribute("deptwise", DatabasePlugin.executeQuery(con, sql));
-			}
+			
 			
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");

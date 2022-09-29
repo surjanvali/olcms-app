@@ -764,6 +764,41 @@ System.out.println("resident_id--"+resident_id);
 						request.setAttribute("errorMsg", "Error while updating the case details for Ack No :" + cIno);
 					}
 
+				}else if(cform.getDynaForm("ecourtsCaseStatus")!=null && cform.getDynaForm("ecourtsCaseStatus").toString().equals("Private")){
+					
+					int a=0;
+					
+					if(roleId!=null && (roleId.equals("4") || roleId.equals("5") || roleId.equals("10"))) {//MLO / NO / Dist-NO
+						sql="update ecourts_gpo_ack_depts set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"', case_status='98' "
+								+ " where ack_no='"+cIno+"' and dept_code='"+deptCode+"'  "; //and respondent_slno='"+resident_id+"' 
+						 a = DatabasePlugin.executeUpdate(sql, con);
+						System.out.println("a-----3------------"+a);
+					}
+					
+					else {
+						
+						sql="update ecourts_gpo_ack_depts set ecourts_case_status='"+cform.getDynaForm("ecourtsCaseStatus")+"', case_status='98' "
+								+ " where ack_no='"+cIno+"' and dept_code='"+deptCode+"' "; //and respondent_slno='"+resident_id+"'
+						a += DatabasePlugin.executeUpdate(sql, con);
+					}
+					
+					System.out.println("update-----4------------"+sql);
+					System.out.println("a-sql-----------"+a);
+					
+					sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks ) "
+							+ "values ('" + cIno + "','"+actionPerformed+"','"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"')";
+					a += DatabasePlugin.executeUpdate(sql, con);
+					
+					System.out.println("a----5-------------"+a);
+					
+					if (a > 0) {
+						request.setAttribute("successMsg", "Case details updated successfully for Ack No :" + cIno);
+						con.commit();
+					} else {
+						con.rollback();
+						request.setAttribute("errorMsg", "Error while updating the case details for Ack No :" + cIno);
+					}
+					
 				}
 				cform.setDynaForm("remarks", "");
 			} else {

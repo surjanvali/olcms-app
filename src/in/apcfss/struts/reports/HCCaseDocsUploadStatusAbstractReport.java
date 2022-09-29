@@ -116,8 +116,6 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 				deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"));
 				deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
 			}
-
-			
 			
 			
 			sql = "select a.dept_code as deptcode,dn.description,count(*) as total_cases,sum(case when scanned_document_path is not null and length(scanned_document_path)>10 then 1 else 0 end) as olcms_uploads, "
@@ -134,7 +132,6 @@ public class HCCaseDocsUploadStatusAbstractReport extends DispatchAction {
 					if(roleId.equals("2") || roleId.equals("10")){
 						sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
 					}
-					
 					
 					// + "where dn.reporting_dept_code='AGC01' or a.dept_code='AGC01' "
 					sql+= "group by a.dept_code,dn.description order by 1";

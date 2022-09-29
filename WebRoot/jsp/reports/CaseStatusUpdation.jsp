@@ -603,8 +603,33 @@ body {
 				</logic:present>
 				<hr />
 
+
+
+	<div class="row">
+					
+
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<label>Case Status <bean:message key="mandatory" />
+							</label>
+							<html:select styleId="ecourtsCaseStatus"
+								property="dynaForm(ecourtsCaseStatus)" styleClass="form-control">
+								<html:option value="0">---SELECT---</html:option>
+								<html:option value="Pending">Pending</html:option>
+								<html:option value="Private">Private</html:option>
+								<html:option value="Closed">Closed</html:option>
+							</html:select>
+						</div>
+					</div>
+				</div>
+
+
+
+
+
+
 				<div class="row">
-					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group petitiondiv">
 						<label>Upload Petition <bean:message key="mandatory" /></label>
 						<html:file styleClass="form-control" styleId="petitionDocument"
 							property="dynaForm(petitionDocument)" />
@@ -620,18 +645,6 @@ body {
 
 					</div>
 
-					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label>Case Status <bean:message key="mandatory" />
-							</label>
-							<html:select styleId="ecourtsCaseStatus"
-								property="dynaForm(ecourtsCaseStatus)" styleClass="form-control">
-								<html:option value="0">---SELECT---</html:option>
-								<html:option value="Pending">Pending</html:option>
-								<html:option value="Closed">Closed</html:option>
-							</html:select>
-						</div>
-					</div>
 				</div>
 
 				<%-- <div class="row">
@@ -879,6 +892,7 @@ body {
 							<html:option value="0">---SELECT---</html:option>
 							<html:option value="Parawise Remarks">Parawise Remarks</html:option>
 							<html:option value="Counter Affidavit">Counter Affidavit</html:option>
+							<html:option value="Private">Private</html:option>
 							<%-- <html:option value="Interim Orders">Interim Orders</html:option>
 							<html:option value="Appeal">Appeal</html:option>
 							<html:option value="Contempt">Contempt</html:option>
@@ -1091,7 +1105,8 @@ body {
 
 						$(".casecloseddiv").hide();
 						$(".casependingdiv").hide();
-
+						$(".petitiondiv").hide();
+						
 						$(".counterfileddiv").hide();
 						$(".counteruploaddiv").hide();
 
@@ -1110,19 +1125,23 @@ body {
 											$(".parawiseRemarksdiv").hide();
 											$(".counterfileddiv").hide();
 											$(".counteruploaddiv").hide();
-
+											$(".petitiondiv").hide();
+											
 											$(".appealfileddiv").hide();
 											$(".appealuploaddiv").hide();
 											// alert("ecourtsCaseStatus::"+$("#ecourtsCaseStatus").val());
 											if ($("#ecourtsCaseStatus").val() == "Closed") {
 												$(".casecloseddiv").show();
 												$(".appealfileddiv").show();
+												$(".petitiondiv").show();
+												
 
 											} else if ($("#ecourtsCaseStatus")
 													.val() == "Pending") {
 												$(".casependingdiv").show();
 												$(".parawiseRemarksdiv").show();
 												$(".counterfileddiv").show();
+												$(".petitiondiv").show();
 												//$(".parawiseRemarkssubmitteddiv").hide();
 											}
 										});
@@ -1169,11 +1188,13 @@ body {
 						if ($("#ecourtsCaseStatus").val() == "Closed") {
 							$(".casecloseddiv").show();
 							$(".appealfileddiv").show();
+							$(".petitiondiv").show();
 
 						} else if ($("#ecourtsCaseStatus").val() == "Pending") {
 							$(".casependingdiv").show();
 							$(".parawiseRemarksdiv").show();
 							$(".counterfileddiv").show();
+							$(".petitiondiv").show();
 							//$(".parawiseRemarkssubmitteddiv").hide();
 						}
 

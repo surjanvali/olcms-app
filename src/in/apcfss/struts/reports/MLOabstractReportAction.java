@@ -94,8 +94,10 @@ public class MLOabstractReportAction extends DispatchAction {
 							+ " order by d.sdeptcode||d.deptcode";
 					*/
 					
-					sql="select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, designation_name_en,upper(d.description) as description,d.sdeptcode||d.deptcode as dept_code "
-							+ "from mlo_details a  inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en from "+tableName+") b on (a.employeeid=b.employee_id and a.designation=b.designation_id)  "
+					sql="select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, b.fullname_en, "
+							+ "designation_name_en,upper(d.description) as description,d.sdeptcode||d.deptcode as dept_code from mlo_details a  "
+							//+ "inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en from "+tableName+") b on (a.employeeid=b.employee_id and a.designation=b.designation_id)  "
+							+"	inner join (select distinct employee_id,fullname_en,designation_id, designation_name_en,email from nic_data ) b on ((trim(a.emailid)=trim(b.email)) or (a.employeeid=b.employee_id and a.designation=b.designation_id))"
 							+ "left join dept d on (a.user_id=d.sdeptcode||d.deptcode)   "
 							+ "order by d.sdeptcode||d.deptcode";
 					

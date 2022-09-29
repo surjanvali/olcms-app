@@ -152,7 +152,7 @@ public class LoginAction extends DispatchAction{
 						// String tableName = AjaxModels.getTableName2(CommonModels.checkStringObject(rs.getString("dist_id")));
 						
 						  // String sql = "select u.userid,u.user_description,un.description as description,u.dept_id from users u left join dept un on (u.dept_id=un.dept_id) where upper(u.userid)=upper(?) order by 1 ";
-							sql = "select u.userid,u.user_description,un.description as description,un.dept_id,un.dept_code as deptcode, upper(trim(un.description)) as dept_name,"
+							sql = "select u.userid,u.user_description,un.description as description,un.dept_id,un.dept_code as deptcode, upper(trim(un.description)) as dept_name,dm.district_name,"
 									+ " nd.employee_id, nd.fullname_en, nd.designation_name_en, nd.post_name_en, "
 									+ " nd.employee_identity, upper(trim(rm.role_name)) as role_name, to_char(last_login,'dd-mm-yyyy HH12:MI AM') as last_login, un.reporting_dept_code, u.dist_id from users u "
 									// + " left join dept un on (u.dept_id=un.dept_id) "
@@ -161,6 +161,7 @@ public class LoginAction extends DispatchAction{
 									+ " left join "+tableName+" nd on (u.userid=nd.email and nd.is_primary='t')"
 									+ " left join roles_mst rm on (ur.role_id=rm.role_id)  "
 									+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)=? group by user_id) ll on (u.userid=ll.user_id)"
+									+ " left join district_mst dm on (dm.district_id=u.dist_id)"
 									+ " where upper(u.userid)=upper(trim(?)) ";
 						  
 						  System.out.println("role==8 || role==10 || role==11 || role==12 SQL 121:"+sql);
@@ -183,6 +184,7 @@ public class LoginAction extends DispatchAction{
 								session.setAttribute("empPost", rs.getString("post_name_en"));
 								session.setAttribute("lastLogin", rs.getString("last_login"));
 								session.setAttribute("dist_id", rs.getString("dist_id"));
+								session.setAttribute("district_name", rs.getString("district_name"));
 								session.setAttribute("reporting_dept_code", rs.getString("reporting_dept_code"));
 								
 								sql="insert into users_track_time (user_id, login_time_date) values ('"+rs.getString("userid")+"',now())";
@@ -193,7 +195,7 @@ public class LoginAction extends DispatchAction{
 					else if(role==2){ // District Collector
 						
 						  // String sql = "select u.userid,u.user_description,un.description as description,u.dept_id from users u left join dept un on (u.dept_id=un.dept_id) where upper(u.userid)=upper(?) order by 1 ";
-							sql = "select u.userid,u.user_description,un.description as description,un.dept_id,un.dept_code as deptcode, upper(trim(un.description)) as dept_name,"
+							sql = "select u.userid,u.user_description,un.description as description,un.dept_id,un.dept_code as deptcode, upper(trim(un.description)) as dept_name,dm.district_name,"
 									+ " nd.employee_id, nd.fullname_en, nd.designation_name_en, nd.post_name_en, "
 									+ " nd.employee_identity, upper(trim(rm.role_name)) as role_name, to_char(last_login,'dd-mm-yyyy HH12:MI AM') as last_login, u.dist_id, un.reporting_dept_code from users u "
 									//+ " left join dept un on (u.dept_id=un.dept_id)"
@@ -203,6 +205,7 @@ public class LoginAction extends DispatchAction{
 									+ " left join nic_data nd on (u.userid=nd.email and nd.is_primary='t')"
 									+ " left join roles_mst rm on (ur.role_id=rm.role_id)  "
 									+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)=? group by user_id) ll on (u.userid=ll.user_id)"
+									+ " left join district_mst dm on (dm.district_id=u.dist_id)"
 									+ " where upper(u.userid)=upper(trim(?)) ";
 						  
 						  System.out.println("SQL 121:"+sql);
@@ -225,6 +228,7 @@ public class LoginAction extends DispatchAction{
 								session.setAttribute("empPost", rs.getString("post_name_en"));
 								session.setAttribute("lastLogin", rs.getString("last_login"));
 								session.setAttribute("dist_id", rs.getString("dist_id"));
+								session.setAttribute("district_name", rs.getString("district_name"));
 								session.setAttribute("reporting_dept_code", rs.getString("reporting_dept_code"));
 								
 								sql="insert into users_track_time (user_id, login_time_date) values ('"+rs.getString("userid")+"',now())";
