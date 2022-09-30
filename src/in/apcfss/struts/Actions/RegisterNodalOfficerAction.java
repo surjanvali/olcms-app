@@ -126,6 +126,13 @@ public class RegisterNodalOfficerAction extends DispatchAction {
 							+ "where coalesce(a.dist_id,0)=0 ) b on (d.dept_code = b.dept_id) where (reporting_dept_code='"
 							+ deptCode + "' or dept_code='" + deptCode + "') and substr(dept_code,4,2)!='01' and d.display= true   order by d.reporting_dept_code, d.dept_code";
 					
+					
+					sql="select d.dept_code, upper(trim(d.description)) as description,slno, user_id, designation, employeeid, mobileno, emailid, aadharno, case when b.fullname_en is null then 'TRANSFERRED / PROMOTED' else b.fullname_en end as fullname_en, designation_name_en ,"
+							+ " case when b.fullname_en is null then 'TRANSFERRED' else null end as status"
+							+ " from dept_new d left join (select slno, user_id, designation, employeeid, mobileno, emailid, aadharno, dept_id,dist_id from nodal_officer_details) a  on (a.dept_id=d.dept_code) "
+							+ " left join (select distinct employee_id,fullname_en,designation_name_en, designation_id from nic_data) b on (a.employeeid=b.employee_id and a.designation=b.designation_id) "
+							+ " where (reporting_dept_code='"+deptCode+"' or dept_code='"+deptCode+"') and substr(dept_code,4,2)!='01' and d.display= true and  coalesce(a.dist_id,0)=0 order by d.reporting_dept_code, d.dept_code";
+					
 				}
 				
 
