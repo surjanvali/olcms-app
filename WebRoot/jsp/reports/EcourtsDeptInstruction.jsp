@@ -158,8 +158,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								class="btn btn-success" onclick="return fnShowCases();" />
 						</div>
 					</div>
-
-
 				</div>
 			</div>
 
@@ -242,12 +240,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			</logic:notEmpty>
 		
-		
 			<logic:notEmpty name="CASESLISTNEW">
 				<div class="ibox">
 					<div class="ibox-body">
 						<div class="table-responsive">
-
 							<table id="example" class="table table-striped table-bordered"
 								style="width:100%">
 								<thead>
@@ -256,18 +252,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<!-- <th></th> -->
 										<th>CINo</th>
 										<th>Case Type</th>
-										<th>Reg.No.</th>
-										<th>Reg. Year</th>
+										<!-- <th>Reg.No.</th>
+										<th>Reg. Year</th> -->
 										<th>Petitioner</th>
 										<th>District</th>
 										<th>Petitioner Advocate</th>
 										<th>Respondent Advocate</th>
 										<th>Instructions / Daily Status Action</th>
-
 									</tr>
 								</thead>
 								<tbody>
-
 									<logic:iterate id="map" name="CASESLISTNEW" indexId="i">
 										<tr>
 											<td>${i+1 }.</td>
@@ -277,12 +271,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												class="btn btn-sm btn-info waves-effect waves-light"
 												onclick="javascript:viewCaseDetailsPopup('${map.ack_no}');" />
 											</td>
-											
-											<td>${map.casetype}</td>
-											<td>${map.reg_no}</td>
-											<td>${map.reg_year }</td>
+											<td>${map.maincaseno}</td>
 											<td>${map.petitioner_name }</td>
-											<td>${map.distid }</td>
+											<td>${map.district_name}</td>
 											<td>${map.advocatename }</td>
 											<td>${map.advocateccno }</td>
 											<td><input type="button" id="btnShowPopup"
@@ -291,7 +282,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												onclick="javascript:viewCaseDetailsPopup1('${map.ack_no}','${map.legacy_ack_flag}');" />
 											</td>
 										</tr>
-
 									</logic:iterate>
 								</tbody>
 								<tfoot>
@@ -303,15 +293,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 				</div>
-
 			</logic:notEmpty>
 		</div>
-
-
-
 	</html:form>
 </div>
-
 <!-- Modal  Start-->
 
 <div id="MyPopup" class="modal fade" role="dialog"

@@ -69,7 +69,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<html:hidden property="dynaForm(deptName)" styleId="deptName" />
 		<html:hidden property="dynaForm(respondenttype)" styleId="respondenttype" />
 		<html:hidden property="dynaForm(caseStatus)" styleId="caseStatus" />
-		
 
 		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -95,7 +94,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 			</div>
 		</div>
-
 		<div class="ibox">
 			<div class="ibox-head">
 				<div class="ibox-title">

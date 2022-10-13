@@ -232,7 +232,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 
 		return mapping.findForward("success");
 	}
-	public ActionForward getSubmitCategory(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	public ActionForward getSubmitCategoryNew(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -249,7 +249,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 			String caseType = CommonModels.checkStringObject(request.getParameter("caseType"));
 			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
 			System.out.println("cIno---"+cIno);
-
+			System.out.println("caseType---"+caseType);
 
 			FileUploadUtilities fuu = new FileUploadUtilities();
 			FormFile myDoc;
@@ -277,7 +277,84 @@ public class DailyStatusEntryAction extends DispatchAction {
 			ps.setString(++i, CommonModels.checkStringObject(session.getAttribute("dept_code")));
 			ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
 			ps.setString(++i, userId);
-			ps.setString(++i, caseType);
+			ps.setString(++i, "New");
+			ps.setString(++i, status_flag);
+
+			System.out.println("sql--"+sql);
+
+			a = ps.executeUpdate();
+
+			System.out.println("a--->"+a);
+			if(a>0) {
+
+				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks,uploaded_doc_path) "
+						+ " values ('" + cIno + "','SUBMITTED DAILY CASE STATUS', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("daily_status").toString()+"','"+DailyStatus_file+"')";
+				DatabasePlugin.executeUpdate(sql, con);
+
+
+				request.setAttribute("successMsg", "Dialy Status details saved successfully.");
+			}else {
+				request.setAttribute("errorMsg", "Error in submission. Kindly try again.");
+			}
+
+		} catch (Exception e) {
+			//con.rollback();
+			request.setAttribute("errorMsg", "Error in Submission. Kindly try again.");
+			e.printStackTrace();
+		} finally {
+			cform.setDynaForm("daily_status","");
+			cform.setDynaForm("fileCino", cIno);
+			DatabasePlugin.close(con, ps, null);
+		}
+		return getCino(mapping, cform, request, response);
+	}
+	
+	public ActionForward getSubmitCategoryLegacy(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String sql = null;//, cIno=null;
+		CommonForm cform = (CommonForm) form;
+		HttpSession session = request.getSession();
+		String userId=null;int a=0;String cIno = null;
+		try {
+			con = DatabasePlugin.connect();
+			//con.setAutoCommit(false);
+			request.setAttribute("HEADING", "Instructions Entry");
+			System.out.println("in assign2DeptHOD --- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
+			userId = CommonModels.checkStringObject(request.getSession().getAttribute("userid"));
+			String caseType = CommonModels.checkStringObject(request.getParameter("caseType"));
+			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
+			System.out.println("cIno---"+cIno);
+			System.out.println("caseType---"+caseType);
+
+			FileUploadUtilities fuu = new FileUploadUtilities();
+			FormFile myDoc;
+
+			myDoc = cform.getChangeLetter();
+
+			System.out.println("myDoc---"+myDoc);
+			String filePath="uploads/DailyStatus/";
+			String newFileName="DailyStatus_"+CommonModels.randomTransactionNo();
+			String DailyStatus_file = fuu.saveFile(myDoc, filePath, newFileName);
+
+			System.out.println("pdfFile--"+DailyStatus_file);
+
+			String status_flag="D";
+
+
+			sql = "insert into ecourts_dept_instructions (cino, instructions , upload_fileno,dept_code ,dist_code,insert_by,legacy_ack_flag,status_instruction_flag ) "
+					+ " values (?,?, ?, ?, ?, ?,?,?)";
+
+			ps = con.prepareStatement(sql);
+			int i = 1;
+			ps.setString(i, cIno);
+			ps.setString(++i, cform.getDynaForm("daily_status") != null ? cform.getDynaForm("daily_status").toString() : "");
+			ps.setString(++i, DailyStatus_file);
+			ps.setString(++i, CommonModels.checkStringObject(session.getAttribute("dept_code")));
+			ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
+			ps.setString(++i, userId);
+			ps.setString(++i, "Legacy");
 			ps.setString(++i, status_flag);
 
 			System.out.println("sql--"+sql);
@@ -331,6 +408,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 			cIno = cIno!=null && !cIno.equals("") ? cIno : CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
 
 			System.out.println("cIno" + cIno);
+			System.out.println("caseType---" + caseType);
 
 			if (cIno != null && !cIno.equals("")) {
 
@@ -341,7 +419,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 				if (caseType.equals("Legacy")) {
 
 					sql = "select a.*, "
-							+ " nda.fullname_en as fullname, nda.designation_name_en as designation, nda.post_name_en as post_name, nda.email, nda.mobile1 as mobile,dim.district_name , "
+							+ " nda.fullname_en as fullname,'Legacy' as legacy_ack_flag , nda.designation_name_en as designation, nda.post_name_en as post_name, nda.email, nda.mobile1 as mobile,dim.district_name , "
 							+ " 'Pending at '||ecs.status_description||'' as current_status, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths,"
 							+ " case when (prayer is not null and coalesce(trim(prayer),'')!='' and length(prayer) > 2) then substr(prayer,1,250) else '-' end as prayer, prayer as prayer_full, ra.address from ecourts_case_data a "
 
@@ -381,7 +459,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 				}else {
 
 
-					sql = "select a.slno ,ad.respondent_slno, a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , a.remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
+					sql = "select a.slno ,ad.respondent_slno, a.ack_no,'New' as legacy_ack_flag , distid , advocatename ,advocateccno , casetype , maincaseno , a.remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 							+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
 							+ "to_char(a.inserted_time,'dd-mm-yyyy') as generated_date, "
 							+ "getack_dept_desc(a.ack_no::text) as dept_descs , coalesce(a.hc_ack_no,'-') as hc_ack_no "

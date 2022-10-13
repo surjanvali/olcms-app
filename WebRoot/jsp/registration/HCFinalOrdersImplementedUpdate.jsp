@@ -227,16 +227,6 @@ body {
 				<hr />
 				
 				
-				
-				
-				
-			
-				
-				
-
-				
-			
-
 				<div class="row">
 					<%-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
 						<label>Upload Petition <bean:message key="mandatory" /></label>
@@ -268,7 +258,6 @@ body {
 						</div>
 					</div>
 				</div>
-
 
 				<div class="row finaldiv">
 					<%-- <div class="col-sm-6 form-group casecloseddiv">
@@ -431,7 +420,6 @@ body {
 					</div>
 				</div>
 
-
 				<hr />
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -528,7 +516,7 @@ body {
 			$("#mode").val("updateCaseDetails");
 			//$("#AssignedCasesToSectionForm").submit();
 			return true;
-		}dismissedFileCopydismissedFileCopy
+		}
 	}
 
 	function forwardCase() {

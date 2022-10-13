@@ -341,7 +341,7 @@ $(document).ready(function() {
 		if (cino != null && cino != "" && cino != "0") {
 			srclink = "./DailyStatusEntry.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino=" +cino+"&caseType="+caseNo;
 			//srclink = "./EcourtsDeptInstructionNew.do?mode=getCasesList&cino="+cino+"&caseType="+caseNo;
-		//	alert("LINK:"+srclink);
+			//alert("LINK:"+srclink);
 			if (srclink != "") {
 				$("#MyPopup .modal-title").html(heading);
 				$("#page").prop("src", srclink)

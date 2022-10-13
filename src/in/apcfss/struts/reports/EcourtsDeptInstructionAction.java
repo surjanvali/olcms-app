@@ -497,7 +497,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 			}
 
 
-			sql= " select b.legacy_ack_flag,a.* from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino,legacy_ack_flag from ecourts_dept_instructions where legacy_ack_flag='New') b on (e.ack_no=b.cino) where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" order by 1";
+			sql= " select b.legacy_ack_flag,(SELECT district_name FROM district_mst dm where (e.dist_id=dm.district_id) ) as district_name,a.* from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino,legacy_ack_flag from ecourts_dept_instructions where legacy_ack_flag='New') b on (e.ack_no=b.cino) where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" order by 1";
 
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

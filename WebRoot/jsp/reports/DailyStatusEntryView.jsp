@@ -334,6 +334,53 @@ body {
 			</div>
 		</div>
 	</div>
+	
+	
+	<!-- --------------- -->
+	
+	<div class="ibox">
+			<div class="ibox-head">
+				<div class="ibox-title">
+					<h4 class="m-t-0 header-title">
+						<b>Submit Daily Status</b>
+					</h4>
+				</div>
+			</div>
+			<div class="ibox-body">
+				<html:hidden styleId="cino" property="dynaForm(cino)" />
+				
+				<div class="row">
+					<div class="col-md-6 col-xs-12 pull-right">
+						<b> Status: </b>
+					</div>
+					<div class="col-md-6 col-xs-12">
+						<html:textarea styleId="daily_status"
+							property="dynaForm(daily_status)" styleClass="form-control"
+							cols="50" rows="5">
+						</html:textarea>
+					</div>
+					
+							<div class="col-md-6 col-xs-12 pull-right">
+								<b> Upload file: </b>
+							</div>
+							<div class="col-md-6 col-xs-12">
+								<html:file property="changeLetter" styleId="changeLetter"
+									styleClass="form-control"></html:file>
+							</div>
+				</div>
+			</div>
+			<div class="ibox-footer text-center">
+				<div class="row">
+					<div class="col-md-12 col-xs-12 text-center">
+						<input type="submit" name="submit" value="Submit"
+							class="btn btn-success" onclick="return fnSubmitCategoryLegacy();" />
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	
+	
 </logic:present>
 		
 	<logic:present name="existDataNew">
@@ -379,10 +426,10 @@ body {
 			</div>
 		</div>
 	</div>
-</logic:present>
-
-
-		<div class="ibox">
+	
+	<!-- --------- -->
+	
+	<div class="ibox">
 			<div class="ibox-head">
 				<div class="ibox-title">
 					<h4 class="m-t-0 header-title">
@@ -392,6 +439,7 @@ body {
 			</div>
 			<div class="ibox-body">
 				<html:hidden styleId="cino" property="dynaForm(cino)" />
+				
 				<div class="row">
 					<div class="col-md-6 col-xs-12 pull-right">
 						<b> Status: </b>
@@ -416,25 +464,45 @@ body {
 				<div class="row">
 					<div class="col-md-12 col-xs-12 text-center">
 						<input type="submit" name="submit" value="Submit"
-							class="btn btn-success" onclick="return fnSubmitCategory();" />
+							class="btn btn-success" onclick="return fnSubmitCategoryNew();" />
 					</div>
 				</div>
 			</div>
 		</div>
+	
+	
+	
+</logic:present>
+
+
+		
 
 		
 	</html:form>
 </div>
 
 <script type="text/javascript">
-	function fnSubmitCategory() {
+	function fnSubmitCategoryNew() {
 		if ($("#daily_status").val() == null || $("#daily_status").val() == "" || $("#daily_status").val() == "0") {
 			alert("Enter Status");
 			$("#daily_status").focus();
 			return false;
 		}
 		
-		$("#mode").val("getSubmitCategory");
+		$("#mode").val("getSubmitCategoryNew");
 		$("#HighCourtCasesListForm").submit();
 	}
+	
+	
+	function fnSubmitCategoryLegacy() {
+		if ($("#daily_status").val() == null || $("#daily_status").val() == "" || $("#daily_status").val() == "0") {
+			alert("Enter Status");
+			$("#daily_status").focus();
+			return false;
+		}
+		
+		$("#mode").val("getSubmitCategoryLegacy");
+		$("#HighCourtCasesListForm").submit();
+	}
+	
 </script>
