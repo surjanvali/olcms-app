@@ -901,7 +901,7 @@ public class GPReportAction extends DispatchAction {
 				request.setAttribute("DEPTNSTRUCTIONS", existData);
 				
 				// Daily Case Status Updates by GP
-				sql = "select status_remarks, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,coalesce(upload_fileno,'-') as upload_fileno from ecourts_gpo_daily_status where cino='" + cIno + "'  order by 1 ";
+				sql = "select instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "'  order by 1 ";
 				System.out.println("sql--" + sql);
 				existData = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("GPDAILYSTATUS", existData);
@@ -1001,7 +1001,16 @@ public class GPReportAction extends DispatchAction {
 				
 				msg = "Case details ("+cIno+") updated successfully.";
 				
-				sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"'";
+				sql="insert into ecourts_olcms_case_details_log (cino , petition_document ,  counter_filed_document  , judgement_order,action_taken_order ,last_updated_by , "
+						+ "last_updated_on, counter_filed , remarks, ecourts_case_status , corresponding_gp , pwr_uploaded, pwr_submitted_date ,pwr_received_date,"
+						+ "pwr_approved_gp,pwr_gp_approved_date, appeal_filed ,appeal_filed_copy,  appeal_filed_date , pwr_uploaded_copy , counter_approved_gp ,"
+						+ "action_to_perfom , counter_approved_date , counter_approved_by , respondent_slno ,cordered_impl_date, dismissed_copy , "
+						+ "final_order_status, no_district_updated , is_orderimplemented , counter_filed_date) "
+						+ " select cino , petition_document ,  counter_filed_document  , judgement_order,action_taken_order ,last_updated_by , "
+						+ "last_updated_on, counter_filed , remarks, ecourts_case_status , corresponding_gp , pwr_uploaded, pwr_submitted_date ,pwr_received_date,"
+						+ "pwr_approved_gp,pwr_gp_approved_date, appeal_filed ,appeal_filed_copy,  appeal_filed_date , pwr_uploaded_copy , counter_approved_gp ,"
+						+ "action_to_perfom , counter_approved_date , counter_approved_by , respondent_slno ,cordered_impl_date, dismissed_copy , "
+						+ "final_order_status, no_district_updated , is_orderimplemented , counter_filed_date from ecourts_olcms_case_details where cino='"+cIno+"'";
 				a += DatabasePlugin.executeUpdate(sql, con);
 				String sqlCondition2="";
 				
@@ -1018,6 +1027,7 @@ public class GPReportAction extends DispatchAction {
 						DatabasePlugin.executeUpdate(sql, con);
 						
 						sqlCondition2 = ", pwr_uploaded_copy='"+pwr_uploaded_copy+"'";
+						System.out.println("sql--1->"+sql);
 					}
 					
 					sql="update ecourts_olcms_case_details set pwr_approved_gp='Yes',pwr_gp_approved_date=current_date"
@@ -1026,10 +1036,12 @@ public class GPReportAction extends DispatchAction {
 							+ "  where cino='"+cIno+"'";
 					a += DatabasePlugin.executeUpdate(sql, con);
 					
-					
-					sql="update ecourts_case_data set case_status='"+newStatus+"' where cino='"+cIno+"'";
+					System.out.println("sql--2->"+sql);
+					//sql="update ecourts_case_data set case_status='"+newStatus+"' where cino='"+cIno+"'";
 					sql="update ecourts_case_data set  case_status="+newStatus+", assigned_to='"+assigned2Emp+"' where cino='"+cIno+"' ";
 					a += DatabasePlugin.executeUpdate(sql, con);
+					
+					System.out.println("sql--->"+sql);
 					
 					
 					msg = "Parawise Remarks Approved successfully for Case ("+cIno+").";

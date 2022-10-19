@@ -76,7 +76,7 @@ public class SMSAlertsJob implements Job{
 					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text) "
 					+ " inner join dept_new dn on (b.dept_code=dn.dept_code) "
 					+ " inner join mlo_details mlo on (mlo.user_id=b.dept_code) "
-					+ " where a.inserted_time::date = current_date - 10  and a.casetype='4' "
+					+ " where a.inserted_time::date = current_date  and a.casetype='4' "
 					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,mlo.mobileno,a.inserted_time::date  order by b.dept_code,ctm.sno "
 					+ "";
 			System.out.println("MLO CCs SMS SQL:"+sql);
@@ -89,7 +89,7 @@ public class SMSAlertsJob implements Job{
 					+ "select district_name,ctm.sno,casetype,ctm.case_short_name,dm.mobile_no as mobileno,a.inserted_time::date,count(*) as casescount from  ecourts_gpo_ack_dtls a   "
 					+ "inner join case_type_master ctm on (a.casetype=ctm.sno::text)  "
 					+ "inner join district_mst dm on (a.distid=dm.district_id)  "
-					+ "where a.inserted_time::date = current_date - 10  and a.casetype='4' "
+					+ "where a.inserted_time::date = current_date and a.casetype='4' "
 					+ "group by ctm.sno,casetype,ctm.case_short_name,dm.mobile_no,a.inserted_time::date,district_name "
 					+ "";
 			System.out.println("DC CCs SMS SQL:"+sql);
@@ -103,7 +103,7 @@ public class SMSAlertsJob implements Job{
 					+ "inner join case_type_master ctm on (a.casetype=ctm.sno::text)  "
 					+ "inner join dept_new dn on (b.dept_code=dn.dept_code)  "
 					+ "inner join nodal_officer_details nd on (nd.dept_id=b.dept_code and nd.dist_id=0)  "
-					+ "where a.inserted_time::date = current_date - 10  and a.casetype='4'  "
+					+ "where a.inserted_time::date = current_date  and a.casetype='4'  "
 					+ "group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,nd.mobileno,a.inserted_time::date  order by b.dept_code,ctm.sno  "
 					+ "";
 			System.out.println("NO CCs SMSSQL:"+sql);
@@ -118,7 +118,7 @@ public class SMSAlertsJob implements Job{
 					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
 					+ " inner join dept_new dn on (b.dept_code=dn.dept_code)"
 					+ " inner join nodal_officer_details nd on (nd.dept_id=b.dept_code and nd.dist_id=b.dist_id)"
-					+ " where a.inserted_time::date = current_date - 10  and a.casetype='4'"
+					+ " where a.inserted_time::date = current_date  and a.casetype='4'"
 					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,nd.mobileno,a.inserted_time::date order by b.dept_code,ctm.sno"
 					+ " ";
 
@@ -136,7 +136,7 @@ public class SMSAlertsJob implements Job{
 					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text) "
 					+ " inner join dept_new dn on (b.dept_code=dn.dept_code) "
 					+ " inner join mlo_details mlo on (mlo.user_id=b.dept_code) "
-					+ " where a.inserted_time::date = current_date - 10  "
+					+ " where a.inserted_time::date = current_date  "
 					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,mlo.mobileno,a.inserted_time::date  order by b.dept_code,ctm.sno "
 					+ " ) x group by description, mobileno, inserted_time "
 					+ "";
@@ -153,7 +153,7 @@ public class SMSAlertsJob implements Job{
 					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
 					+ " inner join dept_new dn on (b.dept_code=dn.dept_code)"
 					+ " inner join nodal_officer_details nd on (nd.dept_id=b.dept_code and nd.dist_id=0)"
-					+ " where a.inserted_time::date = current_date - 10 "
+					+ " where a.inserted_time::date = current_date  "
 					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,nd.mobileno,a.inserted_time::date order by b.dept_code,ctm.sno "
 					+ " ) x group by description, mobileno, inserted_time";
 			System.out.println("NO ALL SMSSQL:"+sql);
@@ -169,7 +169,7 @@ public class SMSAlertsJob implements Job{
 					+ " inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
 					+ " inner join dept_new dn on (b.dept_code=dn.dept_code)"
 					+ " inner join nodal_officer_details nd on (nd.dept_id=b.dept_code and nd.dist_id=b.dist_id)"
-					+ " where a.inserted_time::date = current_date - 10 "
+					+ " where a.inserted_time::date = current_date  "
 					+ " group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,nd.mobileno,a.inserted_time::date order by b.dept_code,ctm.sno"
 					+ " ) x group by description, mobileno, inserted_time";
 			System.out.println("DNO ALL SQL:"+sql);
@@ -184,7 +184,7 @@ public class SMSAlertsJob implements Job{
 					+ "select district_name,ctm.sno,casetype,ctm.case_short_name,dm.mobile_no,a.inserted_time::date,count(*) as cases from  ecourts_gpo_ack_dtls a   "
 					+ "inner join case_type_master ctm on (a.casetype=ctm.sno::text)  "
 					+ "inner join district_mst dm on (a.distid=dm.district_id)  "
-					+ "where a.inserted_time::date = current_date - 10   "
+					+ "where a.inserted_time::date = current_date   "
 					+ "group by ctm.sno,casetype,ctm.case_short_name,dm.mobile_no,a.inserted_time::date,district_name "
 					+ ") x group by mobile_no, inserted_time, district_name";
 			System.out.println("DC ALL SQL:"+sql);
@@ -198,7 +198,7 @@ public class SMSAlertsJob implements Job{
 					+ "	 inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no)"
 					+ "	 inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
 					+ "	 inner join dept_new dn on (b.dept_code=dn.dept_code )"
-					+ "	 where a.inserted_time::date = current_date - 10 "
+					+ "	 where a.inserted_time::date = current_date  "
 					+ "	group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.reporting_dept_code,dn.description,mobileno,a.inserted_time::date order by b.dept_code,ctm.sno"
 					+ "			) x inner join dept_new dn1 on (x.reporting_dept_code=dn1.dept_code) "
 					+ "group by dn1.description, mobileno, inserted_time,dn1.dept_code,dn1.reporting_dept_code ";
@@ -215,7 +215,7 @@ public class SMSAlertsJob implements Job{
 					+ "	 inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no)"
 					+ "	 inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
 					+ "	 inner join dept_new dn on (b.dept_code=dn.dept_code )"
-					+ "	 where a.inserted_time::date = current_date - 10 "
+					+ "	 where a.inserted_time::date = current_date "
 					+ "	group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,mobileno,a.inserted_time::date "
 					+ ") x group by description, mobileno, inserted_time,dept_code ";
 
@@ -230,7 +230,7 @@ public class SMSAlertsJob implements Job{
 					+ "	 inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no)"
 					+ "	 inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
 					+ "	 inner join dept_new dn on (b.dept_code=dn.dept_code )"
-					+ "	 where a.inserted_time::date = current_date - 10 and  a.casetype='4'"
+					+ "	 where a.inserted_time::date = current_date  and  a.casetype='4'"
 					+ "	group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.reporting_dept_code,dn.description,mobileno,a.inserted_time::date order by b.dept_code,ctm.sno"
 					+ "	) x inner join dept_new dn1 on (x.reporting_dept_code=dn1.dept_code) "
 					+ "group by dn1.description, mobileno, inserted_time,dn1.dept_code,dn1.reporting_dept_code ";
@@ -246,7 +246,7 @@ public class SMSAlertsJob implements Job{
 					+ "	 inner join ecourts_gpo_ack_depts b on (a.ack_no=b.ack_no)"
 					+ "	 inner join case_type_master ctm on (a.casetype=ctm.sno::text)"
 					+ "	 inner join dept_new dn on (b.dept_code=dn.dept_code )"
-					+ "	 where a.inserted_time::date = current_date - 10 and  a.casetype='4'"
+					+ "	 where a.inserted_time::date = current_date  and  a.casetype='4'"
 					+ "	group by ctm.sno,casetype,ctm.case_short_name,b.dept_code,dn.description,mobileno,a.inserted_time::date "
 					+ ") x group by description, mobileno, inserted_time,dept_code";
 

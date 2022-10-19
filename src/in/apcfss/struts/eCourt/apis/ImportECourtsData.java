@@ -57,7 +57,7 @@ public class ImportECourtsData
 			// sql = "select distinct a.cino from ecourts_cinos_1105_1605 a left join ecourts_case_data b using (cino) where b.cino is null ";
 			//sql = "select distinct a.cino from ecourts_cinos_1705_2305 a left join ecourts_case_data b using (cino) where b.cino is null";
 			
-			sql = "select distinct cino from ecourts_case_data where cino='APHC010194442020'";// ecourts_cinos_new limit 1";//where to_char(inserted_time,'dd/mm/yyyy')=current_date and ecourts_response is null";
+			sql = "select distinct cino from ecourts_case_data where cino='APHC010397132021'";// ecourts_cinos_new limit 1";//where to_char(inserted_time,'dd/mm/yyyy')=current_date and ecourts_response is null";
 			System.out.println("SQL:"+sql);
 			
 			st = con.createStatement();
@@ -90,7 +90,7 @@ public class ImportECourtsData
 						e.printStackTrace();
 					}
 				}
-				 resp=null;
+				 //resp=null;
 				if (resp != null && !resp.equals("")) {
 					try {
 						String response_str="", decryptedRespStr="";
@@ -103,7 +103,7 @@ public class ImportECourtsData
 					          decryptedRespStr = ECourtsCryptoHelper.decrypt(response_str.getBytes());
 					        }
 					      System.out.println("decryptedRespStr:"+decryptedRespStr);
-						 processCNRsearchResponse(resp, opVal, con, rs.getString("cino").trim());
+						 //processCNRsearchResponse(resp, opVal, con, rs.getString("cino").trim());
 					}catch (Exception e) {
 						e.printStackTrace();
 					}

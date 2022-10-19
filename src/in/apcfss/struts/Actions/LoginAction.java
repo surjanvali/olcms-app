@@ -263,6 +263,38 @@ public class LoginAction extends DispatchAction{
 					  }
 					target="Welcome";
 					}
+else if(role==18){ // GP OFFICE
+						
+						sql="select u.userid,user_type,user_description, upper(trim(rm.role_name)) as role_name, "
+								+ " to_char(last_login,'dd-mm-yyyy HH12:MI AM') as last_login,ur.role_id from users u  "
+								+ "inner join user_roles ur on (u.userid=ur.userid) inner join roles_mst rm on (ur.role_id=rm.role_id) "
+								+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)=? group by user_id) ll on (u.userid=ll.user_id)"
+								
+								+ " where upper(u.userid)=upper(trim(?)) ";
+						
+						
+						
+						
+						
+						System.out.println("SQL 121:"+sql);
+						ps = con.prepareStatement(sql);
+						ps.setString(1, username.toUpperCase());
+						ps.setString(2, username);
+						
+						rs = ps.executeQuery();
+						if (rs != null && rs.next()) {
+							session = request.getSession(true);
+							session.setAttribute("userid", rs.getString("userid"));
+							session.setAttribute("userName", rs.getString("user_description"));
+							session.setAttribute("role_id", role);
+							session.setAttribute("role_desc", rs.getString("role_name"));
+							session.setAttribute("lastLogin", rs.getString("last_login"));
+							
+							sql="insert into users_track_time (user_id, login_time_date) values ('"+rs.getString("userid")+"',now())";
+							DatabasePlugin.executeUpdate(sql, con);
+					  }
+					target="Welcome";
+					}
 					
 					else if(role==13){ // HC - DEOS OFFICE
 						

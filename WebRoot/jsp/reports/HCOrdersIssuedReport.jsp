@@ -21,7 +21,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<html:form action="/HCOrdersIssuedReport"
 		styleId="HCCaseStatusAbstract">
 		<html:hidden styleId="mode" property="mode" />
-		<html:hidden property="dynaForm(deptId)" styleId="deptId" />
+		<%-- <html:hidden property="dynaForm(deptId)" styleId="deptId" /> --%>
 		<html:hidden property="dynaForm(deptName)" styleId="deptName" />
 		<html:hidden property="dynaForm(caseStatus)" styleId="caseStatus" />
 		<html:hidden property="dynaForm(reportType)" styleId="reportType" />
@@ -55,85 +55,154 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<div class="ibox-title">Orders Issued Report</div>
 			</div>
 			<div class="ibox-body">
-				<%-- <div class="row">
-					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label>Department</label>
-							<html:select styleId="deptId" property="dynaForm(deptId)"
-								styleClass="form-control select2Class">
-								<html:option value="0">---ALL---</html:option>
-								<logic:notEmpty name="CommonForm" property="dynaForm(deptList)">
-									<html:optionsCollection name="CommonForm"
-										property="dynaForm(deptList)" />
-								</logic:notEmpty>
-							</html:select>
+				<div class="ibox-body">
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Case Type</label>
+								<html:select styleId="caseTypeId"
+									property="dynaForm(caseTypeId)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---ALL---</html:option>
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(caseTypesList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(caseTypesList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
 						</div>
-					</div>
-					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label>District</label>
-							<html:select styleId="districtId" property="dynaForm(districtId)"
-								styleClass="form-control select2Class">
-								<html:option value="0">---ALL---</html:option>
-								<logic:notEmpty name="CommonForm" property="dynaForm(distList)">
-									<html:optionsCollection name="CommonForm"
-										property="dynaForm(distList)" />
-								</logic:notEmpty>
-							</html:select>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Department</label>
+								<html:select styleId="deptId" property="dynaForm(deptId)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---ALL---</html:option>
+									<logic:notEmpty name="CommonForm" property="dynaForm(deptList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(deptList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
 						</div>
-					</div>
-				</div> --%>
-				<div class="row">
 
-					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label class="font-bold">From Date</label>
-							<div class="input-group date">
-								<span class="input-group-addon bg-white"><i
-									class="fa fa-calendar"></i></span>
-								<html:text styleId="fromDate" property="dynaForm(fromDate)"
-									styleClass="form-control datepicker" />
-
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>District</label>
+								<html:select styleId="districtId"
+									property="dynaForm(districtId)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---ALL---</html:option>
+									<logic:notEmpty name="CommonForm" property="dynaForm(distList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(distList)" />
+									</logic:notEmpty>
+								</html:select>
 							</div>
 						</div>
 					</div>
-					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<label class="font-bold">To Date</label>
-							<div class="input-group date">
-								<span class="input-group-addon bg-white"><i
-									class="fa fa-calendar"></i></span>
-								<html:text styleId="toDate" property="dynaForm(toDate)"
-									styleClass="form-control datepicker" />
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Case Registration Year</label>
+								<html:select styleId="regYear" property="dynaForm(regYear)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---ALL---</html:option>
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(yearsList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(yearsList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
+						</div>
 
+					
+					
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Date of Registration (From
+									Date)</label>
+								<div class="input-group date">
+									<span class="input-group-addon bg-white"><i
+										class="fa fa-calendar"></i></span>
+									<html:text styleId="fromDate"
+										property="dynaForm(fromDate)"
+										styleClass="form-control datepicker" />
+
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="font-bold">Date of Registration (To Date)</label>
+								<div class="input-group date">
+									<span class="input-group-addon bg-white"><i
+										class="fa fa-calendar"></i></span>
+									<html:text styleId="toDate" property="dynaForm(toDate)"
+										styleClass="form-control datepicker" />
+
+								</div>
+							</div>
+						</div>
+					
+				</div>
+</div>
+
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Petitioner Name</label>
+								<html:text styleId="petitionerName"
+									property="dynaForm(petitionerName)" styleClass="form-control" />
+
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Respondent Name</label>
+								<html:text styleId="respodentName"
+									property="dynaForm(respodentName)" styleClass="form-control" />
+
+							</div>
+						</div>
+						
+						<%-- <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Judge Name</label>
+								<html:text styleId="judgeName"
+									property="dynaForm(judgeName)" styleClass="form-control" />
+
+							</div>
+						</div> --%>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Select Judge Name</label>
+								<html:select styleId="judgeName"
+									property="dynaForm(judgeName)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---ALL---</html:option>
+									<logic:notEmpty name="CommonForm"
+										property="dynaForm(JudgeList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(JudgeList)" />
+									</logic:notEmpty>
+								</html:select>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-12 col-xs-12">
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 						<input type="submit" name="submit" value="Show Report"
 							class="btn btn-success" onclick="return fnShowCases();" />
-						<!-- <input
-							type="submit" name="submit2" value="Show Department Wise"
-							class="btn btn-success" onclick="return fnShowDeptWise();" /> <input
-							type="submit" name="submit3" value="Show District Wise"
-							class="btn btn-success" onclick="return fnShowDistWise();" /> -->
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<input type="submit" name="submit" value="Show Cases List"
+							class="btn btn-success" onclick="return fnShowCasesList();" />
 					</div>
 				</div>
-				<%-- </div>
-
-		<div class="ibox">
-			<div class="ibox-head">
-				<div class="ibox-title">
-					<h4 class="m-t-0 header-title">
-						<b><logic:notEmpty name="HEADING">
-									${HEADING }
-								</logic:notEmpty> </b>
-					</h4>
-				</div>
-			</div>
-			<div class="ibox-body"> --%>
+				
 			<br />
 				<div class="row">
 					<div class="col-md-12 col-xs-12">
@@ -432,18 +501,24 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			format : "dd-mm-yyyy"
 		});
 	});
-
+	
 	function fnShowCases() {
 		$("#mode").val("unspecified");
 		$("#HCCaseStatusAbstract").submit();
 	}
+	function fnShowCasesList() {
+		$("#mode").val("getCasesListNew");
+		$("#HCCaseStatusAbstract").submit();
+	}
+	
 
 	function ShowHODWise(deptId, deptDesc) {
 		/*$("#deptId").val(deptId);
 		$("#deptName").val(deptDesc);
 		$("#mode").val("HODwisedetails");
 		$("#HCCaseStatusAbstract").submit();*/
-		$(location).attr("href", "./HCOrdersIssuedReport.do?mode=HODwisedetails&deptName="+deptDesc+"&deptId="+deptId+"&fromDate="+$("#fromDate").val()+"&toDate="+$("#toDate").val());
+		$(location).attr("href", "./HCOrdersIssuedReport.do?mode=HODwisedetails&deptName="+deptDesc+"&deptId="+deptId+"&fromDate="+$("#fromDate").val()+"&toDate="+$("#toDate").val()
+				+"&judgeName="+$("#judgeName").val()+"&respodentName="+$("#respodentName").val()+"&petitionerName="+$("#petitionerName").val()+"&districtId="+$("#districtId").val());
 	}
 	function showCasesWise(deptId, deptDesc, status, repType) {
 		/*$("#deptId").val(deptId);
@@ -451,7 +526,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#caseStatus").val(status);
 		$("#mode").val("getCasesList");
 		$("#HCCaseStatusAbstract").submit();*/
-		$(location).attr("href", "./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus="+status+"&repType="+repType+"&deptName="+deptDesc+"&deptId="+deptId+"&fromDate="+$("#fromDate").val()+"&toDate="+$("#toDate").val());
+		$(location).attr("href", "./HCOrdersIssuedReport.do?mode=getCasesList&caseStatus="+status+"&repType="+repType+"&deptName="+deptDesc+"&deptId="+deptId+"&fromDate="+$("#fromDate").val()+"&toDate="+$("#toDate").val()
+				+"&judgeName="+$("#judgeName").val()+"&respodentName="+$("#respodentName").val()+"&petitionerName="+$("#petitionerName").val()+"&districtId="+$("#districtId").val());
 	}
 
 	function viewCaseDetailsPopup(cino) {
