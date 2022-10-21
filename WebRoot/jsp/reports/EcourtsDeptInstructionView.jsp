@@ -145,8 +145,7 @@ body {
 
 											<td nowrap="nowrap">${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
 											<td
-												style="min-width: 350px;t
-											ext-align: justify;">
+												style="min-width: 350px;text-align: justify;">
 												<logic:notEmpty name="map" property="prayer">
 
 													<logic:equal value="-" name="map" property="prayer">
@@ -197,7 +196,107 @@ body {
 							</table>
 						</div>
 					</div>
-				</div></logic:notEmpty>
+				</div>
+				
+				
+				
+				<!-- ------------- -->
+				
+				<div class="ibox">
+		<div class="ibox-title">
+					<h4 class="m-t-0 header-title">
+						<b>Instructions submitted</b>
+					</h4>
+				</div>
+		<div class="ibox-body">
+			<div class="row NewTypediv">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<table id="example"
+						class="table table-striped table-bordered NewTypediv"
+						style="width:100%">
+						<thead>
+							<tr>
+								<th>Sl.No</th>
+								<th>Description</th>
+								<th>Submitted On</th>
+								<th>Uploaded Instructions File</th>
+							</tr>
+						</thead>
+						<tbody>
+							<logic:iterate id="map" name="existData" indexId="i">
+								<tr>
+									<td>${i+1 }.</td>
+									<td>${map.instructions }</td>
+									<td>${map.insert_time}</td>
+									<td><logic:notEqual value="-" name="map"
+											property="upload_fileno">
+											<a href='${map.upload_fileno}' target='_new'
+												class="btn btn-sm btn-info">View Uploaded File</a>
+										</logic:notEqual> <logic:equal value="-" name="map" property="upload_fileno">
+														---
+													</logic:equal></td>
+
+								</tr>
+							</logic:iterate>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+			<!-- //------------------------- -->
+			
+				<div class="ibox">
+		<div class="ibox-head">
+				<div class="ibox-title">
+					<h4 class="m-t-0 header-title">
+						<b>Submit New Instruction</b>
+					</h4>
+				</div>
+			</div>
+					<div class="ibox-body">
+						<html:hidden styleId="cino" property="dynaForm(cino)" />
+						<div class="row ">
+							<div class="col-md-6 col-xs-12 pull-right">
+
+								<b> Enter Instructions </b>
+
+							</div>
+							<div class="col-md-6 col-xs-12">
+								<html:textarea styleId="instructions"
+									property="dynaForm(instructions)" styleClass="form-control"
+									cols="50" rows="5">
+								</html:textarea>
+							</div>
+						</div>
+						<div class="row oldTypediv">
+							<div class="col-md-6 col-xs-12 pull-right">
+								<b> Upload file: </b>
+							</div>
+							<div class="col-md-6 col-xs-12">
+								<html:file property="changeLetter" styleId="changeLetter"
+									styleClass="form-control"></html:file>
+							</div>
+						</div>
+					</div>
+					<div class="ibox-footer text-center">
+						<div class="row">
+							<div class="col-md-12 col-xs-12 text-center">
+								<input type="submit" name="submit" value="Submit"
+									class="btn btn-success" onclick="return fnSubmitCategoryLegacy();" />
+							</div>
+						</div>
+					</div>
+				</div>
+	
+				</logic:notEmpty>
+				
+				
+				
+				
 				<logic:notEmpty name="CASESLISTNEW">
 			<div class="ibox NewTypediv">
 			<div class="ibox-head">
@@ -271,7 +370,7 @@ body {
 								</logic:iterate>
 							</tbody>
 							<tfoot>
-								<tR>
+								<tR><td>
 									<logic:present name="DISPLAYOLD">
 										<td colspan="14">&nbsp;
 									</logic:present>
@@ -284,58 +383,11 @@ body {
 						</table>
 					</div>
 				</div>
-			</div></logic:notEmpty>
-				
-				
-		
-
-			<logic:present name="existData">
-	<div class="ibox">
-		<div class="ibox-title">
-					<h4 class="m-t-0 header-title">
-						<b>Instructions submitted</b>
-					</h4>
-				</div>
-		<div class="ibox-body">
-			<div class="row NewTypediv">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<table id="example"
-						class="table table-striped table-bordered NewTypediv"
-						style="width:100%">
-						<thead>
-							<tr>
-								<th>Sl.No</th>
-								<th>Description</th>
-								<th>Submitted On</th>
-								<th>Uploaded Instructions File</th>
-							</tr>
-						</thead>
-						<tbody>
-							<logic:iterate id="map" name="existData" indexId="i">
-								<tr>
-									<td>${i+1 }.</td>
-									<td>${map.instructions }</td>
-									<td>${map.insert_time}</td>
-									<td><logic:notEqual value="-" name="map"
-											property="upload_fileno">
-											<a href='${map.upload_fileno}' target='_new'
-												class="btn btn-sm btn-info">View Uploaded File</a>
-										</logic:notEqual> <logic:equal value="-" name="map" property="upload_fileno">
-														---
-													</logic:equal></td>
-
-								</tr>
-							</logic:iterate>
-						</tbody>
-					</table>
-				</div>
 			</div>
-		</div>
-	</div>
-</logic:present>
-		
-	<logic:present name="existDataNew">
-	<div class="ibox">
+			
+			<!-- //-------------------- -->
+				
+				<div class="ibox">
 		<div class="ibox-title">
 					<h4 class="m-t-0 header-title">
 						<b> Instructions submitted</b>
@@ -377,9 +429,11 @@ body {
 			</div>
 		</div>
 	</div>
-</logic:present>
-		
-		<div class="ibox">
+			
+			
+			<!-- //------------------------- -->
+			
+				<div class="ibox">
 		<div class="ibox-head">
 				<div class="ibox-title">
 					<h4 class="m-t-0 header-title">
@@ -416,25 +470,60 @@ body {
 						<div class="row">
 							<div class="col-md-12 col-xs-12 text-center">
 								<input type="submit" name="submit" value="Submit"
-									class="btn btn-success" onclick="return fnSubmitCategory();" />
+									class="btn btn-success" onclick="return fnSubmitCategoryNew();" />
 							</div>
 						</div>
 					</div>
 				</div>
-		
-		
-
-
+				
+				
+				
+				
+				
+			
+			</logic:notEmpty>
+				
 	</html:form>
 </div>
 
 <script type="text/javascript">
-	function fnSubmitCategory() {
+	/* function fnSubmitCategory() {
 		if (($("#instructions").val() == "" || $("#instructions").val() == "0")) {
 			alert("Please Enter Instructions");
 			return false;
 		}
 		$("#mode").val("getSubmitCategory");
 		$("#HighCourtCasesListForm").submit();
+	} */
+	
+	
+	
+	
+	
+	function fnSubmitCategoryNew() {
+		if (($("#instructions").val() == "" || $("#instructions").val() == "0")) {
+			alert("Please Enter Instructions");
+			return false;
+		}
+		
+		$("#mode").val("getSubmitCategoryNew");
+		$("#HighCourtCasesListForm").submit();
 	}
+	
+	
+	function fnSubmitCategoryLegacy() {
+		if (($("#instructions").val() == "" || $("#instructions").val() == "0")) {
+			alert("Please Enter Instructions");
+			return false;
+		}
+		
+		$("#mode").val("getSubmitCategoryLegacy");
+		$("#HighCourtCasesListForm").submit();
+	}
+	
+	
+	
+	
+	
+	
 </script>

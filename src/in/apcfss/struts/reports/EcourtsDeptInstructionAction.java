@@ -292,6 +292,162 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 		}
 		return getCino(mapping, cform, request, response);
 	}
+	
+	public ActionForward getSubmitCategoryNew(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String sql = null;//, cIno=null;
+		CommonForm cform = (CommonForm) form;
+		HttpSession session = request.getSession();
+		String userId=null;int a=0;String cIno = null;
+		try {
+			con = DatabasePlugin.connect();
+			//con.setAutoCommit(false);
+			request.setAttribute("HEADING", "Instructions Entry");
+			System.out.println("in assign2DeptHOD --- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
+			userId = CommonModels.checkStringObject(request.getSession().getAttribute("userid"));
+			String caseType = CommonModels.checkStringObject(request.getParameter("caseType"));
+			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
+			System.out.println("cIno---"+cIno);
+			System.out.println("caseType---"+caseType);
+
+			FileUploadUtilities fuu = new FileUploadUtilities();
+			FormFile myDoc;
+
+			myDoc = cform.getChangeLetter();
+
+			System.out.println("myDoc---"+myDoc);
+			String filePath="uploads/DailyStatus/";
+			String newFileName="DailyStatus_"+CommonModels.randomTransactionNo();
+			String DailyStatus_file = fuu.saveFile(myDoc, filePath, newFileName);
+
+			System.out.println("pdfFile--"+DailyStatus_file);
+
+			String status_flag="D";
+
+
+			sql = "insert into ecourts_dept_instructions (cino, instructions , upload_fileno,dept_code ,dist_code,insert_by,legacy_ack_flag,status_instruction_flag ) "
+					+ " values (?,?, ?, ?, ?, ?,?,?)";
+
+			ps = con.prepareStatement(sql);
+			int i = 1;
+			ps.setString(i, cIno);
+			ps.setString(++i, cform.getDynaForm("instructions") != null ? cform.getDynaForm("instructions").toString() : "");
+			ps.setString(++i, DailyStatus_file);
+			ps.setString(++i, CommonModels.checkStringObject(session.getAttribute("dept_code")));
+			ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
+			ps.setString(++i, userId);
+			ps.setString(++i, "New");
+			ps.setString(++i, status_flag);
+
+			System.out.println("sql--"+sql);
+
+			a = ps.executeUpdate();
+
+			System.out.println("a--->"+a);
+			if(a>0) {
+
+				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks,uploaded_doc_path) "
+						+ " values ('" + cIno + "','SUBMITTED INSTRUCTIONS TO GP', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("instructions").toString()+"','"+DailyStatus_file+"')";
+				DatabasePlugin.executeUpdate(sql, con);
+
+
+				request.setAttribute("successMsg", "Dialy Status details saved successfully.");
+			}else {
+				request.setAttribute("errorMsg", "Error in submission. Kindly try again.");
+			}
+
+		} catch (Exception e) {
+			//con.rollback();
+			request.setAttribute("errorMsg", "Error in Submission. Kindly try again.");
+			e.printStackTrace();
+		} finally {
+			cform.setDynaForm("daily_status","");
+			cform.setDynaForm("fileCino", cIno);
+			DatabasePlugin.close(con, ps, null);
+		}
+		return getCino(mapping, cform, request, response);
+	}
+	
+	public ActionForward getSubmitCategoryLegacy(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String sql = null;//, cIno=null;
+		CommonForm cform = (CommonForm) form;
+		HttpSession session = request.getSession();
+		String userId=null;int a=0;String cIno = null;
+		try {
+			con = DatabasePlugin.connect();
+			//con.setAutoCommit(false);
+			request.setAttribute("HEADING", "Instructions Entry");
+			System.out.println("in assign2DeptHOD --- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
+			userId = CommonModels.checkStringObject(request.getSession().getAttribute("userid"));
+			String caseType = CommonModels.checkStringObject(request.getParameter("caseType"));
+			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
+			System.out.println("cIno---"+cIno);
+			System.out.println("caseType---"+caseType);
+
+			FileUploadUtilities fuu = new FileUploadUtilities();
+			FormFile myDoc;
+
+			myDoc = cform.getChangeLetter();
+
+			System.out.println("myDoc---"+myDoc);
+			String filePath="uploads/DailyStatus/";
+			String newFileName="DailyStatus_"+CommonModels.randomTransactionNo();
+			String DailyStatus_file = fuu.saveFile(myDoc, filePath, newFileName);
+
+			System.out.println("pdfFile--"+DailyStatus_file);
+
+			String status_flag="D";
+
+
+			sql = "insert into ecourts_dept_instructions (cino, instructions , upload_fileno,dept_code ,dist_code,insert_by,legacy_ack_flag,status_instruction_flag ) "
+					+ " values (?,?, ?, ?, ?, ?,?,?)";
+
+			ps = con.prepareStatement(sql);
+			int i = 1;
+			ps.setString(i, cIno);
+			ps.setString(++i, cform.getDynaForm("instructions") != null ? cform.getDynaForm("instructions").toString() : "");
+			ps.setString(++i, DailyStatus_file);
+			ps.setString(++i, CommonModels.checkStringObject(session.getAttribute("dept_code")));
+			ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
+			ps.setString(++i, userId);
+			ps.setString(++i, "Legacy");
+			ps.setString(++i, status_flag);
+
+			System.out.println("sql--"+sql);
+
+			a = ps.executeUpdate();
+
+			System.out.println("a--->"+a);
+			if(a>0) {
+
+				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks,uploaded_doc_path) "
+						+ " values ('" + cIno + "','SUBMITTED INSTRUCTIONS TO GP', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("instructions").toString()+"','"+DailyStatus_file+"')";
+				DatabasePlugin.executeUpdate(sql, con);
+
+
+				request.setAttribute("successMsg", "Dialy Status details saved successfully.");
+			}else {
+				request.setAttribute("errorMsg", "Error in submission. Kindly try again.");
+			}
+
+		} catch (Exception e) {
+			//con.rollback();
+			request.setAttribute("errorMsg", "Error in Submission. Kindly try again.");
+			e.printStackTrace();
+		} finally {
+			cform.setDynaForm("daily_status","");
+			cform.setDynaForm("fileCino", cIno);
+			DatabasePlugin.close(con, ps, null);
+		}
+		return getCino(mapping, cform, request, response);
+	}
+
+
 
 	public ActionForward getCino(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {

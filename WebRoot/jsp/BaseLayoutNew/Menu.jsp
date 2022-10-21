@@ -62,6 +62,22 @@
 					<small>${sessionScope.dept_code } - ${sessionScope.dept_desc }</small> --%>
 
 				</c:if>
+				<c:if test="${sessionScope.role_id eq 19}">
+					<!-- <div class="font-strong">AG Office</div>  -->
+					<div class="font-strong">${sessionScope.userName}</div>
+					<small>${sessionScope.role_desc }</small>
+					<%-- <br />
+					<small>${sessionScope.dept_code } - ${sessionScope.dept_desc }</small> --%>
+
+				</c:if>
+				<c:if test="${sessionScope.role_id eq 20}">
+					<!-- <div class="font-strong">AG Office</div>  -->
+					<div class="font-strong">${sessionScope.userName}</div>
+					<small>${sessionScope.role_desc }</small>
+					<%-- <br />
+					<small>${sessionScope.dept_code } - ${sessionScope.dept_desc }</small> --%>
+
+				</c:if>
 				<c:if test="${sessionScope.role_id eq 7 }">
 					<div class="font-strong">${sessionScope.userName }</div>
 				</c:if>

@@ -263,7 +263,7 @@ public class LoginAction extends DispatchAction{
 					  }
 					target="Welcome";
 					}
-else if(role==18){ // GP OFFICE
+else if(role==18 || role==19 || role==20){ // GP OFFICE
 						
 						sql="select u.userid,user_type,user_description, upper(trim(rm.role_name)) as role_name, "
 								+ " to_char(last_login,'dd-mm-yyyy HH12:MI AM') as last_login,ur.role_id from users u  "
@@ -271,9 +271,6 @@ else if(role==18){ // GP OFFICE
 								+ " left join (select user_id,max(login_time_date) as last_login from users_track_time where upper(user_id)=? group by user_id) ll on (u.userid=ll.user_id)"
 								
 								+ " where upper(u.userid)=upper(trim(?)) ";
-						
-						
-						
 						
 						
 						System.out.println("SQL 121:"+sql);

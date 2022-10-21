@@ -294,12 +294,12 @@ public class WelcomePageAction extends DispatchAction{
 					request.setAttribute("disposedCasesStatus", disposedCasesStatus);
 					
 					// Daily Status
-					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy') b on (a.cino=b.cino) "
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy' and status_instruction_flag='D') b on (a.cino=b.cino) "
 							+ " inner join dept_new d on (a.dept_code=d.dept_code) "
 							+ " where d.display = true and (reporting_dept_code='"+deptCode+"' or a.dept_code='"+deptCode+"') ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) "
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) "
 							+ " inner join dept_new d on (e.dept_code=d.dept_code) "
 							+ " where a.ack_type = 'NEW' and (reporting_dept_code='"+deptCode+"' or e.dept_code='"+deptCode+"') ";
 
@@ -409,12 +409,12 @@ public class WelcomePageAction extends DispatchAction{
 					List<Map<Object, String>> disposedCasesStatus = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("disposedCasesStatus", disposedCasesStatus);
 					
-					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy') b on (a.cino=b.cino) "
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy' and status_instruction_flag='D') b on (a.cino=b.cino) "
 							+ " inner join dept_new d on (a.dept_code=d.dept_code) "
 							+ " where d.display = true and a.dist_id='"+distId+"' ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) "
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) "
 							+ " inner join dept_new d on (e.dept_code=d.dept_code) "
 							+ " where a.ack_type = 'NEW' and e.distid='"+distId+"' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
@@ -440,11 +440,11 @@ public class WelcomePageAction extends DispatchAction{
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
 					
-					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy') b on (a.cino=b.cino) "
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy' and status_instruction_flag='D') b on (a.cino=b.cino) "
 							+ " where dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
 							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 					
@@ -468,11 +468,11 @@ public class WelcomePageAction extends DispatchAction{
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
 					
-					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy') b on (a.cino=b.cino) "
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy' and status_instruction_flag='D') b on (a.cino=b.cino) "
 							+ " where dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' AND status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
 							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 					
@@ -501,11 +501,11 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("instruction SQL:"+sql);
 					request.setAttribute("instructions", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy') b on (a.cino=b.cino) "
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy' and status_instruction_flag='D') b on (a.cino=b.cino) "
 							+ " where dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
 							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 				}
@@ -534,11 +534,11 @@ public class WelcomePageAction extends DispatchAction{
 					System.out.println("instruction SQL:"+sql);
 					request.setAttribute("instructions", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy') b on (a.cino=b.cino) "
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy' and status_instruction_flag='D') b on (a.cino=b.cino) "
 							+ " where dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
 							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 					
@@ -564,12 +564,12 @@ public class WelcomePageAction extends DispatchAction{
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
 					
-					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy') b on (a.cino=b.cino) "
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy' and status_instruction_flag='D') b on (a.cino=b.cino) "
 							+ " where dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
 
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
 							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 				}
@@ -593,11 +593,11 @@ public class WelcomePageAction extends DispatchAction{
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
 					
-					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy') b on (a.cino=b.cino) "
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy' and status_instruction_flag='D') b on (a.cino=b.cino) "
 							+ " where dept_code='"+deptCode+"' and dist_id='"+distId+"' and coalesce(ecourts_case_status,'')!='Closed'  ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
 							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' and dist_id='"+distId+"' and coalesce(ecourts_case_status,'')!='Closed' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 				}
@@ -615,11 +615,11 @@ public class WelcomePageAction extends DispatchAction{
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
 					
-					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy') b on (a.cino=b.cino) "
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy' and status_instruction_flag='D') b on (a.cino=b.cino) "
 							+ " where assigned=true and assigned_to='"+userid+"' and case_status=5 and coalesce(ecourts_case_status,'')!='Closed'";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
 							+ " where a.ack_type = 'NEW' and e.assigned=true and e.assigned_to='"+userid+"' and e.case_status=5 and coalesce(e.ecourts_case_status,'')!='Closed' ";
 					
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
@@ -637,11 +637,11 @@ public class WelcomePageAction extends DispatchAction{
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
 					
-					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy') b on (a.cino=b.cino) "
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy' and status_instruction_flag='D') b on (a.cino=b.cino) "
 							+ " where assigned=true and assigned_to='"+userid+"' and case_status=9 and coalesce(ecourts_case_status,'')!='Closed'";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) "
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) "
 							+ " where a.ack_type = 'NEW' and e.assigned=true and e.assigned_to='"+userid+"' and e.case_status=9 and coalesce(e.ecourts_case_status,'')!='Closed'";
 					
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
@@ -658,11 +658,11 @@ public class WelcomePageAction extends DispatchAction{
 					dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("NEWCASESCOUNTS", dashboardCounts);
 					
-					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy') b on (a.cino=b.cino) "
+					sql="select count(*) from ecourts_case_data a inner join (select distinct cino from ecourts_dept_instructions  where legacy_ack_flag='Legacy' and status_instruction_flag='D') b on (a.cino=b.cino) "
 							+ " where assigned=true and assigned_to='"+userid+"' and case_status=10 and coalesce(ecourts_case_status,'')!='Closed'";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New') b on (a.ack_no=b.cino) "
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) "
 							+ " where a.ack_type = 'NEW' and e.assigned=true and e.assigned_to='"+userid+"' and e.case_status=10 and coalesce(e.ecourts_case_status,'')!='Closed'";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 					

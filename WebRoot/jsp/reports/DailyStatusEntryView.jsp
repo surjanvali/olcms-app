@@ -342,7 +342,8 @@ body {
 			<div class="ibox-head">
 				<div class="ibox-title">
 					<h4 class="m-t-0 header-title">
-						<b>Submit Daily Status</b>
+						<b>Replay to Instructions
+</b>
 					</h4>
 				</div>
 			</div>
@@ -433,7 +434,8 @@ body {
 			<div class="ibox-head">
 				<div class="ibox-title">
 					<h4 class="m-t-0 header-title">
-						<b>Submit Daily Status</b>
+						<b>Replay to Instructions
+</b>
 					</h4>
 				</div>
 			</div>

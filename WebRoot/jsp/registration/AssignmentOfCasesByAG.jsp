@@ -339,7 +339,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 
-
 				<div class="row">
 					<div class="col-md-12">
 						<div class="ibox">
@@ -371,8 +370,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<div class="form-group">
 												<label>Select Employee <bean:message
 														key="mandatory" /></label>
-												<html:select styleId="mloSubjectId"
-													property="dynaForm(mloSubjectId)" styleClass="select2Class"
+												<html:select styleId="emp_id"
+													property="dynaForm(emp_id)" styleClass="select2Class"
 													style="width:100%;">
 													<html:option value="0">---SELECT---</html:option>
 													<logic:notEmpty name="CommonForm"
@@ -386,7 +385,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												<input type="submit" name="submit"
 													value="Assign Cases"
 													class="btn btn-sm btn-primary"
-													onclick="return fnAssignMloSubject();" />
+													onclick="return fnAssignCase();" />
 											</div>
 								</div>
 							</div>
@@ -446,69 +445,6 @@ function reloadParent(){
 	location.reload(true);
 }
 
-function showDepts() {
-	var chkdVal= $("#officerType:checked").val();	
-	/* if($("#caseDept"))
-		$("#caseDept").select2('destroy');
-	if($("#empDept"))
-		$("#empDept").select2('destroy'); */
-	// alert($("#empDept").val());
-	var data = {
-		mode : "AjaxAction",
-		typeCode : chkdVal,
-		getType : "getDeptList"
-	}
-	$.post("AjaxModels.do", data).done(function(res) {
-		if (res != '' && (chkdVal=="S-HOD" || chkdVal=="D-HOD" || chkdVal=="DC-NO")) {
-			$("#caseDept").select2('destroy');
-			$("#caseDept").html(res);
-			$("#caseDept").select2();
-			$("#caseDept").select2("val", "0");
-		}
-		if (res != '' && (chkdVal=="SD-SO" || chkdVal=="OD-SO" || chkdVal=="DC-SO")) {
-			$("#empDept").select2('destroy');
-			$("#empDept").html(res);
-			$("#empDept").select2();
-			$("#empDept").select2("val", "0");
-		}
-	}).fail(function(exc) {
-		alert("Error Occured.Please Try Again");
-	});
-}
-
-function changeReport(){
-	
-	var chkdVal= $("#officerType:checked").val();	
-	
-	$(".depthodDiv").hide();
-	$(".depthodSectionDiv").hide();
-	$(".distDiv").hide();
-	$(".disthodDiv").hide();
-	$(".distdepthodSectionDiv").hide();
-	$(".mloSubDiv").hide();
-	
-	if(chkdVal=="MLO-SUB"){
-		$(".mloSubDiv").show();
-	} else if(chkdVal=="S-HOD"){
-		$(".depthodDiv").show();
-	} else if(chkdVal=="D-HOD"){
-		$(".depthodDiv").show();
-	} else if(chkdVal=="SD-SO"){
-		$(".depthodSectionDiv").show();
-	} else if(chkdVal=="OD-SO"){
-		$(".depthodSectionDiv").show();
-	} else if(chkdVal=="DC"){
-		$(".distDiv").show();
-	}else if(chkdVal=="DC-NO"){
-		$(".distDiv").show();
-		$(".disthodDiv").show();
-	}else if(chkdVal=="DC-SO"){
-		$(".depthodSectionDiv").show();
-		$(".distdepthodSectionDiv").show();
-	} 
-	showDepts();
-}
-
 
 $(document).ready(function() {
 	$(".select2Class").select2();
@@ -534,7 +470,7 @@ $(document).ready(function() {
 		document.forms[0].submit();
 	}
 	
-function fnAssignMloSubject(){
+function fnAssignCase(){
 		
 		var testval = [];
 		 $('#caseIds:checked').each(function() {
@@ -546,107 +482,16 @@ function fnAssignMloSubject(){
 			alert("Select atleast a case to submit.");
 			return false;
 		}
-		if($("#mloSubjectId").val()==null || $("#mloSubjectId").val()=="" || $("#mloSubjectId").val()=="0"){
-			alert("Select MLO Subject.");
-			$("#mloSubjectId").focus();
+		if($("#emp_id").val()==null || $("#emp_id").val()=="" || $("#emp_id").val()=="0"){
+			alert("Select Emp.");
+			$("#emp_id").focus();
 			return false;
 		}
 		else{
-			$("#mode").val("assign2DeptHOD");
+			$("#mode").val("assignCase");
 			$("#HighCourtCasesListForm").submit();
 		}
 	}
-	
-	function fnAssign2DeptHOD(){
-		
-		var testval = [];
-		 $('#caseIds:checked').each(function() {
-		   testval.push($(this).val());
-		 });
-		 $("#selectedCaseIds").val(testval);
-		 //alert("selectedCaseIds:"+$("#selectedCaseIds").val());
-		if($("#selectedCaseIds").val()==null || $("#selectedCaseIds").val()=="" || $("#selectedCaseIds").val()=="0"){
-			alert("Select atleast a case to submit.");
-			return false;
-		}
-		if($("#caseDept").val()==null || $("#caseDept").val()=="" || $("#caseDept").val()=="0"){
-			alert("Select Department.");
-			$("#caseDept").focus();
-			return false;
-		}
-		else{
-			$("#mode").val("assign2DeptHOD");
-			$("#HighCourtCasesListForm").submit();
-		}
-	}
-	
-function fnAssign2DistHOD(){
-		
-		var testval = [];
-		 $('#caseIds:checked').each(function() {
-		   testval.push($(this).val());
-		 });
-		 $("#selectedCaseIds").val(testval);
-		 var chkdVal= $("#officerType:checked").val();
-		 
-		 // alert("selectedCaseIds:"+$("#selectedCaseIds").val());
-		if($("#selectedCaseIds").val()==null || $("#selectedCaseIds").val()=="" || $("#selectedCaseIds").val()=="0"){
-			alert("Select atleast a case to submit.");
-			return false;
-		}
-		if($("#caseDist").val()==null || $("#caseDist").val()=="" || $("#caseDist").val()=="0"){
-			alert("Select District.");
-			$("#caseDist").focus();
-			return false;
-		}
-		else if(chkdVal=="DC-NO" && ($("#distDept").val()==null || $("#distDept").val()=="" || $("#distDept").val()=="0")){
-			alert("Select Department.");
-			$("#distDept").focus();
-			return false;
-		}
-		else{
-			$("#mode").val("assign2DistCollector");
-			// alert($("#mode").val());
-			$("#HighCourtCasesListForm").submit();
-		}
-	}
-	
-	function fnAssign2DeptHOD2(){
-		
-		var testval = [];
-		 $('#caseIds:checked').each(function() {
-		   testval.push($(this).val());
-		 });
-		 $("#selectedCaseIds").val(testval);
-		// alert("selectedCaseIds:"+$("#selectedCaseIds").val());
-		if($("#selectedCaseIds").val()==null || $("#selectedCaseIds").val()=="" || $("#selectedCaseIds").val()=="0"){
-			alert("Select atleast a case to submit.");
-			return false;
-		}
-		else if ($("#empDept").val() == null || $("#empDept").val() == "" || $("#empDept").val() == "0") {
-			alert("Select Employee Department");
-			$("#empDept").focus();
-			return false;
-		}
-		else if ($("#empSection").val() == null || $("#empSection").val() == "" || $("#empSection").val() == "0") {
-			alert("Select Employee Section");
-			$("#empSection").focus();
-			return false;
-		} else if ($("#empPost").val() == null || $("#empPost").val() == "" || $("#empPost").val() == "0") {
-			alert("Select Post");
-			$("#empPost").focus();
-			return false;
-		} else if ($("#employeeId").val() == null || $("#employeeId").val() == "" || $("#employeeId").val() == "0") {
-			alert("Select Employee to Assign");
-			$("#employeeId").focus();
-			return false;
-		} 
-		else{
-			$("#mode").val("assignMultiCases2Section");
-			$("#HighCourtCasesListForm").submit();
-		}
-	}
-	
 	
 	function fnShowCases() {
 		

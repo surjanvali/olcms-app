@@ -246,7 +246,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 			request.setAttribute("HEADING", "Instructions Entry");
 			System.out.println("in assign2DeptHOD --- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
 			userId = CommonModels.checkStringObject(request.getSession().getAttribute("userid"));
-			String caseType = CommonModels.checkStringObject(request.getParameter("caseType"));
+			String caseType = "New";
 			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
 			System.out.println("cIno---"+cIno);
 			System.out.println("caseType---"+caseType);
@@ -288,9 +288,8 @@ public class DailyStatusEntryAction extends DispatchAction {
 			if(a>0) {
 
 				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks,uploaded_doc_path) "
-						+ " values ('" + cIno + "','SUBMITTED DAILY CASE STATUS', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("daily_status").toString()+"','"+DailyStatus_file+"')";
+						+ " values ('" + cIno + "','REPLAY INSTRUCTIONS BY GP', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("daily_status").toString()+"','"+DailyStatus_file+"')";
 				DatabasePlugin.executeUpdate(sql, con);
-
 
 				request.setAttribute("successMsg", "Dialy Status details saved successfully.");
 			}else {
@@ -323,7 +322,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 			request.setAttribute("HEADING", "Instructions Entry");
 			System.out.println("in assign2DeptHOD --- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
 			userId = CommonModels.checkStringObject(request.getSession().getAttribute("userid"));
-			String caseType = CommonModels.checkStringObject(request.getParameter("caseType"));
+			String caseType = "Legacy";
 			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
 			System.out.println("cIno---"+cIno);
 			System.out.println("caseType---"+caseType);

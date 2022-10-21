@@ -86,7 +86,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Case Type</th>
 										<th> Ack No</th>
 										<th>Registered Date</th>
-										<th>Update Daily Status</th>
+										<th>Replay to Instructions</th>
 										<th>Status</th>
 									</tr>
 								</thead>
@@ -99,7 +99,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										 ${map.cino}</a></td>
 											<td style="text-align: center;">${map.dt_regis }</td>
 											<td>
-												 <input type="button" id="btnShowPopup" value="Submit Daily Status"
+												 <input type="button" id="btnShowPopup" value="Replay to Instructions"
 												class="btn btn-sm btn-success waves-effect waves-light"
 												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}');" />
 											</td>

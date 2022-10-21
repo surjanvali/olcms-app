@@ -99,7 +99,7 @@ public class HighCourtCauseListAction extends DispatchAction {
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 
-			System.out.println("data=" + data);
+			//System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0)
 				request.setAttribute("causelist", data);
 			else

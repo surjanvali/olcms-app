@@ -22,10 +22,7 @@ import plugins.DatabasePlugin;
 public class GPReportAction extends DispatchAction {
 	@Override
 	public ActionForward unspecified(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-	
-		
-		
+			HttpServletResponse response) throws Exception {		
 		return mapping.findForward("success");
 	}
 	
@@ -658,13 +655,13 @@ public class GPReportAction extends DispatchAction {
 				}
 				
 				// Dept. Instructions
-				sql = "select instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "' and status_instruction_flag='I' order by 1 ";
+				sql = "select cino,instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "' and status_instruction_flag='I' order by 1 ";
 				System.out.println("Dept INstructions sql--" + sql);
 				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("DEPTNSTRUCTIONS", existData);
 				
 				// Daily Case Status Updates by GP
-				sql = "select instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "' and status_instruction_flag='D'  order by 1 ";
+				sql = "select cino,instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "' and status_instruction_flag='D'  order by 1 ";
 				System.out.println("sql--" + sql);
 				existData = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("GPDAILYSTATUS", existData);
@@ -895,13 +892,13 @@ public class GPReportAction extends DispatchAction {
 				}
 				
 				// Dept. Instructions
-				sql = "select instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "'  order by 1 ";
+				sql = "select cino,instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "'  order by 1 ";
 				System.out.println("Dept INstructions sql--" + sql);
 				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("DEPTNSTRUCTIONS", existData);
 				
 				// Daily Case Status Updates by GP
-				sql = "select instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "'  order by 1 ";
+				sql = "select cino,instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "'  order by 1 ";
 				System.out.println("sql--" + sql);
 				existData = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("GPDAILYSTATUS", existData);
@@ -1208,7 +1205,16 @@ public class GPReportAction extends DispatchAction {
 					//msg = "Parawise Remarks Returned for Case ("+cIno+").";
 				}
 				
-				sql="insert into ecourts_olcms_case_details_log select * from ecourts_olcms_case_details where cino='"+cIno+"'";
+				sql="insert into ecourts_olcms_case_details_log (cino , petition_document ,  counter_filed_document  , judgement_order,action_taken_order ,last_updated_by , "
+						+ "last_updated_on, counter_filed , remarks, ecourts_case_status , corresponding_gp , pwr_uploaded, pwr_submitted_date ,pwr_received_date,"
+						+ "pwr_approved_gp,pwr_gp_approved_date, appeal_filed ,appeal_filed_copy,  appeal_filed_date , pwr_uploaded_copy , counter_approved_gp ,"
+						+ "action_to_perfom , counter_approved_date , counter_approved_by , respondent_slno ,cordered_impl_date, dismissed_copy , "
+						+ "final_order_status, no_district_updated , is_orderimplemented , counter_filed_date) "
+						+ " select cino , petition_document ,  counter_filed_document  , judgement_order,action_taken_order ,last_updated_by , "
+						+ "last_updated_on, counter_filed , remarks, ecourts_case_status , corresponding_gp , pwr_uploaded, pwr_submitted_date ,pwr_received_date,"
+						+ "pwr_approved_gp,pwr_gp_approved_date, appeal_filed ,appeal_filed_copy,  appeal_filed_date , pwr_uploaded_copy , counter_approved_gp ,"
+						+ "action_to_perfom , counter_approved_date , counter_approved_by , respondent_slno ,cordered_impl_date, dismissed_copy , "
+						+ "final_order_status, no_district_updated , is_orderimplemented , counter_filed_date from ecourts_olcms_case_details where cino='"+cIno+"'";
 				a += DatabasePlugin.executeUpdate(sql, con);
 				
 				if (a > 0) {

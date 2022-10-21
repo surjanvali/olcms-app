@@ -190,6 +190,7 @@ body {
 														<th>Submitted By</th>
 														<th>Submitted On</th>
 														<th>Uploaded File</th>
+														<th>Replay to Instructions</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -206,6 +207,11 @@ body {
 										</logic:notEqual> <logic:equal value="-" name="map" property="upload_fileno">
 														---
 													</logic:equal></td>
+													<td>
+												 <input type="button" id="btnShowPopup" value="Replay to Instructions"
+												class="btn btn-sm btn-success waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}');" />
+											</td>
 														</tr>
 													</logic:iterate>
 												</tbody>
@@ -1129,6 +1135,31 @@ body {
 
 			</div>
 		</div>
+		<!-- Modal  Start-->
+<div id="MyPopup" class="modal fade" role="dialog"
+	style="padding-top:200px;">
+	<div class="modal-dialog modal-lg">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header"
+				style="background-color: #3498db;color: #fff;">
+				<button type="button" class="close" data-dismiss="modal">
+					&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					<iframe src="" id="page" name="model_window"
+						style="width:100%;min-height:600px;;border:0px;"> </iframe>
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+		
 
 	</html:form>
 </div>
@@ -1394,6 +1425,23 @@ body {
 										});
 
 					});
+	
+	function viewCaseDetailsPopup1(cino, caseNo) {
+		//alert("hai"+cino+caseNo);
+		var heading = "View/Submit Daily Status for Case : "+cino;
+		var srclink = "";
+		if (cino != null && cino != "" && cino != "0") {
+			srclink = "./DailyStatusEntry.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino=" +cino+"&caseType="+caseNo;
+			//srclink = "./EcourtsDeptInstructionNew.do?mode=getCasesList&cino="+cino+"&caseType="+caseNo;
+			//alert("LINK:"+srclink);
+			if (srclink != "") {
+				$("#MyPopup .modal-title").html(heading);
+				$("#page").prop("src", srclink)
+				//$("#MyPopup .modal-body").html(body);
+				$("#MyPopup").modal("show");
+			};
+		};
+	};
 </script>
 </body>
 </html>
