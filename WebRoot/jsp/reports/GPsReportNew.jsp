@@ -86,7 +86,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Case Type</th>
 										<th> Ack No</th>
 										<th>Registered Date</th>
-										<th>Replay to Instructions</th>
+										<!-- <th>Reply to Instructions</th> -->
 										<th>Status</th>
 									</tr>
 								</thead>
@@ -98,11 +98,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td><a href="./GPsReportNew.do?mode=caseStatusUpdate&caseCiNo=${map.cino}&caseType=${map.legacy_ack_flag}" class="btn btn-info btn-md"> 
 										 ${map.cino}</a></td>
 											<td style="text-align: center;">${map.dt_regis }</td>
-											<td>
-												 <input type="button" id="btnShowPopup" value="Replay to Instructions"
+											<%-- <td>
+												 <input type="button" id="btnShowPopup" value="Reply to Instructions"
 												class="btn btn-sm btn-success waves-effect waves-light"
 												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}');" />
-											</td>
+											</td> --%>
 											<td style="text-align: center;">Pending</td>
 											<%-- 
 												<td><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}">${map.ack_date }</a></td>

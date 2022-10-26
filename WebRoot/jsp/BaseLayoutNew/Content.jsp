@@ -406,6 +406,69 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</a>
 				</div>
+				
+				<logic:notEmpty name="AGOFFICE">
+				<div class="col-lg-3 col-md-6">
+					<a href="./AssignmentOfCasesByAG.do">
+						<div class="ibox bg-danger color-white widget-stat">
+							<div class="ibox-body">
+								<h2 class="m-b-5 font-strong">Assign Case</h2>
+								<div class="m-b-5">&nbsp;</div>
+								<i class="fa fa-file-text-o widget-stat-icon"></i>
+								<div>
+									<small> &nbsp;</small>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<div class="col-lg-3 col-md-6">
+					<a href="./AssignedCasesByAG.do">
+						<div class="ibox bg-primary color-white widget-stat">
+							<div class="ibox-body">
+								<h2 class="m-b-5 font-strong">Assigned Cases By AG</h2>
+								<div class="m-b-5">&nbsp;</div>
+								<i class="fa fa-file-text-o widget-stat-icon"></i>
+								<div>
+									<small> &nbsp;</small>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<div class="col-lg-3 col-md-6">
+					<a href="./AssignedCasesByAG.do">
+						<div class="ibox bg-primary color-white widget-stat">
+							<div class="ibox-body">
+								<h2 class="m-b-5 font-strong"> Cases sent By AG Office</h2>
+								<div class="m-b-5">&nbsp;</div>
+								<i class="fa fa-file-text-o widget-stat-icon"></i>
+								<div>
+									<small> &nbsp;</small>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<div class="col-lg-3 col-md-6">
+					<a href="./EcourtsCaseSearch.do">
+						<div class="ibox bg-primary color-white widget-stat">
+							<div class="ibox-body">
+								<h2 class="m-b-5 font-strong">Search Case </h2>
+								<div class="m-b-5">&nbsp;</div>
+								<i class="fa fa-file-text-o widget-stat-icon"></i>
+								<div>
+									<small> &nbsp;</small>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				</logic:notEmpty>
 
 			</div>
 
@@ -565,6 +628,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												<th>CINo.</th>
 												<th>Activity</th>
 												<th>Assigned To</th>
+												<th>Remarks</th>
+												<th>Uploaded File</th>
 												<th>Time</th>
 											</tr>
 										</thead>
@@ -574,7 +639,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													<td>${i+1 }</td>
 													<td>${map.cino }</td>
 													<td>${map.action_type }</td>
-													<td><logic:equal value="-" name="map"
+													<td>${map.assigned_to}</td>
+													<td>${map.remarks}</td>
+													<td>${map.uploaded_doc_path}</td>
+													<%-- <td><logic:equal value="-" name="map"
 															property="uploaded_doc_path">
 													 ${map.deptdesc } ${map.fullname_en } ${map.post_name_en } 
 													<logic:greaterThan value="0" name="map" property="dist_id">
@@ -586,7 +654,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 															<a href="${map.uploaded_doc_path }" target="_new">
 																Uploaded Document</a>
 
-														</logic:notEqual></td>
+														</logic:notEqual></td> --%>
 													<td>${map.inserted_time }</td>
 												</tr>
 											</logic:iterate>

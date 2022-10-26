@@ -444,7 +444,7 @@ public class WelcomePageAction extends DispatchAction{
 							+ " where dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino)  "
 							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 					
@@ -472,7 +472,7 @@ public class WelcomePageAction extends DispatchAction{
 							+ " where dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' AND status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' AND status_instruction_flag='D') b on (a.ack_no=b.cino)  "
 							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 					
@@ -505,7 +505,7 @@ public class WelcomePageAction extends DispatchAction{
 							+ " where dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino)  "
 							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 				}
@@ -538,7 +538,7 @@ public class WelcomePageAction extends DispatchAction{
 							+ " where dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino)  "
 							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 					
@@ -569,7 +569,7 @@ public class WelcomePageAction extends DispatchAction{
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
 
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino)  "
 							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 				}
@@ -597,7 +597,7 @@ public class WelcomePageAction extends DispatchAction{
 							+ " where dept_code='"+deptCode+"' and dist_id='"+distId+"' and coalesce(ecourts_case_status,'')!='Closed'  ";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino)  "
 							+ " where a.ack_type = 'NEW' and e.dept_code='"+deptCode+"' and dist_id='"+distId+"' and coalesce(ecourts_case_status,'')!='Closed' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 				}
@@ -619,7 +619,7 @@ public class WelcomePageAction extends DispatchAction{
 							+ " where assigned=true and assigned_to='"+userid+"' and case_status=5 and coalesce(ecourts_case_status,'')!='Closed'";
 					request.setAttribute("DAILYSTATUSBYGP", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) \r\n"
+					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino)  "
 							+ " where a.ack_type = 'NEW' and e.assigned=true and e.assigned_to='"+userid+"' and e.case_status=5 and coalesce(e.ecourts_case_status,'')!='Closed' ";
 					
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
@@ -717,6 +717,9 @@ public class WelcomePageAction extends DispatchAction{
 					
 					
 					  sql="select count(distinct a.cino) from ecourts_dept_instructions a where a.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"' and legacy_ack_flag='Legacy')";
+					  
+					  sql=" select count(distinct a.cino) from ecourts_dept_instructions a  "
+					  		+ "where a.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='gp-cooperation@ap.gov.in' and legacy_ack_flag in ('New','Legacy') )";
 					  System.out.println("instruction SQL:"+sql);
 					  request.setAttribute("INSTRUCTIONSCOUNT", DatabasePlugin.getStringfromQuery(sql, con));
 					  
@@ -725,11 +728,27 @@ public class WelcomePageAction extends DispatchAction{
 					  System.out.println("instruction SQL:"+sql);
 					  request.setAttribute("INSTRUCTIONSCOUNTNEW", DatabasePlugin.getStringfromQuery(sql, con));
 					
-					sql="select count(*) From ecourts_olcms_case_details a "
-							+ "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  "
-							+ "inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code and ecd.assigned_to=emgd.gp_id) "
-							+ "where pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'No')='Yes' and (counter_filed='No' or counter_filed='Yes') and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6' "
-							+ "and emgd.gp_id='"+userid+"'";
+						/*
+						 * sql="select count(*) From ecourts_olcms_case_details a " +
+						 * "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  " +
+						 * "inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code and ecd.assigned_to=emgd.gp_id) "
+						 * +
+						 * "where pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'No')='Yes' and (counter_filed='No' or counter_filed='Yes') and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6' "
+						 * + "and emgd.gp_id='"+userid+"'";
+						 */
+					
+					sql="select count(*) from "
+							+ "( select count(a.cino) as tot From ecourts_olcms_case_details a  "
+							+ "							inner join ecourts_case_data ecd on (a.cino=ecd.cino)   "
+							+ "							inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code and ecd.assigned_to=emgd.gp_id)  "
+							+ "							where pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'No')='Yes' and (counter_filed='No' or counter_filed='Yes') and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6'  "
+							+ "							and emgd.gp_id='"+userid+"' "
+							+ "UNION ALL "
+							+ "select count(ad.ack_no) as tot From ecourts_olcms_case_details a inner join  ecourts_gpo_ack_dtls ad on (a.cino=ad.ack_no) inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no)   "
+							+ "							inner join ecourts_mst_gp_dept_map emgd on (d.dept_code=emgd.dept_code and d.assigned_to=emgd.gp_id)  "
+							+ "							where pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'No')='Yes' and (counter_filed='No' or counter_filed='Yes') and coalesce(counter_approved_gp,'F')='F' and d.case_status='6'  "
+							+ "							and emgd.gp_id='"+userid+"' ) x" ;
+					
 					System.out.println("COUNTERS SQL:"+sql);
 					request.setAttribute("counterFileCount", DatabasePlugin.getStringfromQuery(sql, con));
 					
@@ -742,11 +761,27 @@ public class WelcomePageAction extends DispatchAction{
 					request.setAttribute("counterFileCountNew", DatabasePlugin.getStringfromQuery(sql, con));
 					
 					//System.out.println("counterFile--"+sql);
-					sql="select count(*) From ecourts_olcms_case_details a "
+					/*sql="select count(*) From ecourts_olcms_case_details a "
 							+ "inner join ecourts_case_data ecd on (a.cino=ecd.cino)  "
 							+ "inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code and ecd.assigned_to=emgd.gp_id) "
 							+ "where (pwr_uploaded='No' or pwr_uploaded='Yes') and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6' "
-							+ "and emgd.gp_id='"+userid+"'  ";
+							+ "and emgd.gp_id='"+userid+"'  ";*/
+					
+					
+					sql="select count(*) from "
+							+ "( select count(*) From ecourts_olcms_case_details a  "
+							+ "							inner join ecourts_case_data ecd on (a.cino=ecd.cino)   "
+							+ "							inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code and ecd.assigned_to=emgd.gp_id)  "
+							+ "							where (pwr_uploaded='No' or pwr_uploaded='Yes') and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6'  "
+							+ "							and emgd.gp_id='"+userid+"' "
+							+ "UNION ALL "
+							+ "select count(*) From ecourts_olcms_case_details a  "
+							+ "							inner join  ecourts_gpo_ack_dtls ad on (a.cino=ad.ack_no) inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no)  "
+							+ "							inner join ecourts_mst_gp_dept_map emgd on (d.dept_code=emgd.dept_code and d.assigned_to=emgd.gp_id)  "
+							+ "							where (pwr_uploaded='No' or pwr_uploaded='Yes') and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and d.case_status='6'  "
+							+ "							and emgd.gp_id='"+userid+"') x";
+					
+					
 					System.out.println("PARAWISE COUNT SQL:"+sql);
 					request.setAttribute("parawiseCount", DatabasePlugin.getStringfromQuery(sql, con));
 					
@@ -862,6 +897,10 @@ public class WelcomePageAction extends DispatchAction{
 					
 				}
 				else if(roleId.equals("13") || roleId.equals("14")) { // HC-DEOs
+					
+				}
+				else if(roleId.equals("18") || roleId.equals("19")) { // AG OFFICE
+					request.setAttribute("AGOFFICE", "AGOFFICE");
 					
 				}
 				

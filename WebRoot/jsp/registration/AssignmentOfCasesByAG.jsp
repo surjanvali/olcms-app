@@ -70,11 +70,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="ibox-title">List of High Court Cases </div>
 				</div>
 				<div class="ibox-body">
-					<!-- <h4 class="m-t-0 header-title">
-		<b>High Court Cases List</b>
-	</h4>
-	<hr /> -->
-
 					<div class="row">
 						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 							<div class="form-group">
@@ -350,7 +345,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</div>
 							<div class="ibox-body">
 
-								<div class="row">
+								<%-- <div class="row">
 									<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 										<div class="form-group">
 											<label>Remarks</label>
@@ -361,7 +356,26 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											</html:textarea>
 										</div>
 									</div>
-								</div>
+								</div> --%>
+								<div class="row">
+					<div class="col-md-3 col-xs-12 pull-right">
+						<b> Remarks: </b>
+					</div>
+					<div class="col-md-3 col-xs-12">
+						<html:textarea styleId="caseRemarks"
+							property="dynaForm(caseRemarks)" styleClass="form-control"
+							cols="50" rows="5">
+						</html:textarea>
+					</div>
+					
+							<div class="col-md-3 col-xs-12 pull-right">
+								<b> Upload file: </b>
+							</div>
+							<div class="col-md-3 col-xs-12">
+								<html:file property="changeLetter" styleId="changeLetter"
+									styleClass="form-control"></html:file>
+							</div>
+				</div>
 								<hr />
 
 								<div class="row">

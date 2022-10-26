@@ -6,7 +6,9 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -86,10 +88,28 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
 			userid = CommonModels.checkStringObject(session.getAttribute("userid"));
 			con = DatabasePlugin.connect();
+			
+			Date date = new Date();
+			SimpleDateFormat DateFor = new SimpleDateFormat("MM/dd/yyyy");
+			String stringDate = DateFor.format(date);
+			System.out.println("Date Format with MM/dd/yyyy : "+stringDate);
 
-			sql= " select distinct a.est_code , a. causelist_date , a.bench_id , a. causelist_id , cause_list_type ,coalesce(causelist_document,'') as document, b.judge_name "
-					+ "from ecourts_causelist_bench_data a  left join  ecourts_causelist_data b on (a.bench_id=b.bench_id) "
-					+ "where a.causelist_date=to_date('09/02/2022','mm/dd/yyyy') ";
+			
+			if (cform.getDynaForm("dofFromDate") != null
+					&& !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
+				stringDate += " and causelist_date >= to_date('" + cform.getDynaForm("dofFromDate")
+				+ "','dd-mm-yyyy') ";
+			}
+			/*
+			 * if (cform.getDynaForm("dofToDate") != null &&
+			 * !cform.getDynaForm("dofToDate").toString().contentEquals("")) { sqlCondition
+			 * += " and causelist_date <= to_date('" + cform.getDynaForm("dofToDate") +
+			 * "','dd-mm-yyyy') "; }
+			 */
+			
+			sql= " select distinct c.cino,c.dept_code,c.type_name_reg,c.reg_no,c.reg_year,d.prayer, a.est_code , a. causelist_date , a.bench_id , a. causelist_id , cause_list_type ,coalesce(causelist_document,'') as document, b.judge_name "
+					+ "from ecourts_causelist_bench_data a  left join  ecourts_causelist_data b on (a.bench_id=b.bench_id) inner join  ecourts_case_data c on (a.bench_id=c.bench_id)  and (a.cause_list_type=c.causelist_type)  inner join nic_prayer_data d  on (c.cino=d.cino) "
+					+ "where a.causelist_date=to_date('09/05/2022','mm/dd/yyyy')   and assigned_to='"+userid+"'   ";   //'"+stringDate+"'
 
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -143,11 +163,8 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 
 			System.out.println("pdfFile--"+DailyStatus_file);
 
-			String status_flag="D";
-
-
-			sql = "insert into ecourts_dept_instructions (cino, instructions , upload_fileno,dept_code ,dist_code,insert_by,legacy_ack_flag,status_instruction_flag ) "
-					+ " values (?,?, ?, ?, ?, ?,?,?)";
+			sql = "insert into ecourts_gpo_daily_status (cino, status_remarks , upload_fileno,dept_code ,dist_code,insert_by,legacy_ack_flag ) "
+					+ " values (?,?, ?, ?, ?, ?,?)";
 
 			ps = con.prepareStatement(sql);
 			int i = 1;
@@ -158,7 +175,6 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 			ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
 			ps.setString(++i, userId);
 			ps.setString(++i, "New");
-			ps.setString(++i, status_flag);
 
 			System.out.println("sql--"+sql);
 
@@ -219,11 +235,8 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 
 			System.out.println("pdfFile--"+DailyStatus_file);
 
-			String status_flag="D";
-
-
-			sql = "insert into ecourts_dept_instructions (cino, instructions , upload_fileno,dept_code ,dist_code,insert_by,legacy_ack_flag,status_instruction_flag ) "
-					+ " values (?,?, ?, ?, ?, ?,?,?)";
+			sql = "insert into ecourts_gpo_daily_status (cino, status_remarks , upload_fileno,dept_code ,dist_code,insert_by,legacy_ack_flag ) "
+					+ " values (?,?, ?, ?, ?, ?,?)";
 
 			ps = con.prepareStatement(sql);
 			int i = 1;
@@ -234,7 +247,6 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 			ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
 			ps.setString(++i, userId);
 			ps.setString(++i, "Legacy");
-			ps.setString(++i, status_flag);
 
 			System.out.println("sql--"+sql);
 
@@ -270,7 +282,7 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql = null, cIno = null, target = "casepopupview1",caseType=null;
+		String userId = null, roleId = null, sql = null, cIno = null, target = "DailyStatusEntryByGPView",caseType=null;
 		System.out.println("getCino");
 
 		try {

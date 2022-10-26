@@ -63,7 +63,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="ibox bg-danger color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${INSTRUCTIONSCOUNT }</h2>
-										<div class="m-b-5">Instructions Legacy</div>
+										<div class="m-b-5">Instructions</div>
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
 											<small> &nbsp;</small>
@@ -75,7 +75,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</logic:greaterThan>
 
 				</logic:notEmpty>
-				<logic:notEmpty name="INSTRUCTIONSCOUNTNEW">
+				<%-- <logic:notEmpty name="INSTRUCTIONSCOUNTNEW">
 					<logic:greaterThan value="0" name="INSTRUCTIONSCOUNTNEW">
 						<div class="col-lg-2 col-md-3">
 							<!-- <a href="./GPOAck.do?mode=deptWiseCases"> -->
@@ -94,7 +94,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</logic:greaterThan>
 
-				</logic:notEmpty>
+				</logic:notEmpty> --%>
 				<logic:notEmpty name="NEWCASES">
 					<logic:greaterThan value="0" name="NEWCASES">
 						<div class="col-lg-2 col-md-3">
@@ -124,7 +124,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="ibox bg-danger color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${parawiseCount }</h2>
-										<div class="m-b-5">Parawise Remarks Pending for Approval Legacy</div>
+										<div class="m-b-5">Parawise Remarks Pending for Approval </div>
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
 											<small> &nbsp;</small>
@@ -143,9 +143,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								href="./GPReport.do?mode=viewGPCases&pwCounterFlag=COUNTER">
 								<div class="ibox bg-danger color-white widget-stat">
 									<div class="ibox-body">
-										<h2 class="m-b-5 font-strong">${counterFileCount }</h2>
+										<h2 class="m-b-5 font-strong">${counterFileCount}</h2>
 										<div class="m-b-5">Counter Filed and Pending for
-											Approval Legacy</div>
+											Approval </div>
 
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
@@ -157,7 +157,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</logic:greaterThan>
 				</logic:notEmpty>
-				<logic:notEmpty name="parawiseCountNew">
+				<%-- <logic:notEmpty name="parawiseCountNew">
 					<logic:greaterThan value="0" name="parawiseCountNew">
 						<div class="col-lg-2 col-md-3">
 							<a
@@ -198,7 +198,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</logic:greaterThan>
 
-				</logic:notEmpty>
+				</logic:notEmpty> --%>
 			</div>
 
 			<logic:present name="showReport1">

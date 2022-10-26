@@ -70,18 +70,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 			</div>
-
 			<div class="ibox">
-				<div class="ibox-head">
-					<div class="ibox-title">Daily Status Entry</div>
-				</div>
-				<div class="ibox-body">
-					
-					<div class="row">
-						
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+				
+				<!-- <div class="ibox-body">
+					<div class="row"> -->
+					<%--	<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 							<div class="form-group">
-								<label class="font-bold">Date of Filing From Date</label>
+								<label class="font-bold">Date</label>
 								<div class="input-group date">
 									<span class="input-group-addon bg-white"><i
 										class="fa fa-calendar"></i></span>
@@ -91,7 +86,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 							<div class="form-group">
 								<label class="font-bold">Date of Filing From Date</label>
 								<div class="input-group date">
@@ -101,22 +96,25 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										styleClass="form-control datepicker" />
 								</div>
 							</div>
-						</div>
+						</div> --%>
 					</div>
 					
-					<div class="row">
+					<!-- <div class="row">
 						<div class="col-md-12 col-xs-12">
 							<input type="submit" name="submit" value="Get Cases"
 								class="btn btn-success" onclick="return fnShowCases();" />
 						</div>
-					</div>
+					</div> -->
 
 
-				</div>
+				<!-- </div> -->
 			</div>
 
 			<logic:notEmpty name="CASESLIST">
 				<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">Daily Status Entry Cases</div>
+				</div>
 					<div class="ibox-body">
 						<div class="table-responsive">
 
@@ -125,6 +123,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<thead>
 									<tr>
 										<th>Sl.No</th>
+										<th>Cino</th>
+										<th>Dept Code</th>
+										<th>Case Type</th>
+										<th>Case Reg No</th>
+										<th>Case Reg Year</th>
+										<th>Prayer</th>
 										<th>Bench Id</th>
 										<th>Cause List Id</th>
 										<th>Cause List Type</th>
@@ -136,6 +140,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<logic:iterate id="map" name="CASESLIST" indexId="i">
 										<tr>
 											<td>${i+1 }.</td>
+											<%-- <td>${map.cino}</td> --%>
+											<td><input type="button" id="btnShowPopup"
+												value="${map.cino}"
+												class="btn btn-sm btn-info waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
+
+											</td>
+											<td>${map.dept_code}</td>
+											
+											<td>${map.type_name_reg}</td>
+											<td>${map.reg_no}</td>
+											<td>${map.reg_year}</td>
+											<td>${map.prayer}</td>
+											
 											<td>${map.bench_id}</td>
 											<td>${map.causelist_id}</td>
 											<td>${map.cause_list_type}</td>
@@ -143,7 +161,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td>
 												 <input type="button" id="btnShowPopup" value="Update DailyStatus"
 												class="btn btn-sm btn-info waves-effect waves-light"
-												onclick="javascript:viewCaseDetailsPopup1('${map.causelist_id}');" />
+												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','Legacy');" />
 											</td>
 										</tr>
 									</logic:iterate>
@@ -193,7 +211,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<!--  <button type="button" class="btn btn-danger" data-dismiss="modal"  onclick="return fnShowCases();">Close</button>  -->
 				 <!-- <div class="btn btn-danger" data-dismiss="modal"><a href="./DailyStatusEntry.do" >Close</a></div>  -->
 				<!-- <input type="submit" name="submit" value="Close" class="btn btn-danger" data-dismiss="modal" onclick="return fnShowCases();" /> -->
-				<div class="form-group"> <a href="./DailyStatusEntry.do" class="btn btn-danger border-0">Close</a>
+				<div class="form-group"> <a href="./DailyStatusEntryByGP.do" class="btn btn-danger border-0">Close</a>
 			</div>
 		</div>
 	</div>
@@ -310,25 +328,6 @@ $(document).ready(function() {
 	
 	
 	function fnShowCases() {
-		
-		if(($("#regYear").val()=="" || $("#regYear").val()=="0") 
-				&& ($("#dofFromDate").val() == null || $("#dofFromDate").val() == "" || $("#dofFromDate").val() == "0")
-		&& 	($("#purpose").val() == null || $("#purpose").val() == "" || $("#purpose").val() == "0")
-		&& ($("#districtId").val() == null || $("#districtId").val() == "" || $("#districtId").val() == "0")
-		){
-			alert("Please select a filter to get the data.");
-			return false;
-		}
-		
-		if (!($("#dofFromDate").val() == null || $("#dofFromDate").val() == "" || $("#dofFromDate").val() == "0")
-				&& ($("#dofToDate").val() == null || $("#dofToDate").val() == "" || $("#dofToDate").val() == "0")
-		)
-		{
-			alert("Select Filing To Date");
-			$("#dofToDate").focus();
-			return false;
-		}
-		alert("Please select a filter to get the data.");
 		
 		$("#mode").val("getCasesList");
 		$("#HighCourtCasesListForm").submit();
@@ -705,11 +704,11 @@ function populateEmpDetails(cino) {
 		};
 	};
 	
-	function viewCaseDetailsPopup1(cino) {
+	function viewCaseDetailsPopup1(cino,caseType) {
 		var heading = "View Instructions Details for CINO : "+cino;
 		var srclink = "";
 		if (cino != null && cino != "" && cino != "0") {
-			srclink = "./DailyStatusEntry.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino=" + cino;
+			srclink = "./DailyStatusEntryByGP.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino=" + cino+"&caseType="+caseType;
 			 //alert("LINK:"+srclink);
 			if (srclink != "") {
 				$("#MyPopup .modal-title").html(heading);

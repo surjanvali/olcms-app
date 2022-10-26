@@ -94,38 +94,7 @@ public class GPReportAction extends DispatchAction {
 			}
 			con = DatabasePlugin.connect();
 			
-			if(roleId!=null && roleId.equals("6")) { // GPO
-				
-				String counter_pw_flag = CommonModels.checkStringObject(request.getParameter("pwCounterFlag"));
-				
-				condition=" and a.case_status=6 and e.gp_id='"+userId+"' ";
-				
-				if(counter_pw_flag.equals("PR")) {
-					heading = "Parawise Remarks submitted Cases List";
-					// pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6'
-					condition+=" and pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' )";
-				}
-				if(counter_pw_flag.equals("COUNTER")) {
-					heading = "Counters filed Cases List";
-					//pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6'
-					condition+=" and pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F'";
-				}
-			}
 			heading = "Instruction Cases List";
-			/*
-			 * sql =
-			 * "select type_name_reg, reg_no, reg_year, to_char(dt_regis,'dd-mm-yyyy') as dt_regis, a.cino, case when length(scanned_document_path) > 10 then scanned_document_path else '-' end as scanned_document_path "
-			 * + " from ecourts_case_data a " +
-			 * " left join ecourts_olcms_case_details od on (a.cino=od.cino)" +
-			 * " left join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) " +
-			 * " inner join dept_new d on (a.dept_code=d.dept_code) " +
-			 * " where assigned=true "+condition +
-			 * " and coalesce(a.ecourts_case_status,'')!='Closed' "+condition;
-			 * 
-			 * 
-			 * sql += "order by reg_year,type_name_reg,reg_no";
-			 * request.setAttribute("HEADING", heading);
-			 */
 			
 			 sql="select type_name_reg, reg_no,reg_year, to_char(dt_regis,'dd-mm-yyyy') as dt_regis, a.cino, "
 			 		+ " case when length(scanned_document_path) > 10 then scanned_document_path else '-' end as scanned_document_path,legacy_ack_flag "
@@ -140,10 +109,32 @@ public class GPReportAction extends DispatchAction {
 				request.setAttribute("CASEWISEDATA", data);
 			request.setAttribute("HEADING", heading);
 			
-			}else {
-				request.setAttribute("errorMsg", "No Records found to display");
-			}
+		} /*
+			 * else { request.setAttribute("errorMsg", "No Records found to display"); }
+			 */
 			
+			String sql_new="select (select case_full_name from case_type_master ctm where ctm.sno::text=e.casetype::text) as type_name_reg, "
+				 		+ " e.reg_no, e.reg_year, to_char(e.inserted_time,'dd-mm-yyyy') as dt_regis, a.cino, "
+				 		+ "  case when length(ack_file_path) > 10 then ack_file_path else '-' end as scanned_document_path,legacy_ack_flag  "
+				 		+ " from (select distinct cino,dept_code,legacy_ack_flag from ecourts_dept_instructions where legacy_ack_flag='New') a "
+				 		+ " inner join ecourts_gpo_ack_depts d on (d.ack_no=a.cino) and (d.dept_code=a.dept_code)   inner join ecourts_gpo_ack_dtls e on (d.ack_no=e.ack_no)  "
+				 		+ " where d.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userId+"')";
+				 
+				System.out.println("SQL:" + sql_new);
+				List<Map<String, Object>> data1 = DatabasePlugin.executeQuery(sql_new, con);
+				// System.out.println("data=" + data);
+				if (data1 != null && !data1.isEmpty() && data1.size() > 0) {
+					request.setAttribute("CASEWISEDATANEW", data1);
+					request.setAttribute("total", data1.size());
+				System.out.println("size"+data1.size());
+			} /*
+				 * else { request.setAttribute("errorMsg", "No Records found to display"); }
+				 */
+			
+				if (data1 == null  && data1.size() == 0 && data == null  &&  data.size() == 0) {
+					request.setAttribute("errorMsg", "No Records found to display"); 
+			} 
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -176,23 +167,7 @@ public class GPReportAction extends DispatchAction {
 			}
 			con = DatabasePlugin.connect();
 			
-			if(roleId!=null && roleId.equals("6")) { // GPO
-				heading = "Instruction Cases List";
-				String counter_pw_flag = CommonModels.checkStringObject(request.getParameter("pwCounterFlag"));
-				
-				condition=" and a.case_status=6 and e.gp_id='"+userId+"' ";
-				
-				if(counter_pw_flag.equals("PR")) {
-					heading = "Parawise Remarks submitted Cases List";
-					// pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6'
-					condition+=" and pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' )";
-				}
-				if(counter_pw_flag.equals("COUNTER")) {
-					heading = "Counters filed Cases List";
-					//pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6'
-					condition+=" and pwr_uploaded='Yes' and counter_filed='No' and coalesce(counter_approved_gp,'F')='F'";
-				}
-			}
+			
 			request.setAttribute("HEADING", heading);
 			//heading = "Instruction Cases List";
 			 sql="select (select case_full_name from case_type_master ctm where ctm.sno::text=e.casetype::text) as type_name_reg, "
@@ -276,10 +251,35 @@ public class GPReportAction extends DispatchAction {
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			// System.out.println("data=" + data);
-			if (data != null && !data.isEmpty() && data.size() > 0)
+			if (data != null && !data.isEmpty() && data.size() > 0) {
 				request.setAttribute("CASEWISEDATA", data);
-			else
-				request.setAttribute("errorMsg", "No Records found to display");
+			}
+			
+			
+			String sql1 = "select (select case_full_name from case_type_master ctm where ctm.sno::text=b.casetype::text) as type_name_reg,'New' as legacy_ack_flag, reg_no, reg_year, inserted_time::date as dt_regis, a.ack_no as cino, "
+					+ "case when length(ack_file_path) > 10 then ack_file_path else '-' end as scanned_document_path "
+					+ " from ecourts_gpo_ack_depts a inner join ecourts_gpo_ack_dtls b on (a.ack_no=b.ack_no)"
+					+ " left join ecourts_olcms_case_details od on (a.ack_no=od.cino)"
+					+ " left join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code and a.assigned_to=e.gp_id) "
+					+ " inner join dept_new d on (a.dept_code=d.dept_code) "
+					+ " where assigned=true "+condition
+					+ " and coalesce(a.ecourts_case_status,'')!='Closed' ";
+			
+			sql1	+= "order by reg_year,type_name_reg,reg_no";
+			request.setAttribute("HEADING", heading);
+
+			System.out.println("SQL:" + sql1);
+			List<Map<String, Object>> data1 = DatabasePlugin.executeQuery(sql1, con);
+			// System.out.println("data=" + data);
+			if (data1 != null && !data1.isEmpty() && data1.size() > 0) {
+				request.setAttribute("CASEWISEDATANEW", data1);
+				request.setAttribute("total", data1.size());
+			}
+			
+			if (data1 == null  && data1.size() == 0 && data == null  &&  data.size() == 0) {
+				request.setAttribute("errorMsg", "No Records found to display"); 
+		} 
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -892,13 +892,13 @@ public class GPReportAction extends DispatchAction {
 				}
 				
 				// Dept. Instructions
-				sql = "select cino,instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "'  order by 1 ";
+				sql = "select cino,instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "'  order by insert_time desc  ";
 				System.out.println("Dept INstructions sql--" + sql);
 				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("DEPTNSTRUCTIONS", existData);
 				
 				// Daily Case Status Updates by GP
-				sql = "select cino,instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "'  order by 1 ";
+				sql = "select cino,instructions, to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "'  order by insert_time desc  ";
 				System.out.println("sql--" + sql);
 				existData = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("GPDAILYSTATUS", existData);
@@ -992,10 +992,11 @@ public class GPReportAction extends DispatchAction {
 				
 				FormFile myDoc;
 				String updateSql="";
-				String remarks = "";
+				String remarks = cform.getDynaForm("remarks").toString();
 				String actionPerformed="";
 				actionPerformed = !CommonModels.checkStringObject(cform.getDynaForm("actionToPerform")).equals("") && !CommonModels.checkStringObject(cform.getDynaForm("actionToPerform")).equals("0") ?  cform.getDynaForm("actionToPerform").toString()+" Approved"  : "CASE DETAILS UPDATED";
 				
+				System.out.println("remarks---"+remarks);
 				msg = "Case details ("+cIno+") updated successfully.";
 				
 				sql="insert into ecourts_olcms_case_details_log (cino , petition_document ,  counter_filed_document  , judgement_order,action_taken_order ,last_updated_by , "
@@ -1019,8 +1020,8 @@ public class GPReportAction extends DispatchAction {
 						newFileName = "parawiseremarks_"+CommonModels.randomTransactionNo();
 						pwr_uploaded_copy = fuu.saveFile(myDoc, filePath, newFileName);
 						
-						sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
-								+ "values ('" + cIno + "','GP Approved Parawise Remarks','"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"', '"+pwr_uploaded_copy+"')";
+						sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path,assigned_to ) "
+								+ "values ('" + cIno + "','GP Approved Parawise Remarks','"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"', '"+pwr_uploaded_copy+"','"+assigned2Emp+"')";
 						DatabasePlugin.executeUpdate(sql, con);
 						
 						sqlCondition2 = ", pwr_uploaded_copy='"+pwr_uploaded_copy+"'";
@@ -1051,8 +1052,8 @@ public class GPReportAction extends DispatchAction {
 						newFileName="counter_"+CommonModels.randomTransactionNo();
 						counter_filed_document = fuu.saveFile(myDoc, filePath, newFileName);
 						
-						sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path ) "
-								+ "values ('" + cIno + "','Counter finalized by GP','"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"', '"+counter_filed_document+"')";
+						sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks, uploaded_doc_path,assigned_to ) "
+								+ "values ('" + cIno + "','Counter finalized by GP','"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"', '"+counter_filed_document+"','"+assigned2Emp+"')";
 						DatabasePlugin.executeUpdate(sql, con);
 						
 						sqlCondition2=", counter_filed_document='" + counter_filed_document + "'";
@@ -1061,17 +1062,22 @@ public class GPReportAction extends DispatchAction {
 					
 					msg = "Counter Affidavit finalized successfully for Case ("+cIno+").";
 					
-					sql = "update ecourts_olcms_case_details set counter_approved_gp='T',counter_approved_date=current_date, counter_approved_by='"
+					sql = "update ecourts_olcms_case_details set counter_filed='Yes',counter_approved_gp='T',counter_approved_date=current_date, counter_approved_by='"
 							+ userId + "', remarks='" + remarks + "', last_updated_by='" + userId
 							+ "', last_updated_on=now()" + "" + sqlCondition2
 							+ " where cino='" + cIno + "'";
 					System.out.println("COUNTER SQL:"+sql);
 					a += DatabasePlugin.executeUpdate(sql, con);
+					
+					sql="update ecourts_case_data set  case_status="+newStatus+", assigned_to='"+assigned2Emp+"' where cino='"+cIno+"' ";
+					a += DatabasePlugin.executeUpdate(sql, con);
+					
+					System.out.println("sql--->"+sql);
 				}
 				
 				if (a > 0) {
 					sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks) "
-							+ " values ('" + cIno + "','"+actionPerformed+"', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("remarks")+"')";
+							+ " values ('" + cIno + "','"+actionPerformed+"', '"+userId+"', '"+request.getRemoteAddr()+"', '"+remarks+"')";
 					DatabasePlugin.executeUpdate(sql, con);
 					
 					request.setAttribute("successMsg", msg);

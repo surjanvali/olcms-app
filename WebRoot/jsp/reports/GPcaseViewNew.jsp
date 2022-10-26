@@ -92,7 +92,7 @@ body {
 						data-toggle="tab" href="#instructions" role="tab"
 						aria-controls="instructions" aria-selected="true"> <span
 							class="d-block d-sm-none"><i class="fas fa-user"></i></span> <span
-							class="d-none d-sm-block">Instructions / Dialy Case Status</span>
+							class="d-none d-sm-block">Instructions </span>
 					</a></li>
 
 				<!-- 	<li class="nav-item"><a class="nav-link"
@@ -190,7 +190,7 @@ body {
 														<th>Submitted By</th>
 														<th>Submitted On</th>
 														<th>Uploaded File</th>
-														<th>Replay to Instructions</th>
+														<th>Reply to Instructions</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -208,7 +208,7 @@ body {
 														---
 													</logic:equal></td>
 													<td>
-												 <input type="button" id="btnShowPopup" value="Replay to Instructions"
+												 <input type="button" id="btnShowPopup" value="Reply to Instructions"
 												class="btn btn-sm btn-success waves-effect waves-light"
 												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}');" />
 											</td>

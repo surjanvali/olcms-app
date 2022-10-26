@@ -84,25 +84,25 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<tr>
 										<th>Sl.No</th>
 										<th>Case Type</th>
-										<th>Case No.</th>
+										<th>Case No./ Ack No</th>
 										<th>Registered Date</th>
-										<th>Update Daily Status</th>
+										<!-- <th>Reply to Instructions</th> -->
 										<th>Status</th>
 									</tr>
 								</thead>
 								<tbody>
-									<logic:iterate id="map" name="CASEWISEDATA" indexId="i">
+								<logic:iterate id="map" name="CASEWISEDATANEW" indexId="i">
 										<tr>
-											<td>${i+1 }.</td>
+											<td>${i+1}.</td>
 											<td>${map.type_name_reg}</td>
-											<td><a href="./GPReport.do?mode=caseStatusUpdate&caseCiNo=${map.cino}&caseType=${map.legacy_ack_flag}" class="btn btn-info btn-md"> 
-											${map.type_name_reg}/${map.reg_no}/${map.reg_year}</a></td>
+											<td><a href="./GPsReportNew.do?mode=caseStatusUpdate&caseCiNo=${map.cino}&caseType=${map.legacy_ack_flag}" class="btn btn-info btn-md"> 
+										 ${map.cino}</a></td>
 											<td style="text-align: center;">${map.dt_regis }</td>
-											<td>
-												 <input type="button" id="btnShowPopup" value="Submit Daily Status"
+											<%-- <td>
+												 <input type="button" id="btnShowPopup" value="Reply to Instructions"
 												class="btn btn-sm btn-success waves-effect waves-light"
 												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}');" />
-											</td>
+											</td> --%>
 											<td style="text-align: center;">Pending</td>
 											<%-- 
 												<td><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}">${map.ack_date }</a></td>
@@ -112,6 +112,30 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											--%>
 										</tr>
 									</logic:iterate>
+									<logic:iterate id="map" name="CASEWISEDATA" indexId="i">
+									<%-- <html:text property="total" value="${total}"/> --%>
+										<tr>
+											<td>${total+i+1}.</td>
+											<td>${map.type_name_reg}</td>
+											<td><a href="./GPReport.do?mode=caseStatusUpdate&caseCiNo=${map.cino}&caseType=${map.legacy_ack_flag}" class="btn btn-info btn-md"> 
+											${map.type_name_reg}/${map.reg_no}/${map.reg_year}</a></td>
+											<td style="text-align: center;">${map.dt_regis }</td>
+											<%-- <td>
+												 <input type="button" id="btnShowPopup" value="Reply to Instructions"
+												class="btn btn-sm btn-success waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}');" />
+											</td> --%>
+											<td style="text-align: center;">Pending</td>
+											<%-- 
+												<td><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}">${map.ack_date }</a></td>
+												<td style="text-align: right;">${map.total}</td>
+												<td style="text-align: right;"><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=NEW">${map.new_acks }</a></td>
+												<td style="text-align: right;"><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=OLD">${map.existing_acks }</a></td> 
+											--%>
+										</tr>
+									</logic:iterate>
+								
+									
 								</tbody>
 								<tfoot>
 									<tR>
@@ -123,64 +147,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 			</logic:notEmpty>
-
-
-			<%-- <logic:notEmpty name="ACKSABSTRACTDATA">
-				<div class="ibox">
-					<div class="ibox-head">
-						<div class="ibox-title">New Cases Abstract Report</div>
-					</div>
-
-					<div class="ibox-body">
-						<div class="table-responsive">
-
-							<table id="example" class="table table-striped table-bordered"
-								style="width:100%">
-								<thead>
-									<tr>
-										<th>Sl.No</th>
-										<th>Ack Date</th>
-										<th>Total</th>
-										<th>New Cases</th>
-										<th>Existing Cases</th>
-									</tr>
-								</thead>
-								<tbody>
-									<bean:define id="totTot" value="0"></bean:define>
-									<bean:define id="newTot" value="0"></bean:define>
-									<bean:define id="oldTot" value="0"></bean:define>
-									<logic:iterate id="map" name="ACKSABSTRACTDATA" indexId="i">
-										<tr>
-											<td>${i+1 }.</td>
-											<td><a
-												href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}">${map.ack_date }</a></td>
-											<td style="text-align: right;">${map.total}</td>
-											<td style="text-align: right;"><a
-												href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=NEW">${map.new_acks }</a></td>
-											<td style="text-align: right;"><a
-												href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=OLD">${map.existing_acks }</a></td>
-
-											<bean:define id="totTot" value="${totTot + map.total }"></bean:define>
-											<bean:define id="newTot" value="${newTot + map.new_acks }"></bean:define>
-											<bean:define id="oldTot"
-												value="${oldTot + map.existing_acks }"></bean:define>
-									</logic:iterate>
-								</tbody>
-								<tfoot>
-									<tR>
-										<td colspan="2" style="text-align: center;">Totals</td>
-										<td style="text-align: right;">${totTot }</td>
-										<td style="text-align: right;">${newTot }</td>
-										<td style="text-align: right;">${oldTot }</td>
-									</tR>
-								</tfoot>
-							</table>
-						</div>
-					</div>
-				</div>
-			</logic:notEmpty> --%>
-
-
 
 		</div>
 	</html:form>

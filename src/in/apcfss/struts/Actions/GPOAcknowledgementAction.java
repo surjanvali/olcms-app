@@ -5,8 +5,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1073,9 +1071,11 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			 * df.format(todaysDate);
 			 */
 			
-			LocalDateTime da_ti2 = LocalDateTime.now();
-	        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm:ss a");
-	        String testDateString = da_ti2.format(dtf1);
+			/*
+			 * LocalDateTime da_ti2 = LocalDateTime.now(); DateTimeFormatter dtf1 =
+			 * DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm:ss a"); String
+			 * testDateString = da_ti2.format(dtf1);
+			 */
 			
 			
 			Itext_pdf_setting pdfsetting = new Itext_pdf_setting();
@@ -1107,7 +1107,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			// System.out.println("--"+code128Image.getScaledWidth());
 			
 			document.add(code128Image);
-			document.add(pdfsetting.para(testDateString+"                                      "+"APOLCMS" ,subhead,Paragraph.ALIGN_LEFT,2,2));
+			document.add(pdfsetting.para("                                      "+"APOLCMS" ,subhead,Paragraph.ALIGN_LEFT,2,2));
 			//document.add(pdfsetting.para("APOLCMS",subhead,Paragraph.ALIGN_RIGHT,0,2));
 			// System.out.println("BAR CODE pdfFilePath:" + pdfFilePath);
 		} catch (Exception e) {

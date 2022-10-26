@@ -515,7 +515,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 						cform.setDynaForm("cino", ((Map) data.get(0)).get("cino"));
 						
 						sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
-								+ " from ecourts_dept_instructions where cino='" + cIno + "' and legacy_ack_flag='Legacy'  order by 1 ";
+								+ " from ecourts_dept_instructions where cino='" + cIno + "'   order by insert_time desc  ";//and legacy_ack_flag='Legacy'
 						System.out.println("sql--" + sql);
 						List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
 						request.setAttribute("existData", existData);
@@ -547,7 +547,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 					cform.setDynaForm("cino", cIno);
 					//	request.setAttribute("cinooo", ackNoo);
 					sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
-							+ " from ecourts_dept_instructions where cino='" + cIno + "' and legacy_ack_flag='New'  order by 1 ";
+							+ " from ecourts_dept_instructions where cino='" + cIno + "'   order by insert_time desc  ";//and legacy_ack_flag='New'
 					System.out.println("sql--" + sql);
 					List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
 					request.setAttribute("existDataNew", existData);
