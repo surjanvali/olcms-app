@@ -5,6 +5,7 @@ import in.apcfss.struts.commons.CommonModels;
 import in.apcfss.struts.commons.FileUploadUtilities;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Map;
 
@@ -71,7 +72,7 @@ public class AssignedCasesByAGAction extends DispatchAction {
 					+ " on (a.cino=b.cino) "
 					+ " "
 					+ " left join ecourts_olcms_case_details od on (a.cino=od.cino)"
-					+ " where  case_status='18' "
+					+ " where  case_status='19'  and assigned_to='"+userId+"' " 
 					+ " and coalesce(a.ecourts_case_status,'')!='Closed' "
 					+ " order by a.cino";
 			
@@ -101,6 +102,7 @@ public class AssignedCasesByAGAction extends DispatchAction {
 
 		try {
 			session = request.getSession();
+			con = DatabasePlugin.connect();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 
@@ -118,8 +120,18 @@ public class AssignedCasesByAGAction extends DispatchAction {
 				cIno = CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
 			}
 			
+			String sql_reg_no = "select type_name_reg||'/'||reg_no||'/'||reg_year as reg_number,cino from ecourts_case_data a where a.cino='" + cIno + "'";
+			
+			System.out.println("sql--"+sql_reg_no);
+			
+			List<Map<String, Object>> reg_no_data = DatabasePlugin.executeQuery(sql_reg_no, con);
+			
+			String reg_no=(String)reg_no_data.get(0).get("reg_number").toString();
+			
+			System.out.println("reg_no--"+reg_no);
+			
 			if (cIno != null && !cIno.equals("")) {
-				con = DatabasePlugin.connect();
+				
 	
 				// sql = "select * from ecourts_case_data where cino='" + cIno + "'";
 				sql = "select a.*, prayer from ecourts_case_data a left join nic_prayer_data np on (a.cino=np.cino) where a.cino='" + cIno + "'";
@@ -216,7 +228,7 @@ public class AssignedCasesByAGAction extends DispatchAction {
 			data = DatabasePlugin.executeQuery(sql, con);
 			request.setAttribute("OLCMSCASEDATA", data);
 	
-				request.setAttribute("HEADING", "Case Details for CINO : " + cIno);
+				request.setAttribute("HEADING", "Case Details for Case Number : " + reg_no);
 			}
 			else {
 				request.setAttribute("errorMsg", "Invalid Cino.");
@@ -461,6 +473,344 @@ public class AssignedCasesByAGAction extends DispatchAction {
 			DatabasePlugin.closeConnection(con);
 		}
 		return mapping.findForward("casestatusupdate");
+	}
+	public ActionForward case_Respond(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		CommonForm cform = (CommonForm) form;
+		Connection con = null;
+		HttpSession session = null;
+		String userId = null, roleId = null, sql = null, cIno = null, viewDisplay = null, target = "responce",caseType=null;
+		System.out.println("getCino");
+
+		try {
+			session = request.getSession();
+			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			viewDisplay = CommonModels.checkStringObject(request.getParameter("SHOWPOPUP"));
+			String caseNo="";
+			caseType ="Legacy"; //CommonModels.checkStringObject(request.getParameter("caseType"));
+			List<Map<String, Object>> data=null;
+			System.out.println("viewDisplay--" + viewDisplay);
+
+			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
+				return mapping.findForward("Logout");
+			}
+
+			cIno = CommonModels.checkStringObject(request.getParameter("cino"));
+			cIno = cIno!=null && !cIno.equals("") ? cIno : CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
+
+			System.out.println("cIno" + cIno);
+
+			if (cIno != null && !cIno.equals("")) {
+				
+				cform.setDynaForm("cino", cIno);
+				
+				con = DatabasePlugin.connect();
+
+				sql="select type_name_reg||'/'||reg_no||'/'||reg_year as reg_no,cino from ecourts_case_data a where   cino in ('"+cIno+"')";
+				 
+				 System.out.println("sql--"+sql);
+				 List<Map<String, String>> cino_data = DatabasePlugin.executeQuery(sql, con);
+				 caseNo=cino_data.get(0).get("reg_no").toString();
+				
+				request.setAttribute("HEADING", " Re-Assign Case Reg Number: " + caseNo);
+				
+				if (caseType.equals("Legacy")) {
+					
+					sql = "select a.*, "
+							+ " nda.fullname_en as fullname, nda.designation_name_en as designation, nda.post_name_en as post_name, nda.email, nda.mobile1 as mobile,dim.district_name , "
+							+ " 'Pending at '||ecs.status_description||'' as current_status, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths,"
+							+ " case when (prayer is not null and coalesce(trim(prayer),'')!='' and length(prayer) > 2) then substr(prayer,1,250) else '-' end as prayer, prayer as prayer_full, ra.address from ecourts_case_data a "
+							
+							+ " left join nic_prayer_data np on (a.cino=np.cino)"
+							+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
+							+ " left join district_mst dim on (a.dist_id=dim.district_id) "
+							+ " inner join ecourts_mst_case_status ecs on (a.case_status=ecs.status_id) "
+							+ " left join nic_data_all nda on (a.dept_code=substr(nda.global_org_name,1,5) and a.assigned_to=nda.email and nda.is_primary='t' and coalesce(a.dist_id,'0')=coalesce(nda.dist_id,'0')) "
+							+ " left join"
+							+ " ("
+							+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
+							+ " from "
+							+ " (select * from (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_interimorder where order_document_path is not null and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+							+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) x1" + " union"
+							+ " (select cino, order_document_path,order_date,order_details||' Dt.'||to_char(order_date,'dd-mm-yyyy') as order_details from ecourts_case_finalorder where order_document_path is not null"
+							+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
+							+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
+							+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code) where d.display = true and a.cino='"+cIno+"' ";
+					
+					
+					System.out.println("ecourts SQL:" + sql);
+					data = DatabasePlugin.executeQuery(sql, con);
+					if (data != null && !data.isEmpty() && data.size() > 0) {
+						request.setAttribute("CASESLISTOLD", data);
+						/*
+						 * cform.setDynaForm("cino", ((Map) data.get(0)).get("cino"));
+						 * 
+						 * sql =
+						 * "select instructions,to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
+						 * + " from ecourts_dept_instructions where cino='" + cIno +
+						 * "'   order by insert_time desc  ";//and legacy_ack_flag='Legacy'
+						 * System.out.println("sql--" + sql); List<Map<String, Object>> existData =
+						 * DatabasePlugin.executeQuery(sql, con); request.setAttribute("existData",
+						 * existData);
+						 */
+						
+					} else {
+						request.setAttribute("errorMsg", "No Records Found");
+					}
+					
+				}else {
+					
+					
+				sql = "select a.slno ,ad.respondent_slno, a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , a.remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
+						+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
+						+ "to_char(a.inserted_time,'dd-mm-yyyy') as generated_date, "
+						+ "getack_dept_desc(a.ack_no::text) as dept_descs , coalesce(a.hc_ack_no,'-') as hc_ack_no "
+						+ " from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
+						+ " left join district_mst dm on (ad.dist_id=dm.district_id) "
+						+ " left join dept_new dmt on (ad.dept_code=dmt.dept_code)"
+						+ " inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name)  "
+						+ " where a.delete_status is false and ack_type='NEW'    and (a.ack_no='"+cIno+"' or a.hc_ack_no='"+cIno+"' )  and respondent_slno='1'   "
+						+ " order by a.inserted_time desc";
+				
+				
+				System.out.println("ecourts SQL:" + sql);
+				data = DatabasePlugin.executeQuery(sql, con);
+				if (data != null && !data.isEmpty() && data.size() > 0) {
+					request.setAttribute("CASESLISTNEW", data);
+					
+					cform.setDynaForm("cino", cIno);
+					sql = "select instructions,to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
+							+ " from ecourts_dept_instructions where cino='" + cIno + "'   order by insert_time desc  ";//and legacy_ack_flag='New'
+					System.out.println("sql--" + sql);
+					List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
+					request.setAttribute("existDataNew", existData);
+
+				} else {
+					request.setAttribute("errorMsg", "No Records Found");
+				}
+				
+				}
+				
+			} else {
+				request.setAttribute("errorMsg", "Invalid Cino.");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DatabasePlugin.closeConnection(con);
+		}
+		return mapping.findForward(target);
+	}
+	public ActionForward case_ReAssign(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		CommonForm cform = (CommonForm) form;
+		Connection con = null;
+		HttpSession session = null;
+		String userId = null, roleId = null, sql = null, cIno = null, viewDisplay = null, target = "reAssign",caseType=null;
+		System.out.println("getCino");
+
+		try {
+			session = request.getSession();
+			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			viewDisplay = CommonModels.checkStringObject(request.getParameter("SHOWPOPUP"));
+			String caseNo="";
+			caseType ="Legacy"; //CommonModels.checkStringObject(request.getParameter("caseType"));
+			List<Map<String, Object>> data=null;
+			System.out.println("viewDisplay--" + viewDisplay);
+
+			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
+				return mapping.findForward("Logout");
+			}
+			con = DatabasePlugin.connect();
+			cform.setDynaForm("AGOFFICELIST", DatabasePlugin.getSelectBox("select emp_id,emp_name from  ag_office_employees where emp_id not in ('1','9','10') order by emp_id",con));
+			
+			cIno = CommonModels.checkStringObject(request.getParameter("cino"));
+			cIno = cIno!=null && !cIno.equals("") ? cIno : CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
+
+			System.out.println("cIno" + cIno);
+			
+			sql="select type_name_reg||'/'||reg_no||'/'||reg_year as reg_no,cino from ecourts_case_data a where   cino in ('"+cIno+"')";
+			 
+			 System.out.println("sql--"+sql);
+			 List<Map<String, String>> cino_data = DatabasePlugin.executeQuery(sql, con);
+			 caseNo=cino_data.get(0).get("reg_no").toString();
+			
+			request.setAttribute("HEADING", " Re-Assign Case Reg Number: " + caseNo);
+
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cform.setDynaForm("fileCino", cIno);
+			DatabasePlugin.closeConnection(con);
+		}
+		return mapping.findForward(target);
+	}
+	public ActionForward caseReAssignSubmit(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		CommonForm cform = (CommonForm) form;
+		Connection con = null;
+		HttpSession session = null;
+		String userId = null, roleId = null, sql = null, cIno = null, viewDisplay = null, target = "reAssign",caseType=null;
+		System.out.println("getCino");
+
+		try {
+			session = request.getSession();
+			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			viewDisplay = CommonModels.checkStringObject(request.getParameter("SHOWPOPUP"));
+			String caseNo="";
+			caseType ="Legacy"; //CommonModels.checkStringObject(request.getParameter("caseType"));
+			List<Map<String, Object>> data=null;
+			System.out.println("viewDisplay--" + viewDisplay);
+
+			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
+				return mapping.findForward("Logout");
+			}
+			con = DatabasePlugin.connect();
+			cform.setDynaForm("AGOFFICELIST", DatabasePlugin.getSelectBox("select emp_id,emp_name from  ag_office_employees where emp_id not in ('1','9','10') order by emp_id",con));
+			
+			cIno = CommonModels.checkStringObject(request.getParameter("cino"));
+			cIno = cIno!=null && !cIno.equals("") ? cIno : CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
+
+			System.out.println("cIno" + cIno);
+			
+			userId = (String)request.getSession().getAttribute("userid");
+			
+			String emp_email = DatabasePlugin.selectString("select emp_email from ag_office_employees where emp_id='"+CommonModels.checkStringObject(cform.getDynaForm("emp_id"))+"'", con);
+
+			FileUploadUtilities fuu = new FileUploadUtilities();
+			FormFile myDoc;
+
+			myDoc = cform.getChangeLetter();
+
+			System.out.println("myDoc---"+myDoc);
+			String filePath="uploads/Remarks_SPLGP_file/";
+			String newFileName="Remarks_SPLGP_file_"+CommonModels.randomTransactionNo();
+			String Remarks_AG_file = fuu.saveFile(myDoc, filePath, newFileName);
+
+			System.out.println("pdfFile--"+Remarks_AG_file);
+
+			if (cIno != null && !cIno.equals("") && !CommonModels.checkStringObject(cform.getDynaForm("emp_id")).equals("0")) {
+				
+				/*
+				 * String newStatus="";
+				 * 
+				 * if(emp_email!=null &&
+				 * CommonModels.checkStringObject(cform.getDynaForm("emp_id")).equals("1")) { //
+				 * MLO / NO newStatus="18"; }else if(emp_email!=null &&
+				 * CommonModels.checkStringObject(cform.getDynaForm("emp_id")).equals("1")) { //
+				 * NO newStatus="19"; }else if(emp_email!=null && emp_email.equals("6")) { //
+				 * GPO newStatus=""; }
+				 */
+				
+				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, assigned_to , remarks,uploaded_doc_path ) "
+						+ "values ('" + cIno + "','CASE RE-ASSSIGNED TO "+emp_email+"  ','"+userId+"', '"+request.getRemoteAddr()+"', '"+emp_email+"', '"+CommonModels.checkStringObject(cform.getDynaForm("caseRemarks"))+"','"+Remarks_AG_file+"')";
+				
+				DatabasePlugin.executeUpdate(sql, con);
+				System.out.println(":ACTIVITIES SQL:"+sql);
+				
+				sql = "update ecourts_case_data set assigned=true, case_status='19', assigned_to='"+emp_email+"' where cino  in ('"+cIno+"')" ;
+				
+				System.out.println("UPDATE SQL:"+sql);
+				
+				DatabasePlugin.executeUpdate(sql, con);
+				con.commit();
+				request.setAttribute("successMsg", "Case/Cases successfully moved to selected Employee.");
+				
+				
+			} else {
+				request.setAttribute("errorMsg", "Invalid Cino.");
+			}
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DatabasePlugin.closeConnection(con);
+		}
+		return mapping.findForward(target);
+	}
+	
+	public ActionForward getSubmitCategory(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String sql = null;//, cIno=null;
+		CommonForm cform = (CommonForm) form;
+		HttpSession session = request.getSession();
+		String userId=null;int a=0;String cIno = null;
+		try {
+			con = DatabasePlugin.connect();
+			//con.setAutoCommit(false);
+			request.setAttribute("HEADING", "Instructions Entry");
+			System.out.println("in assign2DeptHOD --- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
+			userId = CommonModels.checkStringObject(request.getSession().getAttribute("userid"));
+			String caseType = CommonModels.checkStringObject(request.getParameter("caseType"));
+			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
+			System.out.println("cIno---"+cIno);
+			System.out.println("caseType---"+caseType);
+
+			FileUploadUtilities fuu = new FileUploadUtilities();
+			FormFile myDoc;
+
+			myDoc = cform.getChangeLetter();
+
+			System.out.println("myDoc---"+myDoc);
+			String filePath="uploads/ResponseText/";
+			String newFileName="ResponseText_"+CommonModels.randomTransactionNo();
+			String ResponseText = fuu.saveFile(myDoc, filePath, newFileName);
+
+			System.out.println("pdfFile--"+ResponseText);
+
+
+			sql = "insert into ecourts_response_ag_mst (cino, response , upload_fileno,insert_by,insert_time ) "
+					+ " values (?,?, ?, ?, now())";
+
+			ps = con.prepareStatement(sql);
+			int i = 1;
+			ps.setString(i, cIno);
+			ps.setString(++i, cform.getDynaForm("responseText") != null ? cform.getDynaForm("responseText").toString() : "");
+			ps.setString(++i, ResponseText);
+			ps.setString(++i, userId);
+
+			System.out.println("sql--"+sql);
+
+			a = ps.executeUpdate();
+
+			System.out.println("a--->"+a);
+			if(a>0) {
+
+				sql="update ecourts_case_data set  case_status='18', assigned_to='adv-general@apolcms.in' where cino='"+cIno+"' ";
+				 DatabasePlugin.executeUpdate(sql, con);
+				
+				System.out.println("sql--->"+sql);
+				
+				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks,uploaded_doc_path) "
+						+ " values ('" + cIno + "','SUBMITTED RESPONSE TO AG', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("responseText").toString()+"','"+ResponseText+"')";
+				DatabasePlugin.executeUpdate(sql, con);
+
+				request.setAttribute("successMsg", "Response sent successfully.");
+			}else {
+				request.setAttribute("errorMsg", "Error in submission. Kindly try again.");
+			}
+
+		} catch (Exception e) {
+			//con.rollback();
+			request.setAttribute("errorMsg", "Error in Submission. Kindly try again.");
+			e.printStackTrace();
+		} finally {
+			cform.setDynaForm("daily_status","");
+			cform.setDynaForm("fileCino", cIno);
+			DatabasePlugin.close(con, ps, null);
+		}
+		//return mapping.findForward("success");
+		return unspecified(mapping, cform, request, response);
+		//return getCino(mapping, cform, request, response);
 	}
 	
 	public ActionForward fileCounterAction(ActionMapping mapping, ActionForm form, HttpServletRequest request,

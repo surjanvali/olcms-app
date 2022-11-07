@@ -88,8 +88,24 @@ public class EcourtsCaseSearchAction extends DispatchAction {
 			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
 			con = DatabasePlugin.connect();
 			
+			String caseType=cform.getDynaForm("oldNewType").toString();
 			
-			String	cino=cform.getDynaForm("caseType1").toString()+"/"+cform.getDynaForm("mainCaseNo").toString()+"/"+cform.getDynaForm("regYear1").toString();
+			String ackNoo=null;
+			
+			String cino=null;
+			
+			
+			if(caseType.equals("New")) {
+				
+				cform.setDynaForm("oldNewType", "New");
+				
+				ackNoo=cform.getDynaForm("ackNoo").toString();
+			
+			}else {
+				
+				cform.setDynaForm("oldNewType", "Legacy");
+				
+				cino=cform.getDynaForm("caseType1").toString()+"/"+cform.getDynaForm("mainCaseNo").toString()+"/"+cform.getDynaForm("regYear1").toString();
 				
 				if (cform.getDynaForm("caseType1") != null && !cform.getDynaForm("caseType1").toString().contentEquals("")
 						&& !cform.getDynaForm("caseType1").toString().contentEquals("0")) {
@@ -106,7 +122,13 @@ public class EcourtsCaseSearchAction extends DispatchAction {
 					sqlCondition += " and a.reg_year='" + cform.getDynaForm("regYear1").toString().trim() + "' ";
 				}
 				
+			}
 			
+			System.out.println("ackNoo--"+ackNoo+"cino---"+cino);
+			
+			List<Map<String, Object>> data=null;
+			
+			if (caseType.equals("Legacy")) {
 				
 				sql = "select a.*, "
 						+ " nda.fullname_en as fullname, nda.designation_name_en as designation, nda.post_name_en as post_name, nda.email, nda.mobile1 as mobile,dim.district_name , "
@@ -118,6 +140,12 @@ public class EcourtsCaseSearchAction extends DispatchAction {
 						+ " left join district_mst dim on (a.dist_id=dim.district_id) "
 						+ " inner join ecourts_mst_case_status ecs on (a.case_status=ecs.status_id) "
 						+ " left join nic_data_all nda on (a.dept_code=substr(nda.global_org_name,1,5) and a.assigned_to=nda.email and nda.is_primary='t' and coalesce(a.dist_id,'0')=coalesce(nda.dist_id,'0')) "
+				
+				/*sql = "select a.*, "
+						+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer, ra.address from ecourts_case_data a "
+						+ " left join nic_prayer_data np on (a.cino=np.cino)"
+						+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "*/
+						
 						+ " left join"
 						+ " ("
 						+ " select cino, string_agg('<a href=\"./'||order_document_path||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||order_details||'</span></a><br/>','- ') as orderpaths"
@@ -132,12 +160,34 @@ public class EcourtsCaseSearchAction extends DispatchAction {
 				
 				
 			System.out.println("ecourts SQL:" + sql);
-			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
+			 data = DatabasePlugin.executeQuery(sql, con);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
 				request.setAttribute("CASESLISTOLD", data);
 
 			} else {
 				request.setAttribute("errorMsg", "No Records Found");
+			}
+			}else {
+				
+				sql = "select a.slno ,ad.respondent_slno, a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , a.remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
+						+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
+						+ "to_char(a.inserted_time,'dd-mm-yyyy') as generated_date, "
+						+ "getack_dept_desc(a.ack_no::text) as dept_descs , coalesce(a.hc_ack_no,'-') as hc_ack_no "
+						+ " from ecourts_gpo_ack_depts ad inner join ecourts_gpo_ack_dtls a on (ad.ack_no=a.ack_no) "
+						+ " left join district_mst dm on (ad.dist_id=dm.district_id) "
+						+ " left join dept_new dmt on (ad.dept_code=dmt.dept_code)"
+						+ " inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name)  "
+						+ " where a.delete_status is false and ack_type='NEW'    and (a.ack_no='"+ackNoo+"' or a.hc_ack_no='"+ackNoo+"' )    "
+						+ " order by a.inserted_time desc";
+
+			System.out.println("ecourts SQL:" + sql);
+		 data = DatabasePlugin.executeQuery(sql, con);
+			if (data != null && !data.isEmpty() && data.size() > 0) {
+				request.setAttribute("CASESLISTNEW", data);
+
+			} else {
+				request.setAttribute("errorMsg", "No Records Found");
+			}
 			}
 
 			cform.setDynaForm("caseTypesListShrt", DatabasePlugin.getSelectBox( "select  upper(trim(case_short_name)) as sno,upper(trim(case_short_name)) as case_full_name from case_type_master order by sno", con));
@@ -149,12 +199,23 @@ public class EcourtsCaseSearchAction extends DispatchAction {
 			}
 			cform.setDynaForm("yearsList", selectData);
 
+			
+			if(caseType.equals("New")) {
+				cform.setDynaForm("cino", ackNoo);
+			//	request.setAttribute("cinooo", ackNoo);
+				}else {
+				cform.setDynaForm("cino", ((Map) data.get(0)).get("cino"));
+				//request.setAttribute("cinooo", ((Map) data.get(0)).get("cino"));
+				}
 				
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			saveToken(request);
-			
+			/*
+			 * cform.setDynaForm("caseType1",""); cform.setDynaForm("regYear1","");
+			 * cform.setDynaForm("mainCaseNo",""); cform.setDynaForm("ackNoo","");
+			 */
 			DatabasePlugin.close(con, ps, null);
 		}
 

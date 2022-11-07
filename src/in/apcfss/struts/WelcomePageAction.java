@@ -718,8 +718,13 @@ public class WelcomePageAction extends DispatchAction{
 					
 					  sql="select count(distinct a.cino) from ecourts_dept_instructions a where a.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"' and legacy_ack_flag='Legacy')";
 					  
-					  sql=" select count(distinct a.cino) from ecourts_dept_instructions a  "
-					  		+ "where a.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='gp-cooperation@ap.gov.in' and legacy_ack_flag in ('New','Legacy') )";
+					  sql=" select count(distinct cino) from (  "
+					  		+ "select distinct a.cino as cino from ecourts_dept_instructions a inner join ecourts_case_data d on (a.cino=d.cino) "
+					  		+ " where d.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"' and legacy_ack_flag in ('New','Legacy') )  "
+					  		+ "UNION   "
+					  		+ "select distinct a.cino as cino from ecourts_dept_instructions a  "
+					  		+ "inner join  ecourts_gpo_ack_dtls ad on (a.cino=ad.ack_no) inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no)                                                      "
+					  		+ " where d.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userid+"' and legacy_ack_flag in ('New','Legacy') )  ) x";
 					  System.out.println("instruction SQL:"+sql);
 					  request.setAttribute("INSTRUCTIONSCOUNT", DatabasePlugin.getStringfromQuery(sql, con));
 					  
@@ -737,14 +742,14 @@ public class WelcomePageAction extends DispatchAction{
 						 * + "and emgd.gp_id='"+userid+"'";
 						 */
 					
-					sql="select count(*) from "
-							+ "( select count(a.cino) as tot From ecourts_olcms_case_details a  "
+					sql="select count(distinct cino) from "
+							+ "( select a.cino as cino From ecourts_olcms_case_details a  "
 							+ "							inner join ecourts_case_data ecd on (a.cino=ecd.cino)   "
 							+ "							inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code and ecd.assigned_to=emgd.gp_id)  "
 							+ "							where pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'No')='Yes' and (counter_filed='No' or counter_filed='Yes') and coalesce(counter_approved_gp,'F')='F' and ecd.case_status='6'  "
 							+ "							and emgd.gp_id='"+userid+"' "
 							+ "UNION ALL "
-							+ "select count(ad.ack_no) as tot From ecourts_olcms_case_details a inner join  ecourts_gpo_ack_dtls ad on (a.cino=ad.ack_no) inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no)   "
+							+ "select a.cino as cino From ecourts_olcms_case_details a inner join  ecourts_gpo_ack_dtls ad on (a.cino=ad.ack_no) inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no)   "
 							+ "							inner join ecourts_mst_gp_dept_map emgd on (d.dept_code=emgd.dept_code and d.assigned_to=emgd.gp_id)  "
 							+ "							where pwr_uploaded='Yes' and coalesce(pwr_approved_gp,'No')='Yes' and (counter_filed='No' or counter_filed='Yes') and coalesce(counter_approved_gp,'F')='F' and d.case_status='6'  "
 							+ "							and emgd.gp_id='"+userid+"' ) x" ;
@@ -768,14 +773,14 @@ public class WelcomePageAction extends DispatchAction{
 							+ "and emgd.gp_id='"+userid+"'  ";*/
 					
 					
-					sql="select count(*) from "
-							+ "( select count(*) From ecourts_olcms_case_details a  "
+					sql="select count(distinct cino) from "
+							+ "( select a.cino as cino From ecourts_olcms_case_details a  "
 							+ "							inner join ecourts_case_data ecd on (a.cino=ecd.cino)   "
 							+ "							inner join ecourts_mst_gp_dept_map emgd on (ecd.dept_code=emgd.dept_code and ecd.assigned_to=emgd.gp_id)  "
 							+ "							where (pwr_uploaded='No' or pwr_uploaded='Yes') and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6'  "
 							+ "							and emgd.gp_id='"+userid+"' "
 							+ "UNION ALL "
-							+ "select count(*) From ecourts_olcms_case_details a  "
+							+ "select a.cino as cino From ecourts_olcms_case_details a  "
 							+ "							inner join  ecourts_gpo_ack_dtls ad on (a.cino=ad.ack_no) inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no)  "
 							+ "							inner join ecourts_mst_gp_dept_map emgd on (d.dept_code=emgd.dept_code and d.assigned_to=emgd.gp_id)  "
 							+ "							where (pwr_uploaded='No' or pwr_uploaded='Yes') and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and d.case_status='6'  "
@@ -899,8 +904,16 @@ public class WelcomePageAction extends DispatchAction{
 				else if(roleId.equals("13") || roleId.equals("14")) { // HC-DEOs
 					
 				}
-				else if(roleId.equals("18") || roleId.equals("19")) { // AG OFFICE
+				else if(roleId.equals("18") ) { // Adv general
+					request.setAttribute("ADVGENRL", "ADVGENRL");
+					
+				}
+				else if(roleId.equals("19") ) { // AG OFFICE
 					request.setAttribute("AGOFFICE", "AGOFFICE");
+					
+				}
+				else if(roleId.equals("20") ) { // AG OFFICE clerk
+					request.setAttribute("AGOFFICECLRK", "AGOFFICECLRK");
 					
 				}
 				
@@ -913,12 +926,12 @@ public class WelcomePageAction extends DispatchAction{
 				}
 				
 				// sql="select * from ecourts_case_activities where inserted_by='"+userid+"' order by inserted_on desc limit 10 ";
-				sql = "select cino, action_type, inserted_by, to_char(inserted_on,'dd-mm-yyyy hh:MM:ss') as inserted_time , assigned_to, remarks, coalesce(uploaded_doc_path,'-') as uploaded_doc_path, dist_id , dn.dept_code||' - '||dn.description as deptdesc,"
-						+ " nd.fullname_en,nd.post_name_en , dm.district_name " + "from ecourts_case_activities ca "
+				sql = "select ca.cino, action_type, (type_name_reg||'/'||reg_no||'/'||reg_year) as case_no,inserted_by, to_char(inserted_on,'dd-mm-yyyy hh:MM:ss') as inserted_time , ca.assigned_to, remarks, coalesce(uploaded_doc_path,'-') as uploaded_doc_path, ca.dist_id , dn.dept_code||' - '||dn.description as deptdesc,"
+						+ " nd.fullname_en,nd.post_name_en , dm.district_name " + "from ecourts_case_activities ca inner join ecourts_case_data ecd on (ecd.cino=ca.cino) "
 						+ "left join (select distinct employee_id,fullname_en,post_name_en from nic_data) nd on (ca.assigned_to=employee_id) "
 						+ "left join dept_new dn on (ca.assigned_to=dn.dept_code) "
 						+ "left join district_mst dm on (ca.dist_id=dm.district_id) " + "where inserted_by='" + userid
-						+ "' and cino is not null and cino!='null' order by inserted_on desc limit 10";
+						+ "' and ca.cino is not null and ca.cino!='null' order by inserted_on desc limit 10";
 				System.out.println("RECENT ACTIVITY SQL:" + sql);
 				request.setAttribute("recentActivities", DatabasePlugin.executeQuery(con, sql));
 			}

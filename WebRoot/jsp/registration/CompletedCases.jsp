@@ -16,7 +16,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	
 </div>
 <div class="page-content fade-in-up">
-	<html:form action="/AssignedCasesByAG"
+	<html:form action="/CompletedCases"
 		styleId="AssignedCasesToSectionForm">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden property="dynaForm(roleId)" styleId="roleId" />
@@ -71,6 +71,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<!-- <th>Case Type</th>
 									<th>Reg.No.</th>
 									<th>Reg. Year</th> -->
+
+									
 									<!-- <th>Prayer</th> -->
 
 									<!-- <th>Filing No.</th>
@@ -86,7 +88,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Respondent Advocate</th>
 									<!-- <th>Orders</th>
 								<th style="width: 150px !important;">Action / Status</th> -->
-								<!-- <th>Scanned Affidavit</th> -->
+								<th>Case Status</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -94,9 +96,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<logic:iterate id="map" name="CASESLIST" indexId="i">
 									<tr>
 										<td>${i+1 }</td>
-										<td nowrap="nowrap">
-										<button class="btn btn-sm btn-primary"
-												onclick="viewCaseDtls('${map.cino}');">${map.type_name_fil }/${map.reg_no}/${map.reg_year}</button>
+										<td nowrap="nowrap">${map.type_name_fil }/${map.reg_no}/${map.reg_year}
 										</td>
 										<td>${map.cino}
 											<!-- <a href="./AssignedCasesToSection.do?mode=getCino"
@@ -173,16 +173,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												onclick="javascript:viewCaseDetailsPopup1('${map.cino}');" />
 											
 											</td> --%>
-											<%-- <td><logic:notEmpty name="map"
-												property="scanned_document_path1">
-												<logic:notEqual value="-" name="map"
-													property="scanned_document_path1">
-													<a href="./${map.scanned_document_path}" target="_new"
-														class="btn btn-sm btn-info"><i
-														class="glyphicon glyphicon-save"></i><span>Scanned
-															Affidavit</span></a>
-												</logic:notEqual>
-											</logic:notEmpty></td> --%>
+											<td>${map.status}</td>
 								</logic:iterate>
 							</logic:notEmpty>
 						</tbody>

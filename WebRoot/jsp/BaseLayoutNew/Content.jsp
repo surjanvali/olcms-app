@@ -407,12 +407,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</a>
 				</div>
 				
-				<logic:notEmpty name="AGOFFICE">
+				<logic:notEmpty name="ADVGENRL">
 				<div class="col-lg-3 col-md-6">
 					<a href="./AssignmentOfCasesByAG.do">
 						<div class="ibox bg-danger color-white widget-stat">
 							<div class="ibox-body">
-								<h2 class="m-b-5 font-strong">Assign Case</h2>
+								<h2 class="m-b-5 font-strong">Assign Cases</h2>
 								<div class="m-b-5">&nbsp;</div>
 								<i class="fa fa-file-text-o widget-stat-icon"></i>
 								<div>
@@ -422,6 +422,103 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</a>
 				</div>
+				
+				<div class="col-lg-3 col-md-6">
+					<a href="./CompletedCasesBySplGP.do">
+						<div class="ibox bg-danger color-white widget-stat">
+							<div class="ibox-body">
+								<h2 class="m-b-5 font-strong">Assigned Cases</h2>
+								<div class="m-b-5">&nbsp;</div>
+								<i class="fa fa-file-text-o widget-stat-icon"></i>
+								<div>
+									<small> &nbsp;</small>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<div class="col-lg-3 col-md-6">
+					<a href="./EcourtsCaseSearch.do">
+						<div class="ibox bg-primary color-white widget-stat">
+							<div class="ibox-body">
+								<h2 class="m-b-5 font-strong">Search Case </h2>
+								<div class="m-b-5">&nbsp;</div>
+								<i class="fa fa-file-text-o widget-stat-icon"></i>
+								<div>
+									<small> &nbsp;</small>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				</logic:notEmpty>
+				
+				<logic:notEmpty name="AGOFFICE">
+				<div class="col-lg-3 col-md-6">
+					<a href="./AssignedCasesByAG.do">
+						<div class="ibox bg-primary color-white widget-stat">
+							<div class="ibox-body">
+								<h2 class="m-b-5 font-strong">Inbox</h2>
+								<div class="m-b-5">&nbsp;</div>
+								<i class="fa fa-file-text-o widget-stat-icon"></i>
+								<div>
+									<small> &nbsp;</small>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<div class="col-lg-3 col-md-6">
+					<a href="./CompletedCases.do">
+						<div class="ibox bg-danger color-white widget-stat">
+							<div class="ibox-body">
+								<h2 class="m-b-5 font-strong">Completed Cases</h2>
+								<div class="m-b-5">&nbsp;</div>
+								<i class="fa fa-file-text-o widget-stat-icon"></i>
+								<div>
+									<small> &nbsp;</small>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<div class="col-lg-3 col-md-6">
+					<a href="./CasesSentByAGOffice.do">
+						<div class="ibox bg-primary color-white widget-stat">
+							<div class="ibox-body">
+								<h2 class="m-b-5 font-strong"> Cases Sent By AG-OFFICE</h2>
+								<div class="m-b-5">&nbsp;</div>
+								<i class="fa fa-file-text-o widget-stat-icon"></i>
+								<div>
+									<small> &nbsp;</small>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<div class="col-lg-3 col-md-6">
+					<a href="./EcourtsCaseSearch.do">
+						<div class="ibox bg-primary color-white widget-stat">
+							<div class="ibox-body">
+								<h2 class="m-b-5 font-strong">Search Case </h2>
+								<div class="m-b-5">&nbsp;</div>
+								<i class="fa fa-file-text-o widget-stat-icon"></i>
+								<div>
+									<small> &nbsp;</small>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				</logic:notEmpty>
+				
+				<logic:notEmpty name="AGOFFICECLRK">
 				
 				<div class="col-lg-3 col-md-6">
 					<a href="./AssignedCasesByAG.do">
@@ -438,11 +535,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</a>
 				</div>
 				
-				<div class="col-lg-3 col-md-6">
-					<a href="./AssignedCasesByAG.do">
+					<div class="col-lg-3 col-md-6">
+					<a href="./SendCases.do">
 						<div class="ibox bg-primary color-white widget-stat">
 							<div class="ibox-body">
-								<h2 class="m-b-5 font-strong"> Cases sent By AG Office</h2>
+								<h2 class="m-b-5 font-strong"> Send Cases</h2>
 								<div class="m-b-5">&nbsp;</div>
 								<i class="fa fa-file-text-o widget-stat-icon"></i>
 								<div>
@@ -626,6 +723,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<tr>
 												<th>Sl.No</th>
 												<th>CINo.</th>
+												<th>Case Number</th>
 												<th>Activity</th>
 												<th>Assigned To</th>
 												<th>Remarks</th>
@@ -638,6 +736,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												<tr>
 													<td>${i+1 }</td>
 													<td>${map.cino }</td>
+													<td>${map.case_no}</td>
 													<td>${map.action_type }</td>
 													<td>${map.assigned_to}</td>
 													<td>${map.remarks}</td>

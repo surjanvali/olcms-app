@@ -271,7 +271,7 @@ public class EcourtsDeptInstructionNewAction extends DispatchAction {
 					request.setAttribute("CASESLISTOLD", data);
 					cform.setDynaForm("cino", ((Map) data.get(0)).get("cino"));
 					
-					sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + ((Map) data.get(0)).get("cino") + "'  order by 1 ";
+					sql = "select instructions,to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + ((Map) data.get(0)).get("cino") + "'  order by insert_time desc ";
 					System.out.println("sql--" + sql);
 					List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
 					request.setAttribute("existDataOld", existData);
@@ -301,7 +301,7 @@ public class EcourtsDeptInstructionNewAction extends DispatchAction {
 					
 					cform.setDynaForm("cino", ackNoo);
 					//	request.setAttribute("cinooo", ackNoo);
-					sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + ackNoo + "'  order by 1 ";
+					sql = "select instructions, to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + ackNoo + "'  order by insert_time desc ";
 					System.out.println("sql--" + sql);
 					List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
 					request.setAttribute("existDataNew", existData);

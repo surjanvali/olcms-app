@@ -55,10 +55,36 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="ibox-title">Case Search</div>
 				</div>
 				<div class="ibox-body">
+					<!-- <h4 class="m-t-0 header-title">
+		<b>High Court Cases List</b>
+	</h4>
+	<hr /> -->
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label class="ui-radio ui-radio-inline"> <html:radio
+										property="dynaForm(oldNewType)" styleId="oldNewType"
+										value="New" onchange="caseTypeSelect();">
+										<span class="input-span"></span>
+										<b>New Cases</b>
+									</html:radio>
+								</label> <label class="ui-radio ui-radio-inline"> <html:radio
+										property="dynaForm(oldNewType)" styleId="oldNewType"
+										value="Legacy" onchange="caseTypeSelect();">
+										<span class="input-span"></span>
+										<b>Legacy Cases</b>
+									</html:radio>
+								</label>
+
+							</div>
+						</div>
+					</div>
 
 					<div class="row oldTypediv">
 						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 							<div class="form-group">
+								<!-- <label>Select Case Type. (WP/WA/AS/CRP Nos.) </label> -->
 								<div class="row col-md-12">
 									<div class="row col-md-4">
 									<label> Case Type</label>
@@ -73,9 +99,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											</logic:notEmpty>
 										</html:select>
 									</div>
-									
 									<div class="col-md-4">
-									<label> Case No</label>
+									<label> Case Year</label>
 										<html:select styleId="regYear1" property="dynaForm(regYear1)"
 											style="width: 100%;" onchange="getCaseTypedetails();"
 											styleClass="select2Class">
@@ -87,9 +112,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											</logic:notEmpty>
 										</html:select>
 									</div>
-									
 									<div class="col-md-4">
-									<label> Case Year</label>
+									<label> Case Number</label>
 										<html:text styleId="mainCaseNo" styleClass="form-control"
 											style="width: 100%;" property="dynaForm(mainCaseNo)"
 											onchange="getCaseTypedetails();" maxlength="7"
@@ -101,6 +125,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 
+					<div class="row NewTypediv">
+						<div class="col-md-4">
+						<label> Enter Acknowledge Number </label><span class="input-span">*</span>
+						<html:text styleId="ackNoo" styleClass="form-control"
+											style="width: 100%;" property="dynaForm(ackNoo)" maxlength="30"
+											onkeypress="return isNumberKey(this);" /></div>
+					</div>
+<br>
 					<div class="row">
 						<div class="col-md-12 col-xs-12">
 							<input type="submit" name="submit" value="Get Cases"
@@ -403,6 +435,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	function fnShowCases() {
 
+		var chkdVal = $("#oldNewType:checked").val();
+		//alert (chkdVal);
+
+		if ((chkdVal == null || chkdVal == "" || chkdVal == "0")) {
+			alert("Select Type Of Case");
+			$("#oldNewType").focus();
+			return false;
+		}
+
+		if (chkdVal == "Legacy") {
+
 			if (($("#caseType1").val() == null || $("#caseType1").val() == "" || $(
 					"#caseType1").val() == "0")) {
 				alert("Select Case Type");
@@ -424,6 +467,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				return false;
 			}
 
+		} else {
+
+			if (($("#ackNoo").val() == null || $("#ackNoo").val() == "" )) {
+				alert("Enter Ack No");
+				$("#ackNoo").focus();
+				return false;
+			}
+
+		}
+
+		// alert("Please select a filter to get the data.");
 
 		$("#mode").val("getCasesList");
 		$("#HighCourtCasesListForm").submit();

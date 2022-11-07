@@ -83,7 +83,7 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 
 			sql = "select * from ecourts_case_emp_assigned_dtls a inner join ecourts_case_data b on (a.cino=b.cino)"
 					+ " inner join (select distinct employee_id,employee_identity,global_org_name,fullname_en,designation_name_en,mobile1, email from nic_data where coalesce(employee_id,'')!='') c"
-					+ " on (a.emp_id=c.employee_id and a.emp_section=trim(c.employee_identity))" 
+					+ " on ( a.emp_section=trim(c.employee_identity))"  //a.emp_id=c.employee_id and
 					//+ " where dept_id='" + session.getAttribute("dept_id") + "' " 
 					+ " where a.inserted_by='" + session.getAttribute("userid") + "' " 
 					+ " order by a.inserted_time";

@@ -342,7 +342,7 @@ body {
 			<div class="ibox-head">
 				<div class="ibox-title">
 					<h4 class="m-t-0 header-title">
-						<b>Replay to Instructions
+						<b>Reply to Instructions
 </b>
 					</h4>
 				</div>
@@ -434,7 +434,7 @@ body {
 			<div class="ibox-head">
 				<div class="ibox-title">
 					<h4 class="m-t-0 header-title">
-						<b>Replay to Instructions
+						<b>Reply to Instructions
 </b>
 					</h4>
 				</div>

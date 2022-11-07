@@ -358,10 +358,12 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 				String distCode = CommonModels.checkStringObject(cform.getDynaForm("caseDist1"));
 				String empDeptCode = CommonModels.checkStringObject(cform.getDynaForm("empDept"));
 
+				System.out.println("empDeptCode---"+empDeptCode);
+				System.out.println("sub---"+empDeptCode.toString().substring(0, 5));
 				String tableName = AjaxModels.getTableName(distCode, con);
 
 				String emailId = DatabasePlugin.getStringfromQuery("select distinct trim(email) from " + tableName
-						+ " where substring(global_org_name,1,5)='" + cform.getDynaForm("empDept")
+						+ " where substring(global_org_name,1,5)='" + cform.getDynaForm("empDept").toString().substring(0, 5)
 						+ "' and trim(employee_identity)='" + cform.getDynaForm("empSection")
 						+ "' and trim(post_name_en)='" + cform.getDynaForm("empPost") + "' and trim(employee_id)='"
 						+ cform.getDynaForm("employeeId") + "' and email is not null ", con);
@@ -459,6 +461,12 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 					}
 
 					// NEW SECTION OFFICER CREATION
+					/*
+					 * if (Integer.parseInt(DatabasePlugin.getStringfromQuery(
+					 * "select count(*) from section_officer_details where  employeeid='"+
+					 * cform.getDynaForm("employeeId") +"' ", con)) == 0) { con.commit();
+					 */
+					
 					sql = "insert into section_officer_details (emailid, dept_id,designation,employeeid,mobileno,aadharno,inserted_by,inserted_ip, dist_id) "
 							+ "select distinct b.email,d.sdeptcode||d.deptcode,b.designation_id,b.employee_id,b.mobile1,uid, '"
 							+ (String) session.getAttribute("userid") + "', '" + request.getRemoteAddr() + "'::inet,"
@@ -468,6 +476,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 					//+ " where b.employee_id='" + cform.getDynaForm("employeeId") + "'";
 					System.out.println("NEW SECTION OFFICER CREATION SQL:" + sql);
 					b += DatabasePlugin.executeUpdate(sql, con);
+					
 
 					sql = "insert into users (userid, password, user_description, created_by, created_on, created_ip, dept_id, dept_code, user_type, dist_id) "
 							+ "select distinct b.email, md5('olcms@2021'), b.fullname_en, '"
@@ -481,6 +490,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 					System.out.println("USER CREATION SQL:" + sql);
 
 					b += DatabasePlugin.executeUpdate(sql, con);
+					//}
 
 					// sql = "select distinct mobile1 from " + tableName + " where employee_id='"+ cform.getDynaForm("employeeId") + "' and mobile1 is not null";
 					sql="select distinct mobile1 from "+tableName+" b "
@@ -493,8 +503,10 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 					sql = "insert into user_roles (userid, role_id) values ('" + emailId + "','" + newRoleId + "')";
 					System.out.println("INSERT ROLE SQL:" + sql);
 					b += DatabasePlugin.executeUpdate(sql, con);
+					
+					System.out.println("b--"+b);
 
-					if (b == 3) {
+					if (b > 0) {
 						String smsText = "Your User Id is " + emailId
 								+ " and Password is olcms@2021 to Login to https://apolcms.ap.gov.in/ Portal. Please do not share with anyone. \r\n-APOLCMS";
 						String templateId = "1007784197678878760";

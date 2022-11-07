@@ -89,10 +89,15 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 			userid = CommonModels.checkStringObject(session.getAttribute("userid"));
 			con = DatabasePlugin.connect();
 			
-			Date date = new Date();
-			SimpleDateFormat DateFor = new SimpleDateFormat("MM/dd/yyyy");
-			String stringDate = DateFor.format(date);
-			System.out.println("Date Format with MM/dd/yyyy : "+stringDate);
+			Date curDate = new Date();
+		      SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+		      
+		      String stringDate = format.format(curDate);
+		      System.out.println(stringDate);
+		      
+		      format = new SimpleDateFormat("dd/M/yyyy");
+		      stringDate = format.format(curDate);
+		      System.out.println("---"+stringDate);
 
 			
 			if (cform.getDynaForm("dofFromDate") != null
@@ -109,14 +114,13 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 			
 			sql= " select distinct c.cino,c.dept_code,c.type_name_reg,c.reg_no,c.reg_year,d.prayer, a.est_code , a. causelist_date , a.bench_id , a. causelist_id , cause_list_type ,coalesce(causelist_document,'') as document, b.judge_name "
 					+ "from ecourts_causelist_bench_data a  left join  ecourts_causelist_data b on (a.bench_id=b.bench_id) inner join  ecourts_case_data c on (a.bench_id=c.bench_id)  and (a.cause_list_type=c.causelist_type)  inner join nic_prayer_data d  on (c.cino=d.cino) "
-					+ "where a.causelist_date=to_date('09/05/2022','mm/dd/yyyy')   and assigned_to='"+userid+"'   ";   //'"+stringDate+"'
+					+ "where a.causelist_date=to_date('"+stringDate+"','dd/mm/yyyy')-1   and assigned_to='"+userid+"'   ";   //'"+stringDate+"'
 
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			// System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
 				request.setAttribute("CASESLIST", data);
-
 				
 			} else {
 				request.setAttribute("errorMsg", "No Records Found");

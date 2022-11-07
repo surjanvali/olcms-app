@@ -288,7 +288,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 			if(a>0) {
 
 				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks,uploaded_doc_path) "
-						+ " values ('" + cIno + "','REPLAY INSTRUCTIONS BY GP', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("daily_status").toString()+"','"+DailyStatus_file+"')";
+						+ " values ('" + cIno + "','REPLY INSTRUCTIONS BY GP', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("daily_status").toString()+"','"+DailyStatus_file+"')";
 				DatabasePlugin.executeUpdate(sql, con);
 
 				request.setAttribute("successMsg", "Dialy Status details saved successfully.");
@@ -445,7 +445,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 						request.setAttribute("CASESLISTOLD", data);
 						cform.setDynaForm("cino", ((Map) data.get(0)).get("cino"));
 
-						sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
+						sql = "select instructions,to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
 								+ " from ecourts_dept_instructions where cino='" + cIno + "'   order by insert_time desc limit 1 ";  //and legacy_ack_flag='Legacy'
 						System.out.println("sql--" + sql);
 						List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
@@ -457,8 +457,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 
 				}else {
 
-
-					sql = "select a.slno ,ad.respondent_slno, a.ack_no,'New' as legacy_ack_flag , distid , advocatename ,advocateccno , casetype , maincaseno , a.remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
+					sql = " select a.slno ,ad.respondent_slno, a.ack_no,'New' as legacy_ack_flag , distid , advocatename ,advocateccno , casetype , maincaseno , a.remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 							+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
 							+ "to_char(a.inserted_time,'dd-mm-yyyy') as generated_date, "
 							+ "getack_dept_desc(a.ack_no::text) as dept_descs , coalesce(a.hc_ack_no,'-') as hc_ack_no "
@@ -469,7 +468,6 @@ public class DailyStatusEntryAction extends DispatchAction {
 							+ " where a.delete_status is false and ack_type='NEW'    and (a.ack_no='"+cIno+"' or a.hc_ack_no='"+cIno+"' )  and respondent_slno='1'   "
 							+ " order by a.inserted_time desc";
 
-
 					System.out.println("ecourts SQL:" + sql);
 					data = DatabasePlugin.executeQuery(sql, con);
 					if (data != null && !data.isEmpty() && data.size() > 0) {
@@ -477,7 +475,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 
 						cform.setDynaForm("cino", cIno);
 						//	request.setAttribute("cinooo", ackNoo);
-						sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
+						sql = "select instructions,to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
 								+ " from ecourts_dept_instructions where cino='" + cIno + "'  order by insert_time desc limit 1"; //and legacy_ack_flag='New' 
 						System.out.println("sql--" + sql);
 						List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);

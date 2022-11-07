@@ -2,7 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%
-	String path = request.getContextPath();
+String path = request.getContextPath();
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 
@@ -34,10 +34,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 </div>
 <div class="page-content fade-in-up">
 	<html:form method="post" action="/AssignmentOfCasesByAG"
-		styleId="HighCourtCasesListForm">
+		enctype="multipart/form-data" styleId="HighCourtCasesListForm">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden styleId="selectedCaseIds"
 			property="dynaForm(selectedCaseIds)" />
+		<html:hidden styleId="respondentIds"
+			property="dynaForm(respondentIds)" />
+
 
 		<div class="container-fluid">
 			<div class="row">
@@ -64,146 +67,30 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 			</div>
-
-			<div class="ibox">
-				<div class="ibox-head">
-					<div class="ibox-title">List of High Court Cases </div>
-				</div>
-				<div class="ibox-body">
-					<div class="row">
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>Case Registration Year</label>
-								<html:select styleId="regYear" property="dynaForm(regYear)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---SELECT---</html:option>
-									<html:option value="ALL">ALL</html:option>
-									<logic:notEmpty name="CommonForm"
-										property="dynaForm(yearsList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(yearsList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label class="font-bold">Date of Registration(From Date)</label>
-								<div class="input-group date">
-									<span class="input-group-addon bg-white"><i
-										class="fa fa-calendar"></i></span>
-									<html:text styleId="dofFromDate"
-										property="dynaForm(dofFromDate)"
-										styleClass="form-control datepicker" />
-
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label class="font-bold">Date of Registration (To Date)</label>
-								<div class="input-group date">
-									<span class="input-group-addon bg-white"><i
-										class="fa fa-calendar"></i></span>
-									<html:text styleId="dofToDate" property="dynaForm(dofToDate)"
-										styleClass="form-control datepicker" />
-
-								</div>
-
-
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<%-- <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>Purpose</label>
-								<html:select styleId="purpose" property="dynaForm(purpose)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty name="CommonForm"
-										property="dynaForm(purposeList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(purposeList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div> --%>
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>Case Type</label>
-								<html:select styleId="caseTypeId"
-									property="dynaForm(caseTypeId)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---ALL---</html:option>
-									<logic:notEmpty name="CommonForm"
-										property="dynaForm(caseTypesList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(caseTypesList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>District</label>
-								<html:select styleId="districtId"
-									property="dynaForm(districtId)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---SELECT---</html:option>
-									<logic:notEmpty name="CommonForm" property="dynaForm(distList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(distList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-						
-						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="form-group">
-								<label>Department</label>
-								<html:select styleId="deptId" property="dynaForm(deptId)"
-									styleClass="form-control select2Class">
-									<html:option value="0">---ALL---</html:option>
-									<logic:notEmpty name="CommonForm" property="dynaForm(deptList)">
-										<html:optionsCollection name="CommonForm"
-											property="dynaForm(deptList)" />
-									</logic:notEmpty>
-								</html:select>
-							</div>
-						</div>
-					</div>
-					<!-- <div class="row">
-		<div class="col-md-12 col-xs-12">
-			<small>Cases filed in the year 2021 and 2022 were listed below. To view
-				and process other cases please use the Year filter or select
-				From and To dates. Press the "Get Cases" button for the Cases
-				List. </small>
-		</div>
-	</div> -->
-					<div class="row">
-						<div class="col-md-12 col-xs-12">
-							<input type="submit" name="submit" value="Get Cases"
-								class="btn btn-success" onclick="return fnShowCases();" />
-						</div>
-					</div>
-
-									</div>
-			</div>
-
+			
 			<logic:notEmpty name="CASESLIST">
+
 				<div class="ibox">
-					
+
 					<div class="ibox-body">
 						<div class="table-responsive">
+							<%--<div class="row">
+								<div class="col-md-12 col-xs-12">
+									<b>Selected Cases</b>
+								</div>
+							</div>
+
+							 <html:textarea styleId="testselectedCaseIds"
+								property="dynaForm(testselectedCaseIds)"
+								styleClass="form-control" cols="50" rows="3" />
+							<br /> --%>
 
 							<table id="example" class="table table-striped table-bordered"
 								style="width:100%">
 								<thead>
 									<tr>
 										<th>Sl.No</th>
-										<th></th>
+										<!-- <th></th> -->
 										<th>CINo</th>
 										<th>Scanned Affidavit</th>
 										<!-- <th>Assigned to</th> -->
@@ -222,11 +109,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Judge Name</th>
 										<th>Petitioner</th>
 										<th>District</th>
-										<th>Purpose</th>
+										<!-- <th>Purpose</th>
 										<th>Respondents</th>
 										<th>Petitioner Advocate</th>
 										<th>Respondent Advocate</th>
-										<th>Orders</th>
+										<th>Orders</th> -->
 										<!-- <th>Assign To</th> -->
 									</tr>
 								</thead>
@@ -235,19 +122,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<logic:iterate id="map" name="CASESLIST" indexId="i">
 										<tr>
 											<td>${i+1 }.</td>
-											<td>
-												<%-- <input type="checkbox" name="caseIds" value="${map.cino}" id="caseIds" class="form-control"/> --%>
-												<!-- <label class="ui-checkbox ui-checkbox-gray">
-                                            <input type="checkbox">
-                                            <span class="input-span"></span></label> -->
+										<%-- 	<td>
 
 												<div class="form-group">
 													<label class="ui-checkbox"> <input type="checkbox"
-														name="caseIds" value="${map.cino}" id="caseIds" /> <span
-														class="input-span"></span></label>
+														name="caseIds" value="${map.cino}" id="caseIds"
+														onchange="countValues();" /> <span class="input-span"></span></label>
 												</div>
 
-											</td>
+											</td> --%>
 											<td><input type="button" id="btnShowPopup"
 												value="${map.cino}"
 												class="btn btn-sm btn-info waves-effect waves-light"
@@ -269,9 +152,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												${map.fullname} - ${map.designation} <br />
 												${map.mobile} - ${map.email}
 											</td> --%>
-											
-											
-											<td nowrap="nowrap"><logic:notEmpty name="map" property="date_of_filing">
+
+
+											<td nowrap="nowrap"><logic:notEmpty name="map"
+													property="date_of_filing">
 													<logic:notEqual value="0001-01-01" name="map"
 														property="date_of_filing">
 																	${map.date_of_filing }
@@ -281,29 +165,30 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<%-- <td>${map.type_name_fil }</td>
 										<td>${map.reg_no}</td>
 										<td>${map.reg_year }</td> prayer --%>
-											<td nowrap="nowrap" >${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
+											<td nowrap="nowrap">${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
 											<td style="min-width: 300px;text-align: justify;"><logic:notEmpty
-												name="map" property="prayer">
+													name="map" property="prayer">
 
-												<logic:equal value="-" name="map" property="prayer">
+													<logic:equal value="-" name="map" property="prayer">
 												N/A
 												</logic:equal>
 
-												<logic:notEqual value="-" name="map" property="prayer">
+													<logic:notEqual value="-" name="map" property="prayer">
 										
 										
 										${map.prayer }
 										
 										<button class="btn btn-info btn-xs" data-container="body"
-														data-toggle="popover" data-trigger="hover"
-														data-placement="top" data-content="${map.prayer_full }"
-														data-original-title="" title="">View More</button>
-												</logic:notEqual>
-											</logic:notEmpty></td>
+															data-toggle="popover" data-trigger="hover"
+															data-placement="top" data-content="${map.prayer_full }"
+															data-original-title="" title="">View More</button>
+													</logic:notEqual>
+												</logic:notEmpty></td>
 
 											<td>${map.fil_no}</td>
 											<td>${map.fil_year }</td>
-											<td nowrap="nowrap"><logic:notEmpty name="map" property="date_next_list">
+											<td nowrap="nowrap"><logic:notEmpty name="map"
+													property="date_next_list">
 													<logic:notEqual value="0001-01-01" name="map"
 														property="date_next_list">
 																	${map.date_next_list }
@@ -313,15 +198,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td>Hon'ble Judge : ${map.coram }</td>
 											<td>${map.pet_name }</td>
 											<td>${map.dist_name }</td>
-											<td>${map.purpose_name }</td>
+											<%-- <td>${map.purpose_name }</td>
 											<td>${map.res_name },${map.address}</td>
 
 											<td>${map.pet_adv }</td>
 											<td>${map.res_adv }</td>
-											<td style="text-align: center;">${map.orderpaths }</td>
+											<td style="text-align: center;">${map.orderpaths }</td> --%>
 
 										</tr>
-										
+
 									</logic:iterate>
 								</tbody>
 								<tfoot>
@@ -334,7 +219,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 
-				<div class="row">
+				<%-- <div class="row">
 					<div class="col-md-12">
 						<div class="ibox">
 							<div class="ibox-head">
@@ -345,48 +230,179 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</div>
 							<div class="ibox-body">
 
-								<%-- <div class="row">
-									<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-										<div class="form-group">
-											<label>Remarks</label>
-											<html:textarea styleId="caseRemarks"
-												property="dynaForm(caseRemarks)" styleClass="form-control"
-												cols="50" rows="5">
-
-											</html:textarea>
-										</div>
-									</div>
-								</div> --%>
 								<div class="row">
-					<div class="col-md-3 col-xs-12 pull-right">
-						<b> Remarks: </b>
-					</div>
-					<div class="col-md-3 col-xs-12">
-						<html:textarea styleId="caseRemarks"
-							property="dynaForm(caseRemarks)" styleClass="form-control"
-							cols="50" rows="5">
-						</html:textarea>
-					</div>
-					
-							<div class="col-md-3 col-xs-12 pull-right">
-								<b> Upload file: </b>
-							</div>
-							<div class="col-md-3 col-xs-12">
-								<html:file property="changeLetter" styleId="changeLetter"
-									styleClass="form-control"></html:file>
-							</div>
-				</div>
+									<div class="col-md-3 col-xs-12 pull-right">
+										<b> Remarks: </b>
+									</div>
+									<div class="col-md-3 col-xs-12">
+										<html:textarea styleId="caseRemarks"
+											property="dynaForm(caseRemarks)" styleClass="form-control"
+											cols="50" rows="5">
+										</html:textarea>
+									</div>
+
+									<div class="col-md-3 col-xs-12 pull-right">
+										<b> Upload file: </b>
+									</div>
+									<div class="col-md-3 col-xs-12">
+										<html:file property="changeLetter" styleId="changeLetter"
+											styleClass="form-control"></html:file>
+									</div>
+								</div>
 								<hr />
 
 								<div class="row">
 									<div class="col-md-6">
 
+										<div class="form-group">
+											<label>Select Employee <bean:message key="mandatory" /></label>
+											<html:select styleId="emp_id" property="dynaForm(emp_id)"
+												styleClass="select2Class" style="width:100%;">
+												<html:option value="0">---SELECT---</html:option>
+												<logic:notEmpty name="CommonForm"
+													property="dynaForm(AGOFFICELIST)">
+													<html:optionsCollection name="CommonForm"
+														property="dynaForm(AGOFFICELIST)" />
+												</logic:notEmpty>
+											</html:select>
+										</div>
+										<div class="form-group">
+											<input type="submit" name="submit" value="Assign Cases"
+												class="btn btn-sm btn-primary"
+												onclick="return fnAssignCase();" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+ --%>			</logic:notEmpty>
+		</div>
+			
+			
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">Assign Cases</div>
+				</div>
+
+				<div class="ibox">
+
+					<div class="row">
+
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<table id="RESPSTABID" class="table table-bordered">
+								<thead>
+									<tr>
+										<th colspan="10">Case Details: <span class="pull-right"><input
+												type="button" value="Add" class="btn btn-sm btn-success"
+												name="add" id="addResp" /> <input type="button"
+												value="Remove" class="btn btn-sm btn-danger" name="remove"
+												id="removeResp" /></span></th>
+									</tr>
+									<tr>
+										<th style="width: 10%;">Sl No.</th>
+										<th style="width: 30%;">Case Type</th>
+										<th style="width: 30%;">Case Year</th>
+										<th style="width: 10%;">Case Number</th>
+									<!-- 	<th style="width: 20%;">Case Details</th> -->
+
+									</tr>
+								</thead>
+
+								<tbody>
+									<logic:notPresent name="cfmsdata">
+										<tr id="1">
+											<td>${i+1}</td>
+											<td><html:select styleId="caseTypeId1"
+													property="dynaForm(caseTypeId1)"
+													styleClass="form-control select2Class">
+													<html:option value="0">---SELECT---</html:option>
+													<logic:notEmpty name="CommonForm"
+														property="dynaForm(caseTypesList)">
+														<html:optionsCollection name="CommonForm"
+															property="dynaForm(caseTypesList)" />
+													</logic:notEmpty>
+												</html:select></td>
+											<td><html:select styleId="regYear1"
+													property="dynaForm(regYear1)"
+													styleClass="form-control select2Class">
+													<html:option value="0">---SELECT---</html:option>
+													<%-- <html:option value="ALL">ALL</html:option> --%>
+													<logic:notEmpty name="CommonForm"
+														property="dynaForm(yearsList)">
+														<html:optionsCollection name="CommonForm"
+															property="dynaForm(yearsList)" />
+													</logic:notEmpty>
+												</html:select></td>
+											<td><html:text styleId="caseNumber1"
+													styleClass="form-control" style="height:30px;width:300px"
+													property="dynaForm(caseNumber1)" maxlength="50" /></td>
+													
+												<!-- 	<td><div class="col-md-12 col-xs-12">
+													<input type="submit" name="submit" value="Case Details"
+														class="btn btn-success"
+														onclick="return getData();" />
+												</div></td> -->
+										</tr>
+									</logic:notPresent>
+									<logic:present name="cfmsdata">
+										<logic:iterate id="map" name="cfmsdata" indexId="i">
+											<tr id="1">
+
+												<td>${i+1}</td>
+												<td><html:text styleId="caseTypeId${i+1}"
+														styleClass="form-control" style="height:30px;width:300px"
+														property="dynaForm(caseTypeId${i+1})" maxlength="10" /></td>
+												<td><html:text styleId="regYear${i+1}"
+														styleClass="form-control" style="height:30px;width:300px"
+														property="dynaForm(regYear${i+1})" maxlength="15" /></td>
+												<td><html:text styleId="caseNumber${i+1}"
+														styleClass="form-control" style="height:30px;width:300px"
+														property="dynaForm(caseNumber${i+1})" maxlength="50" /></td>
+														<%-- <td>
+													<input type="submit" name="submit" value="Case Details${i+1}" 
+														class="btn btn-success"
+														onclick="return getData();" />
+												</td> --%>
+											</tr>
+										</logic:iterate>
+									</logic:present>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="ibox">
+								<div class="ibox-body">
+									<div class="row ">
+							<div class="col-md-3 col-xs-12 pull-right">
+								<b> Enter Remarks </b>
+							</div>
+							<div class="col-md-3 col-xs-12">
+								<html:textarea styleId="caseRemarks"
+									property="dynaForm(caseRemarks)" styleClass="form-control"
+									cols="50" rows="5">
+								</html:textarea>
+							</div>
+						</div>
+						<div class="row ">
+							<div class="col-md-3 col-xs-12 pull-right">
+								<b> Upload file: </b>
+							</div><br>
+							<div class="col-md-3 col-xs-12">
+								<html:file property="changeLetter" styleId="changeLetter"
+									styleClass="form-control"></html:file>
+							</div>
+						</div>
+									<hr />
+									<div class="row">
+										<div class="col-md-6">
 											<div class="form-group">
-												<label>Select Employee <bean:message
-														key="mandatory" /></label>
-												<html:select styleId="emp_id"
-													property="dynaForm(emp_id)" styleClass="select2Class"
-													style="width:100%;">
+												<label>Select Employee <bean:message key="mandatory" /></label>
+												<html:select styleId="emp_id" property="dynaForm(emp_id)"
+													styleClass="select2Class" style="width:100%;">
 													<html:option value="0">---SELECT---</html:option>
 													<logic:notEmpty name="CommonForm"
 														property="dynaForm(AGOFFICELIST)">
@@ -395,19 +411,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													</logic:notEmpty>
 												</html:select>
 											</div>
-											<div class="form-group">
-												<input type="submit" name="submit"
-													value="Assign Cases"
-													class="btn btn-sm btn-primary"
-													onclick="return fnAssignCase();" />
+											<div class="row" style="text-align: right">
+												<div class="col-md-12 col-xs-12">
+													<input type="submit" name="submit" value="Assign Cases"
+														class="btn btn-success"
+														onclick="return fnSubmitCategory();" />
+												</div>
 											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+
 				</div>
-			</logic:notEmpty>
-		</div>
+			</div>
 	</html:form>
 </div>
 
@@ -436,7 +455,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		</div>
 	</div>
 </div>
-
 
 <script type="text/javascript"
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -469,7 +487,6 @@ $(document).ready(function() {
 		$('#example2').DataTable();
 	}
 	
-	// alert("Cases filed in the year 2021 listed below. To view and process other cases please use the Year filter or select From and To dates. Press the 'Get Cases' button for the Cases List.");
 	$('#panel-modal').modal({backdrop : 'static', keyboard : false});
 	$('#panel-modal').modal('show');
 	
@@ -479,9 +496,38 @@ $(document).ready(function() {
 	});
 });
 
-	function backFn() {
-		document.forms[0].mode.value = "unspecified";
-		document.forms[0].submit();
+	/* function getData() {
+		
+		if($("#caseTypeId1").val()==null || $("#caseTypeId1").val()=="" || $("#caseTypeId1").val()=="0" ){
+			alert("Enter case Type");
+			$("#caseTypeId").focus();
+			return false;
+		} 
+		if($("#regYear1").val()==null || $("#regYear1").val()=="" || $("#regYear1").val()=="0" ){
+			alert("Enter Reg Year");
+			$("#regYear1").focus();
+			return false;
+		} 
+		if($("#caseNumber1").val()==null || $("#caseNumber1").val()=="" || $("#caseNumber1").val()=="0" ){
+			alert("Enter case Type");
+			$("#caseNumber1").focus();
+			return false;
+		} 
+		
+		
+		$("#mode").val("getCasesList");
+		$("#HighCourtCasesListForm").submit();
+	} */
+	
+	
+	function countValues(){
+		//alert("val--"+val);
+		var testval = [];
+		 $('#caseIds:checked').each(function() {
+		   testval.push($(this).val());
+		 });
+		 $("#testselectedCaseIds").val(testval);
+		// alert("testselectedCaseIds:"+$("#testselectedCaseIds").val());
 	}
 	
 function fnAssignCase(){
@@ -508,347 +554,12 @@ function fnAssignCase(){
 	}
 	
 	function fnShowCases() {
-		
-		
-		/* if(($("#regYear").val()=="" || $("#regYear").val()=="0") 
-				&& ($("#dofFromDate").val() == null || $("#dofFromDate").val() == "" || $("#dofFromDate").val() == "0")
-		&& 	($("#purpose").val() == null || $("#purpose").val() == "" || $("#purpose").val() == "0")
-		&& ($("#districtId").val() == null || $("#districtId").val() == "" || $("#districtId").val() == "0")
-		){
-			alert("Please select a filter to get the data.");
-			return false;
-		}
-		
-		if (!($("#dofFromDate").val() == null || $("#dofFromDate").val() == "" || $("#dofFromDate").val() == "0")
-				&& ($("#dofToDate").val() == null || $("#dofToDate").val() == "" || $("#dofToDate").val() == "0")
-		)
-		{
-			alert("Select Filing To Date");
-			$("#dofToDate").focus();
-			return false;
-		} */
-		
-		/*if ($("#dofFromDate").val() == null || $("#dofFromDate").val() == "" || $("#dofFromDate").val() == "0") {
-			alert("Select Filing From Date");
-			$("#dofFromDate").focus();
-			return false;
-		} else if ($("#dofToDate").val() == null || $("#dofToDate").val() == "" || $("#dofToDate").val() == "0") {
-			alert("Select Filing To Date");
-			$("#dofToDate").focus();
-			return false;
-		}
-
-		if ($("#purpose").val() == null || $("#purpose").val() == "" || $("#purpose").val() == "0") {
-			alert("Select Purpose");
-			$("#purpose").focus();
-			return false;
-		}
-
-		if (($("#dofFromDate").val() == null || $("#dofFromDate").val() == "" || $("#dofFromDate").val() == "0") && ($("#purpose").val() == null || $("#purpose").val() == "" || $("#purpose").val() == "0")) {
-			alert("Select an Option to retrieve Data");
-			$("#purpose").focus();
-			return false;
-		}*/
-		
 		$("#mode").val("getCasesList");
 		$("#HighCourtCasesListForm").submit();
 	}
 
 	
-	function populateDeptSecs() {
-		$("#empSection").select2('destroy');
-		// alert($("#empDept").val());
-		var data = {
-			mode : "AjaxAction",
-			empDept : $("#empDept").val(),
-			getType : "getEmpDeptSectionsList",
-			distCode : $("#caseDist1") ? $("#caseDist1").val() : "0"
-		}
-		$.post("AjaxModels.do", data).done(function(res) {
-			if (res != '') {
-				$("#empSection").html(res);
-			}
-		}).fail(function(exc) {
-			alert("Error Occured.Please Try Again");
-		});
-		$("#empSection").select2();
-		$("#empSection").select2("val", "0");
-		
-	}
-
-	function populatePostDetails() {
-		$("#empPost").select2('destroy');
-		var data = {
-			mode : "AjaxAction",
-			empSec : $("#empSection").val(),
-			empDept : $("#empDept").val(),
-			getType : "getEmpPostsList",
-			distCode : $("#caseDist1") ? $("#caseDist1").val() : "0"
-		}
-		$.post("AjaxModels.do", data).done(function(res) {
-			if (res != '') {
-				$("#empPost").html(res);
-			}
-		}).fail(function(exc) {
-			alert("Error Occured.Please Try Again");
-		});
-		$("#empPost").select2();
-		$("#empPost").select2("val", "0");
-		
-	}
-
-	function populateEmpDetails() {
-		$("#employeeId").select2('destroy');
-		var data = {
-			mode : "AjaxAction",
-			empDept : $("#empDept").val(),
-			empSec : $("#empSection").val(),
-			empPost : $("#empPost").val(),
-			getType : "getEmpsList",
-			distCode : $("#caseDist1") ? $("#caseDist1").val() : "0"
-		}
-		$.post("AjaxModels.do", data).done(function(res) {
-			if (res != '') {
-				$("#employeeId").html(res);
-			}
-		}).fail(function(exc) {
-			alert("Error Occured.Please Try Again");
-		});
-		$("#employeeId").select2();
-		$("#employeeId").select2("val", "0");
-		
-	}
 	
-	
-	
-	
-	function assignCourtCase2() {
-	var cINO = $("#cINO").val();
-		// alert("AJAX SUBMIT:	"+cINO);
-		if (cINO == null || cINO == "" || cINO == "0") {
-			alert("Invalid data");
-			return false;
-		} 
-		else if ($("#empDept").val() == null || $("#empDept").val() == "" || $("#empDept").val() == "0") {
-			alert("Select Employee Department");
-			$("#empDept").focus();
-			return false;
-		}
-		else if ($("#empSection").val() == null || $("#empSection").val() == "" || $("#empSection").val() == "0") {
-			alert("Select Employee Section");
-			$("#empSection").focus();
-			return false;
-		} else if ($("#empPost").val() == null || $("#empPost").val() == "" || $("#empPost").val() == "0") {
-			alert("Select Post");
-			$("#empPost").focus();
-			return false;
-		} else if ($("#employeeId").val() == null || $("#employeeId").val() == "" || $("#employeeId").val() == "0") {
-			alert("Select Employee to Assign");
-			$("#employeeId").focus();
-			return false;
-		} else {
-			document.forms[0].mode.value = "assignCase";
-			document.forms[0].submit();
-		}
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	function assignCourtCase(cINO) {
-		// alert("AJAX SUBMIT:	"+cINO);
-		if (cINO == null || cINO == "" || cINO == "0") {
-			alert("Invalid data");
-			return false;
-		} else if ($("#empDept" + cINO).val() == null || $("#empDept" + cINO).val() == "" || $("#empDept" + cINO).val() == "0") {
-			alert("Select Employee Department");
-			$("#empDept" + cINO).focus();
-			return false;
-		} else if ($("#empSection" + cINO).val() == null || $("#empSection" + cINO).val() == "" || $("#empSection" + cINO).val() == "0") {
-			alert("Select Employee Section");
-			$("#empSection" + cINO).focus();
-			return false;
-		} else if ($("#empPost" + cINO).val() == null || $("#empPost" + cINO).val() == "" || $("#empPost" + cINO).val() == "0") {
-			alert("Select Post");
-			$("#empPost" + cINO).focus();
-			return false;
-		} else if ($("#employeeId" + cINO).val() == null || $("#employeeId" + cINO).val() == "" || $("#employeeId" + cINO).val() == "0") {
-			alert("Select Employee to Assign");
-			$("#employeeId" + cINO).focus();
-			return false;
-		} else {
-			//document.forms[0].mode.value = "assignCourtCaseToEmp";
-			//document.forms[0].submit();
-			$("#LOADINGPAGEGIF").html('<img src="<%=basePath%>images/gears.gif" /> <br /> Saving your data. Please wait...');
-		$("#ASSIGN" + cINO).hide();
-		var data = {
-			mode : "assignCase2Employee",
-			cino : cINO,
-			emp_dept : $("#empDept" + cINO).val(),
-			emp_section : $("#empSection" + cINO).val(),
-			emp_post : $("#empPost" + cINO).val(),
-			emp_id : $("#employeeId" + cINO).val()
-		}
-		$.post("AssignmentOfCasesByAG.do", data).done(function(res) {
-			$("#MSG" + cINO).html(res);
-
-		}).fail(function(exc) {
-			// $("#ASSIGN"+cINO).html(res);
-			$("#ASSIGN" + cINO).show();
-			$("#MSG" + cINO).html(res);
-		// alert("Error Occured.Please Try Again.");
-		});
-		$("#MSG" + cINO).focus();
-		setTimeout(function() {
-			$("#LOADINGPAGEGIF").html("");
-		}, 900);
-	}
-}
-
-/*$(document).ready(function() {
-	$(".select2Class").select2();
-	
-	$('.input-group.date').datepicker({
-		format : "dd-mm-yyyy"
-	});
-	
-	//$(".select2_demo_1").select2();
-	if ($('#example2')) {
-		$('#example2').DataTable();
-		var table = $('#example2').DataTable({
-			dom : 'Bfrtip',
-			buttons : [ {
-				extend : 'pdfHtml5',
-				orientation : 'landscape',
-				title : 'Issue type wise pendency Report',
-				pageSize : 'LEGAL'
-			}, {
-				extend : 'excelHtml5',
-				title : 'Issue type wise pendency Report'
-			}, {
-				extend : 'print',
-				title : 'Issue type wise pendency Report'
-			} ],
-			responsive : true,
-			"lengthMenu" : [ [ 10, 25, 50, -1 ], [ 10, 25, 50, "All" ] ],
-			"pageLength" : -1,
-		});
-		
-		new $.fn.dataTable.FixedHeader( table );*/
-
-		/* $('#example2').dataTable({
-			"pageLength" : 10,
-			"buttons" : [ 'copy', 'excel', 'pdf', 'colvis' ]
-		}); */
-
-	/* $(document).ready(function() {
-		var table = $('#example').DataTable({
-			lengthChange : false,
-			buttons : [ 'copy', 'excel', 'pdf', 'colvis' ]
-		});
-
-		table.buttons().container()
-			.appendTo('#example_wrapper .col-sm-6:eq(0)');
-	}); 
-	}
-
-// $("#purpose").select2();
-});*/
-
-/*
-function populateDeptSecs(cino) {
-	$("#LOADINGPAGEGIF").html('<img src="< %=basePath%>images/gears.gif" /> <br /> Retrieving your data. Please wait...');
-	$("#empSection" + cino).select2('destroy');
-	var data = {
-		mode : "AjaxAction",
-		empDept : $("#empDept" + cino).val(),
-		getType : "getEmpDeptSectionsList"
-	}
-	$.post("AjaxModels.do", data).done(function(res) {
-		if (res != '') {
-			$("#empSection" + cino).html(res);
-		}
-	}).fail(function(exc) {
-		alert("Error Occured.Please Try Again");
-	});
-	$("#empSection" + cino).select2();
-	$("#empSection" + cino).select2("val", "0");
-	setTimeout(function() {
-		$("#LOADINGPAGEGIF").html("");
-	}, 900);
-}
-
-function populatePostDetails(cino) {
-	$("#LOADINGPAGEGIF").html('<img src="<%=basePath%>images/gears.gif" /> <br /> Retrieving your data. Please wait...');
-	$("#empPost" + cino).select2('destroy');
-	var data = {
-		mode : "AjaxAction",
-		empSec : $("#empSection" + cino).val(),
-		empDept : $("#empDept" + cino).val(),
-		getType : "getEmpPostsList"
-	}
-	$.post("AjaxModels.do", data).done(function(res) {
-		if (res != '') {
-			$("#empPost" + cino).html(res);
-		}
-	}).fail(function(exc) {
-		alert("Error Occured.Please Try Again");
-	});
-	$("#empPost" + cino).select2();
-	$("#empPost" + cino).select2("val", "0");
-	setTimeout(function() {
-		$("#LOADINGPAGEGIF").html("");
-	}, 900);
-}
-
-function populateEmpDetails(cino) {
-	$("#LOADINGPAGEGIF").html('<img src="<%=basePath%>images/gears.gif" /> <br /> Retrieving your data. Please wait...');
-		$("#employeeId" + cino).select2('destroy');
-		var data = {
-			mode : "AjaxAction",
-			empDept : $("#empDept" + cino).val(),
-			empSec : $("#empSection" + cino).val(),
-			empPost : $("#empPost" + cino).val(),
-			getType : "getEmpsList"
-		}
-		$.post("AjaxModels.do", data).done(function(res) {
-			if (res != '') {
-				$("#employeeId" + cino).html(res);
-			}
-		}).fail(function(exc) {
-			alert("Error Occured.Please Try Again");
-		});
-		$("#employeeId" + cino).select2();
-		$("#employeeId" + cino).select2("val", "0");
-		setTimeout(function() {
-			$("#LOADINGPAGEGIF").html("");
-		}, 900);
-	}
-
-*/
-
-	function showEdit(val) {
-		$("#mloId").val(val);
-		document.forms[0].mode.value = "editEmployee";
-		document.forms[0].submit();
-	}
-
-	function deleteData(val) {
-		$("#mloId").val(val);
-		document.forms[0].mode.value = "deleteEmployeeDetails";
-		document.forms[0].submit();
-	}
-
 	function isNumberKey(evt) {
 		var charCode = (evt.which) ? evt.which : event.keyCode;
 		if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -886,146 +597,7 @@ function populateEmpDetails(cino) {
 		}
 	}
 
-	function updateEmployeeDetails() {
-		designationId = $("#designationId").val();
-		employeeId = $("#employeeId").val();
-		mobileNo = $("#mobileNo").val();
-		emailId = $("#emailId").val();
-		aadharNo = $("#aadharNo").val();
-
-		if (designationId == null || designationId == "" || designationId == "0") {
-			alert("Select Designation");
-			$("#designationId").focus();
-			return false;
-		}
-
-		if (employeeId == null || employeeId == "" || employeeId == "0") {
-			alert("Select Employee");
-			$("#employeeId").focus();
-			return false;
-		}
-
-		if (mobileNo == null || mobileNo == "" || mobileNo == "0") {
-			alert("Enter Mobile Number");
-			$("#mobileNo").focus();
-			return false;
-		}
-
-		if (mobileNo != null && mobileNo != "" && mobileNo.length != 10) {
-			alert("Enter 10-digit Mobile Number");
-			$("#mobileNo").focus();
-			return false;
-		}
-
-
-		if (emailId == null || emailId == "" || emailId == "0") {
-			alert("Enter Email Id");
-			$("#emailId").focus();
-			return false;
-		}
-		var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-		if (!emailId.match(mailformat)) {
-			alert("You have entered an invalid email address!");
-			$("#emailId").focus();
-			return false;
-		}
-
-		if (aadharNo == null || aadharNo == "" || aadharNo == "0") {
-			alert("Enter Aadhar Number");
-			$("#aadharNo").focus();
-			return false;
-		}
-
-		if (aadharNo != null && aadharNo != "" && aadharNo.length != 12) {
-			alert("Enter 12-digit Aadhar Number");
-			$("#aadharNo").focus();
-			return false;
-		}
-
-		if (confirm("Do you want to Update employee details?")) {
-			document.forms[0].mode.value = "updateEmployeeDetails";
-			document.forms[0].submit();
-		}
-		else
-			return false;
-
-	}
-
-	function addEmployee() {
-		designationId = $("#designationId").val();
-		employeeId = $("#employeeId").val();
-		mobileNo = $("#mobileNo").val();
-		emailId = $("#emailId").val();
-		aadharNo = $("#aadharNo").val();
-
-		if (designationId == null || designationId == "" || designationId == "0") {
-			alert("Select Designation");
-			$("#designationId").focus();
-			return false;
-		}
-
-		if (employeeId == null || employeeId == "" || employeeId == "0") {
-			alert("Select Employee");
-			$("#employeeId").focus();
-			return false;
-		}
-
-		if (mobileNo == null || mobileNo == "" || mobileNo == "0") {
-			alert("Enter Mobile Number");
-			$("#mobileNo").focus();
-			return false;
-		}
-
-		if (mobileNo != null && mobileNo != "" && mobileNo.length != 10) {
-			alert("Enter 10-digit Mobile Number");
-			$("#mobileNo").focus();
-			return false;
-		}
-
-
-		if (emailId == null || emailId == "" || emailId == "0") {
-			alert("Enter Email Id");
-			$("#emailId").focus();
-			return false;
-		}
-
-		var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-		if (!emailId.match(mailformat)) {
-			alert("You have entered an invalid email address!");
-			$("#emailId").focus();
-			return false;
-		}
-
-		if (aadharNo == null || aadharNo == "" || aadharNo == "0") {
-			alert("Enter Aadhar Number");
-			$("#aadharNo").focus();
-			return false;
-		}
-
-		if (aadharNo != null && aadharNo != "" && aadharNo.length != 12) {
-			alert("Enter 12-digit Aadhar Number");
-			$("#aadharNo").focus();
-			return false;
-		}
-
-		if (confirm("Do you want to save employee details?")) {
-			document.forms[0].mode.value = "saveEmployeeDetails";
-			document.forms[0].submit();
-		}
-		else
-			return false;
-	}
-
-	function verifyAadhaar() {
-		var aadharNo = $("#aadharNo").val();
-		if (validate(aadharNo)) {
-
-		} else {
-			alert("Invalid aadhar no.");
-			$("#aadharNo").val("");
-		}
-	}
-
+	
 	function assignCaseToEmployee(cino) {
 		var heading = "Assign Case to Employee";
 		var srclink = "";
@@ -1057,3 +629,123 @@ function populateEmpDetails(cino) {
 	};
 	
 </script>
+
+
+
+
+<script type="text/javascript">
+	function fnSubmitCategory() {
+		
+		if($("#caseTypeId1").val()==null || $("#caseTypeId1").val()=="" || $("#caseTypeId1").val()=="0" ){
+			alert("Enter case Type");
+			$("#caseTypeId1").focus();
+			return false;
+		} 
+		if($("#regYear1").val()==null || $("#regYear1").val()=="" || $("#regYear1").val()=="0" ){
+			alert("Enter Reg Year");
+			$("#regYear").focus();
+			return false;
+		} 
+		if($("#caseNumber1").val()==null || $("#caseNumber1").val()=="" || $("#caseNumber1").val()=="0" ){
+			alert("Enter case Type");
+			$("#caseNumber1").focus();
+			return false;
+		} 
+		
+		
+		
+		if($("#caseRemarks").val()==null || $("#caseRemarks").val()=="" ){
+			alert("Enter Remarks");
+			$("#caseRemarks").focus();
+			return false;
+		}
+		
+		if($("#emp_id").val()==null || $("#emp_id").val()=="" || $("#emp_id").val()=="0"){
+			alert("Select Employee");
+			$("#emp_id").focus();
+			return false;
+		}
+		
+		$("#mode").val("assignCase");
+		$("#respondentIds").val(
+				$("#RESPSTABID tbody tr").length);
+		$("#HighCourtCasesListForm").submit();
+	}
+
+	$("#addResp")
+			.click(
+					function() {
+						//alert("wait....")
+						let rowfyable = $("#RESPSTABID").closest('table');
+						//let randomNo = Math.floor(Math.random() * (100 - 2) + 1);
+						let rowCount = $("#RESPSTABID tbody tr").length; //$('tbody', rowfyable).rows.length;
+						let rowCount2 = rowCount + 1;
+						let caseTypeId = $("#caseTypeId" + rowCount).val();
+						let regYear = $("#regYear" + rowCount).val();
+						let caseNumber = $("#caseNumber" + rowCount).val();
+
+						//alert("prevVal--"+caseNumber);
+						if ((caseTypeId != null && caseTypeId != "" && caseTypeId != "All")
+								&& (regYear != null && regYear != "" && regYear != "0") && (caseNumber != null && caseNumber != "" && caseNumber != "0")) {
+							console.log("rowCount:"+rowCount);
+							// console.log("rowCount2:"+rowCount2);
+
+							$('tbody', rowfyable)
+									.append(
+											"<tr id='"+rowCount2+"'><td>"
+													+ rowCount2
+													+ ".</td><td><select name='dynaForm(caseTypeId" + rowCount2 + ")' id='caseTypeId" + rowCount2 + "' style='width: 100%;' ></select></td><td>"
+													+ "<select name='dynaForm(regYear" + rowCount2 + ")' id='regYear" + rowCount2 + "' style='width: 100%;' ></select></td>"
+													+ "<td><input type='text' name='dynaForm(caseNumber"
+													+ rowCount2
+													+ ")' id='caseNumber"
+													+ rowCount2
+													+ "' style='height:30px;width:300px' ></text></td></tr>"+ "");  /* <td><input type='submit' name='submit' value='Case Details'onclick='return getData();' /></td> */
+							
+							$("#caseTypeId" + rowCount + " option").clone().appendTo("#caseTypeId" + rowCount2);
+							$("#caseTypeId" + rowCount2).select2();
+							$("#caseTypeId" + rowCount2).select2("val", "0");
+							
+							
+							
+							$("#regYear" + rowCount + " option").clone().appendTo("#regYear" + rowCount2);
+							$("#regYear" + rowCount2).select2();
+							$("#regYear" + rowCount2).select2("val", "0");
+							
+
+							$("#respondentIds").val(
+									$("#RESPSTABID tbody tr").length);
+						}
+//alert("caseTypeId---"+caseTypeId);
+						
+						if ((caseTypeId == "" || caseTypeId == "0")) {
+							alert("Pease Select Case Type");
+							$("#caseTypeId" + rowCount).focus();
+						}
+					//	alert("regYear---"+regYear);
+						if ((regYear == "" ||regYear == "0")) {
+							alert(" Pease Select Case Reg Year");
+							$("#regYear" + rowCount).focus();
+						}
+						//alert("caseNumber---"+caseNumber);
+						if ((caseNumber == "")) {
+							alert("Enter Case Number");
+							$("#caseNumber" + rowCount).focus();
+						}
+
+					});
+
+	$("#removeResp").click(function() {
+		let rowfyable = $("#RESPSTABID").closest('table');
+		let rowCount = $("#RESPSTABID tbody tr").length;
+		if (rowCount > 1) {
+			$('tbody tr:last', rowfyable).remove();
+		}
+		else {
+			alert ("Should have atleast one valid Case Details")
+		}
+	});
+
+</script>
+
+

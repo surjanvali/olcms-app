@@ -514,7 +514,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 						request.setAttribute("CASESLISTOLD", data);
 						cform.setDynaForm("cino", ((Map) data.get(0)).get("cino"));
 						
-						sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
+						sql = "select instructions,to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
 								+ " from ecourts_dept_instructions where cino='" + cIno + "'   order by insert_time desc  ";//and legacy_ack_flag='Legacy'
 						System.out.println("sql--" + sql);
 						List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
@@ -546,7 +546,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 					
 					cform.setDynaForm("cino", cIno);
 					//	request.setAttribute("cinooo", ackNoo);
-					sql = "select instructions,to_char(insert_time,'dd-mm-yyyy HH:mi:ss') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
+					sql = "select instructions,to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
 							+ " from ecourts_dept_instructions where cino='" + cIno + "'   order by insert_time desc  ";//and legacy_ack_flag='New'
 					System.out.println("sql--" + sql);
 					List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
@@ -653,7 +653,8 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 			}
 
 
-			sql= " select b.legacy_ack_flag,(SELECT district_name FROM district_mst dm where (e.dist_id=dm.district_id) ) as district_name,a.* from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino,legacy_ack_flag from ecourts_dept_instructions where legacy_ack_flag='New') b on (e.ack_no=b.cino) where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" order by 1";
+			sql= " select b.legacy_ack_flag,(SELECT district_name FROM district_mst dm where (e.dist_id=dm.district_id) ) as district_name,a.* from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  "
+					+ " inner join (select distinct cino,legacy_ack_flag from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (e.ack_no=b.cino) where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" order by 1";
 
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -789,7 +790,7 @@ public class EcourtsDeptInstructionAction extends DispatchAction {
 				sqlCondition +="  and assigned_to='"+userid+"'";
 			}
 
-			sql= " select b.legacy_ack_flag,a.* from ecourts_case_data a inner join (select distinct cino,legacy_ack_flag from ecourts_dept_instructions where legacy_ack_flag='Legacy') b on (a.cino=b.cino) where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" order by 1";
+			sql= " select b.legacy_ack_flag,a.* from ecourts_case_data a inner join (select distinct cino,legacy_ack_flag from ecourts_dept_instructions where legacy_ack_flag='Legacy' and status_instruction_flag='D') b on (a.cino=b.cino) where coalesce(ecourts_case_status,'')!='Closed' "+sqlCondition+" order by 1";
 
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

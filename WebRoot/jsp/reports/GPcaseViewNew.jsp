@@ -917,10 +917,10 @@ body {
 
 										<button class="btn btn-md btn-success" type="button"
 											name="forward"
-											onclick="return gpApprove('Parawise Remarks');">Approve</button>
+											onclick="return gpApproveNew('Parawise Remarks');">Approve</button>
 
 										<button class="btn btn-md btn-danger" type="button"
-											name="forward" onclick="return gpReject('Parawise Remarks');">Return</button>
+											name="forward" onclick="return gpRejectNew('Parawise Remarks');">Return</button>
 									</logic:equal>
 								</logic:present>
 							</div>
@@ -1120,12 +1120,12 @@ body {
 										</div>
 										<button class="btn btn-md btn-success" type="button"
 											name="forward"
-											onclick="return gpApprove('Counter Affidavit');">Update
+											onclick="return gpApproveNew('Counter Affidavit');">Update
 											& Finalize Counter</button>
 
 										<button class="btn btn-md btn-danger" type="button"
 											name="forward"
-											onclick="return gpReject('Counter Affidavit');">Return</button>
+											onclick="return gpRejectNew('Counter Affidavit');">Return</button>
 									</logic:equal>
 								</logic:present>
 							</div>
@@ -1257,14 +1257,14 @@ body {
 		}
 	}
 
-	function gpApprove(val) {
-		$("#mode").val("gpApprove");
+	function gpApproveNew(val) {
+		$("#mode").val("gpApproveNew");
 		$("#actionToPerform").val(val);
 		$("#AssignedCasesToSectionForm").submit();
 		return true;
 	}
-	function gpReject(val) {
-		$("#mode").val("gpReject");
+	function gpRejectNew(val) {
+		$("#mode").val("gpRejectNew");
 		$("#actionToPerform").val(val);
 		$("#AssignedCasesToSectionForm").submit();
 		return true;
