@@ -131,7 +131,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			}
 			
 
-			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))) {
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14") || roleId.equals("17"))) {
 				sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='" + deptCode
 						+ "') ";
 			}
@@ -144,6 +144,12 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and ad.distid='" + distCode + "' ";
 				cform.setDynaForm("districtId", distCode);
 			}
+			
+			String condition = "";
+			if ((roleId.equals("6"))) {
+				condition = " left join ecourts_mst_gp_dept_map egm on (egm.dept_code=d.dept_code) ";
+				sqlCondition += " and egm.gp_id='" + userid + "'";
+			}
 
 			if (cform.getDynaForm("caseTypeId") != null && !cform.getDynaForm("caseTypeId").toString().contentEquals("")
 					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
@@ -153,13 +159,13 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			sql = "select distid,district_name,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad "
 					+ " inner join district_mst dm on (ad.distid=dm.district_id) "
 					+ " inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) "
-					+ "inner join dept_new dmt on (d.dept_code=dmt.dept_code)" + " where ack_type='NEW' " + sqlCondition //and respondent_slno=1 
+					+ "inner join dept_new dmt on (d.dept_code=dmt.dept_code) " + condition + " " + " where ack_type='NEW' " + sqlCondition //and respondent_slno=1 
 					+ " group by distid,dm.district_name order by district_name";
 
 			System.out.println("SQL:showDistWise" + sql);
 
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
+			//System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
 				request.setAttribute("DISTWISEACKS", data);
 			} else {
@@ -230,6 +236,17 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			String sqlCondition = "";
 			con = DatabasePlugin.connect();
 
+			Date curDate = new Date();
+		      SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+		      
+		      String stringDate = format.format(curDate);
+		      System.out.println(stringDate);
+		      
+		      format = new SimpleDateFormat("dd-M-yyyy");
+		      stringDate = format.format(curDate);
+		      System.out.println("---"+stringDate);
+		      
+			
 			if (cform.getDynaForm("districtId") != null && !cform.getDynaForm("districtId").toString().contentEquals("")
 					&& !cform.getDynaForm("districtId").toString().contentEquals("0")) {
 				sqlCondition += " and ad.distid='" + cform.getDynaForm("districtId").toString().trim() + "' ";
@@ -239,14 +256,18 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 					&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
 				sqlCondition += " and d.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 			}
+			
+			 cform.setDynaForm("toDate",stringDate);
+		      cform.setDynaForm("fromDate",stringDate);
 
 			if (cform.getDynaForm("fromDate") != null && !cform.getDynaForm("fromDate").toString().contentEquals("")) {
-				sqlCondition += " and ad.inserted_time::date >= to_date('" + cform.getDynaForm("fromDate")
-						+ "','dd-mm-yyyy') ";
+				sqlCondition += " and ad.inserted_time::date >= to_date('" + cform.getDynaForm("fromDate")+ "','dd-mm-yyyy') ";
+				
 			}
 			if (cform.getDynaForm("toDate") != null && !cform.getDynaForm("toDate").toString().contentEquals("")) {
 				sqlCondition += " and ad.inserted_time::date <= to_date('" + cform.getDynaForm("toDate")
 						+ "','dd-mm-yyyy') ";
+				
 			}
 			if (cform.getDynaForm("advcteName") != null && !cform.getDynaForm("advcteName").toString().contentEquals("")) {
 				sqlCondition += " and replace(replace(advocatename,' ',''),'.','') ilike  '%"+cform.getDynaForm("advcteName")+"%'";
@@ -261,7 +282,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			 */
 
 			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14")
-					|| roleId.equals("6"))) {
+					|| roleId.equals("6") || roleId.equals("17"))) {
 				sqlCondition += " and (dm.dept_code='" + deptCode + "' or dm.reporting_dept_code='" + deptCode + "') ";
 			}
 			System.out.println("roleId---" + roleId);
@@ -281,6 +302,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 					&& !cform.getDynaForm("caseTypeId").toString().contentEquals("0")) {
 				sqlCondition += " and ad.casetype='" + cform.getDynaForm("caseTypeId").toString().trim() + "' ";
 			}
+			
 
 			sql = "select d.dept_code,upper(description) as description,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad  inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) "
 					+ "inner join dept_new dm on (d.dept_code=dm.dept_code) " + condition + " "
@@ -290,7 +312,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			System.out.println("SQL:showDeptWise" + sql);
 
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
+			//System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
 				request.setAttribute("DEPTWISEACKS", data);
 			} else {
@@ -414,7 +436,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			System.out.println("SQL:showUserWise" + sql);
 
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
+			//System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
 				request.setAttribute("USERWISEACKS", data);
 			} else {
@@ -556,7 +578,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			 */
 
 			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14")
-					|| roleId.equals("6"))) {
+					|| roleId.equals("6") || roleId.equals("17"))) {
 				sqlCondition += " and (dmt.dept_code='" + deptCode + "' or dmt.reporting_dept_code='" + deptCode
 						+ "') ";
 			}
@@ -564,6 +586,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			String condition = "";
 			if ((roleId.equals("6"))) {
 				condition = " inner join ecourts_mst_gp_dept_map egm on (egm.dept_code=ad.dept_code) ";
+				sqlCondition += " and egm.gp_id='" +userid + "' ";
 			}
 
 			if (roleId.equals("2")) {
@@ -619,7 +642,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			System.out.println("SQL:" + sql);
 
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
+			//System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
 				request.setAttribute("CASEWISEACKS", data);
 

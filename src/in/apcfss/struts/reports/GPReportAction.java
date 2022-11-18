@@ -680,7 +680,7 @@ public class GPReportAction extends DispatchAction {
 				
 				// Dept. Instructions
 				sql = "select cino,instructions, to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno,status_instruction_flag,reply_flag,slno,reply_serno, reply_instructions ,coalesce(reply_upload_fileno,'-') as reply_upload_fileno, reply_insert_time, reply_insert_by  "
-						+ " from ecourts_dept_instructions where cino='" + cIno + "'  order by 1 ";  //and status_instruction_flag='I'
+						+ " from ecourts_dept_instructions where cino='" + cIno + "'  order by insert_time::timestamp desc ";  //and status_instruction_flag='I'
 				System.out.println("Dept INstructions sql--" + sql);
 				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("DEPTNSTRUCTIONS", existData);
