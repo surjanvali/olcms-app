@@ -147,8 +147,7 @@ body {
 
 											<td nowrap="nowrap">${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
 											<td
-												style="min-width: 350px;t
-											ext-align: justify;">
+												style="min-width: 350px;text-align: justify;">
 												<logic:notEmpty name="map" property="prayer">
 
 													<logic:equal value="-" name="map" property="prayer">

@@ -252,7 +252,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="ibox bg-danger color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${DAILYSTATUSBYGP}</h2>
-										<div class="m-b-5">Daily Status Submitted by GP Legacy</div>
+										<div class="m-b-5">Replies By GP (Legacy)</div>
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
 											<small> &nbsp;</small>
@@ -271,7 +271,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="ibox bg-danger color-white widget-stat">
 									<div class="ibox-body">
 										<h2 class="m-b-5 font-strong">${DAILYSTATUSBYGPNEW}</h2>
-										<div class="m-b-5">Daily Status Submitted by GP New</div>
+										<div class="m-b-5">Replies By GP (New)</div>
 										<i class="fa fa-file-text-o widget-stat-icon"></i>
 										<div>
 											<small> &nbsp;</small>
@@ -412,7 +412,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<a href="./AssignmentOfCasesByAG.do">
 						<div class="ibox bg-danger color-white widget-stat">
 							<div class="ibox-body">
-								<h2 class="m-b-5 font-strong">Assign Cases</h2>
+								<h2 class="m-b-5 font-strong">Inbox</h2>
 								<div class="m-b-5">&nbsp;</div>
 								<i class="fa fa-file-text-o widget-stat-icon"></i>
 								<div>
@@ -427,7 +427,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<a href="./CompletedCasesBySplGP.do">
 						<div class="ibox bg-danger color-white widget-stat">
 							<div class="ibox-body">
-								<h2 class="m-b-5 font-strong">Assigned Cases</h2>
+								<h2 class="m-b-5 font-strong">Completed Cases</h2>
 								<div class="m-b-5">&nbsp;</div>
 								<i class="fa fa-file-text-o widget-stat-icon"></i>
 								<div>

@@ -416,7 +416,7 @@ public class WelcomePageAction extends DispatchAction{
 					
 					sql="select count(*) from ecourts_gpo_ack_depts e inner join ecourts_gpo_ack_dtls a on (e.ack_no=a.ack_no)  inner join (select distinct cino from ecourts_dept_instructions where legacy_ack_flag='New' and status_instruction_flag='D') b on (a.ack_no=b.cino) "
 							+ " inner join dept_new d on (e.dept_code=d.dept_code) "
-							+ " where a.ack_type = 'NEW' and e.distid='"+distId+"' ";
+							+ " where a.ack_type = 'NEW' and e.dist_id='"+distId+"' ";
 					request.setAttribute("DAILYSTATUSBYGPNEW", DatabasePlugin.getStringfromQuery(sql, con));
 					
 				}else if(roleId.equals("3")) { // Sect. Dept.

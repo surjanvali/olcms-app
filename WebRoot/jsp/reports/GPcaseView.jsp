@@ -190,6 +190,11 @@ body {
 														<th>Submitted By</th>
 														<th>Submitted On</th>
 														<th>Uploaded File</th>
+														<th>Reply Sent</th>
+														<!-- <th>Reply Submitted By</th> -->
+														<th>Reply Submitted On</th>
+														<th>Reply Uploaded File</th>
+														
 														<th>Reply to Instructions</th>
 													</tr>
 												</thead>
@@ -201,17 +206,48 @@ body {
 															<td>${map.insert_by}</td>
 															<td>${map.insert_time}</td>
 															<td><logic:notEqual value="-" name="map"
-											property="upload_fileno">
-											<a href='${map.upload_fileno}' target='_new'
-												class="btn btn-sm btn-info">View Uploaded File</a>
-										</logic:notEqual> <logic:equal value="-" name="map" property="upload_fileno">
+																	property="upload_fileno">
+																	<a href='${map.upload_fileno}' target='_new'
+																		class="btn btn-sm btn-info">View Uploaded File</a>
+																</logic:notEqual> <logic:equal value="-" name="map"
+																	property="upload_fileno">
 														---
 													</logic:equal></td>
-													<td>
+															<td>${map.reply_instructions}</td>
+															<%-- <td>${map.reply_insert_by}</td> --%>
+															<td>${map.reply_insert_time}</td>
+															<td><logic:notEqual value="-" name="map"
+																	property="reply_upload_fileno">
+																	<a href='${map.reply_upload_fileno}' target='_new'
+																		class="btn btn-sm btn-info">View Uploaded File</a>
+																</logic:notEqual> <logic:equal value="-" name="map"
+																	property="reply_upload_fileno">
+														---
+													</logic:equal></td>
+													<%-- <td>
 												 <input type="button" id="btnShowPopup" value="Reply to Instructions"
 												class="btn btn-sm btn-success waves-effect waves-light"
-												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}');" />
-											</td>
+												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}','${map.slno}');" />
+											</td> --%>
+											
+											
+											<td><logic:equal value="N" name="map"
+																	property="reply_flag">
+																	<input type="button" id="btnShowPopup"
+																		value="Reply to Instructions"
+																		class="btn btn-sm btn-success waves-effect waves-light"
+																		onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}','${map.slno}');" />
+																</logic:equal> <logic:equal value="Y" name="map" property="reply_flag">
+													---
+												</logic:equal></td>
+											
+											
+											
+											
+											
+											
+											
+											
 														</tr>
 													</logic:iterate>
 												</tbody>
@@ -1732,12 +1768,12 @@ body {
 										});
 
 					});
-	function viewCaseDetailsPopup1(cino, caseNo) {
+	function viewCaseDetailsPopup1(cino, caseNo,serno) {
 		//alert("hai"+cino+caseNo);
 		var heading = "View/Submit Daily Status for Case : "+cino;
 		var srclink = "";
 		if (cino != null && cino != "" && cino != "0") {
-			srclink = "./DailyStatusEntry.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino=" +cino+"&caseType="+caseNo;
+			srclink = "./DailyStatusEntry.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino=" +cino+"&caseType="+caseNo+"&serno="+serno;
 			//srclink = "./EcourtsDeptInstructionNew.do?mode=getCasesList&cino="+cino+"&caseType="+caseNo;
 			//alert("LINK:"+srclink);
 			if (srclink != "") {

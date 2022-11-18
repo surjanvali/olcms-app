@@ -95,7 +95,7 @@ body {
 							class="d-none d-sm-block">Instructions </span>
 					</a></li>
 
-				<!-- 	<li class="nav-item"><a class="nav-link"
+					<!-- 	<li class="nav-item"><a class="nav-link"
 						id="dialycasestatus-tab" data-toggle="tab" href="#dialycasestatus"
 						role="tab" aria-controls="dialycasestatus" aria-selected="true">
 							<span class="d-block d-sm-none"><i class="fas fa-user"></i></span>
@@ -186,10 +186,15 @@ body {
 													</tr>
 													<tr>
 														<th>Sl.No</th>
-														<th>Description</th>
+														<th>Instructions Received</th>
 														<th>Submitted By</th>
 														<th>Submitted On</th>
 														<th>Uploaded File</th>
+														<th>Reply Sent</th>
+														<!-- <th>Reply Submitted By</th> -->
+														<th>Reply Submitted On</th>
+														<th>Reply Uploaded File</th>
+
 														<th>Reply to Instructions</th>
 													</tr>
 												</thead>
@@ -201,17 +206,33 @@ body {
 															<td>${map.insert_by}</td>
 															<td>${map.insert_time}</td>
 															<td><logic:notEqual value="-" name="map"
-											property="upload_fileno">
-											<a href='${map.upload_fileno}' target='_new'
-												class="btn btn-sm btn-info">View Uploaded File</a>
-										</logic:notEqual> <logic:equal value="-" name="map" property="upload_fileno">
+																	property="upload_fileno">
+																	<a href='${map.upload_fileno}' target='_new'
+																		class="btn btn-sm btn-info">View Uploaded File</a>
+																</logic:notEqual> <logic:equal value="-" name="map"
+																	property="upload_fileno">
 														---
 													</logic:equal></td>
-													<td>
-												 <input type="button" id="btnShowPopup" value="Reply to Instructions"
-												class="btn btn-sm btn-success waves-effect waves-light"
-												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}');" />
-											</td>
+															<td>${map.reply_instructions}</td>
+															<%-- <td>${map.reply_insert_by}</td> --%>
+															<td>${map.reply_insert_time}</td>
+															<td><logic:notEqual value="-" name="map"
+																	property="reply_upload_fileno">
+																	<a href='${map.reply_upload_fileno}' target='_new'
+																		class="btn btn-sm btn-info">View Uploaded File</a>
+																</logic:notEqual> <logic:equal value="-" name="map"
+																	property="reply_upload_fileno">
+														---
+													</logic:equal></td>
+															<td><logic:equal value="N" name="map"
+																	property="reply_flag">
+																	<input type="button" id="btnShowPopup"
+																		value="Reply to Instructions"
+																		class="btn btn-sm btn-success waves-effect waves-light"
+																		onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}','${map.slno}');" />
+																</logic:equal> <logic:equal value="Y" name="map" property="reply_flag">
+													---
+												</logic:equal></td>
 														</tr>
 													</logic:iterate>
 												</tbody>
@@ -311,32 +332,32 @@ body {
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 												${map.mode_filing}</div>
 										</div>
-										
+
 										<div class="row">
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
 												<b>Case ID: </b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 												${map.casetype}</div>
-											
+
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
 												<b>District : </b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 												${map.district_name}</div>
-											
-										
+
+
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
 												<b>Petitioner Name: </b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 												${map.petitioner_name}</div>
 
-										
-											
+
+
 										</div>
 										<div class="row">
-										
+
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
 												<b>Respondent Advocate : </b>
 											</div>
@@ -349,14 +370,14 @@ body {
 												${map.advocateccno}</div>
 										</div>
 										<div class="row">
-										
-										
-										<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
+
+
+											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
 												<b> Ack no</b>
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 												${map.ack_no} <br>${map.hc_ack_no}</div>
-												
+
 
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-right">
 												<b> Filing Year: </b>
@@ -368,9 +389,9 @@ body {
 											</div>
 											<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
 												${map.reg_no}</div>
-										
+
 										</div>
-										
+
 
 									</logic:iterate>
 
@@ -465,9 +486,9 @@ body {
 						</div>
 					</div>
 
-				
 
-					
+
+
 
 
 
@@ -718,209 +739,211 @@ body {
 										</div>
 									</div>
 								</logic:present>
-<logic:present name="PWRSUBMITION">
+								<logic:present name="PWRSUBMITION">
 									<logic:equal value="ENABLE" name="PWRSUBMITION">
-								<div class="row">
-									<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
-										<label>Upload Petition <bean:message key="mandatory" /></label>
-										<html:file styleClass="form-control"
-											styleId="petitionDocument"
-											property="dynaForm(petitionDocument)" />
-										<span class="help-block"><bean:message
-												key="upload.document.validation.msg" /></span>
+										<div class="row">
+											<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
+												<label>Upload Petition <bean:message key="mandatory" /></label>
+												<html:file styleClass="form-control"
+													styleId="petitionDocument"
+													property="dynaForm(petitionDocument)" />
+												<span class="help-block"><bean:message
+														key="upload.document.validation.msg" /></span>
 
-										<logic:notEmpty name="CommonForm"
-											property="dynaForm(petitionDocumentOld)">
-											<a
-												href='<bean:write name="CommonForm" property="dynaForm(petitionDocumentOld)"/>'
-												target='_new' class="btn btn-sm btn-info">View Uploaded
-												File</a>
-										</logic:notEmpty>
+												<logic:notEmpty name="CommonForm"
+													property="dynaForm(petitionDocumentOld)">
+													<a
+														href='<bean:write name="CommonForm" property="dynaForm(petitionDocumentOld)"/>'
+														target='_new' class="btn btn-sm btn-info">View
+														Uploaded File</a>
+												</logic:notEmpty>
 
-									</div>
-
-									<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-										<div class="form-group">
-											<label>Case Status <bean:message key="mandatory" />
-											</label>
-											<html:select styleId="ecourtsCaseStatus"
-												property="dynaForm(ecourtsCaseStatus)"
-												styleClass="form-control">
-												<html:option value="0">---SELECT---</html:option>
-												<html:option value="Pending">Pending</html:option>
-												<html:option value="Closed">Closed</html:option>
-											</html:select>
-										</div>
-									</div>
-								</div>
-
-
-								<div class="row">
-									<div class="col-sm-6 form-group casecloseddiv">
-										<label>Upload Judgement Order <bean:message
-												key="mandatory" /></label>
-
-										<html:file styleClass="form-control" styleId="judgementOrder"
-											property="dynaForm(judgementOrder)" />
-										<span class="help-block"><bean:message
-												key="upload.document.validation.msg" /></span>
-
-										<logic:notEmpty name="CommonForm"
-											property="dynaForm(judgementOrderOld)">
-											<a
-												href='<bean:write name="CommonForm" property="dynaForm(judgementOrderOld)"/>'
-												target='_new' class="btn btn-sm btn-info">View Uploaded
-												File</a>
-										</logic:notEmpty>
-
-									</div>
-									<div class="col-sm-6 form-group casecloseddiv">
-										<label>Action Taken Order <bean:message
-												key="mandatory" /></label>
-
-										<html:file styleClass="form-control"
-											styleId="actionTakenOrder"
-											property="dynaForm(actionTakenOrder)" />
-										<span class="help-block"><bean:message
-												key="upload.document.validation.msg" /></span>
-
-										<logic:notEmpty name="CommonForm"
-											property="dynaForm(actionTakenOrderOld)">
-											<a
-												href='<bean:write name="CommonForm" property="dynaForm(actionTakenOrderOld)"/>'
-												target='_new' class="btn btn-sm btn-info">View Uploaded
-												File</a>
-										</logic:notEmpty>
-
-									</div>
-								</div>
-
-								<div class="parawiseRemarksdiv">
-									<div class="row">
-										<div class="col-sm-6 form-group">
-											<label>Parawise Remarks Submitted</label>
-											<html:select styleId="parawiseRemarksSubmitted"
-												property="dynaForm(parawiseRemarksSubmitted)"
-												styleClass="form-control">
-												<html:option value="0">---SELECT---</html:option>
-												<html:option value="No">No</html:option>
-												<html:option value="Yes">Yes</html:option>
-											</html:select>
-										</div>
-
-										<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
-											<label for="sel1"> Date of Submission of Parawise
-												Remarks to GP/SC <font color="red">*</font>
-											</label>
-											<div class="input-group date">
-												<span class="input-group-addon bg-white"><i
-													class="fa fa-calendar"></i></span>
-												<html:text styleId="parawiseRemarksDt"
-													property="dynaForm(parawiseRemarksDt)"
-													styleClass="form-control datepicker" />
 											</div>
-										</div>
-									</div>
 
-									<div class="row">
-										<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
-											<label>Upload Parawise Remarks</label>
-											<html:file styleClass="form-control"
-												styleId="parawiseRemarksCopy"
-												property="dynaForm(parawiseRemarksCopy)" />
-
-
-											<span class="help-block"><bean:message
-													key="upload.document.validation.msg" /></span>
-
-											<logic:notEmpty name="CommonForm"
-												property="dynaForm(parawiseRemarksCopyOld)">
-												<a
-													href='<bean:write name="CommonForm" property="dynaForm(parawiseRemarksCopyOld)"/>'
-													target='_new' class="btn btn-sm btn-info">View Uploaded
-													File</a>
-											</logic:notEmpty>
-
-										</div>
-
-										<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
-											<label for="sel1"> Parawise Remarks Approved by GP<font
-												color="red">*</font></label>
-											<html:select property="dynaForm(pwr_gp_approved)"
-												styleId="pwr_gp_approved" styleClass="form-control">
-												<html:option value="0">---SELECT---</html:option>
-												<html:option value="No">No</html:option>
-												<html:option value="Yes">Yes</html:option>
-											</html:select>
-
-										</div>
-
-									</div>
-
-									<div class="row parawiseRemarksapproveddiv">
-										<div class="col-xs-12 col-sm-6 form-group ">
-											<label class="font-bold">Date of Approval of Parawise
-												Remarks by GP/SC <font color="red">*</font>
-											</label>
-											<div class="input-group date">
-												<span class="input-group-addon bg-white"><i
-													class="fa fa-calendar"></i></span>
-												<html:text styleId="dtPRApprovedToGP"
-													property="dynaForm(dtPRApprovedToGP)"
-													styleClass="form-control datepicker" />
+											<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+												<div class="form-group">
+													<label>Case Status <bean:message key="mandatory" />
+													</label>
+													<html:select styleId="ecourtsCaseStatus"
+														property="dynaForm(ecourtsCaseStatus)"
+														styleClass="form-control">
+														<html:option value="0">---SELECT---</html:option>
+														<html:option value="Pending">Pending</html:option>
+														<html:option value="Closed">Closed</html:option>
+													</html:select>
+												</div>
 											</div>
 										</div>
 
-										<div class="col-xs-12 col-sm-6 form-group">
-											<label class="font-bold">Date of Receipt of Approved
-												Parawise Remarks from GP/SC <font color="red">*</font>
-											</label>
-											<div class="input-group date">
-												<span class="input-group-addon bg-white"><i
-													class="fa fa-calendar"></i></span>
-												<html:text styleId="dtPRReceiptToGP"
-													property="dynaForm(dtPRReceiptToGP)"
-													styleClass="form-control datepicker" />
+
+										<div class="row">
+											<div class="col-sm-6 form-group casecloseddiv">
+												<label>Upload Judgement Order <bean:message
+														key="mandatory" /></label>
+
+												<html:file styleClass="form-control"
+													styleId="judgementOrder"
+													property="dynaForm(judgementOrder)" />
+												<span class="help-block"><bean:message
+														key="upload.document.validation.msg" /></span>
+
+												<logic:notEmpty name="CommonForm"
+													property="dynaForm(judgementOrderOld)">
+													<a
+														href='<bean:write name="CommonForm" property="dynaForm(judgementOrderOld)"/>'
+														target='_new' class="btn btn-sm btn-info">View
+														Uploaded File</a>
+												</logic:notEmpty>
+
+											</div>
+											<div class="col-sm-6 form-group casecloseddiv">
+												<label>Action Taken Order <bean:message
+														key="mandatory" /></label>
+
+												<html:file styleClass="form-control"
+													styleId="actionTakenOrder"
+													property="dynaForm(actionTakenOrder)" />
+												<span class="help-block"><bean:message
+														key="upload.document.validation.msg" /></span>
+
+												<logic:notEmpty name="CommonForm"
+													property="dynaForm(actionTakenOrderOld)">
+													<a
+														href='<bean:write name="CommonForm" property="dynaForm(actionTakenOrderOld)"/>'
+														target='_new' class="btn btn-sm btn-info">View
+														Uploaded File</a>
+												</logic:notEmpty>
+
 											</div>
 										</div>
 
-									</div>
-								</div>
+										<div class="parawiseRemarksdiv">
+											<div class="row">
+												<div class="col-sm-6 form-group">
+													<label>Parawise Remarks Submitted</label>
+													<html:select styleId="parawiseRemarksSubmitted"
+														property="dynaForm(parawiseRemarksSubmitted)"
+														styleClass="form-control">
+														<html:option value="0">---SELECT---</html:option>
+														<html:option value="No">No</html:option>
+														<html:option value="Yes">Yes</html:option>
+													</html:select>
+												</div>
 
-								<div class="row">
-									<div class="col-sm-6 form-group">
-										<label>Action <bean:message key="mandatory" />
-										</label>
-										<html:select styleId="actionToPerform"
-											property="dynaForm(actionToPerform)"
-											styleClass="form-control">
-											<html:option value="Parawise Remarks">Parawise Remarks</html:option>
+												<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
+													<label for="sel1"> Date of Submission of Parawise
+														Remarks to GP/SC <font color="red">*</font>
+													</label>
+													<div class="input-group date">
+														<span class="input-group-addon bg-white"><i
+															class="fa fa-calendar"></i></span>
+														<html:text styleId="parawiseRemarksDt"
+															property="dynaForm(parawiseRemarksDt)"
+															styleClass="form-control datepicker" />
+													</div>
+												</div>
+											</div>
 
-										</html:select>
-									</div>
-									<div class="col-sm-6 form-group"></div>
-								</div>
+											<div class="row">
+												<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
+													<label>Upload Parawise Remarks</label>
+													<html:file styleClass="form-control"
+														styleId="parawiseRemarksCopy"
+														property="dynaForm(parawiseRemarksCopy)" />
 
-								<div class="row">
-									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-										<div class="form-group">
-											<label for="sel1" id="remaeksTextId">Remarks: </label>
 
-											<html:textarea cols="600" styleId="remarks"
-												property="dynaForm(remarks)"
-												style="width: 1000px; height: 250px;">
-											</html:textarea>
+													<span class="help-block"><bean:message
+															key="upload.document.validation.msg" /></span>
+
+													<logic:notEmpty name="CommonForm"
+														property="dynaForm(parawiseRemarksCopyOld)">
+														<a
+															href='<bean:write name="CommonForm" property="dynaForm(parawiseRemarksCopyOld)"/>'
+															target='_new' class="btn btn-sm btn-info">View
+															Uploaded File</a>
+													</logic:notEmpty>
+
+												</div>
+
+												<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
+													<label for="sel1"> Parawise Remarks Approved by GP<font
+														color="red">*</font></label>
+													<html:select property="dynaForm(pwr_gp_approved)"
+														styleId="pwr_gp_approved" styleClass="form-control">
+														<html:option value="0">---SELECT---</html:option>
+														<html:option value="No">No</html:option>
+														<html:option value="Yes">Yes</html:option>
+													</html:select>
+
+												</div>
+
+											</div>
+
+											<div class="row parawiseRemarksapproveddiv">
+												<div class="col-xs-12 col-sm-6 form-group ">
+													<label class="font-bold">Date of Approval of
+														Parawise Remarks by GP/SC <font color="red">*</font>
+													</label>
+													<div class="input-group date">
+														<span class="input-group-addon bg-white"><i
+															class="fa fa-calendar"></i></span>
+														<html:text styleId="dtPRApprovedToGP"
+															property="dynaForm(dtPRApprovedToGP)"
+															styleClass="form-control datepicker" />
+													</div>
+												</div>
+
+												<div class="col-xs-12 col-sm-6 form-group">
+													<label class="font-bold">Date of Receipt of
+														Approved Parawise Remarks from GP/SC <font color="red">*</font>
+													</label>
+													<div class="input-group date">
+														<span class="input-group-addon bg-white"><i
+															class="fa fa-calendar"></i></span>
+														<html:text styleId="dtPRReceiptToGP"
+															property="dynaForm(dtPRReceiptToGP)"
+															styleClass="form-control datepicker" />
+													</div>
+												</div>
+
+											</div>
 										</div>
-									</div>
-								</div>
-								
+
+										<div class="row">
+											<div class="col-sm-6 form-group">
+												<label>Action <bean:message key="mandatory" />
+												</label>
+												<html:select styleId="actionToPerform"
+													property="dynaForm(actionToPerform)"
+													styleClass="form-control">
+													<html:option value="Parawise Remarks">Parawise Remarks</html:option>
+
+												</html:select>
+											</div>
+											<div class="col-sm-6 form-group"></div>
+										</div>
+
+										<div class="row">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+												<div class="form-group">
+													<label for="sel1" id="remaeksTextId">Remarks: </label>
+
+													<html:textarea cols="600" styleId="remarks"
+														property="dynaForm(remarks)"
+														style="width: 1000px; height: 250px;">
+													</html:textarea>
+												</div>
+											</div>
+										</div>
+
 
 										<button class="btn btn-md btn-success" type="button"
 											name="forward"
 											onclick="return gpApproveNew('Parawise Remarks');">Approve</button>
 
 										<button class="btn btn-md btn-danger" type="button"
-											name="forward" onclick="return gpRejectNew('Parawise Remarks');">Return</button>
+											name="forward"
+											onclick="return gpRejectNew('Parawise Remarks');">Return</button>
 									</logic:equal>
 								</logic:present>
 							</div>
@@ -1136,30 +1159,30 @@ body {
 			</div>
 		</div>
 		<!-- Modal  Start-->
-<div id="MyPopup" class="modal fade" role="dialog"
-	style="padding-top:200px;">
-	<div class="modal-dialog modal-lg">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header"
-				style="background-color: #3498db;color: #fff;">
-				<button type="button" class="close" data-dismiss="modal">
-					&times;</button>
-				<h4 class="modal-title"></h4>
-			</div>
-			<div class="modal-body">
-				<p>
-					<iframe src="" id="page" name="model_window"
-						style="width:100%;min-height:600px;;border:0px;"> </iframe>
-				</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		<div id="MyPopup" class="modal fade" role="dialog"
+			style="padding-top:200px;">
+			<div class="modal-dialog modal-lg">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header"
+						style="background-color: #3498db;color: #fff;">
+						<button type="button" class="close" data-dismiss="modal">
+							&times;</button>
+						<h4 class="modal-title"></h4>
+					</div>
+					<div class="modal-body">
+						<p>
+							<iframe src="" id="page" name="model_window"
+								style="width:100%;min-height:600px;;border:0px;"> </iframe>
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-</div>
-		
+
 
 	</html:form>
 </div>
@@ -1425,13 +1448,14 @@ body {
 										});
 
 					});
-	
-	function viewCaseDetailsPopup1(cino, caseNo) {
+
+	function viewCaseDetailsPopup1(cino, caseNo, serno) {
 		//alert("hai"+cino+caseNo);
-		var heading = "View/Submit Daily Status for Case : "+cino;
+		var heading = "View/Submit Daily Status for Case : " + cino;
 		var srclink = "";
 		if (cino != null && cino != "" && cino != "0") {
-			srclink = "./DailyStatusEntry.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino=" +cino+"&caseType="+caseNo;
+			srclink = "./DailyStatusEntry.do?mode=getCino&SHOWPOPUP=SHOWPOPUP&cino="
+					+ cino + "&caseType=" + caseNo + "&serno=" + serno;
 			//srclink = "./EcourtsDeptInstructionNew.do?mode=getCasesList&cino="+cino+"&caseType="+caseNo;
 			//alert("LINK:"+srclink);
 			if (srclink != "") {
@@ -1439,8 +1463,10 @@ body {
 				$("#page").prop("src", srclink)
 				//$("#MyPopup .modal-body").html(body);
 				$("#MyPopup").modal("show");
-			};
-		};
+			}
+			;
+		}
+		;
 	};
 </script>
 </body>

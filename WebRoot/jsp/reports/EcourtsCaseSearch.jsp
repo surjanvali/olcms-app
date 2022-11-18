@@ -55,25 +55,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="ibox-title">Case Search</div>
 				</div>
 				<div class="ibox-body">
-					<!-- <h4 class="m-t-0 header-title">
-		<b>High Court Cases List</b>
-	</h4>
-	<hr /> -->
 
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 							<div class="form-group">
+								 <label class="ui-radio ui-radio-inline"> <html:radio
+										property="dynaForm(oldNewType)" styleId="oldNewType"
+										value="Legacy" onchange="caseTypeSelect();">
+										<span class="input-span"></span>
+										<b>Legacy Cases</b>
+									</html:radio>
+								</label>
 								<label class="ui-radio ui-radio-inline"> <html:radio
 										property="dynaForm(oldNewType)" styleId="oldNewType"
 										value="New" onchange="caseTypeSelect();">
 										<span class="input-span"></span>
 										<b>New Cases</b>
-									</html:radio>
-								</label> <label class="ui-radio ui-radio-inline"> <html:radio
-										property="dynaForm(oldNewType)" styleId="oldNewType"
-										value="Legacy" onchange="caseTypeSelect();">
-										<span class="input-span"></span>
-										<b>Legacy Cases</b>
 									</html:radio>
 								</label>
 
@@ -157,21 +154,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Sl.No</th>
 										<th>CINo</th>
 										<th>Scanned Affidavit</th>
-										<th>Current Status</th>
+										<!-- <th>Current Status</th> -->
 										<th>Date of Filing</th>
 										<!-- <th>Case Type</th>
 									<th>Reg.No.</th>
 									<th>Reg. Year</th> -->
 
 										<th>Case Reg No.</th>
-										<th>Prayer</th>
+										<!-- <th>Prayer</th> -->
 
 										<th>Filing No.</th>
 										<th>Filing Year</th>
 										<th>Date of Next List</th>
-										<th>Bench</th>
+										<!-- <th>Bench</th>
 										<th>Judge Name</th>
-										<th>Petitioner</th>
+										<th>Petitioner</th> -->
 										<th>District</th>
 										<th>Purpose</th>
 										<th>Respondents</th>
@@ -181,7 +178,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									</tr>
 								</thead>
 								<tbody>
-
 									<logic:iterate id="map" name="CASESLISTOLD" indexId="i">
 										<tr>
 											<td>${i+1 }.</td>
@@ -202,7 +198,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 																Affidavit</span></a>
 													</logic:notEqual>
 												</logic:notEmpty></td>
-											<td nowrap="nowrap"><span
+											<%-- <td nowrap="nowrap"><span
 												style="color: navy;font-weight: bold;text-align: center;">
 													${map.current_status}</span> <logic:notEmpty name="map"
 													property="fullname">
@@ -221,10 +217,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 													<logic:notEqual value=" " name="map"
 														property="district_name">
 														<br /> ${map.district_name}</logic:notEqual>
-												</logic:notEmpty> <%-- ${map.globalorgname}<br /> 
-												 ${map.designation} <br />
-												${map.mobile} <br /> ${map.email} <br /> ${map.district_name }--%>
-											</td>
+												</logic:notEmpty> 
+											</td> --%>
 											<td nowrap="nowrap"><logic:notEmpty name="map" property="date_of_filing">
 													<logic:notEqual value="0001-01-01" name="map"
 														property="date_of_filing">
@@ -233,7 +227,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												</logic:notEmpty></td>
 
 											<td nowrap="nowrap">${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
-										<td style="min-width: 350px;t
+										<%-- <td style="min-width: 350px;t
 											ext-align: justify;">
 											<logic:notEmpty
 												name="map" property="prayer">
@@ -252,7 +246,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 														data-placement="top" data-content="${map.prayer_full }"
 														data-original-title="" title="">View More</button>
 												</logic:notEqual>
-											</logic:notEmpty></td>
+											</logic:notEmpty></td> --%>
 
 											<td>${map.fil_no}</td>
 											<td>${map.fil_year }</td>
@@ -262,9 +256,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 																	${map.date_of_filing }
 																</logic:notEqual>
 												</logic:notEmpty></td>
-											<td>${map.bench_name }</td>
+											<%-- <td>${map.bench_name }</td>
 											<td>Hon'ble Judge : ${map.coram }</td>
-											<td>${map.pet_name }</td>
+											<td>${map.pet_name }</td> --%>
 											<td>${map.dist_name }</td>
 											<td>${map.purpose_name }</td>
 											<td>${map.res_name },${map.address}</td>

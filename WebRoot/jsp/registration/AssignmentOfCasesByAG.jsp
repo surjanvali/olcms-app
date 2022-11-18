@@ -400,7 +400,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label>Select Employee <bean:message key="mandatory" /></label>
+												<label>Select Officer <bean:message key="mandatory" /></label>
 												<html:select styleId="emp_id" property="dynaForm(emp_id)"
 													styleClass="select2Class" style="width:100%;">
 													<html:option value="0">---SELECT---</html:option>

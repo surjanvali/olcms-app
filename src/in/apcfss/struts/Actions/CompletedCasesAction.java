@@ -49,11 +49,11 @@ public class CompletedCasesAction extends DispatchAction {
 			}
 			con = DatabasePlugin.connect();
 
-			sql="select  distinct a.cino,type_name_fil,reg_no,reg_year,date_of_filing,coram,pet_name,dist_name,pet_adv,res_adv,b.response,case_status,a.assigned_to,c.inserted_on,"
-					+ " case when case_status='18' and response is not null then 'Completed'  else 'Pending For Response' end as status  from ecourts_case_data a  "
-					+ " left JOIN ecourts_case_activities c ON (c.cino=a.cino  )"
+			sql="select  distinct a.cino,type_name_fil,reg_no,reg_year,date_of_filing,coram,pet_name,dist_name,pet_adv,res_adv,b.response,agolcms_status,a.assigned_to,c.inserted_on,"
+					+ " case when agolcms_status='18' and response is not null then 'Completed'  else 'Pending For Response' end as status  from ecourts_case_data a  "
+					+ " left JOIN ecourts_case_activities_agolcms c ON (c.cino=a.cino  )"
 					+ " left join ecourts_response_ag_mst b on (a.cino=b.cino)   "
-					+ " where  case_status in ('18') and c.inserted_by='"+userId+"' and coalesce(a.ecourts_case_status,'')!='Closed'  order by c.inserted_on asc ";
+					+ " where  agolcms_status in ('18') and c.inserted_by='"+userId+"' and coalesce(a.ecourts_case_status,'')!='Closed'  order by c.inserted_on asc ";
 			
 			System.out.println("AssignedCasesToSectionAction unspecified SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

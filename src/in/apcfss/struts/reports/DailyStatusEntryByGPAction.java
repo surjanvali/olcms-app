@@ -317,7 +317,6 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 							+ " nda.fullname_en as fullname,'Legacy' as legacy_ack_flag , nda.designation_name_en as designation, nda.post_name_en as post_name, nda.email, nda.mobile1 as mobile,dim.district_name , "
 							+ " 'Pending at '||ecs.status_description||'' as current_status, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths,"
 							+ " case when (prayer is not null and coalesce(trim(prayer),'')!='' and length(prayer) > 2) then substr(prayer,1,250) else '-' end as prayer, prayer as prayer_full, ra.address from ecourts_case_data a "
-
 							+ " left join nic_prayer_data np on (a.cino=np.cino)"
 							+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
 							+ " left join district_mst dim on (a.dist_id=dim.district_id) "
@@ -350,9 +349,7 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 					} else {
 						request.setAttribute("errorMsg", "No Records Found");
 					}
-
 				}else {
-
 
 					sql = "select a.slno ,ad.respondent_slno, a.ack_no,'New' as legacy_ack_flag , distid , advocatename ,advocateccno , casetype , maincaseno , a.remarks ,  inserted_by , inserted_ip, upper(trim(district_name)) as district_name, "
 							+ "upper(trim(case_full_name)) as  case_full_name, a.ack_file_path, case when services_id='0' then null else services_id end as services_id,services_flag, "
@@ -364,7 +361,6 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 							+ " inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name)  "
 							+ " where a.delete_status is false and ack_type='NEW'    and (a.ack_no='"+cIno+"' or a.hc_ack_no='"+cIno+"' )  and respondent_slno='1'   "
 							+ " order by a.inserted_time desc";
-
 
 					System.out.println("ecourts SQL:" + sql);
 					data = DatabasePlugin.executeQuery(sql, con);
@@ -382,9 +378,7 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 					} else {
 						request.setAttribute("errorMsg", "No Records Found");
 					}
-
 				}
-
 				request.setAttribute("HEADING", "Submit status for CINO : " + cIno);
 			} else {
 				request.setAttribute("errorMsg", "Invalid Cino.");

@@ -72,7 +72,7 @@ public class AssignedCasesByAGAction extends DispatchAction {
 					+ " on (a.cino=b.cino) "
 					+ " "
 					+ " left join ecourts_olcms_case_details od on (a.cino=od.cino)"
-					+ " where  case_status='19'  and assigned_to='"+userId+"' " 
+					+ " where  agolcms_status='19'  and agolcms_assigned_to='"+userId+"' " 
 					+ " and coalesce(a.ecourts_case_status,'')!='Closed' "
 					+ " order by a.cino";
 			
@@ -708,13 +708,13 @@ public class AssignedCasesByAGAction extends DispatchAction {
 				 * GPO newStatus=""; }
 				 */
 				
-				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, assigned_to , remarks,uploaded_doc_path ) "
+				sql="insert into ecourts_case_activities_agolcms (cino , action_type , inserted_by , inserted_ip, assigned_to , remarks,uploaded_doc_path ) "
 						+ "values ('" + cIno + "','CASE RE-ASSSIGNED TO "+emp_email+"  ','"+userId+"', '"+request.getRemoteAddr()+"', '"+emp_email+"', '"+CommonModels.checkStringObject(cform.getDynaForm("caseRemarks"))+"','"+Remarks_AG_file+"')";
 				
 				DatabasePlugin.executeUpdate(sql, con);
 				System.out.println(":ACTIVITIES SQL:"+sql);
 				
-				sql = "update ecourts_case_data set assigned=true, case_status='19', assigned_to='"+emp_email+"' where cino  in ('"+cIno+"')" ;
+				sql = "update ecourts_case_data set  agolcms_status='19', agolcms_assigned_to='"+emp_email+"' where cino  in ('"+cIno+"')" ;
 				
 				System.out.println("UPDATE SQL:"+sql);
 				
@@ -785,13 +785,13 @@ public class AssignedCasesByAGAction extends DispatchAction {
 			System.out.println("a--->"+a);
 			if(a>0) {
 
-				sql="update ecourts_case_data set  case_status='18', assigned_to='adv-general@apolcms.in' where cino='"+cIno+"' ";
+				sql="update ecourts_case_data set  agolcms_status='18', agolcms_assigned_to='adv-general@apolcms.in' where cino='"+cIno+"' ";
 				 DatabasePlugin.executeUpdate(sql, con);
 				
 				System.out.println("sql--->"+sql);
 				
-				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks,uploaded_doc_path) "
-						+ " values ('" + cIno + "','SUBMITTED RESPONSE TO AG', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("responseText").toString()+"','"+ResponseText+"')";
+				sql="insert into ecourts_case_activities_agolcms (cino , action_type , inserted_by ,assigned_to, inserted_ip, remarks,uploaded_doc_path,inserted_on) "
+						+ " values ('" + cIno + "','SUBMITTED RESPONSE TO AG', '"+userId+"','adv-general@apolcms.in', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("responseText").toString()+"','"+ResponseText+"',now())";
 				DatabasePlugin.executeUpdate(sql, con);
 
 				request.setAttribute("successMsg", "Response sent successfully.");

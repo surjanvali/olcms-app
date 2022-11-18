@@ -433,6 +433,7 @@ public class GPReportAction extends DispatchAction {
 		Connection con = null;
 		HttpSession session = null;
 		String userId = null, roleId = null, deptId = null, deptCode = null, sql = null, empId = null, empSection = null, empPost = null, cIno = null,caseType=null;
+		
 		try {
 			System.out.println("caseStatusUpdate");
 			session = request.getSession();
@@ -466,11 +467,14 @@ public class GPReportAction extends DispatchAction {
 				sql = "select a.*, prayer from ecourts_case_data a left join nic_prayer_data np on (a.cino=np.cino) where a.cino='" + cIno + "'";
 				
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-	
+				String case_no=null;
 				if (data != null && !data.isEmpty() && data.size() > 0) {
 					
 					Map caseData1 = (Map)data.get(0);
 					
+					
+					 case_no=((Map) data.get(0)).get("type_name_reg")+"/"+((Map) data.get(0)).get("reg_no")+"/"+((Map) data.get(0)).get("reg_year");
+					System.out.println("case_no--->"+case_no);
 					if(roleId!=null && (roleId.equals("4") || roleId.equals("5") || roleId.equals("10"))) {
 						request.setAttribute("SHOWBACKBTN", "SHOWBACKBTN");
 					}
@@ -675,19 +679,23 @@ public class GPReportAction extends DispatchAction {
 				}
 				
 				// Dept. Instructions
-				sql = "select cino,instructions, to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "' and status_instruction_flag='I' order by 1 ";
+				sql = "select cino,instructions, to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno,status_instruction_flag,reply_flag,slno,reply_serno, reply_instructions ,coalesce(reply_upload_fileno,'-') as reply_upload_fileno, reply_insert_time, reply_insert_by  "
+						+ " from ecourts_dept_instructions where cino='" + cIno + "'  order by 1 ";  //and status_instruction_flag='I'
 				System.out.println("Dept INstructions sql--" + sql);
 				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("DEPTNSTRUCTIONS", existData);
 				
 				// Daily Case Status Updates by GP
-				sql = "select cino,instructions, to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "' and status_instruction_flag='D'  order by 1 ";
-				System.out.println("sql--" + sql);
-				existData = DatabasePlugin.executeQuery(sql, con);
-				request.setAttribute("GPDAILYSTATUS", existData);
+				/*
+				 * sql =
+				 * "select cino,instructions, to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno,status_instruction_flag,reply_flag,slno,reply_serno, reply_instructions ,coalesce(reply_upload_fileno,'-') as reply_upload_fileno, reply_insert_time, reply_insert_by  "
+				 * + " from ecourts_dept_instructions where cino='" + cIno + "'   order by 1 ";
+				 * //and status_instruction_flag='D' System.out.println("sql--" + sql);
+				 * existData = DatabasePlugin.executeQuery(sql, con);
+				 * request.setAttribute("GPDAILYSTATUS", existData);
+				 */
 				
-				request.setAttribute("HEADING", " Details for the Case No. :" + cIno);
-			
+				request.setAttribute("HEADING", " Details for the Case No. :" + cIno+" Case Reg Number: "+case_no);
 				
 			} else if(caseType.equals("New")) {
 				
@@ -698,8 +706,8 @@ public class GPReportAction extends DispatchAction {
 				//sql = "select * from ecourts_case_data where cino='" + cIno + "'";
 				sql = " select  a.ack_no ,  dept_code,respondent_slno  , (select district_name from district_mst dm where dm.district_id::text=b.distid::text) as district_name,"
 						+ " servicetpye  ,    advocatename , advocateccno,   (select case_full_name from case_type_master ctm where ctm.sno::text=b.casetype::text) as casetype,maincaseno , "
-						+ "remarks , inserted_time::date ,  inserted_by ,  ack_file_path   ,  "
-						+ "petitioner_name    ,  reg_year  , reg_no , mode_filing  , case_category  ,  hc_ack_no  "
+						+ " remarks , inserted_time::date ,  inserted_by ,  ack_file_path   ,  "
+						+ " petitioner_name    ,  reg_year  , reg_no , mode_filing  , case_category  ,  hc_ack_no  "
 						+ " from ecourts_gpo_ack_depts a inner join ecourts_gpo_ack_dtls b on (a.ack_no=b.ack_no) where b.ack_no='" + cIno + "'  and respondent_slno='1'";
 				
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -912,16 +920,20 @@ public class GPReportAction extends DispatchAction {
 				}
 				
 				// Dept. Instructions
-				sql = "select cino,instructions, to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "'  order by insert_time desc  ";
+				sql = "select cino,instructions, to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno,status_instruction_flag,reply_flag,slno,reply_serno, reply_instructions ,coalesce(reply_upload_fileno,'-') as reply_upload_fileno, reply_insert_time, reply_insert_by  from ecourts_dept_instructions where cino='" + cIno + "'  order by insert_time::timestamp desc ";
 				System.out.println("Dept INstructions sql--" + sql);
 				List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("DEPTNSTRUCTIONS", existData);
 				
 				// Daily Case Status Updates by GP
-				sql = "select cino,instructions, to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno from ecourts_dept_instructions where cino='" + cIno + "'  order by insert_time desc  ";
-				System.out.println("sql--" + sql);
-				existData = DatabasePlugin.executeQuery(sql, con);
-				request.setAttribute("GPDAILYSTATUS", existData);
+				/*
+				 * sql =
+				 * "select cino,instructions, to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(insert_by,'0') as insert_by,legacy_ack_flag,coalesce(upload_fileno,'-') as upload_fileno,status_instruction_flag,reply_flag,slno,reply_serno, reply_instructions ,coalesce(reply_upload_fileno,'-') as reply_upload_fileno, reply_insert_time, reply_insert_by  from ecourts_dept_instructions where cino='"
+				 * + cIno + "'  order by insert_time::timestamp desc  ";
+				 * System.out.println("sql--" + sql); existData =
+				 * DatabasePlugin.executeQuery(sql, con); request.setAttribute("GPDAILYSTATUS",
+				 * existData);
+				 */
 				
 				request.setAttribute("HEADING", " Details for the Case No. :" + cIno);
 			}

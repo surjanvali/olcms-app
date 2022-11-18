@@ -106,8 +106,8 @@ body {
 	
 	
 	function fnSubmitCategory() {
-		if (($("#instructions").val() == "" || $("#instructions").val() == "0")) {
-			alert("Please Enter Instructions");
+		if (($("#responseText").val() == "" || $("#responseText").val() == "0")) {
+			alert("Please Enter Response");
 			return false;
 		}
 		

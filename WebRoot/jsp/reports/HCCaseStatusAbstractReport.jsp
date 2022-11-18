@@ -545,7 +545,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Reg.No.</th>
 									<th>Reg. Year</th> -->
 
+									<th>Case Reg Type.</th>
 									<th>Case Reg No.</th>
+									<th>Case Reg Year.</th>
 									<th>Prayer</th>
 
 									<th>Filing No.</th>
@@ -571,7 +573,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											value="${map.cino}"
 											class="btn btn-sm btn-info waves-effect waves-light"
 											onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
-
 										</td>
 										<td><logic:notEmpty name="map"
 												property="scanned_document_path1">
@@ -619,7 +620,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<%-- <td>${map.type_name_fil }</td>
 										<td>${map.reg_no}</td>
 										<td>${map.reg_year }</td> prayer --%>
-										<td nowrap="nowrap">${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
+										<td nowrap="nowrap">${map.type_name_fil}</td>
+										<td nowrap="nowrap">${map.reg_no}</td>
+										<td nowrap="nowrap">${map.reg_year }</td>
 										<td style="min-width: 350px;text-align: justify;"><logic:notEmpty
 												name="map" property="prayer">
 

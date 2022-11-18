@@ -178,11 +178,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											</td> --%>
 											<td>${map.assigned_to}</td>
 											<td>${map.status}</td>
-											<td style="min-width: 50px;text-align: center;">
-										<button class="btn btn-info btn-xs" data-container="body"
+											<td style="min-width: 50px;text-align: center;">${map.response}
+										<%-- <button class="btn btn-info btn-xs" data-container="body"
 														data-toggle="popover" data-trigger="hover"
 														data-placement="top" data-content="${map.response}"
-														data-original-title="" title="">View More</button>
+														data-original-title="" title="">View More</button> --%>
 												</td>
 											
 								</logic:iterate>

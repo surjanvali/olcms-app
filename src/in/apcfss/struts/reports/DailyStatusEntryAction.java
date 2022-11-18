@@ -236,18 +236,20 @@ public class DailyStatusEntryAction extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 		Connection con = null;
 		PreparedStatement ps = null;
+		PreparedStatement ps2 = null;
 		String sql = null;//, cIno=null;
 		CommonForm cform = (CommonForm) form;
 		HttpSession session = request.getSession();
-		String userId=null;int a=0;String cIno = null;
+		String userId=null;int a=0, b=0;String cIno = null,caseType=null;int serno=0;
 		try {
 			con = DatabasePlugin.connect();
 			//con.setAutoCommit(false);
 			request.setAttribute("HEADING", "Instructions Entry");
 			System.out.println("in assign2DeptHOD --- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
 			userId = CommonModels.checkStringObject(request.getSession().getAttribute("userid"));
-			String caseType = "New";
+			 caseType = "New";
 			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
+			serno=Integer.parseInt(CommonModels.checkStringObject(cform.getDynaForm("serno")));
 			System.out.println("cIno---"+cIno);
 			System.out.println("caseType---"+caseType);
 
@@ -265,27 +267,37 @@ public class DailyStatusEntryAction extends DispatchAction {
 
 			String status_flag="D";
 
-
-			sql = "insert into ecourts_dept_instructions (cino, instructions , upload_fileno,dept_code ,dist_code,insert_by,legacy_ack_flag,status_instruction_flag ) "
-					+ " values (?,?, ?, ?, ?, ?,?,?)";
-
-			ps = con.prepareStatement(sql);
-			int i = 1;
-			ps.setString(i, cIno);
-			ps.setString(++i, cform.getDynaForm("daily_status") != null ? cform.getDynaForm("daily_status").toString() : "");
-			ps.setString(++i, DailyStatus_file);
-			ps.setString(++i, CommonModels.checkStringObject(session.getAttribute("dept_code")));
-			ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
-			ps.setString(++i, userId);
-			ps.setString(++i, "New");
-			ps.setString(++i, status_flag);
-
+			/*
+			 * sql =
+			 * "insert into ecourts_dept_instructions (cino, instructions , upload_fileno,dept_code ,dist_code,insert_by,legacy_ack_flag,status_instruction_flag,reply_flag,reply_serno ) "
+			 * + " values (?,?, ?, ?, ?, ?,?,?,'Y',?)";
+			 * 
+			 * ps = con.prepareStatement(sql); int i = 1; ps.setString(i, cIno);
+			 * ps.setString(++i, cform.getDynaForm("daily_status") != null ?
+			 * cform.getDynaForm("daily_status").toString() : ""); ps.setString(++i,
+			 * DailyStatus_file); ps.setString(++i,
+			 * CommonModels.checkStringObject(session.getAttribute("dept_code")));
+			 * ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
+			 * ps.setString(++i, userId); ps.setString(++i, "New"); ps.setString(++i,
+			 * status_flag); ps.setInt(++i, serno);
+			 * 
+			 * System.out.println("sql--"+sql);
+			 * a = ps.executeUpdate();
+			 */
+			
+			
+			sql = "update ecourts_dept_instructions set reply_flag='Y',reply_instructions='"+cform.getDynaForm("daily_status").toString()+"',"
+					+ " reply_upload_fileno='"+DailyStatus_file+"',reply_insert_by='"+userId+"',reply_serno='"+serno+"',legacy_ack_flag='New',"
+							+ " status_instruction_flag='D',reply_insert_time=now() where cino=? and slno=? ";  //and status_instruction_flag='I'
+			
+			ps2 = con.prepareStatement(sql);
+			ps2.setString(1, cIno);
+			ps2.setInt(2, serno);
+			b = ps2.executeUpdate();
+			
 			System.out.println("sql--"+sql);
-
-			a = ps.executeUpdate();
-
 			System.out.println("a--->"+a);
-			if(a>0) {
+			if( b>0) {
 
 				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks,uploaded_doc_path) "
 						+ " values ('" + cIno + "','REPLY INSTRUCTIONS BY GP', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("daily_status").toString()+"','"+DailyStatus_file+"')";
@@ -303,6 +315,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 		} finally {
 			cform.setDynaForm("daily_status","");
 			cform.setDynaForm("fileCino", cIno);
+			cform.setDynaForm("caseType", caseType);
 			DatabasePlugin.close(con, ps, null);
 		}
 		return getCino(mapping, cform, request, response);
@@ -312,18 +325,20 @@ public class DailyStatusEntryAction extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 		Connection con = null;
 		PreparedStatement ps = null;
+		PreparedStatement ps2 = null;
 		String sql = null;//, cIno=null;
 		CommonForm cform = (CommonForm) form;
 		HttpSession session = request.getSession();
-		String userId=null;int a=0;String cIno = null;
+		String userId=null,caseType=null;int a=0,b=0;String cIno = null;int serno=0;
 		try {
 			con = DatabasePlugin.connect();
 			//con.setAutoCommit(false);
 			request.setAttribute("HEADING", "Instructions Entry");
 			System.out.println("in assign2DeptHOD --- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
 			userId = CommonModels.checkStringObject(request.getSession().getAttribute("userid"));
-			String caseType = "Legacy";
+			 caseType = "Legacy";
 			cIno = CommonModels.checkStringObject(cform.getDynaForm("cino"));
+			serno=Integer.parseInt(CommonModels.checkStringObject(cform.getDynaForm("serno")));
 			System.out.println("cIno---"+cIno);
 			System.out.println("caseType---"+caseType);
 
@@ -341,27 +356,46 @@ public class DailyStatusEntryAction extends DispatchAction {
 
 			String status_flag="D";
 
+			/*
+			 * sql =
+			 * "insert into ecourts_dept_instructions (cino, instructions , upload_fileno,dept_code ,dist_code,insert_by,legacy_ack_flag,status_instruction_flag,reply_flag,reply_serno ) "
+			 * + " values (?,?, ?, ?, ?, ?,?,?,'Y',?)";
+			 * 
+			 * ps = con.prepareStatement(sql); int i = 1; ps.setString(i, cIno);
+			 * ps.setString(++i, cform.getDynaForm("daily_status") != null ?
+			 * cform.getDynaForm("daily_status").toString() : ""); ps.setString(++i,
+			 * DailyStatus_file); ps.setString(++i,
+			 * CommonModels.checkStringObject(session.getAttribute("dept_code")));
+			 * ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
+			 * ps.setString(++i, userId); ps.setString(++i, "Legacy"); ps.setString(++i,
+			 * status_flag); ps.setInt(++i,serno);
+			 * 
+			 * System.out.println("sql--"+sql);
+			 * 
+			 * a = ps.executeUpdate();
+			 */
 
-			sql = "insert into ecourts_dept_instructions (cino, instructions , upload_fileno,dept_code ,dist_code,insert_by,legacy_ack_flag,status_instruction_flag ) "
-					+ " values (?,?, ?, ?, ?, ?,?,?)";
-
-			ps = con.prepareStatement(sql);
-			int i = 1;
-			ps.setString(i, cIno);
-			ps.setString(++i, cform.getDynaForm("daily_status") != null ? cform.getDynaForm("daily_status").toString() : "");
-			ps.setString(++i, DailyStatus_file);
-			ps.setString(++i, CommonModels.checkStringObject(session.getAttribute("dept_code")));
-			ps.setInt(++i, CommonModels.checkIntObject(session.getAttribute("dist_id")));
-			ps.setString(++i, userId);
-			ps.setString(++i, "Legacy");
-			ps.setString(++i, status_flag);
-
+			sql = "update ecourts_dept_instructions set reply_flag='Y',reply_instructions='"+cform.getDynaForm("daily_status").toString()+"',"
+					+ " reply_upload_fileno='"+DailyStatus_file+"',reply_insert_by='"+userId+"',reply_serno='"+serno+"',legacy_ack_flag='Legacy',"
+							+ " status_instruction_flag='D',reply_insert_time=now() where cino=? and slno=? ";  //and status_instruction_flag='I'
+			
+			ps2 = con.prepareStatement(sql);
+			ps2.setString(1, cIno);
+			ps2.setInt(2, serno);
+			b = ps2.executeUpdate();
 			System.out.println("sql--"+sql);
-
-			a = ps.executeUpdate();
-
 			System.out.println("a--->"+a);
-			if(a>0) {
+			
+			/*
+			 * sql =
+			 * "update ecourts_dept_instructions set reply_flag='Y' where cino=? and slno=? "
+			 * ;//and status_instruction_flag='I' ps2 = con.prepareStatement(sql);
+			 * ps2.setString(1, cIno); ps2.setInt(2, serno);
+			 * 
+			 * b = ps2.executeUpdate();
+			 */
+			
+			if( b>0) {
 
 				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, remarks,uploaded_doc_path) "
 						+ " values ('" + cIno + "','SUBMITTED DAILY CASE STATUS', '"+userId+"', '"+request.getRemoteAddr()+"', '"+cform.getDynaForm("daily_status").toString()+"','"+DailyStatus_file+"')";
@@ -380,6 +414,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 		} finally {
 			cform.setDynaForm("daily_status","");
 			cform.setDynaForm("fileCino", cIno);
+			cform.setDynaForm("caseType", caseType);
 			DatabasePlugin.close(con, ps, null);
 		}
 		return getCino(mapping, cform, request, response);
@@ -390,7 +425,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql = null, cIno = null, target = "casepopupview1",caseType=null;
+		String userId = null, roleId = null, sql = null, cIno = null,serno = null, target = "casepopupview1",caseType=null;
 		System.out.println("getCino");
 
 		try {
@@ -398,12 +433,14 @@ public class DailyStatusEntryAction extends DispatchAction {
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			caseType = CommonModels.checkStringObject(request.getParameter("caseType"));
+			caseType = caseType!=null && !caseType.equals("") ? caseType : CommonModels.checkStringObject(cform.getDynaForm("caseType"));
 			List<Map<String, Object>> data=null;
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			}
 
 			cIno = CommonModels.checkStringObject(request.getParameter("cino"));
+			serno = CommonModels.checkStringObject(request.getParameter("serno"));
 			cIno = cIno!=null && !cIno.equals("") ? cIno : CommonModels.checkStringObject(cform.getDynaForm("fileCino"));
 
 			System.out.println("cIno" + cIno);
@@ -412,6 +449,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 			if (cIno != null && !cIno.equals("")) {
 
 				cform.setDynaForm("cino", cIno);
+				cform.setDynaForm("serno", serno);
 
 				con = DatabasePlugin.connect();
 
@@ -445,7 +483,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 						request.setAttribute("CASESLISTOLD", data);
 						cform.setDynaForm("cino", ((Map) data.get(0)).get("cino"));
 
-						sql = "select instructions,to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
+						sql = "select instructions,to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(upload_fileno,'-') as upload_fileno,slno,reply_flag,reply_serno "
 								+ " from ecourts_dept_instructions where cino='" + cIno + "'   order by insert_time desc limit 1 ";  //and legacy_ack_flag='Legacy'
 						System.out.println("sql--" + sql);
 						List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
@@ -475,7 +513,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 
 						cform.setDynaForm("cino", cIno);
 						//	request.setAttribute("cinooo", ackNoo);
-						sql = "select instructions,to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(upload_fileno,'-') as upload_fileno "
+						sql = "select instructions,to_char(insert_time,'dd-Mon-yyyy hh24:mi:ss PM') as insert_time,coalesce(upload_fileno,'-') as upload_fileno,slno,reply_flag,reply_serno "
 								+ " from ecourts_dept_instructions where cino='" + cIno + "'  order by insert_time desc limit 1"; //and legacy_ack_flag='New' 
 						System.out.println("sql--" + sql);
 						List<Map<String, Object>> existData = DatabasePlugin.executeQuery(sql, con);
@@ -496,6 +534,7 @@ public class DailyStatusEntryAction extends DispatchAction {
 			e.printStackTrace();
 		} finally {
 			DatabasePlugin.closeConnection(con);
+			cform.setDynaForm("caseType", caseType);
 		}
 		return mapping.findForward(target);
 	}

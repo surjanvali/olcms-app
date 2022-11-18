@@ -140,7 +140,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			
 			System.out.println("SQL:"+sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
+			//System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
 				request.setAttribute("ACKDATA", data);
 			} else {
@@ -216,7 +216,7 @@ public class GPOAcknowledgementAction extends DispatchAction {
 			
 			System.out.println("SQL:"+sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
+			//System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
 				
 				if(ackType.equals("OLD")) {
@@ -565,13 +565,14 @@ public class GPOAcknowledgementAction extends DispatchAction {
 								+ " where a.inserted_by='"+session.getAttribute("userid")
 								+"' and a.delete_status is false and a.ack_no='"+ackNo+"'"
 								
-								+ " group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name, case_full_name,a.ack_file_path, services_id,services_flag, inserted_time,a.barcode_file_path, reg_year, reg_no, ack_type, a.mode_filing, a.case_category, a.hc_ack_no  order by inserted_time desc"
+								+ " group by slno , a.ack_no , distid , advocatename ,advocateccno , casetype , maincaseno , remarks ,  inserted_by , inserted_ip, district_name, case_full_name,a.ack_file_path, services_id,services_flag, inserted_time,a.barcode_file_path, "
+								+ " reg_year, reg_no, ack_type, a.mode_filing, a.case_category, a.hc_ack_no  order by inserted_time desc"
 								+ "";
 						
 						
 						System.out.println("SQL:" + sql);
 						List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-						System.out.println("data=" + data);
+						//System.out.println("data=" + data);
 						if (data != null && !data.isEmpty() && data.size() > 0) {
 							
 							Map<String, Object> ackData=(Map<String, Object>)data.get(0);

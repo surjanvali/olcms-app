@@ -95,6 +95,10 @@ public class FileUploadUtilities {
 			uploadPath = null;
 			e.printStackTrace();
 		}
+		if(uploadPath==null)
+		{
+			uploadPath="---";
+		}
 		return uploadPath;
 	}
 	

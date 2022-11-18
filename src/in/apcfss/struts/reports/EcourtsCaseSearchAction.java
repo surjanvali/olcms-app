@@ -53,7 +53,7 @@ public class EcourtsCaseSearchAction extends DispatchAction {
 
 			cform.setDynaForm("caseTypesListShrt", DatabasePlugin.getSelectBox( "select  upper(trim(case_short_name)) as sno,upper(trim(case_short_name)) as case_full_name from case_type_master order by sno", con));
 			//cform.setDynaForm("AckList", DatabasePlugin.getSelectBox( "select ack_no,ack_no from ecourts_gpo_ack_dtls where 1=1  order by ack_no", con));
-			cform.setDynaForm("oldNewType", "New");
+			cform.setDynaForm("oldNewType", "Legacy");
 			ArrayList selectData = new ArrayList();
 			for (int i = 2022; i > 1980; i--) {
 				selectData.add(new LabelValueBean(i + "", i + ""));
@@ -132,13 +132,13 @@ public class EcourtsCaseSearchAction extends DispatchAction {
 				
 				sql = "select a.*, "
 						+ " nda.fullname_en as fullname, nda.designation_name_en as designation, nda.post_name_en as post_name, nda.email, nda.mobile1 as mobile,dim.district_name , "
-						+ " 'Pending at '||ecs.status_description||'' as current_status, coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths,"
+						+ " coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths,"  //'Pending at '||ecs.status_description||'' as current_status, 
 						+ " case when (prayer is not null and coalesce(trim(prayer),'')!='' and length(prayer) > 2) then substr(prayer,1,250) else '-' end as prayer, prayer as prayer_full, ra.address from ecourts_case_data a "
 						
 						+ " left join nic_prayer_data np on (a.cino=np.cino)"
 						+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
 						+ " left join district_mst dim on (a.dist_id=dim.district_id) "
-						+ " inner join ecourts_mst_case_status ecs on (a.case_status=ecs.status_id) "
+						+ "  "  //inner join ecourts_mst_case_status ecs on (a.case_status=ecs.status_id)
 						+ " left join nic_data_all nda on (a.dept_code=substr(nda.global_org_name,1,5) and a.assigned_to=nda.email and nda.is_primary='t' and coalesce(a.dist_id,'0')=coalesce(nda.dist_id,'0')) "
 				
 				/*sql = "select a.*, "

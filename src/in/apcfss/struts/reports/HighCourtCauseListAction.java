@@ -95,6 +95,13 @@ public class HighCourtCauseListAction extends DispatchAction {
 					+ "from ecourts_causelist_bench_data a  left join  ecourts_causelist_data b on (a.bench_id=b.bench_id) where a.causelist_date=to_date('"
 					+ date + "','mm/dd/yyyy') and coalesce(causelist_document,'') not like '%status_code%'";
 			
+			sql="select distinct c.est_code,c.bench_id, string_agg('<a href=\"./'||c.causelist_document||'\" target=\"_new\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-save\"></i><span>'||c.bench_id||'</span></a><br/>','- ') as document,judge_name "
+					+ " from  ( select * from ( select a.est_code,a.bench_id, a.causelist_document,a.causelist_date,b.judge_name "
+					+ " from ecourts_causelist_bench_data  a left join ecourts_causelist_data b on (a.bench_id=b.bench_id)   where a.causelist_document is not null "
+					+ " and  POSITION('RECORD_NOT_FOUND' in a.causelist_document) = 0 and POSITION('INVALID_TOKEN' in a.causelist_document) = 0 "
+					+ " and a.causelist_date=to_date('9/2/2022','mm/dd/yyyy') and coalesce(causelist_document,'') not like '%status_code%' ) x1   "
+					+ " order by x1.bench_id, x1.causelist_date desc ) c group by c.bench_id, c.est_code,judge_name";
+			
 
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);

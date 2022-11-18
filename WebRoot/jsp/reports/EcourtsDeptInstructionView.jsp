@@ -20,7 +20,8 @@ body {
 </style>
 
 <div class="page-content fade-in-up">
-	<html:form action="/EcourtsDeptInstruction" enctype="multipart/form-data">
+	<html:form action="/EcourtsDeptInstruction"
+		enctype="multipart/form-data">
 		<html:hidden styleId="mode" property="mode" />
 		<%-- <html:hidden styleId="cino" property="dynaForm(cino)" /> --%>
 		<div class="row">
@@ -47,174 +48,172 @@ body {
 				</div>
 			</div>
 		</div>
-<logic:notEmpty name="CASESLISTOLD">
-				<div class="ibox oldTypediv">
+		<logic:notEmpty name="CASESLISTOLD">
+			<div class="ibox oldTypediv">
 				<div class="ibox-title">
 					<h4 class="m-t-0 header-title">
 						<b>Case Details</b>
 					</h4>
 				</div>
-					<div class="ibox-body">
-						<div class="table-responsive">
+				<div class="ibox-body">
+					<div class="table-responsive">
 
-							<table id="example"
-								class="table table-striped table-bordered oldTypediv"
-								style="width:100%">
-								<thead>
-									<tr>
-										<th>Sl.No</th>
-										<th>CINo</th>
-										<th>Scanned Affidavit</th>
-										<!-- <th>Assigned to</th> -->
-										<th>Current Status</th>
-										<th>Date of Filing</th>
-										<!-- <th>Case Type</th>
+						<table id="example"
+							class="table table-striped table-bordered oldTypediv"
+							style="width:100%">
+							<thead>
+								<tr>
+									<th>Sl.No</th>
+									<th>CINo</th>
+									<th>Scanned Affidavit</th>
+									<!-- <th>Assigned to</th> -->
+									<th>Current Status</th>
+									<th>Date of Filing</th>
+									<!-- <th>Case Type</th>
 									<th>Reg.No.</th>
 									<th>Reg. Year</th> -->
 
-										<th>Case Reg No.</th>
-										<th>Prayer</th>
+									<th>Case Reg No.</th>
+									<th>Prayer</th>
 
-										<th>Filing No.</th>
-										<th>Filing Year</th>
-										<th>Date of Next List</th>
-										<th>Bench</th>
-										<th>Judge Name</th>
-										<th>Petitioner</th>
-										<th>District</th>
-										<th>Purpose</th>
-										<th>Respondents</th>
-										<th>Petitioner Advocate</th>
-										<th>Respondent Advocate</th>
-										<th>Orders</th>
-									</tr>
-								</thead>
-								<tbody>
+									<th>Filing No.</th>
+									<th>Filing Year</th>
+									<th>Date of Next List</th>
+									<th>Bench</th>
+									<th>Judge Name</th>
+									<th>Petitioner</th>
+									<th>District</th>
+									<th>Purpose</th>
+									<th>Respondents</th>
+									<th>Petitioner Advocate</th>
+									<th>Respondent Advocate</th>
+									<th>Orders</th>
+								</tr>
+							</thead>
+							<tbody>
 
-									<logic:iterate id="map" name="CASESLISTOLD" indexId="i">
-										<tr>
-											<td>${i+1 }.</td>
-											<td><input type="button" id="btnShowPopup"
-												value="${map.cino}"
-												class="btn btn-sm btn-info waves-effect waves-light"
-												onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
+								<logic:iterate id="map" name="CASESLISTOLD" indexId="i">
+									<tr>
+										<td>${i+1 }.</td>
+										<td><input type="button" id="btnShowPopup"
+											value="${map.cino}"
+											class="btn btn-sm btn-info waves-effect waves-light"
+											onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
 
-											</td>
-											<td><logic:notEmpty name="map"
+										</td>
+										<td><logic:notEmpty name="map"
+												property="scanned_document_path1">
+												<logic:notEqual value="-" name="map"
 													property="scanned_document_path1">
-													<logic:notEqual value="-" name="map"
-														property="scanned_document_path1">
-														<%-- ./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf --%>
-														<a href="./${map.scanned_document_path}" target="_new"
-															class="btn btn-sm btn-info"><i
-															class="glyphicon glyphicon-save"></i><span>Scanned
-																Affidavit</span></a>
-													</logic:notEqual>
-												</logic:notEmpty></td>
+													<%-- ./uploads/scandocs/${map.ack_no}/${map.ack_no}.pdf --%>
+													<a href="./${map.scanned_document_path}" target="_new"
+														class="btn btn-sm btn-info"><i
+														class="glyphicon glyphicon-save"></i><span>Scanned
+															Affidavit</span></a>
+												</logic:notEqual>
+											</logic:notEmpty></td>
 
-											<td nowrap="nowrap"><span
-												style="color: navy;font-weight: bold;text-align: center;">
-													${map.current_status}</span> <logic:notEmpty name="map"
-													property="fullname">
-													<logic:notEqual value=" " name="map" property="fullname">
-														<br />${map.fullname}</logic:notEqual>
-												</logic:notEmpty> <logic:notEmpty name="map" property="designation">
-													<logic:notEqual value=" " name="map" property="designation">
-														<br /> ${map.designation}</logic:notEqual>
-												</logic:notEmpty> <logic:notEmpty name="map" property="mobile">
-													<logic:notEqual value=" " name="map" property="mobile">
-														<br /> ${map.mobile}</logic:notEqual>
-												</logic:notEmpty> <logic:notEmpty name="map" property="email">
-													<logic:notEqual value=" " name="map" property="email">
-														<br /> ${map.email}</logic:notEqual>
-												</logic:notEmpty> <logic:notEmpty name="map" property="district_name">
-													<logic:notEqual value=" " name="map"
-														property="district_name">
-														<br /> ${map.district_name}</logic:notEqual>
-												</logic:notEmpty> <%-- ${map.globalorgname}<br /> 
+										<td nowrap="nowrap"><span
+											style="color: navy;font-weight: bold;text-align: center;">
+												${map.current_status}</span> <logic:notEmpty name="map"
+												property="fullname">
+												<logic:notEqual value=" " name="map" property="fullname">
+													<br />${map.fullname}</logic:notEqual>
+											</logic:notEmpty> <logic:notEmpty name="map" property="designation">
+												<logic:notEqual value=" " name="map" property="designation">
+													<br /> ${map.designation}</logic:notEqual>
+											</logic:notEmpty> <logic:notEmpty name="map" property="mobile">
+												<logic:notEqual value=" " name="map" property="mobile">
+													<br /> ${map.mobile}</logic:notEqual>
+											</logic:notEmpty> <logic:notEmpty name="map" property="email">
+												<logic:notEqual value=" " name="map" property="email">
+													<br /> ${map.email}</logic:notEqual>
+											</logic:notEmpty> <logic:notEmpty name="map" property="district_name">
+												<logic:notEqual value=" " name="map"
+													property="district_name">
+													<br /> ${map.district_name}</logic:notEqual>
+											</logic:notEmpty> <%-- ${map.globalorgname}<br /> 
 												 ${map.designation} <br />
 												${map.mobile} <br /> ${map.email} <br /> ${map.district_name }--%>
-											</td>
-											<td nowrap="nowrap"><logic:notEmpty name="map"
+										</td>
+										<td nowrap="nowrap"><logic:notEmpty name="map"
+												property="date_of_filing">
+												<logic:notEqual value="0001-01-01" name="map"
 													property="date_of_filing">
-													<logic:notEqual value="0001-01-01" name="map"
-														property="date_of_filing">
 																	${map.date_of_filing }
 																</logic:notEqual>
-												</logic:notEmpty></td>
+											</logic:notEmpty></td>
 
-											<td nowrap="nowrap">${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
-											<td
-												style="min-width: 350px;text-align: justify;">
-												<logic:notEmpty name="map" property="prayer">
+										<td nowrap="nowrap">${map.type_name_fil }/${map.reg_no}/${map.reg_year }</td>
+										<td style="min-width: 350px;text-align: justify;"><logic:notEmpty
+												name="map" property="prayer">
 
-													<logic:equal value="-" name="map" property="prayer">
+												<logic:equal value="-" name="map" property="prayer">
 												N/A
 												</logic:equal>
 
-													<logic:notEqual value="-" name="map" property="prayer">
+												<logic:notEqual value="-" name="map" property="prayer">
 										
 										
 										${map.prayer }
 										
 										<button class="btn btn-info btn-xs" data-container="body"
-															data-toggle="popover" data-trigger="hover"
-															data-placement="top" data-content="${map.prayer_full }"
-															data-original-title="" title="">View More</button>
-													</logic:notEqual>
-												</logic:notEmpty>
-											</td>
+														data-toggle="popover" data-trigger="hover"
+														data-placement="top" data-content="${map.prayer_full }"
+														data-original-title="" title="">View More</button>
+												</logic:notEqual>
+											</logic:notEmpty></td>
 
-											<td>${map.fil_no}</td>
-											<td>${map.fil_year }</td>
-											<td nowrap="nowrap"><logic:notEmpty name="map"
+										<td>${map.fil_no}</td>
+										<td>${map.fil_year }</td>
+										<td nowrap="nowrap"><logic:notEmpty name="map"
+												property="date_next_list">
+												<logic:notEqual value="0001-01-01" name="map"
 													property="date_next_list">
-													<logic:notEqual value="0001-01-01" name="map"
-														property="date_next_list">
 																	${map.date_next_list }
 																</logic:notEqual>
-												</logic:notEmpty></td>
-											<td>${map.bench_name }</td>
-											<td>Hon'ble Judge : ${map.coram }</td>
-											<td>${map.pet_name }</td>
-											<td>${map.dist_name }</td>
-											<td>${map.purpose_name }</td>
-											<td>${map.res_name },${map.address}</td>
+											</logic:notEmpty></td>
+										<td>${map.bench_name }</td>
+										<td>Hon'ble Judge : ${map.coram }</td>
+										<td>${map.pet_name }</td>
+										<td>${map.dist_name }</td>
+										<td>${map.purpose_name }</td>
+										<td>${map.res_name },${map.address}</td>
 
-											<td>${map.pet_adv }</td>
-											<td>${map.res_adv }</td>
-											<td style="text-align: center;">${map.orderpaths }</td>
-										</tr>
+										<td>${map.pet_adv }</td>
+										<td>${map.res_adv }</td>
+										<td style="text-align: center;">${map.orderpaths }</td>
+									</tr>
 
-									</logic:iterate>
-								</tbody>
-								<tfoot>
-									<tR>
-										<td colspan="20">&nbsp;</td>
-									</tR>
-								</tfoot>
-							</table>
-						</div>
+								</logic:iterate>
+							</tbody>
+							<tfoot>
+								<tR>
+									<td colspan="20">&nbsp;</td>
+								</tR>
+							</tfoot>
+						</table>
 					</div>
 				</div>
-				
-				
-				
-				<!-- ------------- -->
-				
-				<div class="ibox">
-		<div class="ibox-title">
+			</div>
+
+
+
+			<!-- ------------- -->
+
+			<div class="ibox">
+				<div class="ibox-title">
 					<h4 class="m-t-0 header-title">
 						<b>Instructions submitted</b>
 					</h4>
 				</div>
-		<div class="ibox-body">
-			<div class="row NewTypediv">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<table id="example"
-						class="table table-striped table-bordered NewTypediv"
-						style="width:100%">
-						<thead>
+				<div class="ibox-body">
+					<div class="row NewTypediv">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<table id="example"
+								class="table table-striped table-bordered NewTypediv"
+								style="width:100%">
+								<%-- <thead>
 							<tr>
 								<th>Sl.No</th>
 								<th>Description</th>
@@ -238,74 +237,130 @@ body {
 
 								</tr>
 							</logic:iterate>
-						</tbody>
-					</table>
+						</tbody> --%>
+
+
+								<thead>
+									<tr>
+										<th colspan="12">Instructions Submit</th>
+									</tr>
+									<tr>
+										<th>Sl.No</th>
+										<th>Description</th>
+										<th>Submitted By</th>
+										<th>Submitted On</th>
+										<th>Uploaded File</th>
+										<th>Reply Sent</th>
+										<!-- <th>Reply Submitted By</th> -->
+										<th>Reply Submitted On</th>
+										<th>Reply Uploaded File</th>
+
+										<!-- <th>Reply to Instructions</th> -->
+									</tr>
+								</thead>
+								<tbody>
+									<logic:iterate id="map" name="existData" indexId="i">
+										<tr>
+											<td>${i+1 }.</td>
+											<td>${map.instructions }</td>
+											<td>${map.insert_by}</td>
+											<td>${map.insert_time}</td>
+											<td><logic:notEqual value="-" name="map"
+													property="upload_fileno">
+													<a href='${map.upload_fileno}' target='_new'
+														class="btn btn-sm btn-info">View Uploaded File</a>
+												</logic:notEqual> <logic:equal value="-" name="map" property="upload_fileno">
+														---
+													</logic:equal></td>
+											<td>${map.reply_instructions}</td>
+											<%-- <td>${map.reply_insert_by}</td> --%>
+											<td>${map.reply_insert_time}</td>
+											<td><logic:notEqual value="-" name="map"
+													property="reply_upload_fileno">
+													<a href='${map.reply_upload_fileno}' target='_new'
+														class="btn btn-sm btn-info">View Uploaded File</a>
+												</logic:notEqual> <logic:equal value="-" name="map"
+													property="reply_upload_fileno">
+														---
+													</logic:equal></td>
+											<%-- <td>
+												 <input type="button" id="btnShowPopup" value="Reply to Instructions"
+												class="btn btn-sm btn-success waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}','${map.slno}');" />
+											</td> --%>
+										</tr>
+									</logic:iterate>
+								</tbody>
+
+
+							</table>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-	
-	
-	
+
+
+
 			<!-- //------------------------- -->
-			
-				<div class="ibox">
-		<div class="ibox-head">
-				<div class="ibox-title">
-					<h4 class="m-t-0 header-title">
-						<b>Submit New Instruction</b>
-					</h4>
+
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b>Submit New Instruction</b>
+						</h4>
+					</div>
+				</div>
+				<div class="ibox-body">
+					<html:hidden styleId="cino" property="dynaForm(cino)" />
+					<div class="row ">
+						<div class="col-md-6 col-xs-12 pull-right">
+
+							<b> Enter Instructions </b>
+
+						</div>
+						<div class="col-md-6 col-xs-12">
+							<html:textarea styleId="instructions"
+								property="dynaForm(instructions)" styleClass="form-control"
+								cols="50" rows="5">
+							</html:textarea>
+						</div>
+					</div>
+					<div class="row oldTypediv">
+						<div class="col-md-6 col-xs-12 pull-right">
+							<b> Upload file: </b>
+						</div>
+						<div class="col-md-6 col-xs-12">
+							<html:file property="changeLetter" styleId="changeLetter"
+								styleClass="form-control"></html:file>
+						</div>
+					</div>
+				</div>
+				<div class="ibox-footer text-center">
+					<div class="row">
+						<div class="col-md-12 col-xs-12 text-center">
+							<input type="submit" name="submit" value="Submit"
+								class="btn btn-success"
+								onclick="return fnSubmitCategoryLegacy();" />
+						</div>
+					</div>
 				</div>
 			</div>
-					<div class="ibox-body">
-						<html:hidden styleId="cino" property="dynaForm(cino)" />
-						<div class="row ">
-							<div class="col-md-6 col-xs-12 pull-right">
 
-								<b> Enter Instructions </b>
+		</logic:notEmpty>
 
-							</div>
-							<div class="col-md-6 col-xs-12">
-								<html:textarea styleId="instructions"
-									property="dynaForm(instructions)" styleClass="form-control"
-									cols="50" rows="5">
-								</html:textarea>
-							</div>
-						</div>
-						<div class="row oldTypediv">
-							<div class="col-md-6 col-xs-12 pull-right">
-								<b> Upload file: </b>
-							</div>
-							<div class="col-md-6 col-xs-12">
-								<html:file property="changeLetter" styleId="changeLetter"
-									styleClass="form-control"></html:file>
-							</div>
-						</div>
-					</div>
-					<div class="ibox-footer text-center">
-						<div class="row">
-							<div class="col-md-12 col-xs-12 text-center">
-								<input type="submit" name="submit" value="Submit"
-									class="btn btn-success" onclick="return fnSubmitCategoryLegacy();" />
-							</div>
-						</div>
-					</div>
-				</div>
-	
-				</logic:notEmpty>
-				
-				
-				
-				
-				<logic:notEmpty name="CASESLISTNEW">
+
+
+
+		<logic:notEmpty name="CASESLISTNEW">
 			<div class="ibox NewTypediv">
-			<div class="ibox-head">
-				<div class="ibox-title">
-					<h4 class="m-t-0 header-title">
-						<b>Case Details</b>
-					</h4>
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b>Case Details</b>
+						</h4>
+					</div>
 				</div>
-			</div>
 				<div class="ibox-body">
 					<div class="table-responsive">
 						<table
@@ -370,36 +425,34 @@ body {
 								</logic:iterate>
 							</tbody>
 							<tfoot>
-								<tR><td>
-									<logic:present name="DISPLAYOLD">
-										<td colspan="14">&nbsp;
-									</logic:present>
-									<logic:notPresent name="DISPLAYOLD">
-										<td colspan="12">&nbsp;
-									</logic:notPresent>
-									</td>
+								<tR>
+									<td><logic:present name="DISPLAYOLD">
+											<td colspan="14">&nbsp;
+										</logic:present> <logic:notPresent name="DISPLAYOLD">
+											<td colspan="12">&nbsp;
+										</logic:notPresent></td>
 								</tR>
 							</tfoot>
 						</table>
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- //-------------------- -->
-				
-				<div class="ibox">
-		<div class="ibox-title">
+
+			<div class="ibox">
+				<div class="ibox-title">
 					<h4 class="m-t-0 header-title">
 						<b> Instructions submitted</b>
 					</h4>
 				</div>
-		<div class="ibox-body">
-			<div class="row ">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<table id="example"
-						class="table table-striped table-bordered NewTypediv"
-						style="width:100%">
-						<thead>
+				<div class="ibox-body">
+					<div class="row ">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<table id="example"
+								class="table table-striped table-bordered NewTypediv"
+								style="width:100%">
+								<%-- <thead>
 							<tr>
 								<th>Sl.No</th>
 								<th>Description</th>
@@ -423,66 +476,119 @@ body {
 
 								</tr>
 							</logic:iterate>
-						</tbody>
-					</table>
+						</tbody> --%>
+
+								<thead>
+									<tr>
+										<th colspan="12">Instructions Submit</th>
+									</tr>
+									<tr>
+										<th>Sl.No</th>
+										<th>Description</th>
+										<th>Submitted By</th>
+										<th>Submitted On</th>
+										<th>Uploaded File</th>
+										<th>Reply Sent</th>
+										<!-- <th>Reply Submitted By</th> -->
+										<th>Reply Submitted On</th>
+										<th>Reply Uploaded File</th>
+
+										<!-- <th>Reply to Instructions</th> -->
+									</tr>
+								</thead>
+								<tbody>
+									<logic:iterate id="map" name="existDataNew" indexId="i">
+										<tr>
+											<td>${i+1 }.</td>
+											<td>${map.instructions }</td>
+											<td>${map.insert_by}</td>
+											<td>${map.insert_time}</td>
+											<td><logic:notEqual value="-" name="map"
+													property="upload_fileno">
+													<a href='${map.upload_fileno}' target='_new'
+														class="btn btn-sm btn-info">View Uploaded File</a>
+												</logic:notEqual> <logic:equal value="-" name="map" property="upload_fileno">
+														---
+													</logic:equal></td>
+											<td>${map.reply_instructions}</td>
+											<%-- <td>${map.reply_insert_by}</td> --%>
+											<td>${map.reply_insert_time}</td>
+											<td><logic:notEqual value="-" name="map"
+													property="reply_upload_fileno">
+													<a href='${map.reply_upload_fileno}' target='_new'
+														class="btn btn-sm btn-info">View Uploaded File</a>
+												</logic:notEqual> <logic:equal value="-" name="map"
+													property="reply_upload_fileno">
+														---
+													</logic:equal></td>
+											<%-- <td>
+												 <input type="button" id="btnShowPopup" value="Reply to Instructions"
+												class="btn btn-sm btn-success waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}','${map.slno}');" />
+											</td> --%>
+										</tr>
+									</logic:iterate>
+								</tbody>
+
+							</table>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-			
-			
+
+
 			<!-- //------------------------- -->
-			
-				<div class="ibox">
-		<div class="ibox-head">
-				<div class="ibox-title">
-					<h4 class="m-t-0 header-title">
-						<b>Submit New Instruction</b>
-					</h4>
+
+			<div class="ibox">
+				<div class="ibox-head">
+					<div class="ibox-title">
+						<h4 class="m-t-0 header-title">
+							<b>Submit New Instruction</b>
+						</h4>
+					</div>
+				</div>
+				<div class="ibox-body">
+					<html:hidden styleId="cino" property="dynaForm(cino)" />
+					<div class="row ">
+						<div class="col-md-6 col-xs-12 pull-right">
+
+							<b> Enter Instructions </b>
+
+						</div>
+						<div class="col-md-6 col-xs-12">
+							<html:textarea styleId="instructions"
+								property="dynaForm(instructions)" styleClass="form-control"
+								cols="50" rows="5">
+							</html:textarea>
+						</div>
+					</div>
+					<div class="row oldTypediv">
+						<div class="col-md-6 col-xs-12 pull-right">
+							<b> Upload file: </b>
+						</div>
+						<div class="col-md-6 col-xs-12">
+							<html:file property="changeLetter" styleId="changeLetter"
+								styleClass="form-control"></html:file>
+						</div>
+					</div>
+				</div>
+				<div class="ibox-footer text-center">
+					<div class="row">
+						<div class="col-md-12 col-xs-12 text-center">
+							<input type="submit" name="submit" value="Submit"
+								class="btn btn-success" onclick="return fnSubmitCategoryNew();" />
+						</div>
+					</div>
 				</div>
 			</div>
-					<div class="ibox-body">
-						<html:hidden styleId="cino" property="dynaForm(cino)" />
-						<div class="row ">
-							<div class="col-md-6 col-xs-12 pull-right">
 
-								<b> Enter Instructions </b>
 
-							</div>
-							<div class="col-md-6 col-xs-12">
-								<html:textarea styleId="instructions"
-									property="dynaForm(instructions)" styleClass="form-control"
-									cols="50" rows="5">
-								</html:textarea>
-							</div>
-						</div>
-						<div class="row oldTypediv">
-							<div class="col-md-6 col-xs-12 pull-right">
-								<b> Upload file: </b>
-							</div>
-							<div class="col-md-6 col-xs-12">
-								<html:file property="changeLetter" styleId="changeLetter"
-									styleClass="form-control"></html:file>
-							</div>
-						</div>
-					</div>
-					<div class="ibox-footer text-center">
-						<div class="row">
-							<div class="col-md-12 col-xs-12 text-center">
-								<input type="submit" name="submit" value="Submit"
-									class="btn btn-success" onclick="return fnSubmitCategoryNew();" />
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				
-				
-				
-				
-			
-			</logic:notEmpty>
-				
+
+
+
+
+		</logic:notEmpty>
+
 	</html:form>
 </div>
 

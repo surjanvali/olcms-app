@@ -145,7 +145,7 @@ public class AssignmentOfCasesByAGAction extends DispatchAction {
 				if(!cino.equals("") && !CommonModels.checkStringObject(cform.getDynaForm("emp_id")).equals("0")) {
 					
 				
-				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, assigned_to , remarks,uploaded_doc_path ) "
+				sql="insert into ecourts_case_activities_agolcms (cino , action_type , inserted_by , inserted_ip, assigned_to , remarks,uploaded_doc_path ) "
 						+ "values ('" + cino + "','CASE ASSSIGNED TO AG OFFICE','"+userId+"', '"+request.getRemoteAddr()+"', '"+emp_email+"', '"+CommonModels.checkStringObject(cform.getDynaForm("caseRemarks"))+"','"+Remarks_AG_file+"')";
 				
 				a+=DatabasePlugin.executeUpdate(sql, con);
@@ -158,7 +158,7 @@ public class AssignmentOfCasesByAGAction extends DispatchAction {
 			
 			System.out.println("cinos--"+cinos);
 			
-				sql = "update ecourts_case_data set assigned=true, case_status='19', assigned_to='"+emp_email+"' where cino  in ("+cinos.substring(0, cinos.lastIndexOf(","))+")" ;
+				sql = "update ecourts_case_data set agolcms_status='19', agolcms_assigned_to='"+emp_email+"' where cino  in ("+cinos.substring(0, cinos.lastIndexOf(","))+")" ;
 				
 				System.out.println("UPDATE SQL:"+sql);
 				
