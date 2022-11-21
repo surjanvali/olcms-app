@@ -67,7 +67,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 			</div>
-			
+
 			<logic:notEmpty name="CASESLIST">
 
 				<div class="ibox">
@@ -122,7 +122,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<logic:iterate id="map" name="CASESLIST" indexId="i">
 										<tr>
 											<td>${i+1 }.</td>
-										<%-- 	<td>
+											<%-- 	<td>
 
 												<div class="form-group">
 													<label class="ui-checkbox"> <input type="checkbox"
@@ -219,215 +219,165 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 				</div>
 
-				<%-- <div class="row">
-					<div class="col-md-12">
-						<div class="ibox">
-							<div class="ibox-head">
-								<div class="ibox-title">Assign Cases</div>
-								<div class="ibox-tools">
-									<a class="ibox-collapse"><i class="fa fa-minus"></i></a>
-								</div>
-							</div>
-							<div class="ibox-body">
-
-								<div class="row">
-									<div class="col-md-3 col-xs-12 pull-right">
-										<b> Remarks: </b>
-									</div>
-									<div class="col-md-3 col-xs-12">
-										<html:textarea styleId="caseRemarks"
-											property="dynaForm(caseRemarks)" styleClass="form-control"
-											cols="50" rows="5">
-										</html:textarea>
-									</div>
-
-									<div class="col-md-3 col-xs-12 pull-right">
-										<b> Upload file: </b>
-									</div>
-									<div class="col-md-3 col-xs-12">
-										<html:file property="changeLetter" styleId="changeLetter"
-											styleClass="form-control"></html:file>
-									</div>
-								</div>
-								<hr />
-
-								<div class="row">
-									<div class="col-md-6">
-
-										<div class="form-group">
-											<label>Select Employee <bean:message key="mandatory" /></label>
-											<html:select styleId="emp_id" property="dynaForm(emp_id)"
-												styleClass="select2Class" style="width:100%;">
-												<html:option value="0">---SELECT---</html:option>
-												<logic:notEmpty name="CommonForm"
-													property="dynaForm(AGOFFICELIST)">
-													<html:optionsCollection name="CommonForm"
-														property="dynaForm(AGOFFICELIST)" />
-												</logic:notEmpty>
-											</html:select>
-										</div>
-										<div class="form-group">
-											<input type="submit" name="submit" value="Assign Cases"
-												class="btn btn-sm btn-primary"
-												onclick="return fnAssignCase();" />
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
- --%>			</logic:notEmpty>
+				
+			</logic:notEmpty>
 		</div>
-			
-			
-			<div class="ibox">
-				<div class="ibox-head">
-					<div class="ibox-title">Assign Cases</div>
-				</div>
 
-				<div class="ibox">
 
-					<div class="row">
+		<div class="ibox">
+			<div class="ibox-head">
+				<div class="ibox-title">Assign Cases</div>
+			</div>
 
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<table id="RESPSTABID" class="table table-bordered">
-								<thead>
-									<tr>
-										<th colspan="10">Case Details: <span class="pull-right"><input
-												type="button" value="Add" class="btn btn-sm btn-success"
-												name="add" id="addResp" /> <input type="button"
-												value="Remove" class="btn btn-sm btn-danger" name="remove"
-												id="removeResp" /></span></th>
-									</tr>
-									<tr>
-										<th style="width: 10%;">Sl No.</th>
-										<th style="width: 30%;">Case Type</th>
-										<th style="width: 30%;">Case Year</th>
-										<th style="width: 10%;">Case Number</th>
+
+				<div class="row">
+
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<table id="RESPSTABID" class="table table-bordered">
+							<thead>
+								<tr>
+									<th colspan="10">Case Details: <span class="pull-right"><input
+											type="button" value="Add" class="btn btn-sm btn-success"
+											name="add" id="addResp" /> <input type="button"
+											value="Remove" class="btn btn-sm btn-danger" name="remove"
+											id="removeResp" /></span></th>
+								</tr>
+								<tr>
+									<th style="width: 10%;">Sl No.</th>
+									<th style="width: 30%;">Case Type</th>
+									<th style="width: 30%;">Case Year</th>
+									<th style="width: 10%;">Case Number</th>
 									<!-- 	<th style="width: 20%;">Case Details</th> -->
 
+								</tr>
+							</thead>
+
+							<tbody>
+								<logic:notPresent name="cfmsdata">
+									<tr id="1">
+										<td>${i+1}</td>
+										<td><html:select styleId="caseTypeId1"
+												property="dynaForm(caseTypeId1)"
+												styleClass="form-control select2Class">
+												<html:option value="0">---SELECT---</html:option>
+												<logic:notEmpty name="CommonForm"
+													property="dynaForm(caseTypesList)">
+													<html:optionsCollection name="CommonForm"
+														property="dynaForm(caseTypesList)" />
+												</logic:notEmpty>
+											</html:select></td>
+										<td><html:select styleId="regYear1"
+												property="dynaForm(regYear1)"
+												styleClass="form-control select2Class">
+												<html:option value="0">---SELECT---</html:option>
+												<%-- <html:option value="ALL">ALL</html:option> --%>
+												<logic:notEmpty name="CommonForm"
+													property="dynaForm(yearsList)">
+													<html:optionsCollection name="CommonForm"
+														property="dynaForm(yearsList)" />
+												</logic:notEmpty>
+											</html:select></td>
+										<td><html:text styleId="caseNumber1"
+												styleClass="form-control" style="height:30px;width:300px"
+												property="dynaForm(caseNumber1)" maxlength="50" onkeypress="return isNumberKey(this);"/></td>
+
 									</tr>
-								</thead>
-
-								<tbody>
-									<logic:notPresent name="cfmsdata">
+								</logic:notPresent>
+								<logic:present name="cfmsdata">
+									<logic:iterate id="map" name="cfmsdata" indexId="i">
 										<tr id="1">
-											<td>${i+1}</td>
-											<td><html:select styleId="caseTypeId1"
-													property="dynaForm(caseTypeId1)"
-													styleClass="form-control select2Class">
-													<html:option value="0">---SELECT---</html:option>
-													<logic:notEmpty name="CommonForm"
-														property="dynaForm(caseTypesList)">
-														<html:optionsCollection name="CommonForm"
-															property="dynaForm(caseTypesList)" />
-													</logic:notEmpty>
-												</html:select></td>
-											<td><html:select styleId="regYear1"
-													property="dynaForm(regYear1)"
-													styleClass="form-control select2Class">
-													<html:option value="0">---SELECT---</html:option>
-													<%-- <html:option value="ALL">ALL</html:option> --%>
-													<logic:notEmpty name="CommonForm"
-														property="dynaForm(yearsList)">
-														<html:optionsCollection name="CommonForm"
-															property="dynaForm(yearsList)" />
-													</logic:notEmpty>
-												</html:select></td>
-											<td><html:text styleId="caseNumber1"
-													styleClass="form-control" style="height:30px;width:300px"
-													property="dynaForm(caseNumber1)" maxlength="50" /></td>
-													
-												<!-- 	<td><div class="col-md-12 col-xs-12">
-													<input type="submit" name="submit" value="Case Details"
-														class="btn btn-success"
-														onclick="return getData();" />
-												</div></td> -->
-										</tr>
-									</logic:notPresent>
-									<logic:present name="cfmsdata">
-										<logic:iterate id="map" name="cfmsdata" indexId="i">
-											<tr id="1">
 
-												<td>${i+1}</td>
-												<td><html:text styleId="caseTypeId${i+1}"
-														styleClass="form-control" style="height:30px;width:300px"
-														property="dynaForm(caseTypeId${i+1})" maxlength="10" /></td>
-												<td><html:text styleId="regYear${i+1}"
-														styleClass="form-control" style="height:30px;width:300px"
-														property="dynaForm(regYear${i+1})" maxlength="15" /></td>
-												<td><html:text styleId="caseNumber${i+1}"
-														styleClass="form-control" style="height:30px;width:300px"
-														property="dynaForm(caseNumber${i+1})" maxlength="50" /></td>
-														<%-- <td>
+											<td>${i+1}</td>
+											<td><html:text styleId="caseTypeId${i+1}"
+													styleClass="form-control" style="height:30px;width:300px"
+													property="dynaForm(caseTypeId${i+1})" maxlength="10" /></td>
+											<td><html:text styleId="regYear${i+1}"
+													styleClass="form-control" style="height:30px;width:300px"
+													property="dynaForm(regYear${i+1})" maxlength="15" /></td>
+											<td><html:text styleId="caseNumber${i+1}"
+													styleClass="form-control" style="height:30px;width:300px"
+													property="dynaForm(caseNumber${i+1})" maxlength="50" onkeypress="return isNumberKey(this);" /></td>
+											<%-- <td>
 													<input type="submit" name="submit" value="Case Details${i+1}" 
 														class="btn btn-success"
 														onclick="return getData();" />
 												</td> --%>
-											</tr>
-										</logic:iterate>
-									</logic:present>
-								</tbody>
-							</table>
-						</div>
+										</tr>
+									</logic:iterate>
+								</logic:present>
+							</tbody>
+						</table>
 					</div>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="ibox">
-								<div class="ibox-body">
-									<div class="row ">
-							<div class="col-md-3 col-xs-12 pull-right">
-								<b> Enter Remarks </b>
+				</div>
+
+
+				<div class="col-md-12">
+					<div class="ibox">
+						<div class="ibox-body">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<div class="form-group">
+										<label for="sel1" id="remaeksTextId">Enter Remarks: </label>
+										<script type="text/javascript" src="js/nicEdit-latest.js"></script>
+										<script type="text/javascript">
+								bkLib.onDomLoaded(function() {
+									new nicEditor({
+										fullPanel : true
+									}).panelInstance('caseRemarks');
+								});
+							</script>
+										<html:textarea cols="600" styleId="caseRemarks"
+											property="dynaForm(caseRemarks)"
+											style="width: 500%; height: 250px;">
+										</html:textarea>
+										
+										
+									</div>
+								</div>
 							</div>
-							<div class="col-md-3 col-xs-12">
-								<html:textarea styleId="caseRemarks"
-									property="dynaForm(caseRemarks)" styleClass="form-control"
-									cols="50" rows="5">
-								</html:textarea>
+
+							<div class="row ">
+								<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+									<b> Upload file: </b>
+								</div>
+								<br>
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+									<html:file property="changeLetter" styleId="changeLetter"
+										styleClass="form-control"></html:file>
+								</div>
 							</div>
-						</div>
-						<div class="row ">
-							<div class="col-md-3 col-xs-12 pull-right">
-								<b> Upload file: </b>
-							</div><br>
-							<div class="col-md-3 col-xs-12">
-								<html:file property="changeLetter" styleId="changeLetter"
-									styleClass="form-control"></html:file>
-							</div>
-						</div>
-									<hr />
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label>Select Officer <bean:message key="mandatory" /></label>
-												<html:select styleId="emp_id" property="dynaForm(emp_id)"
-													styleClass="select2Class" style="width:100%;">
-													<html:option value="0">---SELECT---</html:option>
-													<logic:notEmpty name="CommonForm"
-														property="dynaForm(AGOFFICELIST)">
-														<html:optionsCollection name="CommonForm"
-															property="dynaForm(AGOFFICELIST)" />
-													</logic:notEmpty>
-												</html:select>
-											</div>
-											<div class="row" style="text-align: right">
-												<div class="col-md-12 col-xs-12">
-													<input type="submit" name="submit" value="Assign Cases"
-														class="btn btn-success"
-														onclick="return fnSubmitCategory();" />
-												</div>
-											</div>
+<br/>
+
+							<div class="row">
+								<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+									<b> Select Officer: </b>
+								</div>
+								<br>
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+									<div class="form-group">
+										<html:select styleId="emp_id" property="dynaForm(emp_id)"
+											styleClass="select2Class" style="width:100%;">
+											<html:option value="0">---SELECT---</html:option>
+											<logic:notEmpty name="CommonForm"
+												property="dynaForm(AGOFFICELIST)">
+												<html:optionsCollection name="CommonForm"
+													property="dynaForm(AGOFFICELIST)" />
+											</logic:notEmpty>
+										</html:select>
+									</div>
+									<div class="row" style="text-align: right">
+										<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+											<input type="submit" name="submit" value="Assign Cases"
+												class="btn btn-success" onclick="return fnSubmitCategory();" />
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
-				</div>
-			</div>
-	</html:form>
+</div>
+		</div>
+</html:form>
 </div>
 
 <!-- Modal  Start-->
@@ -630,11 +580,10 @@ function fnAssignCase(){
 	
 </script>
 
-
-
-
 <script type="text/javascript">
 	function fnSubmitCategory() {
+		
+		//alert("--"+($("#caseNumber1").val()));
 		
 		if($("#caseTypeId1").val()==null || $("#caseTypeId1").val()=="" || $("#caseTypeId1").val()=="0" ){
 			alert("Enter case Type");
@@ -647,29 +596,43 @@ function fnAssignCase(){
 			return false;
 		} 
 		if($("#caseNumber1").val()==null || $("#caseNumber1").val()=="" || $("#caseNumber1").val()=="0" ){
-			alert("Enter case Type");
+			alert("Enter Case Number");
 			$("#caseNumber1").focus();
 			return false;
 		} 
 		
+		 
+		//var ss=document.forms[0].elements["dynaForm(caseRemarks)"].value;
 		
+		var nicE = new nicEditors.findEditor('caseRemarks');
+		var question = nicE.getContent();
 		
-		if($("#caseRemarks").val()==null || $("#caseRemarks").val()=="" ){
+		 if(question==null || question=="" || question=="<br>"){
 			alert("Enter Remarks");
 			$("#caseRemarks").focus();
 			return false;
-		}
+		} 
+		 
+		
 		
 		if($("#emp_id").val()==null || $("#emp_id").val()=="" || $("#emp_id").val()=="0"){
-			alert("Select Employee");
+			alert("Select Officer");
 			$("#emp_id").focus();
 			return false;
 		}
+		
+		
+		
+			
+			
+			
+		
 		
 		$("#mode").val("assignCase");
 		$("#respondentIds").val(
 				$("#RESPSTABID tbody tr").length);
 		$("#HighCourtCasesListForm").submit();
+		
 	}
 
 	$("#addResp")

@@ -738,11 +738,67 @@ body {
 										<th>Assigned to</th>
 										<th>Remarks</th>
 										<th>Uploaded Document</th>
-										<th>Action </th>
+										<!-- <th>Action </th> -->
 									</tr>
 								</thead>
 								<tbody>
 									<logic:iterate id="activities" name="ACTIVITIESDATA"
+										indexId="i">
+										<tr>
+											<td>${i+1}</td>
+											<td>${activities.inserted_on}</td>
+											<td>${activities.action_type}</td>
+											<td>${activities.inserted_by}</td>
+											<td>${activities.assigned_to}</td>
+											<td>${activities.remarks }</td>
+											<td><logic:notEmpty name="activities"
+													property="uploaded_doc_path">
+													<logic:notEqual value="-" name="activities"
+														property="uploaded_doc_path">
+														<a href='${activities.uploaded_doc_path }' target='_new'
+															class="btn btn-sm btn-info">View Uploaded File</a>
+													</logic:notEqual>
+												</logic:notEmpty></td>
+												
+													<%-- <TD><input type="button" id="btnShowPopup"
+												value="RESPOND"
+												class="btn btn-sm btn-primary waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup1('${map.cino}');" />
+				<input type="button" id="btnShowPopup"
+												value="RE-ASSIGN"
+												class="btn btn-sm btn-primary waves-effect waves-light"
+												onclick="javascript:reassignCase('${map.cino}');" />
+			</td> --%>
+										</tr>
+									</logic:iterate>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</logic:present>
+				
+				<logic:present name="ACTIVITIESDATAAGO">
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-striped table-bordered table-hover"
+								cellspacing="0" width="100%">
+								<thead>
+									<tr>
+										<th colspan="8">Case Activities</th>
+									</tr>
+									<tr>
+										<th>Sl No.</th>
+										<th>Date</th>
+										<th>Activity</th>
+										<th>Updated By</th>
+										<th>Assigned to</th>
+										<th>Remarks</th>
+										<th>Uploaded Document</th>
+										<th>Action </th>
+									</tr>
+								</thead>
+								<tbody>
+									<logic:iterate id="activities" name="ACTIVITIESDATAAGO"
 										indexId="i">
 										<tr>
 											<td>${i+1}</td>

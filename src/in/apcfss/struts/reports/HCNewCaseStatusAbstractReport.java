@@ -507,11 +507,11 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 				heading += caseCategory.trim() + ", Department : " + deptType.trim();
 			}
 
-			sql = "select a.ack_no,advocatename,advocateccno,cm.case_short_name,maincaseno,inserted_time,petitioner_name,getack_dept_desc(a.ack_no::text) as dept_descs,"
+			sql = "select a.ack_no,advocatename,advocateccno,cm.case_short_name,maincaseno,to_char(inserted_time,'dd-mm-yyyy') as inserted_time,petitioner_name,getack_dept_desc(a.ack_no::text) as dept_descs,"
 					+ "	 services_flag,reg_year,reg_no,mode_filing,case_category,dm.district_name,coalesce(e.hc_ack_no,'-') as hc_ack_no,barcode_file_path, "
 					+ " coalesce(trim(e.ack_file_path),'-') as scanned_document_path1,'' as orderpaths "
 					+ " from  ecourts_gpo_ack_depts  a " + " inner join ecourts_gpo_ack_dtls e on (a.ack_no=e.ack_no) "
-					+ " inner join dept_new d on (a.dept_code=d.dept_code)"
+					+ " inner join dept_new d on (a.dept_code=d.dept_code) "
 					+ " inner join district_mst dm on (e.distid=dm.district_id) "
 					+ " inner join case_type_master cm on (e.casetype=cm.sno::text or e.casetype=cm.case_short_name) "
 					+ " " + condition + " where e.ack_type='NEW' and respondent_slno=1 ";
@@ -620,7 +620,7 @@ public class HCNewCaseStatusAbstractReport extends DispatchAction {
 				// sql = "select * from ecourts_case_data where cino='" + cIno + "'";
 				// sql = "select a.*, prayer from ecourts_case_data a left join nic_prayer_data
 				// np on (a.cino=np.cino) where a.cino='" + cIno + "'";
-				sql = " select advocatename,advocateccno,cm.case_short_name,maincaseno,inserted_time,petitioner_name,"
+				sql = " select advocatename,advocateccno,cm.case_short_name,maincaseno,to_char(inserted_time,'dd-mm-yyyy') as inserted_time,petitioner_name,"
 						+ " services_flag,reg_year,reg_no,mode_filing,case_category,dm.district_name from  ecourts_gpo_ack_dtls a"
 						+ " INNER JOIN district_mst dm on (a.distid=dm.district_id) "
 						+ " inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name)"

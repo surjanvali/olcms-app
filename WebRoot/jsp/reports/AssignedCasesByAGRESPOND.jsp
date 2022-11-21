@@ -57,7 +57,7 @@ body {
 			</div>
 					<div class="ibox-body">
 						<html:hidden styleId="cino" property="dynaForm(cino)" />
-						<div class="row ">
+						<%-- <div class="row ">
 							<div class="col-md-6 col-xs-12 pull-right">
 
 								<b> Enter Response </b>
@@ -70,7 +70,7 @@ body {
 								</html:textarea>
 							</div>
 						</div>
-						<div class="row oldTypediv">
+						<div class="row">
 							<div class="col-md-6 col-xs-12 pull-right">
 								<b> Upload file: </b>
 							</div>
@@ -78,7 +78,43 @@ body {
 								<html:file property="changeLetter" styleId="changeLetter"
 									styleClass="form-control"></html:file>
 							</div>
-						</div>
+						</div> --%>
+						
+						
+						<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<div class="form-group">
+										<label for="sel1" id="remaeksTextId">Enter Response: </label>
+										<script type="text/javascript" src="js/nicEdit-latest.js"></script>
+										<script type="text/javascript">
+								bkLib.onDomLoaded(function() {
+									new nicEditor({
+										fullPanel : true
+									}).panelInstance('responseText');
+								});
+							</script>
+										<html:textarea cols="600" styleId="responseText"
+											property="dynaForm(responseText)"
+											style="width: 500%; height: 250px;">
+										</html:textarea>
+										
+										
+									</div>
+								</div>
+							</div>
+
+							<div class="row ">
+								<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+									<b> Upload file: </b>
+								</div>
+								<br>
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+									<html:file property="changeLetter" styleId="changeLetter"
+										styleClass="form-control"></html:file>
+								</div>
+							</div>
+						
+						
 					</div>
 					<div class="ibox-footer text-center">
 						<div class="row">
@@ -106,10 +142,19 @@ body {
 	
 	
 	function fnSubmitCategory() {
-		if (($("#responseText").val() == "" || $("#responseText").val() == "0")) {
+		/* if (($("#responseText").val() == "" || $("#responseText").val() == null)) {
 			alert("Please Enter Response");
 			return false;
-		}
+		} */
+		
+		var nicE = new nicEditors.findEditor('responseText');
+		var question = nicE.getContent();
+		
+		 if(question==null || question=="" || question=="<br>"){
+			alert("Enter Remarks");
+			$("#responseText").focus();
+			return false;
+		} 
 		
 		$("#mode").val("getSubmitCategory");
 		$("#HighCourtCasesListForm").submit();

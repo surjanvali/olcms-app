@@ -29,10 +29,6 @@ public class CommonModels {
 		
 		return objVal!=null && !(objVal.toString().trim()).equals("") ? Integer.parseInt(objVal.toString().trim()) : 0;
 	}
-public static String checkIntObjectFile(Object objVal){
-		
-		return objVal!=null && !(objVal.toString().trim()).equals("") ? (objVal.toString().trim()) : "-";
-	}
 	public static Double checkDoubleObject(Object objVal){
 		
 		return objVal!=null && !(objVal.toString().trim()).equals("") ? Double.parseDouble(objVal.toString().trim()) : 0.0;

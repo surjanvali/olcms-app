@@ -909,12 +909,18 @@ public class WelcomePageAction extends DispatchAction{
 					
 				}
 				else if(roleId.equals("19") ) { // AG OFFICE
-					request.setAttribute("AGOFFICE", "AGOFFICE");
+					//request.setAttribute("AGOFFICE", "AGOFFICE");
+					
+					sql="select count(*) from ecourts_case_data a where  agolcms_status='19'  and agolcms_assigned_to='"+userid+"'  and coalesce(a.ecourts_case_status,'')!='Closed' ";
+					//System.out.println("NEW--"+sql);
+					request.setAttribute("AGOFFICE", DatabasePlugin.getStringfromQuery(sql, con));
 					
 				}
 				else if(roleId.equals("20") ) { // AG OFFICE clerk
-					request.setAttribute("AGOFFICECLRK", "AGOFFICECLRK");
-					
+					//request.setAttribute("AGOFFICECLRK", "AGOFFICECLRK");
+					sql="select count(*) from ecourts_case_data a where  agolcms_status='20'  and agolcms_assigned_to='"+userid+"'  and coalesce(a.ecourts_case_status,'')!='Closed' ";
+					//System.out.println("NEW--"+sql);
+					request.setAttribute("AGOFFICECLRK", DatabasePlugin.getStringfromQuery(sql, con));
 				}
 				
 				else {

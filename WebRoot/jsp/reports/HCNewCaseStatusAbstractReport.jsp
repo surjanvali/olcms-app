@@ -539,6 +539,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Case Type</th>
 									<!-- <th>Reg.No.</th>
 									<th>Reg. Year</th> -->
+									<th>Date</th>
 									<th>Main Case No</th>
 									<th>Case Category</th>
 									<th>Departments / Respondents</th>
@@ -581,6 +582,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<td>${map.case_short_name }</td>
 										<%-- <td>${map.reg_no}</td>
 										<td>${map.reg_year}</td> --%>
+										<td>${map.inserted_time}</td> 
 										<td>${map.maincaseno}</td>
 										<td>${map.case_category }</td>
 										<td>${map.dept_descs }</td>

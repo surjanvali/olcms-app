@@ -412,7 +412,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<a href="./AssignmentOfCasesByAG.do">
 						<div class="ibox bg-danger color-white widget-stat">
 							<div class="ibox-body">
-								<h2 class="m-b-5 font-strong">Inbox</h2>
+								<h2 class="m-b-5 font-strong">Assign Cases</h2>
 								<div class="m-b-5">&nbsp;</div>
 								<i class="fa fa-file-text-o widget-stat-icon"></i>
 								<div>
@@ -461,6 +461,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<div class="ibox bg-primary color-white widget-stat">
 							<div class="ibox-body">
 								<h2 class="m-b-5 font-strong">Inbox</h2>
+								<h2 class="m-b-5 font-strong">${AGOFFICE}</h2>notifytarget:<jmqnotify>.noninbox
+								
 								<div class="m-b-5">&nbsp;</div>
 								<i class="fa fa-file-text-o widget-stat-icon"></i>
 								<div>
@@ -525,6 +527,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<div class="ibox bg-primary color-white widget-stat">
 							<div class="ibox-body">
 								<h2 class="m-b-5 font-strong">Assigned Cases By AG</h2>
+								<h2 class="m-b-5 font-strong">${AGOFFICECLRK}</h2>
 								<div class="m-b-5">&nbsp;</div>
 								<i class="fa fa-file-text-o widget-stat-icon"></i>
 								<div>

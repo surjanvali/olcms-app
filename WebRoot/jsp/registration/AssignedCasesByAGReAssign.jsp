@@ -49,7 +49,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="col-md-12">
 				<div class="ibox">
 					<div class="ibox-body">
-						<div class="row ">
+						<%-- <div class="row ">
 							<div class="col-md-3 col-xs-12 pull-right">
 								<b> Enter Remarks </b>
 							</div>
@@ -69,9 +69,69 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<html:file property="changeLetter" styleId="changeLetter"
 									styleClass="form-control"></html:file>
 							</div>
-						</div>
-						<hr />
+						</div> --%>
+						
 						<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<div class="form-group">
+										<label for="sel1" id="remaeksTextId">Enter Remarks: </label>
+										<script type="text/javascript" src="js/nicEdit-latest.js"></script>
+										<script type="text/javascript">
+								bkLib.onDomLoaded(function() {
+									new nicEditor({
+										fullPanel : true
+									}).panelInstance('caseRemarks');
+								});
+							</script>
+										<html:textarea cols="600" styleId="caseRemarks"
+											property="dynaForm(caseRemarks)"
+											style="width: 500%; height: 250px;">
+										</html:textarea>
+										
+										
+									</div>
+								</div>
+							</div>
+
+							<div class="row ">
+								<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+									<b> Upload file: </b>
+								</div>
+								<br>
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+									<html:file property="changeLetter" styleId="changeLetter"
+										styleClass="form-control"></html:file>
+								</div>
+							</div>
+						
+						<hr />
+						
+						<div class="row">
+								<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+									<b> Select Officer: </b>
+								</div>
+								<br>
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+									<div class="form-group">
+										<html:select styleId="emp_id" property="dynaForm(emp_id)"
+											styleClass="select2Class" style="width:100%;">
+											<html:option value="0">---SELECT---</html:option>
+											<logic:notEmpty name="CommonForm"
+												property="dynaForm(AGOFFICELIST)">
+												<html:optionsCollection name="CommonForm"
+													property="dynaForm(AGOFFICELIST)" />
+											</logic:notEmpty>
+										</html:select>
+									</div>
+									<div class="row" style="text-align: right">
+										<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+											<input type="submit" name="submit" value="Assign Cases"
+												class="btn btn-success" onclick="return fnSubmitCategory();" />
+										</div>
+									</div>
+								</div>
+							</div>
+						<%-- <div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
 									<label>Select Employee <bean:message key="mandatory" /></label>
@@ -92,7 +152,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> --%>
 					</div>
 				</div>
 			</div>
@@ -174,11 +234,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	};
 	function fnSubmitCategory() {
 		
-		alert("wait");
-		if (($("#caseRemarks").val() == "" || $("#caseRemarks").val() == "0")) {
+		//alert("wait");
+		/* if (($("#caseRemarks").val() == "" || $("#caseRemarks").val() == "0")) {
 			alert("Please Enter Remarks");
 			return false;
-		}
+		} */
+		
+		var nicE = new nicEditors.findEditor('caseRemarks');
+		var question = nicE.getContent();
+		
+		 if(question==null || question=="" || question=="<br>"){
+			alert("Enter Remarks");
+			$("#caseRemarks").focus();
+			return false;
+		} 
 		
 		if (($("#emp_id").val() == "" || $("#emp_id").val() == "0")) {
 			alert("Please Select employee");

@@ -213,6 +213,11 @@ public class AssignedCasesByAGAction extends DispatchAction {
 				System.out.println("ecourts activities SQL:" + sql);
 				data = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("ACTIVITIESDATA", data);
+				
+				sql="select * from ecourts_case_activities_agolcms where cino='" + cIno + "'";
+				System.out.println("ecourts ago activities SQL:" + sql);
+				data = DatabasePlugin.executeQuery(sql, con);
+				request.setAttribute("ACTIVITIESDATAAGO", data);
 			
 			
 			sql = "SELECT cino, case when length(petition_document) > 0 then petition_document else null end as petition_document, "
@@ -390,6 +395,11 @@ public class AssignedCasesByAGAction extends DispatchAction {
 				System.out.println("ecourts activities SQL:" + sql);
 				data = DatabasePlugin.executeQuery(sql, con);
 				request.setAttribute("ACTIVITIESDATA", data);
+				
+				sql="select * from ecourts_case_activities_agolcms where cino='" + cIno + "'";
+				System.out.println("ecourts ago activities SQL:" + sql);
+				data = DatabasePlugin.executeQuery(sql, con);
+				request.setAttribute("ACTIVITIESDATAAGO", data);
 				
 				/*
 					sql=" select * from ecourts_olcms_case_details_log where cino='"+cIno+"'";
@@ -655,7 +665,7 @@ public class AssignedCasesByAGAction extends DispatchAction {
 		CommonForm cform = (CommonForm) form;
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql = null, cIno = null, viewDisplay = null, target = "reAssign",caseType=null;
+		String userId = null, roleId = null, sql = null, cIno = null, viewDisplay = null, target = "successmodalLayout",caseType=null;
 		System.out.println("getCino");
 
 		try {
@@ -808,8 +818,9 @@ public class AssignedCasesByAGAction extends DispatchAction {
 			cform.setDynaForm("fileCino", cIno);
 			DatabasePlugin.close(con, ps, null);
 		}
-		//return mapping.findForward("success");
-		return unspecified(mapping, cform, request, response);
+		return mapping.findForward("responce");
+		//return mapping.findForward("successmodalLayout");
+		//return unspecified(mapping, cform, request, response);
 		//return getCino(mapping, cform, request, response);
 	}
 	
