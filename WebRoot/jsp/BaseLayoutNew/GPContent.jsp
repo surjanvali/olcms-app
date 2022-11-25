@@ -276,5 +276,32 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</logic:present>
 		</logic:equal>
 	</div>
+	
+	
+	<logic:notEmpty name="SHOWCAUSELISTPOPUP">
+	<div id="panel-modal2" class="modal fade" role="dialog"
+		style="padding-top:100px;"> 
+			<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header"
+					style="background-color: #374f65;color: #fff;">
+					<h4 class="modal-title">Important Notes</h4>
+				</div>
+				<div class="modal-body">
+					<iframe src="" id="panel-modal2-page" name="model_window"
+						style="width:100%;min-height:600px;;border:0px;"> </iframe>
+				</div>
+				<div class="modal-footer">
+					<button type="button"
+						class="btn btn-sm btn-primary btnClosePopup pull-right"
+						data-dismiss="modal" aria-hidden="true">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</logic:notEmpty>
+	
+	
 </body>
 </html>

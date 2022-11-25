@@ -27,7 +27,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql = null, sqlCondition = "";
+		String userId = null, roleId = null, sql = null, sqlCondition = "",condition="";
 		CommonForm cform = (CommonForm) form;
 		try {
 			System.out.println( "HCCaseStatusAbstractReport..............................................................................unspecified()");
@@ -39,12 +39,15 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			}
-
+			if ((roleId.equals("6"))) {
+				condition = " left join ecourts_mst_gp_dept_map egm on (egm.dept_code=d.dept_code) ";
+				sqlCondition += " and egm.gp_id='" + userId + "'";
+			}
 			else if (roleId.equals("5") || roleId.equals("9") || roleId.equals("10")) {
 
 				return HODwisedetails(mapping, form, request, response);
-			} else // if(roleId.equals("3") || roleId.equals("4"))
-			{
+			} //else // if(roleId.equals("3") || roleId.equals("4"))
+			//{
 				con = DatabasePlugin.connect();
 
 				if (cform.getDynaForm("dofFromDate") != null
@@ -112,7 +115,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 						+ "sum(case when case_status=96 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as goi, "
 						+ "sum(case when case_status=97 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as psu, "
 						+ "sum(case when case_status=98 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as privatetot "
-						+ "from ecourts_case_data a " + "inner join dept_new d on (a.dept_code=d.dept_code) "
+						+ "from ecourts_case_data a " + "inner join dept_new d on (a.dept_code=d.dept_code) "+condition+" "
 						+ "where d.display = true " + sqlCondition;
 
 				if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))
@@ -136,7 +139,7 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					request.setAttribute("secdeptwise", data);
 				else
 					request.setAttribute("errorMsg", "No Records found to display");
-			}
+			//}
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
 			e.printStackTrace();

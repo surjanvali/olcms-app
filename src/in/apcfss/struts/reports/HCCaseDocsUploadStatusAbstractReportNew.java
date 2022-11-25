@@ -26,7 +26,7 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 			HttpServletResponse response) throws Exception {
 		Connection con = null;
 		HttpSession session = null;
-		String userId = null, roleId = null, sql = null,deptId=null,sqlCondition = "";
+		String userId = null, roleId = null, sql = null,deptId=null,sqlCondition = "",condition="";
 		CommonForm cform = (CommonForm) form;
 		try {
 			session = request.getSession();
@@ -93,7 +93,15 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 				
 				 return HODwisedetails(mapping, form, request, response); 
 			}
-			else  if(roleId.equals("1") || roleId.equals("7") ) {
+			if ((roleId.equals("6"))) {
+				condition = " left join ecourts_mst_gp_dept_map egm on (egm.dept_code=dn.dept_code) ";
+				sqlCondition += " and egm.gp_id='" + userId + "'";
+			}
+			if ((roleId.equals("1") || roleId.equals("7"))) {
+				
+				sqlCondition += " ";
+				
+			}
 			
 				
 			sql=" select a1.reporting_dept_code as dept_code,"
@@ -128,7 +136,7 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 					+ " sum(case when counter_approved_gp='Yes' then 1 else 0 end) as counter_approved_gp,	"
 					+ " sum(case when counter_approved_gp='NO' then 1 else 0 end) as counter_rejected_gp"
 					+ " from ecourts_gpo_ack_depts  a  left join ecourts_olcms_case_details ecod on(a.ack_no=ecod.cino and a.respondent_slno=ecod.respondent_slno)	"
-					+ " left join ecourts_gpo_ack_dtls  b using(ack_no) inner join dept_new dn on (a.dept_code=dn.dept_code) "
+					+ " left join ecourts_gpo_ack_dtls  b using(ack_no) inner join dept_new dn on (a.dept_code=dn.dept_code)  "+condition+" "
 					+ " where  b.ack_type='NEW' " + sqlCondition ;
 			sql+=" group by dn.reporting_dept_code,a.dept_code,dn.description,pwr_gp_approved_date,counter_approved_date ) a1 inner join dept_new dn1 on (a1.reporting_dept_code=dn1.dept_code)  "
 					+ " group by a1.reporting_dept_code,dn1.description order by 1 ";
@@ -139,64 +147,6 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 			request.setAttribute("HEADING", "Sect. Dept. Wise Case processing Abstract Report");
 			
 			request.setAttribute("details", DatabasePlugin.executeQuery(con, sql));
-			
-			}else  {
-				
-				sql=" select a1.reporting_dept_code as dept_code,"
-						+ " upper(trim(dn1.description)) as description,"
-						+ " sum(total_resp1) as cases_respondent_one,"
-						+ " sum(total_resp_other) as cases_respondent_other,"
-						+ " sum(totalcases) as total,"
-						+ " sum(closed_cases) as closed_cases,"
-						+ ""
-						+ " sum(pwrcounter_uploaded) as pwrcounter_uploaded, "
-						+ " sum(pwrcounter_not_uploaded) as pwrcounter_not_uploaded ,"
-						+ " sum(pwrcounter_approved_by_gp) as pwrcounter_approved_by_gp ,"
-						+ " sum(pwrcounter_rejected_by_gp) as pwrcounter_rejected_by_gp ,"
-						+ ""
-						+ " sum(counter_uploaded) as counter_uploaded,	"
-						+ " sum(counter_not_uploaded) as counter_not_uploaded,	"
-						+ " sum(counter_approved_gp) as counter_approved_gp  ,"
-						+ " sum(counter_rejected_gp) as counter_rejected_gp "
-						+ ""
-						+ " from ( select case when reporting_dept_code='CAB01' then a.dept_code else reporting_dept_code end as reporting_dept_code,a.dept_code,"
-						+ " upper(trim(dn.description)) as description,"
-						+ " sum(case when a.respondent_slno=1 then 1 else 0 end) as total_resp1, "
-						+ " sum(case when a.respondent_slno > 1 then 1 else 0 end) as total_resp_other, "
-						+ " count(*) as totalcases,"
-						+ " sum(case when a.ecourts_case_status='Closed' then 1 else 0 end) as closed_cases,	"
-						+ " sum(case when a.ecourts_case_status='Pending' and pwr_uploaded_copy is not null and length(pwr_uploaded_copy)>10 then 1 else 0 end) as pwrcounter_uploaded,"
-						+ " sum(case when a.ecourts_case_status='Pending' and pwr_uploaded_copy is null then 1 else 0 end) as pwrcounter_not_uploaded,	"
-						+ " sum(case when ecod.pwr_approved_gp='Yes' then 1 else 0 end) as pwrcounter_approved_by_gp,	"
-						+ " sum(case when ecod.pwr_approved_gp='No' then 1 else 0 end) as pwrcounter_rejected_by_gp,	"
-						+ "	"
-						+ " sum(case when a.ecourts_case_status='Pending' and counter_filed_document is not null and length(counter_filed_document)>10 then 1 else 0 end) as counter_uploaded,	"
-						+ " sum(case when a.ecourts_case_status='Pending' and counter_filed_document is null then 1 else 0 end) as counter_not_uploaded,	"
-						+ " sum(case when counter_approved_gp='Yes' then 1 else 0 end) as counter_approved_gp,	"
-						+ " sum(case when counter_approved_gp='NO' then 1 else 0 end) as counter_rejected_gp"
-						+ ""
-						+ " from ecourts_gpo_ack_depts  a  left join ecourts_olcms_case_details ecod on(a.ack_no=ecod.cino and a.respondent_slno=ecod.respondent_slno)	"
-						+ " left join ecourts_gpo_ack_dtls  b using(ack_no) inner join dept_new dn on (a.dept_code=dn.dept_code) "
-						+ " where  b.ack_type='NEW'  " + sqlCondition ;
-				
-				if(roleId.equals("2") || roleId.equals("10")){
-					sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
-				}else {
-					sql+=" and  a.dept_code='"+deptId+"'  ";
-				}
-
-				
-				sql+=" group by dn.reporting_dept_code,a.dept_code,dn.description,pwr_gp_approved_date,counter_approved_date ) a1 inner join dept_new dn1 on (a1.reporting_dept_code=dn1.dept_code)  "
-						+ " group by a1.reporting_dept_code,dn1.description order by 1 ";
-				
-				System.out.println("un--->"+sql);
-				
-				request.setAttribute("HEADING", "Sect. Dept. Wise Case processing Abstract Report");
-				
-				request.setAttribute("details", DatabasePlugin.executeQuery(con, sql));
-				
-			}
-			
 			
 		} catch (Exception e) {
 		request.setAttribute("errorMsg", "Exception occurred : No Records found to display");

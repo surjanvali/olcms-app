@@ -65,7 +65,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 
 
-			<logic:notEmpty name="CASEWISEDATA">
+			<logic:equal name="show_flag" value="Y">
 				<div class="ibox">
 					<div class="ibox-head">
 						<div class="ibox-title">
@@ -91,6 +91,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									</tr>
 								</thead>
 								<tbody>
+								<logic:notEmpty name="CASEWISEDATANEW">
 								<logic:iterate id="map" name="CASEWISEDATANEW" indexId="i">
 										<tr>
 											<td>${i+1}.</td>
@@ -112,6 +113,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											--%>
 										</tr>
 									</logic:iterate>
+									</logic:notEmpty>
+									<logic:notEmpty name="CASEWISEDATA">
 									<logic:iterate id="map" name="CASEWISEDATA" indexId="i">
 									<%-- <html:text property="total" value="${total}"/> --%>
 										<tr>
@@ -134,6 +137,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											--%>
 										</tr>
 									</logic:iterate>
+									</logic:notEmpty>
 								
 									
 								</tbody>
@@ -146,7 +150,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 				</div>
-			</logic:notEmpty>
+			</logic:equal>
 
 		</div>
 	</html:form>

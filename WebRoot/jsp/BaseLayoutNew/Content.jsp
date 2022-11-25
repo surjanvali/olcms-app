@@ -22,6 +22,47 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
+	<style>
+	#notification {
+    position:fixed;
+    top:0px;
+    width:100%;
+    z-index:105;
+    text-align:center;
+    font-weight:normal;
+    font-size:14px;
+    font-weight:bold;
+    color:white;
+    background-color:#FF7800;
+    padding:5px;
+}
+#notification span.dismiss {
+    border:2px solid #FFF;
+    padding:0 5px;
+    cursor:pointer;
+    float:right;
+    margin-right:10px;
+}
+#notification a {
+    color:white;
+    text-decoration:none;
+    font-weight:bold
+}
+</style>
+<!-- <script>
+
+$(document).ready(function(){
+	  
+	$(".dismiss").click(function(){$("#notification").fadeOut("slow");});
+	
+	  setInterval(function() {
+		  alert("okk");
+	    $.get("./AssignedCasesByAG.do",function(message) {
+	      if (message){ $("#notification").fadeIn("slow").html(message);}
+	    });}) ,10);
+	
+	});
+</script>	 -->
 </head>
 <body>
 	<div class="page-content fade-in-up">
@@ -141,10 +182,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</div>
 						</logic:greaterThan>
 					</logic:iterate>
-
 				</logic:notEmpty>
-
-
 				<logic:notEmpty name="NEWCASES">
 					<logic:greaterThan value="0" name="NEWCASES">
 						<div class="col-lg-3 col-md-6">
@@ -461,8 +499,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<div class="ibox bg-primary color-white widget-stat">
 							<div class="ibox-body">
 								<h2 class="m-b-5 font-strong">Inbox</h2>
-								<h2 class="m-b-5 font-strong">${AGOFFICE}</h2>notifytarget:<jmqnotify>.noninbox
-								
+								<h2 class="m-b-5 font-strong">${AGOFFICE}</h2>
+								<div id="notification" style="display: none;">  <span class="dismiss"><a title="dismiss this notification">x</a></span></div>
 								<div class="m-b-5">&nbsp;</div>
 								<i class="fa fa-file-text-o widget-stat-icon"></i>
 								<div>
@@ -780,7 +818,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		</logic:notEqual>
 	</div>
 	
-	
 	<logic:notEmpty name="SHOWCAUSELISTPOPUP">
 	<div id="panel-modal2" class="modal fade" role="dialog"
 		style="padding-top:100px;"> 
@@ -804,5 +841,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		</div>
 	</div>
 </logic:notEmpty>
+
 </body>
 </html>

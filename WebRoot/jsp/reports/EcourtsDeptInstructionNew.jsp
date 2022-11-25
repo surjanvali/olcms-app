@@ -485,7 +485,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											property="upload_fileno">
 											<a href='${map.upload_fileno}' target='_new'
 												class="btn btn-sm btn-info">View Uploaded File</a>
-										</logic:notEqual> <logic:equal value="-" name="map" property="upload_fileno">
+										</logic:notEqual> <logic:equal value="---" name="map" property="upload_fileno">
 														---
 													</logic:equal></td>
 

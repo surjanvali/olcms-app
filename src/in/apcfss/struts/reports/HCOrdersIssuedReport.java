@@ -26,13 +26,13 @@ public class HCOrdersIssuedReport extends DispatchAction {
 		Connection con = null;
 		HttpSession session = null;
 		CommonForm cform = (CommonForm) form;
-		String userId = null, roleId = null, sql = null,sqlCondition="";
+		String userId = null, roleId = null, sql = null,sqlCondition="",condition="";
 		try {
 			System.out.println("heiii");
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-			
+			con = DatabasePlugin.connect();
 			
 			if (cform.getDynaForm("fromDate") != null
 					&& !cform.getDynaForm("fromDate").toString().contentEquals("")) {
@@ -96,19 +96,22 @@ public class HCOrdersIssuedReport extends DispatchAction {
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			}
-
+			if ((roleId.equals("6"))) {
+				condition = " left join ecourts_mst_gp_dept_map egm on (egm.dept_code=d.dept_code) ";
+				sqlCondition += " and egm.gp_id='" + userId + "'";
+			}
 			else if (roleId.equals("5") || roleId.equals("9")) {
 
 				return HODwisedetails(mapping, form, request, response);
-			} else // if(roleId.equals("3") || roleId.equals("4"))
-			{
-				con = DatabasePlugin.connect();
+			} //else // if(roleId.equals("3") || roleId.equals("4"))
+			//{
+				
 				
 				sql="select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases, sum(interim_order_cases) as interim_order_cases, sum(final_order_cases) as final_order_cases,  "
 						+ " sum(interim_orders)  as interim_orders, sum(final_orders) as final_orders from "
 						+ "(select a.dept_code , case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,"
 						+ " count(*) as total_cases, count(distinct io.cino) as interim_order_cases, count(distinct fo.cino) as final_order_cases,sum(coalesce(interim_orders,'0')::int4)  as interim_orders, sum(coalesce(final_orders,'0')::int4) as final_orders "
-						+ " from ecourts_case_data a inner join dept_new d on (a.dept_code=d.dept_code) "
+						+ " from ecourts_case_data a inner join dept_new d on (a.dept_code=d.dept_code) "+condition+" "
 						+ " left join (select cino, count(*) as interim_orders from ecourts_case_interimorder where 1=1  group by cino) io on (a.cino=io.cino) "  //"+sqlCondition+"
 						+ " left join (select cino, count(*) as final_orders from ecourts_case_finalorder  where 1=1   group by cino) fo on (a.cino=fo.cino) "  //"+sqlCondition+"
 						+ " where d.display = true "+sqlCondition+" ";
@@ -132,7 +135,7 @@ public class HCOrdersIssuedReport extends DispatchAction {
 					request.setAttribute("secdeptwise", data);
 				else
 					request.setAttribute("errorMsg", "No Records found to display");
-			}
+			//}
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
 			e.printStackTrace();

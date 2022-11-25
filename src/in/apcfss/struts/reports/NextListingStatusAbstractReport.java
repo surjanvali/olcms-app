@@ -26,12 +26,13 @@ public class NextListingStatusAbstractReport extends DispatchAction {
 		Connection con = null;
 		HttpSession session = null;
 		String userId = null, roleId = null, sql = null;
+		String condition = "",sqlCondition="";
 		try {
 			System.out.println("heiii");
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
-
+			con = DatabasePlugin.connect();
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			}
@@ -39,10 +40,12 @@ public class NextListingStatusAbstractReport extends DispatchAction {
 			else  if(roleId.equals("5") || roleId.equals("9")) {
 				
 				return HODwisedetails(mapping, form, request, response);
+			}else if ((roleId.equals("6"))) {
+				condition = " inner join ecourts_mst_gp_dept_map emgm on (a.dept_code=emgm.dept_code)  ";
+				sqlCondition += " and emgm.gp_id='" + userId + "'";
 			}
-			else //if(roleId.equals("3") || roleId.equals("4"))
-			{
-			con = DatabasePlugin.connect();
+			//else //if(roleId.equals("3") || roleId.equals("4"))
+			//{
 				
 				sql="select a1.reporting_dept_code as deptcode,dn1.description,sum(total) as  total,sum(today) as today, sum(tomorrow) as tomorrow,sum(week1) as week1, "
 						+ " sum(week2) as week2, sum(week3) as week3,sum(week4) as week4 "
@@ -55,8 +58,7 @@ public class NextListingStatusAbstractReport extends DispatchAction {
 						+ "sum(case when date_next_list > current_date+14 and date_next_list <= current_date+21  then 1 else 0 end) as week3,  "
 						+ "sum(case when date_next_list > current_date+21 and date_next_list <= current_date+28  then 1 else 0 end) as week4"
 						+ " from ecourts_case_data a "
-						+ " inner join dept_new dn on (a.dept_code=dn.dept_code) ";
-						
+						+ " inner join dept_new dn on (a.dept_code=dn.dept_code) "+condition+" ";
 
 						if(roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9"))
 							sql+=" and (dn.reporting_dept_code='"+session.getAttribute("dept_code")+"' or dn.dept_code='"+session.getAttribute("dept_code")+"')";
@@ -65,7 +67,7 @@ public class NextListingStatusAbstractReport extends DispatchAction {
 						}
 						
 						
-						sql+= " group by reporting_dept_code,a.dept_code) a1"
+						sql+= " "+sqlCondition+" group by reporting_dept_code,a.dept_code) a1"
 						
 						+ " inner join dept_new dn1 on (a1.reporting_dept_code=dn1.dept_code) "
 						+ " group by a1.reporting_dept_code,dn1.description"
@@ -75,12 +77,12 @@ public class NextListingStatusAbstractReport extends DispatchAction {
 
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
+			//System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0)
 				request.setAttribute("secdeptwise", data);
 			else
 				request.setAttribute("errorMsg", "No Records found to display");
-			}
+			//}
 		} catch (Exception e) {
 			request.setAttribute("errorMsg", "Exception occurred : No Records found to display");
 			e.printStackTrace();
@@ -100,6 +102,7 @@ public class NextListingStatusAbstractReport extends DispatchAction {
 		HttpSession session = null;
 		CommonForm cform = (CommonForm) form;
 		String userId = null, roleId = null, sql = null, deptId = null, deptName = "";
+		String condition = "",sqlCondition="";
 		try {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
@@ -118,12 +121,18 @@ public class NextListingStatusAbstractReport extends DispatchAction {
 				deptId = CommonModels.checkStringObject(cform.getDynaForm("deptId"));
 				deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
 			}
-
-			
-			
+			 if ((roleId.equals("6"))) {
+				condition = " inner join ecourts_mst_gp_dept_map emgm on (a.dept_code=emgm.dept_code)  ";
+				sqlCondition += " and emgm.gp_id='" + userId + "'";
+			}
+			 if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14") || roleId.equals("17"))) {
+					sqlCondition += " and (a.dept_code='" + deptId + "' or dn.reporting_dept_code='" + deptId+ "') ";
+				}
+			 if(roleId.equals("2")){
+					sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
+				}
 			
 			sql = "select a.dept_code as deptcode,dn.description,"
-					
 				+ " count(*) as total"
 				+ ",sum(case when date_next_list = current_date then 1 else 0 end) as today,"
 				+ "sum(case when date_next_list = current_date+1 then 1 else 0 end) as tomorrow,"
@@ -134,22 +143,17 @@ public class NextListingStatusAbstractReport extends DispatchAction {
 				+ " from ecourts_case_data a "
 
 
-					+ " inner join dept_new dn on (a.dept_code=dn.dept_code) "
-					+ " where dn.display = true and (dn.reporting_dept_code='" + deptId + "' or a.dept_code='" + deptId
-					+ "') ";
+					+ " inner join dept_new dn on (a.dept_code=dn.dept_code)  "+condition+" "
+					+ " where dn.display = true  "+sqlCondition+" ";
 			
-					if(roleId.equals("2")){
-						sql+=" and a.dist_id='"+request.getSession().getAttribute("dist_id")+"'";
-					}
 					
 					
-					// + "where dn.reporting_dept_code='AGC01' or a.dept_code='AGC01' "
 					sql+= "group by a.dept_code,dn.description order by 1";
 
 			request.setAttribute("HEADING", "HOD Wise Cases Abstract (Hearing) for " + deptName);
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
-			System.out.println("data=" + data);
+			//System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0)
 				request.setAttribute("deptwise", data);
 			else

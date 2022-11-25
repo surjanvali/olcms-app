@@ -29,6 +29,7 @@ public class ContemptCasesAbstractReport extends DispatchAction {
 		HttpSession session = null;
 		String userId = null, roleId = null, sql = null, sqlCondition = "";
 		CommonForm cform = (CommonForm) form;
+		String condition = "";
 		try {
 			System.out.println( "HCCaseStatusAbstractReport..............................................................................unspecified()");
 			System.out.println("unspecified unspecified unspecified");
@@ -93,7 +94,10 @@ public class ContemptCasesAbstractReport extends DispatchAction {
 
 				}
 
-
+				if ((roleId.equals("6"))) {
+					condition = " left join ecourts_mst_gp_dept_map egm on (egm.dept_code=d.dept_code) ";
+					sqlCondition += " and egm.gp_id='" + userId + "'";
+				}
 
 
 				sql = "select x.reporting_dept_code as deptcode, upper(d1.description) as description,sum(total_cases) as total_cases,sum(withsectdept) as withsectdept,sum(withmlo) as withmlo,sum(withhod) as withhod,sum(withnodal) as withnodal,sum(withsection) as withsection, sum(withdc) as withdc, sum(withdistno) as withdistno,sum(withsectionhod) as withsectionhod, sum(withsectiondist) as withsectiondist, sum(withgpo) as withgpo, sum(closedcases) as closedcases, sum(goi) as goi, sum(psu) as psu, sum(privatetot) as privatetot  from ("
@@ -112,7 +116,7 @@ public class ContemptCasesAbstractReport extends DispatchAction {
 						+ "sum(case when case_status=96 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as goi, "
 						+ "sum(case when case_status=97 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as psu, "
 						+ "sum(case when case_status=98 and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as privatetot "
-						+ "from ecourts_case_data a " + "inner join dept_new d on (a.dept_code=d.dept_code) "
+						+ "from ecourts_case_data a inner join dept_new d on (a.dept_code=d.dept_code) "+condition+" "
 						+ "where d.display = true  and a.case_type_id='6' " + sqlCondition;
 
 				if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))

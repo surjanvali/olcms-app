@@ -133,6 +133,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Cause List Id</th>
 										<th>Cause List Type</th>
 										<th>Judge Name</th>
+										<th>Department</th>
 										<th>Action</th>
 									</tr>
 								</thead>
@@ -158,6 +159,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											<td>${map.causelist_id}</td>
 											<td>${map.cause_list_type}</td>
 											<td>${map.judge_name}</td>
+											<td>${map.description}</td>
 											<td>
 												 <input type="button" id="btnShowPopup" value="Update DailyStatus"
 												class="btn btn-sm btn-info waves-effect waves-light"
@@ -175,12 +177,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</div>
 					</div>
 				</div>
-			<!-- 	<div class="row" style="text-align: center">
+			 <!-- 	<div class="row" style="text-align: center">
 					<div class="col-md-12 col-xs-12">
 						<input type="submit" name="submit" value="Submit"
 							class="btn btn-success" onclick="return fnSubmitCategory();" />
 					</div>
-				</div> -->
+				</div> --> 
 
 			</logic:notEmpty>
 		</div>

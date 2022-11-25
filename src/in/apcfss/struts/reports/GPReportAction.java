@@ -36,6 +36,7 @@ public class GPReportAction extends DispatchAction {
 			session = request.getSession();
 			userId = CommonModels.checkStringObject(session.getAttribute("userid"));
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
+			String show_flag="N";
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			} else {
@@ -45,7 +46,7 @@ public class GPReportAction extends DispatchAction {
 				
 				sql = "select type_name_reg,reg_no,reg_year,'Legacy' as legacy_ack_flag, to_char(dt_regis,'dd-mm-yyyy') as dt_regis, cino from ecourts_case_data a "
 						+ " inner join dept_new d on (a.dept_code=d.dept_code)   inner join ecourts_mst_gp_dept_map e on (a.dept_code=e.dept_code) "
-						+ " where reg_year > 0 and d.display = true  and e.gp_id='"+userId+"' ";
+						+ " where reg_year > 0 and d.display = true  and e.gp_id='"+userId+"'  ";
 				if(yearId > 0)
 					sql+="and reg_year='"+yearId+"' ";
 				
@@ -57,6 +58,7 @@ public class GPReportAction extends DispatchAction {
 				// System.out.println("data=" + data);
 				if (data != null && !data.isEmpty() && data.size() > 0) {
 					request.setAttribute("CASEWISEDATA", data);
+					show_flag="Y";
 				}
 				
 				String sql_new="select (select case_full_name from case_type_master ctm where ctm.sno::text=e.casetype::text) as type_name_reg, "
@@ -64,7 +66,7 @@ public class GPReportAction extends DispatchAction {
 				 		+ "  case when length(ack_file_path) > 10 then ack_file_path else '-' end as scanned_document_path,legacy_ack_flag  "
 				 		+ " from (select distinct cino,dept_code,legacy_ack_flag from ecourts_dept_instructions where legacy_ack_flag='New') a "
 				 		+ " inner join ecourts_gpo_ack_depts d on (d.ack_no=a.cino) and (d.dept_code=a.dept_code)   inner join ecourts_gpo_ack_dtls e on (d.ack_no=e.ack_no)  "
-				 		+ " where d.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userId+"')";
+				 		+ " where d.dept_code in (select dept_code from ecourts_mst_gp_dept_map where gp_id='"+userId+"') and ";
 				 
 				System.out.println("SQL:" + sql_new);
 				List<Map<String, Object>> data1 = DatabasePlugin.executeQuery(sql_new, con);
@@ -72,14 +74,14 @@ public class GPReportAction extends DispatchAction {
 				if (data1 != null && !data1.isEmpty() && data1.size() > 0) {
 					request.setAttribute("CASEWISEDATANEW", data1);
 					request.setAttribute("total", data1.size());
+					show_flag="Y";
 				System.out.println("size"+data1.size());
 			}
+				request.setAttribute("show_flag", show_flag); 
 			
 				if ((data == null &&  data1 == null )) {
 					request.setAttribute("errorMsg", "No Records found to display"); 
 			} 
-				
-				
 				
 			}
 		} catch (Exception e) {
@@ -110,7 +112,7 @@ public class GPReportAction extends DispatchAction {
 			empSection = CommonModels.checkStringObject(session.getAttribute("empSection"));
 			empPost = CommonModels.checkStringObject(session.getAttribute("empPost"));
 			distId = CommonModels.checkStringObject(session.getAttribute("dist_id"));
-
+			String show_flag="N";
 			if (userId == null || roleId == null || userId.equals("") || roleId.equals("")) {
 				return mapping.findForward("Logout");
 			}
@@ -129,6 +131,7 @@ public class GPReportAction extends DispatchAction {
 			if (data != null && !data.isEmpty() && data.size() > 0) {
 				request.setAttribute("CASEWISEDATA", data);
 			request.setAttribute("HEADING", heading);
+			show_flag="Y";
 			
 		} /*
 			 * else { request.setAttribute("errorMsg", "No Records found to display"); }
@@ -147,11 +150,12 @@ public class GPReportAction extends DispatchAction {
 				if (data1 != null && !data1.isEmpty() && data1.size() > 0) {
 					request.setAttribute("CASEWISEDATANEW", data1);
 					request.setAttribute("total", data1.size());
+					show_flag="Y";
 				System.out.println("size"+data1.size());
 			} /*
 				 * else { request.setAttribute("errorMsg", "No Records found to display"); }
 				 */
-			
+				request.setAttribute("show_flag", show_flag); 
 				if ((data == null &&  data1 == null )) {
 					request.setAttribute("errorMsg", "No Records found to display"); 
 			} 
@@ -268,12 +272,15 @@ public class GPReportAction extends DispatchAction {
 			
 			sql	+= "order by reg_year,type_name_reg,reg_no";
 			request.setAttribute("HEADING", heading);
+			
+			String show_flag="N";
 
 			System.out.println("SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			// System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
 				request.setAttribute("CASEWISEDATA", data);
+				show_flag="Y";
 			}
 			
 			String sql1 = "select (select case_full_name from case_type_master ctm where ctm.sno::text=b.casetype::text) as type_name_reg,'New' as legacy_ack_flag, reg_no, reg_year, inserted_time::date as dt_regis, a.ack_no as cino, "
@@ -291,10 +298,14 @@ public class GPReportAction extends DispatchAction {
 			System.out.println("SQL:" + sql1);
 			List<Map<String, Object>> data1 = DatabasePlugin.executeQuery(sql1, con);
 			// System.out.println("data=" + data);
+			
+			
 			if (data1 != null && !data1.isEmpty() && data1.size() > 0) {
 				request.setAttribute("CASEWISEDATANEW", data1);
 				request.setAttribute("total", data1.size());
+				show_flag="Y";
 			}
+			request.setAttribute("show_flag", show_flag); 
 			
 				if ((data == null &&  data1 == null )) {
 				request.setAttribute("errorMsg", "No Records found to display"); 

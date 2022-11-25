@@ -81,13 +81,19 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 			 * cform.getDynaForm("districtId").toString().trim() + "' "; }
 			 */
 
-			sql = "select * from ecourts_case_emp_assigned_dtls a inner join ecourts_case_data b on (a.cino=b.cino)"
-					+ " inner join (select distinct employee_id,employee_identity,global_org_name,fullname_en,designation_name_en,mobile1, email from nic_data where coalesce(employee_id,'')!='') c"
-					+ " on ( a.emp_section=trim(c.employee_identity))"  //a.emp_id=c.employee_id and
-					//+ " where dept_id='" + session.getAttribute("dept_id") + "' " 
-					+ " where a.inserted_by='" + session.getAttribute("userid") + "' " 
-					+ " order by a.inserted_time";
-			
+			/*
+			 * sql =
+			 * "select distinct b.cino,* from ecourts_case_emp_assigned_dtls a inner join ecourts_case_data b on (a.cino=b.cino)"
+			 * +
+			 * " inner join (select distinct employee_id,employee_identity,global_org_name,fullname_en,designation_name_en,mobile1, email from nic_data where coalesce(employee_id,'')!='') c"
+			 * + " on ( a.emp_section=trim(c.employee_identity))" //a.emp_id=c.employee_id
+			 * and //+ " where dept_id='" + session.getAttribute("dept_id") + "' " +
+			 * " where a.inserted_by='" + session.getAttribute("userid") + "' ";
+			 */
+
+
+			sql="select cino,* from ecourts_case_data a inner join section_officer_details b on (a.assigned_to=b.emailid) "
+					+ " where b.inserted_by='"+session.getAttribute("userid")+"' and ecourts_case_status!='Private'    order by b.emailid ";
 
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -121,23 +127,25 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 		}
 		String sql = null, cIno = "", roleId=null, deptCode=null, distCode=null;
 		try {
+
+			int a=0;
 			cIno = CommonModels.checkStringObject(cform.getDynaForm("cINO"));
-			
+
 			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			deptCode = CommonModels.checkStringObject(session.getAttribute("dept_code"));
 			distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
-			
+
 			if (cIno != null && !cIno.equals("")) {
-				
+
 				con = DatabasePlugin.connect();
-				
+
 				// sql="select coalesce(case_status,0) as case_status,dept_code from ecourts_case_data where cino='"+cIno+"'";
 				// List<Map> currData = DatabasePlugin.executeQuery(con, sql);
 				// int currentStatus = Integer.parseInt(((Map)currData.get(0)).get("case_status").toString());
 				// String currDept = ((Map)currData.get(0)).get("dept_code").toString();
-				
+
 				int backStatus=0;
-				
+
 				if(roleId.equals("4")) {//MLO
 					backStatus = 2;
 				}
@@ -146,8 +154,9 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 				}
 				else if(roleId.equals("10")) {//NO-DIST
 					backStatus = 8;
+					//distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
 				}
-				
+
 				/*if(currentStatus==5 && currDept.substring(4,5).equals("01")) {
 					backStatus = 2;
 				}else if(currentStatus==5 && !currDept.substring(4,5).equals("01")) {
@@ -159,28 +168,41 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 				else if(currentStatus==10) {
 					backStatus = 8;
 				}*/
-				
-				sql = "update ecourts_case_data set assigned=false, assigned_to=null, case_status="+backStatus+", dept_code='"+deptCode+"',dist_id='"+distCode+"'  where cino='" + cIno + "' ";
-				System.out.println("UPDATE SQL:"+sql);
-				int a = DatabasePlugin.executeUpdate(sql, con);
-				
+				if(roleId.equals("10")) {
+
+					sql = "update ecourts_case_data set assigned=false, assigned_to=null, case_status="+backStatus+", dept_code='"+deptCode+"',dist_id='"+distCode+"'  where cino='" + cIno + "' ";
+					System.out.println("UPDATE SQL:"+sql);
+					a = DatabasePlugin.executeUpdate(sql, con);
+				}else if(roleId.equals("2")) {
+
+					sql = "update ecourts_case_data set assigned=false, assigned_to=null, case_status="+backStatus+", dist_id='"+distCode+"'  where cino='" + cIno + "' ";
+					System.out.println("UPDATE SQL:"+sql);
+					a = DatabasePlugin.executeUpdate(sql, con);
+				}else {
+
+					sql = "update ecourts_case_data set assigned=false, assigned_to=null, case_status="+backStatus+", dept_code='"+deptCode+"'  where cino='" + cIno + "' ";
+					System.out.println("UPDATE SQL:"+sql);
+					a = DatabasePlugin.executeUpdate(sql, con);
+
+				}
+
 				sql = "insert into ecourts_case_emp_assigned_dtls_log select * from ecourts_case_emp_assigned_dtls where cino='" + cIno + "' ";
 				System.out.println("UPDATE SQL:"+sql);
 				a += DatabasePlugin.executeUpdate(sql, con);
-				
+
 				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, assigned_to , remarks ) "
 						+ "values ('" + cIno + "','CASE SENT BACK','"+session.getAttribute("userid")+"', '"+request.getRemoteAddr()+"', '"+session.getAttribute("userid")+"', null )";
 				System.out.println("INSERT ACTIVITIES SQL:"+sql);
 				a += DatabasePlugin.executeUpdate(sql, con);
-				
+
 				sql = "delete from ecourts_case_emp_assigned_dtls where cino='" + cIno + "' ";
 				System.out.println("DELETE SQL:"+sql);
 				a += DatabasePlugin.executeUpdate(sql, con);
-				
+
 				if(a > 0) {
 					request.setAttribute("successMsg", "Case reverted back to MLO/No");
 				}
-				
+
 			} else {
 				request.setAttribute("errorMsg", "Invalid CIN No.");
 			}

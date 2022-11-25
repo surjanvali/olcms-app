@@ -112,8 +112,11 @@ public class DailyStatusEntryByGPAction extends DispatchAction {
 			 * "','dd-mm-yyyy') "; }
 			 */
 			
-			sql= " select distinct c.cino,c.dept_code,c.type_name_reg,c.reg_no,c.reg_year,d.prayer, a.est_code , a. causelist_date , a.bench_id , a. causelist_id , cause_list_type ,coalesce(causelist_document,'') as document, b.judge_name "
-					+ "from ecourts_causelist_bench_data a  left join  ecourts_causelist_data b on (a.bench_id=b.bench_id) inner join  ecourts_case_data c on (a.bench_id=c.bench_id)  and (a.cause_list_type=c.causelist_type)  inner join nic_prayer_data d  on (c.cino=d.cino) "
+			sql= " select distinct c.cino,c.dept_code,c.type_name_reg,c.reg_no,c.reg_year,d.prayer, a.est_code , a. causelist_date , a.bench_id , a. causelist_id , "
+					+ " cause_list_type ,coalesce(causelist_document,'') as document, b.judge_name,(select description from dept_new dn where dn.dept_code=c.dept_code)  "
+					+ "from ecourts_causelist_bench_data a  left join  ecourts_causelist_data b on (a.bench_id=b.bench_id) "
+					+ "inner join  ecourts_case_data c on (a.bench_id=c.bench_id)  and (a.cause_list_type=c.causelist_type)  inner join nic_prayer_data d  on (c.cino=d.cino) "
+					+ " left join ecourts_causelist_cases e on (e.causelist_date=b.causelist_date) and (e.case_no=c.type_name_reg||'/'||c.reg_no||'/'||c.reg_year)  "
 					+ "where a.causelist_date=to_date('"+stringDate+"','dd/mm/yyyy')-1   and assigned_to='"+userid+"'   ";   //'"+stringDate+"'
 
 			System.out.println("ecourts SQL:" + sql);

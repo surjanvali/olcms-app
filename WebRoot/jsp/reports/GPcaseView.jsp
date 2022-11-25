@@ -205,22 +205,22 @@ body {
 															<td>${map.instructions }</td>
 															<td>${map.insert_by}</td>
 															<td>${map.insert_time}</td>
-															<td><logic:notEqual value="-" name="map"
+															<td><logic:notEqual value="---" name="map"
 																	property="upload_fileno">
 																	<a href='${map.upload_fileno}' target='_new'
 																		class="btn btn-sm btn-info">View Uploaded File</a>
-																</logic:notEqual> <logic:equal value="-" name="map"
+																</logic:notEqual> <logic:equal value="---" name="map"
 																	property="upload_fileno">
 														---
 													</logic:equal></td>
 															<td>${map.reply_instructions}</td>
 															<%-- <td>${map.reply_insert_by}</td> --%>
 															<td>${map.reply_insert_time}</td>
-															<td><logic:notEqual value="-" name="map"
+															<td><logic:notEqual value="---" name="map"
 																	property="reply_upload_fileno">
 																	<a href='${map.reply_upload_fileno}' target='_new'
 																		class="btn btn-sm btn-info">View Uploaded File</a>
-																</logic:notEqual> <logic:equal value="-" name="map"
+																</logic:notEqual> <logic:equal value="---" name="map"
 																	property="reply_upload_fileno">
 														---
 													</logic:equal></td>

@@ -7,127 +7,118 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 %>
 
 <div class="page-content fade-in-up">
-	<div class="ibox">
-		<div class="ibox-head">
-				<div class="ibox-title">
-					High Court Cases List - Assigned
-				</div>
-			</div>
-		<div class="ibox-body">
-			<html:form method="post" action="/HighCourtCasesAssignedList">
+<html:form method="post" action="/HighCourtCasesAssignedList">
 
-				<html:hidden styleId="mode" styleClass="form-control"
-					property="mode" />
-				<html:hidden styleId="cINO" property="dynaForm(cINO)" />
+	<html:hidden styleId="mode" styleClass="form-control" property="mode" />
+	<html:hidden styleId="cINO" property="dynaForm(cINO)" />
 
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<div class="dashboard-cat-title">
-								<logic:notEmpty name="successMsg">
-									<div class="alert alert-success" role="alert">
-										<button type="button" class="close" data-dismiss="alert"
-											aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-										<i class="mdi mdi-check-all"></i> <strong>${successMsg}</strong>
-									</div>
-								</logic:notEmpty>
-								<logic:notEmpty name="errorMsg">
-									<div class="alert alert-danger" role="alert">
-										<button type="button" class="close" data-dismiss="alert"
-											aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-										<i class="mdi mdi-block-helper"></i> <strong>${errorMsg}</strong>
-									</div>
-								</logic:notEmpty>
-							</div>
-						</div>
-					</div>
-
-					<logic:notEmpty name="CASESLIST">
-						<div class="table-responsive">
-							<table id="example" class="table table-striped table-bordered"
-								style="width:100%">
-								<thead>
-									<tr>
-										<th>Sl.No</th>
-										<th>CINo</th>
-										<th>Date of Filing</th>
-										<th>Case Type</th>
-										<th>Reg.No.</th>
-										<th>Reg. Year</th>
-										<th>File No.</th>
-										<th>File Year</th>
-										<th>Date of Next List</th>
-										<th>Bench</th>
-										<th>Judge Name</th>
-										<th>Petitioner</th>
-										<th>District</th>
-										<th>Purpose</th>
-										<th>Respondents</th>
-										<th>Orders</th>
-										<th>Assigned To</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody>
-
-									<logic:iterate id="map" name="CASESLIST" indexId="i">
-										<tr>
-											<td>${i+1 }</td>
-											<td><input type="button" id="btnShowPopup"
-												value="${map.cino}"
-												class="btn btn-sm btn-info waves-effect waves-light"
-												onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
-											<td><logic:notEmpty name="map" property="date_of_filing">
-													<logic:notEqual value="0001-01-01" name="map"
-														property="date_of_filing">
-																	${map.date_of_filing }
-																</logic:notEqual>
-												</logic:notEmpty></td>
-											<td>${map.type_name_fil }</td>
-											<td>${map.reg_no}</td>
-											<td>${map.reg_year }</td>
-											<td>${map.fil_no}</td>
-											<td>${map.fil_year }</td>
-											<td><logic:notEmpty name="map" property="date_next_list">
-													<logic:notEqual value="0001-01-01" name="map"
-														property="date_next_list">
-																	${map.date_of_filing }
-																</logic:notEqual>
-												</logic:notEmpty></td>
-											<td>${map.bench_name }</td>
-											<td>Hon'ble Judge : ${map.coram }</td>
-											<td>${map.pet_name }</td>
-											<td>${map.dist_name }</td>
-											<td>${map.purpose_name }</td>
-											<td>${map.res_name }</td>
-											<td>${map.orderpaths }</td>
-											<td nowrap="nowrap">${map.global_org_name}<br />
-												${map.fullname_en} - ${map.designation_name_en} <br />
-												${map.mobile1} - ${map.email}
-											</td>
-											<td><input type="submit" name="submit" value="Pull Back"
-												onclick="sendBack('${map.cino}');"
-												class="btn btn-sm btn-warning" /></td>
-										</tr>
-									</logic:iterate>
-								</tbody>
-								<tfoot>
-									<tR>
-										<td colspan="18">&nbsp;</td>
-									</tR>
-								</tfoot>
-							</table>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="dashboard-cat-title">
+					<logic:notEmpty name="successMsg">
+						<div class="alert alert-success" role="alert">
+							<button type="button" class="close" data-dismiss="alert"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<i class="mdi mdi-check-all"></i> <strong>${successMsg}</strong>
 						</div>
 					</logic:notEmpty>
-
+					<logic:notEmpty name="errorMsg">
+						<div class="alert alert-danger" role="alert">
+							<button type="button" class="close" data-dismiss="alert"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<i class="mdi mdi-block-helper"></i> <strong>${errorMsg}</strong>
+						</div>
+					</logic:notEmpty>
 				</div>
-			</html:form>
+			</div>
 		</div>
 	</div>
+	
+		<div class="ibox">
+			<div class="ibox-head">
+				<div class="ibox-title">High Court Cases List - Assigned</div>
+			</div>
+			<div class="ibox-body">
+				<logic:notEmpty name="CASESLIST">
+					<div class="table-responsive">
+						<table id="example" class="table table-striped table-bordered"
+							style="width:100%">
+							<thead>
+								<tr>
+									<th>Sl.No</th>
+									<th>CINo</th>
+									<th>Date of Filing</th>
+									<th>Case Type</th>
+									<th>Reg.No.</th>
+									<th>Reg. Year</th>
+									<th>File No.</th>
+									<th>File Year</th>
+									<th>Date of Next List</th>
+									<th>Bench</th>
+									<th>Judge Name</th>
+									<th>Petitioner</th>
+									<th>District</th>
+									<th>Purpose</th>
+									<th>Respondents</th>
+									<th>Assigned To</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<logic:iterate id="map" name="CASESLIST" indexId="i">
+									<tr>
+										<td>${i+1 }</td>
+										<td><input type="button" id="btnShowPopup"
+											value="${map.cino}"
+											class="btn btn-sm btn-info waves-effect waves-light"
+											onclick="javascript:viewCaseDetailsPopup('${map.cino}');" />
+										<td><logic:notEmpty name="map" property="date_of_filing">
+												<logic:notEqual value="0001-01-01" name="map"
+													property="date_of_filing">
+																	${map.date_of_filing }
+																</logic:notEqual>
+											</logic:notEmpty></td>
+										<td>${map.type_name_fil }</td>
+										<td>${map.reg_no}</td>
+										<td>${map.reg_year }</td>
+										<td>${map.fil_no}</td>
+										<td>${map.fil_year }</td>
+										<td><logic:notEmpty name="map" property="date_next_list">
+												<logic:notEqual value="0001-01-01" name="map"
+													property="date_next_list">
+																	${map.date_of_filing }
+																</logic:notEqual>
+											</logic:notEmpty></td>
+										<td>${map.bench_name }</td>
+										<td>Hon'ble Judge : ${map.coram }</td>
+										<td>${map.pet_name }</td>
+										<td>${map.dist_name }</td>
+										<td>${map.purpose_name }</td>
+										<td>${map.res_name }</td>
+										<td nowrap="nowrap">${map.emailid}</td>
+										<td><input type="submit" name="submit" value="Pull Back"
+											onclick="sendBack('${map.cino}');"
+											class="btn btn-sm btn-warning" /></td>
+									</tr>
+								</logic:iterate>
+							</tbody>
+							<tfoot>
+								<tR>
+									<td colspan="18">&nbsp;</td>
+								</tR>
+							</tfoot>
+						</table>
+					</div>
+				</logic:notEmpty>
+</div>
+			</div>
+</html:form>
 </div>
 
 <div id="MyPopup" class="modal fade" role="dialog"
