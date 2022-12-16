@@ -24,13 +24,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <!-- THEME STYLES-->
 <link href="assetsnew/css/main.min.css" rel="stylesheet" />
 
+
 <!-- START PAGE CONTENT-->
 <div class="page-heading">
-	<%-- <h1 class="page-title">
+	<h1 class="page-title">
 		<logic:notEmpty name="HEADING">
 									${HEADING }
 								</logic:notEmpty>
-	</h1> --%>
+	</h1>
 
 </div>
 <div class="page-content fade-in-up">
@@ -38,6 +39,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		styleId="HighCourtCasesListForm">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden styleId="selectedCaseIds" property="dynaForm(selectedCaseIds)" />
+
 
 		<div class="container-fluid">
 			<div class="row">
@@ -68,25 +70,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			<logic:notEmpty name="DATA">
 				<div class="ibox">
-					<div class="ibox-head">
-						<div class="ibox-title">
-							<logic:notEmpty name="HEADING">
-									${HEADING }
-								</logic:notEmpty>
-						</div>
-					</div>
-
 					<div class="ibox-body">
 						<div class="table-responsive">
 
-							<table id="example" class="table table-striped table-bordered"
+							<table id="example"
+								class="table table-striped table-bordered oldTypediv"
 								style="width:100%">
 								<thead>
 									<tr>
 										<th>Sl.No</th>
 										<th>Department Code</th>
 										<th>Department Name</th>
-										<th>Department Count</th>
+										<!-- <th>Department Count</th> -->
 										<th>Instructions Count</th>
 										<th>Reply Instructions Count</th>
 									</tr>
@@ -103,25 +98,33 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											</td>
 											<td>${map.dept_code}</td>
 											<td>${map.dept_name}</td>
-											<td>
+											<%-- <td>
 											
-											<%-- <input type="button" id="btnShowPopup" value="${map.dept_count}"
+											<input type="button" id="btnShowPopup" value="${map.dept_count}"
 												class="btn btn-sm btn-success waves-effect waves-light"
-												onclick="javascript:viewDetailsPopup1('viewdata','DeptCount','${map.dept_code}');" /> --%>
+												onclick="javascript:viewDetailsPopup1('viewdata','DeptCount','${map.dept_code}');" />
 											
 											<a href="#" class="btn btn-info btn-md"
 											onclick="javascript:viewDetailsPopup1('viewdata','DeptCount','${map.dept_code}');"> 
-											 ${map.dept_count}</a>
+											 ${map.dept_count}
+											 <!-- </a> -->
 											 
 											 <bean:define id="dept_count_total" value="${dept_count_total+map.dept_count}" />
-											</td>
+											 
+											 
+											 
+											<!--  <div id="notification" style="display: none;">
+											 	<span class="dismiss"><a title="dismiss this notification">X</a></span>
+ 											 </div> -->
+
+											</td> --%>
 											<td>
 											<%-- <input type="button" id="btnShowPopup" value="${map.instructions_count}"
 												class="btn btn-sm btn-success waves-effect waves-light"
 												onclick="javascript:viewDetailsPopup1('viewdata','InstCount','${map.dept_code}');" /> --%>
 											
-											<a href="#" class="btn btn-info btn-md" onclick="javascript:viewDetailsPopup1('viewdata','InstCount','${map.dept_code}');"> 
-											 ${map.instructions_count}</a>
+											<a href="./InstructionsreplyCountReport.do?mode=viewdata&pwCounterFlag=InstCount&dept_code=${map.dept_code}&SHOWPOPUP=SHOWPOPUP"  > 
+											 ${map.instructions_count}</a><!-- onclick="javascript:viewDetailsPopup1('viewdata','InstCount','${map.dept_code}');" -->
 											 <bean:define id="instructions_count_total" value="${instructions_count_total+map.instructions_count}" />
 											</td>
 											<td>
@@ -130,7 +133,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												class="btn btn-sm btn-success waves-effect waves-light"
 												onclick="javascript:viewDetailsPopup1('viewdata','ReplyInstCount','${map.dept_code}');" /> --%>
 												
-											<a href="#" class="btn btn-info btn-md" onclick="javascript:viewDetailsPopup1('viewdata','ReplyInstCount','${map.dept_code}');"> 
+											<%-- <a href="#" class="btn btn-info btn-md" onclick="javascript:viewDetailsPopup1('viewdata','ReplyInstCount','${map.dept_code}');"> --%>
+											<a href="./InstructionsreplyCountReport.do?mode=viewdata&pwCounterFlag=ReplyInstCount&dept_code=${map.dept_code}&SHOWPOPUP=SHOWPOPUP"  > 
 											 ${map.reply_instructions_count}</a>
 											 <bean:define id="reply_instructions_count_total" value="${reply_instructions_count_total+map.reply_instructions_count}" />
 											</td>
@@ -140,7 +144,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<tfoot>
 									<tr>
 									    <td colspan="3">Total</td>
-									    <td>${dept_count_total}</td>
+									   <%--  <td>${dept_count_total}</td> --%>
 									    <td>${instructions_count_total}</td>
 									    <td>${reply_instructions_count_total}</td>
 									</tr>
@@ -402,5 +406,64 @@ $(document).ready(function() {
 			};
 		};
 	};
+	
+
+		
+	
+	function getRequestedData(requestType)
+	{
+		
+       //alert("check2");
+
+    	if (requestType !="")
+    	{
+	        $.ajax({
+	            type: "POST",
+	            url: "InstructionsreplyCountReport.do?mode=getRequestedData",
+	            data: "{}",
+	            success: function(response) 
+	            {
+	            	// alert("check3");
+	            
+	            	//alert("check4===>"+response);
+	            	
+	           
+	            	var response = jQuery.parseJSON(response);
+	            	
+	            	var data_exists = response.data_exists;
+	            	if(data_exists == "true")
+	            	{
+		            	var data_list = response.data_list;
+						//$("#notification").append(data_list);
+						
+						if(requestType=="getRequestedData2")
+	            		{
+							$("#notification").fadeIn("slow").html(data_list);
+	            		}else{
+						$("#notification").fadeIn("slow").html("<blink> <font color=\"red\">"+data_list+"</font></blink>");
+	            		}
+						
+					}
+	            	
+					
+					/* var divisions_exists = response.divisions_exists;
+	            	if(divisions_exists == "true")
+	            	{
+						var divisions_list = response.divisions_list;
+						$("#division_id").find('option').remove().end().append(divisions_list);
+					} */
+	            
+	            },
+	            error: function() 
+	            {
+	            }
+	        });
+	    }
+    	
+	}
+		
+
+	
+	
 	
 </script>
