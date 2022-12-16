@@ -138,7 +138,7 @@ public class WelcomePageAction extends DispatchAction{
 					request.setAttribute("HEADING2", "High Court Cases Abstract Report");
 					
 					sql="select count(*) as total, "
-							+ " sum(case when (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as assignment_pending,"
+							//+ " sum(case when (case_status is null or case_status=2)  and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as assignment_pending,"
 							//+ " sum(case when (case_status=7) and coalesce(assigned,'f')='t' and coalesce(ecourts_case_status,'')!='Closed' then 1 else 0 end) as approval_pending,"
 							+ " sum(case when case_status=99 or coalesce(ecourts_case_status,'')='Closed' then 1 else 0 end) as closedcases"
 							+ "  from ecourts_case_data ";
@@ -648,7 +648,7 @@ public class WelcomePageAction extends DispatchAction{
 					
 				}else if(roleId.equals("12")) { // Section Officer (DIST - HOD)
 					// sql="select emp_id,count(*) as assigned from ecourts_case_emp_assigned_dtls where emp_id='"+empId+"' group by emp_id";
-					sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=10 and coalesce(ecourts_case_status,'')!='Closed'";
+					sql="select count(*) as assigned from ecourts_case_data where assigned=true and assigned_to='"+userid+"' and case_status=10 and dist_id='"+distId+"' and coalesce(ecourts_case_status,'')!='Closed'";
 					List<Map<Object, String>> dashboardCounts = DatabasePlugin.executeQuery(con, sql);
 					request.setAttribute("dashboardCounts", dashboardCounts);
 					
@@ -905,12 +905,15 @@ public class WelcomePageAction extends DispatchAction{
 					
 				}
 				else if(roleId.equals("18") ) { // Adv general
-					request.setAttribute("ADVGENRL", "ADVGENRL");
+					//request.setAttribute("ADVGENRL", "ADVGENRL");
+					
+					sql="select count(*) from ecourts_case_data a where  agolcms_status='18'  and agolcms_assigned_to='"+userid+"'  and coalesce(a.ecourts_case_status,'')!='Closed' ";
+					//System.out.println("NEW--"+sql);
+					request.setAttribute("ADVGENRL", DatabasePlugin.getStringfromQuery(sql, con));
 					
 				}
 				else if(roleId.equals("19") ) { // AG OFFICE
 					//request.setAttribute("AGOFFICE", "AGOFFICE");
-					
 					sql="select count(*) from ecourts_case_data a where  agolcms_status='19'  and agolcms_assigned_to='"+userid+"'  and coalesce(a.ecourts_case_status,'')!='Closed' ";
 					//System.out.println("NEW--"+sql);
 					request.setAttribute("AGOFFICE", DatabasePlugin.getStringfromQuery(sql, con));

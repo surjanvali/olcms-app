@@ -50,7 +50,7 @@ public class LoginStatusReportAction extends DispatchAction {
 								+ "inner join dept_new d on (md.dept_id=d.dept_code) inner join users u on (md.emailid=u.userid) "
 								+ "inner join user_roles ur on (u.userid=ur.userid) inner join roles_mst r on (ur.role_id=r.role_id) "
 								+ "left join (select user_id, min(login_time_date) as firstlogin,count(distinct login_time_date::date) as loggedindays, max(login_time_date) as lastlogin from users_track_time group by user_id) a on (md.emailid=a.user_id) "
-								+ "where coalesce(md.dist_id,0)> 0 order by d.dept_code";
+								+ "where coalesce(md.dist_id,0)> 0 order by lastlogin::timestamp desc";
 	
 						
 						request.setAttribute("HEADING", "District Level Nodal Officer (Legal) Login Status Report ");
@@ -68,7 +68,7 @@ public class LoginStatusReportAction extends DispatchAction {
 								+ " inner join roles_mst r on (ur.role_id=r.role_id) "
 								+ " left join (select user_id, min(login_time_date) as firstlogin,count(distinct login_time_date::date) as loggedindays, max(login_time_date) as lastlogin "
 								+ " from users_track_time group by user_id) a on (md.emailid=a.user_id)"
-								+ " where coalesce(md.dist_id,0)=0 order by d.dept_code";
+								+ " where coalesce(md.dist_id,0)=0 order by lastlogin::timestamp desc";
 	
 						
 						request.setAttribute("HEADING", "Nodal Officer (Legal) Login Status Report ");
@@ -83,7 +83,7 @@ public class LoginStatusReportAction extends DispatchAction {
 								+ " inner join users u on (md.emailid=u.userid) inner join user_roles ur on (u.userid=ur.userid) "
 								+ "inner join roles_mst r on (ur.role_id=r.role_id) "
 								+ "left join (select user_id, min(login_time_date) as firstlogin, count(distinct login_time_date::date) as loggedindays, max(login_time_date) as lastlogin  "
-								+ "from users_track_time group by user_id) a on (md.emailid=a.user_id) order by md.slno ";
+								+ "from users_track_time group by user_id) a on (md.emailid=a.user_id) order by lastlogin::timestamp desc ";
 						
 						request.setAttribute("HEADING", "Government Pleders (GP) Login Status Report ");
 						request.setAttribute("GPREPORT", "GPREPORT");
@@ -97,7 +97,7 @@ public class LoginStatusReportAction extends DispatchAction {
 								+ " inner join users u on (md.emailid=u.userid) inner join user_roles ur on (u.userid=ur.userid) inner join roles_mst r on (ur.role_id=r.role_id)"
 								+ " left join (select user_id, min(login_time_date) as firstlogin,"
 								+ " count(distinct login_time_date::date) as loggedindays, max(login_time_date) as lastlogin "
-								+ " from users_track_time group by user_id) a on (md.emailid=a.user_id) order by d.dept_code";
+								+ " from users_track_time group by user_id) a on (md.emailid=a.user_id) order by lastlogin::timestamp desc";
 						
 						request.setAttribute("HEADING", "MLO Subject Login Status Report ");
 						
@@ -107,7 +107,8 @@ public class LoginStatusReportAction extends DispatchAction {
 								+ "(case when (lastlogin::date-firstlogin::date) > 1 then (lastlogin::date-firstlogin::date) - (loggedindays -1) else 0 end) + (current_date - lastlogin::date) as notlogedindays, u.user_description,r.role_name, "
 								+ " d.dept_code as dept_code, d.description from mlo_details md inner join dept_new d on (md.user_id=d.dept_code)"
 								+ " inner join users u on (md.emailid=u.userid) inner join user_roles ur on (u.userid=ur.userid) inner join roles_mst r on (ur.role_id=r.role_id)"
-								+ " left join (select user_id, min(login_time_date) as firstlogin,count(distinct login_time_date::date) as loggedindays, max(login_time_date) as lastlogin from users_track_time group by user_id) a on (md.emailid=a.user_id) order by d.dept_code";
+								+ " left join (select user_id, min(login_time_date) as firstlogin,count(distinct login_time_date::date) as loggedindays, "
+								+ " max(login_time_date) as lastlogin from users_track_time group by user_id) a on (md.emailid=a.user_id) order by lastlogin::timestamp desc";
 	
 						request.setAttribute("HEADING", "Middle Level Officer (Legal) Login Status Report ");
 					}

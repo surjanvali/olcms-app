@@ -49,20 +49,29 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
     font-weight:bold
 }
 </style>
-<!-- <script>
-
+<script>
 $(document).ready(function(){
-	  
-	$(".dismiss").click(function(){$("#notification").fadeOut("slow");});
-	
-	  setInterval(function() {
-		  alert("okk");
-	    $.get("./AssignedCasesByAG.do",function(message) {
-	      if (message){ $("#notification").fadeIn("slow").html(message);}
-	    });}) ,10);
-	
-	});
-</script>	 -->
+  $("button").click(function(){
+    $("#div1").fadeOut();
+    //$("#div2").fadeOut("slow");
+    //$("#div3").fadeOut(3000);
+  });
+});
+</script>
+<style>
+            .blink {
+                animation: blinker 2.5s linear infinite;
+                color: white; 
+                font-family: sans-serif;
+            }
+            @keyframes blinker {
+                50% {
+                    opacity: 0;
+                }
+            }
+        </style>
+       
+
 </head>
 <body>
 	<div class="page-content fade-in-up">
@@ -491,16 +500,32 @@ $(document).ready(function(){
 					</a>
 				</div>
 				
+					<div class="col-lg-3 col-md-6">
+					<a href="./GeneralRemarks.do">
+						<div class="ibox bg-primary color-white widget-stat">
+							<div class="ibox-body">
+								<h2 class="m-b-5 font-strong">General Remarks </h2>
+								<div class="m-b-5">&nbsp;</div>
+								<i class="fa fa-file-text-o widget-stat-icon"></i>
+								<div>
+									<small> &nbsp;</small>
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+				
 				</logic:notEmpty>
 				
 				<logic:notEmpty name="AGOFFICE">
 				<div class="col-lg-3 col-md-6">
-					<a href="./AssignedCasesByAG.do">
-						<div class="ibox bg-primary color-white widget-stat">
+					<a href="./AssignedCasesByAG.do">   <!-- onclick="getData_callback(); -->
+						<div class="ibox bg-primary color-white widget-stat" >
 							<div class="ibox-body">
-								<h2 class="m-b-5 font-strong">Inbox</h2>
-								<h2 class="m-b-5 font-strong">${AGOFFICE}</h2>
-								<div id="notification" style="display: none;">  <span class="dismiss"><a title="dismiss this notification">x</a></span></div>
+								<!-- <h2> <button><p class="blink">Inbox</p></button></h2> -->
+								<h2> <p class="blink">Inbox</p></h2>
+								<div id="div1"><h2 class="m-b-5 font-strong">${AGOFFICE}</h2></div>
+								<div id="notification" style="display: none;">  </div>
 								<div class="m-b-5">&nbsp;</div>
 								<i class="fa fa-file-text-o widget-stat-icon"></i>
 								<div>
@@ -555,7 +580,6 @@ $(document).ready(function(){
 						</div>
 					</a>
 				</div>
-				
 				</logic:notEmpty>
 				
 				<logic:notEmpty name="AGOFFICECLRK">
@@ -605,11 +629,8 @@ $(document).ready(function(){
 						</div>
 					</a>
 				</div>
-				
 				</logic:notEmpty>
-
 			</div>
-
 
 			<logic:notEmpty name="disposedCasesStatus">
 				<div class="row">

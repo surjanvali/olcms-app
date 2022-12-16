@@ -40,7 +40,7 @@ public class PendingCasesReport extends DispatchAction {
 				return mapping.findForward("Logout");
 			}
 			
-			else  if(roleId.equals("17")) 
+			else  if(roleId.equals("17")  || roleId.equals("13") || roleId.equals("14")) 
 			{
 				request.setAttribute("show_flag", "Y");
 			}
@@ -80,6 +80,13 @@ public class PendingCasesReport extends DispatchAction {
 					}
 					cform.setDynaForm("caseTypesList", DatabasePlugin
 							.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
+					
+					cform.setDynaForm("ResAdvList", DatabasePlugin
+							.getSelectBox("select distinct res_adv,res_adv from ecourts_case_data where res_adv is not null and res_adv not in('-','&#039;','.','..','...','....','.....','./',';','0','00','000','0000','00000',',','') order by 1 ", con));
+					
+					
+					cform.setDynaForm("categoryServiceList", 
+							DatabasePlugin.getSelectBox("SELECT distinct (case when category_service=' ' or category_service is null then 'NON-SERVICE' else category_service end)  as code,(case when category_service=' ' or category_service is null then 'NON-SERVICE' else category_service end) as name FROM ecourts_case_data", con));
 					ArrayList selectData = new ArrayList();
 					for (int i = 2022; i > 1980; i--) {
 						selectData.add(new LabelValueBean(i + "", i + ""));
@@ -106,8 +113,11 @@ public class PendingCasesReport extends DispatchAction {
 			}
 			
 		}
-		//return mapping.findForward("success");
-		return getdata(mapping, cform, request, response);
+		
+		String method="unspecified";
+		request.setAttribute("method", method);
+		return mapping.findForward("success");
+		//return getdata(mapping, cform, request, response);
 	}
 	
 	public ActionForward getdata(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -129,14 +139,21 @@ public class PendingCasesReport extends DispatchAction {
 				return mapping.findForward("Logout");
 			}
 			
-			else  if(roleId.equals("17")) 
+			else  if(roleId.equals("17") || roleId.equals("13") || roleId.equals("14")) 
 			{
 			
 				request.setAttribute("show_flag", "Y");
 				
 			    con = DatabasePlugin.connect();
-			    cform.setDynaForm("caseTypeId","WP");
-			    cform.setDynaForm("regYear","2021");
+			    
+			    
+			    if(request.getAttribute("method")!=null && request.getAttribute("method").equals("unspecified"))
+			    {
+			    	cform.setDynaForm("caseTypeId","WP");
+				    cform.setDynaForm("regYear","2022");
+				   // cform.setDynaForm("categoryServiceId","SERVICE");
+				    cform.setDynaForm("categoryServiceId","");
+			    }
 			    
 			    
 			    if (cform.getDynaForm("dofFromDate") != null
@@ -169,6 +186,22 @@ public class PendingCasesReport extends DispatchAction {
 						&& !cform.getDynaForm("deptId").toString().contentEquals("0")) {
 					sqlCondition += " and a.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 				}
+				
+				if (cform.getDynaForm("categoryServiceId") != null && !cform.getDynaForm("categoryServiceId").toString().contentEquals("")
+						&& !cform.getDynaForm("categoryServiceId").toString().contentEquals("0")) {
+					
+					String subcon="";
+					if(cform.getDynaForm("categoryServiceId").equals("NON-SERVICE"))
+					{
+						subcon=" or a.category_service is null or a.category_service=' '";
+					}
+					sqlCondition += " and a.category_service='" + cform.getDynaForm("categoryServiceId").toString().trim() + "' "+subcon+" ";
+				}
+				if (cform.getDynaForm("res_adv_Id") != null && !cform.getDynaForm("res_adv_Id").toString().contentEquals("")
+						&& !cform.getDynaForm("res_adv_Id").toString().contentEquals("0")) {
+					
+					sqlCondition += " and a.res_adv='" + cform.getDynaForm("res_adv_Id").toString().trim() + "' ";
+				}
 
 				//
 				if (cform.getDynaForm("petitionerName") != null && !cform.getDynaForm("petitionerName").toString().contentEquals("")
@@ -185,16 +218,16 @@ public class PendingCasesReport extends DispatchAction {
 
 				}
 				
-				sql="select a.cino,a.type_name_reg as case_type,a.reg_no as main_case_no,a.reg_year as year,a.dept_code,d.description as dept_name,a.dist_name,a.category_service,a.pet_name as petitioner," + 
+				sql="select a.cino,a.type_name_reg as case_type,a.reg_no as main_case_no,a.reg_year as year,a.dept_code,d.description as dept_name,a.dist_name,(case when category_service=' ' or category_service is null then 'NON-SERVICE' else category_service end) as category_service,a.pet_name as petitioner," + 
 						" a.pet_adv as petioner_advocate,a.res_name as respondent,a.res_adv as respondent_advocate,"+
 					    " case when (p.prayer is not null and coalesce(trim(p.prayer),'')!='' and length(p.prayer) > 2) then substr(p.prayer,1,250) else '-' end as prayer, prayer as prayer_full,"+
 					    " (case when a.pend_disp='P' then 'Pending' else 'Disposed' end) as pending_disposed" + 
 						" from ecourts_case_data a" + 
 						" inner join dept_new d on (a.dept_code=d.dept_code) inner join nic_prayer_data p on(a.cino=p.cino) " +
 						" where d.display = true " + sqlCondition+
-						" order by dist_name,a.reg_no limit 5000";
+						" order by dist_name,a.reg_no";
 
-			//System.out.println("SQL:" + sql);
+			//System.out.println("SQL r:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			//System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0)
@@ -237,8 +270,16 @@ public class PendingCasesReport extends DispatchAction {
 							"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 							con));
 					}
-					cform.setDynaForm("caseTypesList", DatabasePlugin
-							.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
+					cform.setDynaForm("caseTypesList", DatabasePlugin.getSelectBox("select case_short_name,case_full_name from case_type_master order by sno", con));
+					
+					cform.setDynaForm("ResAdvList", DatabasePlugin
+							.getSelectBox("select distinct res_adv,res_adv from ecourts_case_data where res_adv is not null and res_adv not in('-','&#039;','.','..','...','....','.....','./',';','0','00','000','0000','00000',',','') order by 1 ", con));
+					
+					
+					cform.setDynaForm("categoryServiceList", 
+							DatabasePlugin.getSelectBox("SELECT distinct (case when category_service=' ' or category_service is null then 'NON-SERVICE' else category_service end)  as code,(case when category_service=' ' or category_service is null then 'NON-SERVICE' else category_service end) as name FROM ecourts_case_data", con));
+					
+					
 					ArrayList selectData = new ArrayList();
 					for (int i = 2022; i > 1980; i--) {
 						selectData.add(new LabelValueBean(i + "", i + ""));

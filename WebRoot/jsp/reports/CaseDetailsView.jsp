@@ -17,6 +17,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 body {
 	overflow-y: auto;
 }
+.row {
+ border :1px solid black;
+}
+.pull-rightt{
+border:1px 1px 1px 1px solid black;
+}
+.row > div > div{
+  background: lightgrey;
+  border: 1px solid grey;
+}
+.cell{
+ border: 1px 1px 1px 1px;
+}
 </style>
 
 <!-- PAGE LEVEL STYLES-->
@@ -24,7 +37,7 @@ body {
 <div class="page-heading">
 	<h3 class="page-title" style="text-align:center">
 		<logic:notEmpty name="HEADING">
-									${HEADING }
+									<font style="color:green">${HEADING }</font>
 								</logic:notEmpty>
 	</h3>
 
@@ -32,7 +45,7 @@ body {
 <div class="page-content fade-in-up">
 	<html:form action="/AssignedCasesToSection">
 		<html:hidden styleId="mode" property="mode" />
-		<div class="row">
+		<tr class="row1" >
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="dashboard-cat-title">
 					<logic:notEmpty name="successMsg">
@@ -67,218 +80,228 @@ body {
 					</h5>
 				</div>
 			</div> --%>
-			<div class="ibox-body">
+			<div class="ibox-body table" style="border: 2px solid black;">
 				<logic:present name="USERSLIST">
+				<table cellpadding="0" cellspacing="0" class="table" style="width: 100% !important;border-collapse: collapse;" border="1">
+				      <thead>
+						<tr class="row1" >
+							<th colspan="6"><font style="color:#3d80eb">Case Details</font></th>
+						</tr>
+					</thead>
+					<tbody>
 					<logic:iterate id="map" name="USERSLIST">
+					      
+						 <tr class="row1" >
+							<td class="cell" align="right">
+								 Date of filing: 
+							</td>
+							<td class="cell" >
+								<b>${map.date_of_filing}</b>
+							</td>
 
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Date of filing: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.date_of_filing}</div>
+							<td class="cell" align="right">
+								 Case Type : 
+							</td>
+							<td class="cell" >
+								<b>${map.type_name_reg}</b></td>
+							<td class="cell" align="right">
+								 Filing No.:
+							</td>
+							<td class="cell" align="right">
+								<b>${map.fil_no}</b></td>
+						</tr>
+						<tr class="row1" >
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Case Type : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.type_name_reg}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Filing No.: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.fil_no}</div>
-						</div>
-						<div class="row">
+							<td class="cell" align="right">
+								 Filing Year: 
+							</td>
+							<td class="cell" >
+								<b>${map.fil_year}</b></td>
+							<td class="cell" align="right">
+								Registration No:
+							</td>
+							<td class="cell" >
+								<b>${map.reg_no}</b></td>
+							<td class="cell" align="right">
+								 Est Code: 
+							</td>
+							<td class="cell" >
+								<b>${map.est_code}</b></td>
+						</tr>
+						<tr class="row1" >
+							<td class="cell" align="right">
+								Case ID:
+							</td>
+							<td class="cell" >
+								<b>${map.case_type_id}</b></td>
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Filing Year: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.fil_year}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Registration No: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.reg_no}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Est Code: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.est_code}</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Case ID: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.case_type_id}</div>
-
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Cause Type: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.causelist_type}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> Bench Name: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.bench_name}</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Judicial Branch: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.judicial_branch}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Coram: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.coram}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Court Est Name: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.court_est_name}</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b> State Name: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.state_name}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>District : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.dist_name}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Date Of First List : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.date_first_list}</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Date Of Next List </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.date_next_list}</div>
+							<td class="cell" align="right">
+								Cause Type: 
+							</td>
+							<td class="cell" >
+								<b>${map.causelist_type}</b></td>
+							<td class="cell" align="right">
+								 Bench Name: 
+							</td>
+							<td class="cell" >
+								<b>${map.bench_name}</b></td>
+						</tr>
+						<tr class="row1" >
+							<td class="cell" align="right">
+								Judicial Branch: 
+							</td>
+							<td class="cell" >
+								<b>${map.judicial_branch}</b></td>
+							<td class="cell" align="right">
+								Coram: 
+							</td>
+							<td class="cell" >
+								<b>${map.coram}</b></td>
+							<td class="cell" align="right">
+								Court Est Name: 
+							</td>
+							<td class="cell" >
+								<b>${map.court_est_name}</b></td>
+						</tr>
+						<tr class="row1" >
+							<td class="cell" align="right">
+								 State Name:
+							</td>
+							<td class="cell" >
+								<b>${map.state_name}</b></td>
+							<td class="cell" align="right">
+								District : 
+							</td>
+							<td class="cell" >
+								<b>${map.dist_name}</b></td>
+							<td class="cell" align="right">
+								Date Of First List : 
+							</td>
+							<td class="cell" >
+								<b>${map.date_first_list}</b></td>
+						</tr>
+						<tr class="row1" >
+							<td class="cell" align="right">
+								Date Of Next List 
+							</td>
+							<td class="cell" >
+								<b>${map.date_next_list}</b></td>
 
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Date Of Decision : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.date_of_decision}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Purpose : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.purpose_name}</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Petitioner Name: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.pet_name}</div>
+							<td class="cell" align="right">
+								Date Of Decision : 
+							</td>
+							<td class="cell" >
+								<b>${map.date_of_decision}</b></td>
+							<td class="cell" align="right">
+								Purpose : 
+							</td>
+							<td class="cell" >
+								<b>${map.purpose_name}</b></td>
+						</tr>
+						<tr class="row1" >
+							<td class="cell" align="right">
+								Petitioner Name:
+							</td>
+							<td class="cell" >
+								<b>${map.pet_name}</b></td>
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Petitioner Advocate : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.pet_adv}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Petitioner Legal Heir : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.pet_legal_heir}</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Respondent Name : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.res_name}, 
-								${map.address}
-								</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Respondent Advocate : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.res_adv}</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Respondent Advocate : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${map.res_adv}</div>
-						</div>
+							<td class="cell" align="right">
+								Petitioner Advocate : 
+							</td>
+							<td class="cell" >
+								<b>${map.pet_adv}</b></td>
+							<td class="cell" align="right">
+								Petitioner Legal Heir : 
+							</td>
+							<td class="cell" >
+								<b>${map.pet_legal_heir}</b></td>
+						</tr>
+						<tr class="row1" >
+							<td class="cell" align="right">
+								Respondent Name : 
+							</td>
+							<td class="cell" >
+								<b>${map.res_name}, 
+								${map.address}</b>
+								</td>
+							<td class="cell" align="right">
+								Respondent Advocate : 
+							</td>
+							<td class="cell" >
+								<b>${map.res_adv}</b></td>
+							<td class="cell" align="right">
+								Respondent Advocate : 
+							</td>
+							<td class="cell" >
+								<b>${map.res_adv}</b></td>
+						</tr>
 
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<b>Prayer:</b>								
-								${map.prayer}</div>
-						</div>
+						<tr class="row1" >
+							<td class="cell" align="right">
+								Prayer:								
+								
+							</td>
+							<td class="cell" colspan="5">
+								<b>${map.prayer}</b>
+							</td>
+						</tr>
 					</logic:iterate>
+					</tbody>
+					</table>
 				</logic:present>
+				
 				<hr />
 
 				<logic:present name="actlist">
-					<div class="row">
 						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
+							<table cellpadding="0" cellspacing="0" class="table" style="width: 100% !important;border-collapse: collapse;" border="1">
 								<thead>
-									<tr>
-										<th colspan="4">ACTS List</th>
+									<tr class="row1" >
+										<th colspan="4"><font style="color:#3d80eb">ACTS List</font></th>
 									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Act</th>
-										<th>Act Name</th>
-										<th>Section</th>
+									<tr class="row1" >
+										<th class="cell" >Sl No.</th>
+										<th class="cell" >Act</th>
+										<th class="cell" >Act Name</th>
+										<th class="cell" >Section</th>
 									</tr>
 								</thead>
 								<tbody>
 									<logic:iterate id="ccd" name="actlist" indexId="i">
-										<tr>
+										<tr class="row1" >
 
-											<td>${i+1}</td>
-											<td>${ccd.act}</td>
-											<td>${ccd.actname}</td>
-											<td>${ccd.section}</td>
+											<td class="cell" >${i+1}</td>
+											<td class="cell" >${ccd.act}</td>
+											<td class="cell" >${ccd.actname}</td>
+											<td class="cell" >${ccd.section}</td>
 										</tr>
 									</logic:iterate>
 								</tbody>
 							</table>
 						</div>
-					</div>
 				</logic:present>
 
 				<logic:present name="PETEXTRAPARTYLIST">
-					<div class="row">
 						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
+							<table cellpadding="0" cellspacing="0" class="table" style="width: 100% !important;border-collapse: collapse;" border="1">
 								<thead>
-									<tr>
-										<th colspan="3">Petitioner's List</th>
+									<tr class="row1" >
+										<th colspan="3"><font style="color:#3d80eb">Petitioner's List</font></th>
 									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Party No</th>
-										<th>Party Name</th>
+									<tr class="row1" >
+										<th class="cell" >Sl No.</th>
+										<th class="cell" >Party No</th>
+										<th class="cell" >Party Name</th>
 
 									</tr>
 								</thead>
 								<tbody>
 									<logic:iterate id="pet" name="PETEXTRAPARTYLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${pet.party_no}</td>
-											<td>${pet.party_name}</td>
+										<tr class="row1" >
+											<td class="cell" >${i+1}</td>
+											<td class="cell" >${pet.party_no}</td>
+											<td class="cell" >${pet.party_name}</td>
 
 										</tr>
 
@@ -286,68 +309,65 @@ body {
 								</tbody>
 							</table>
 						</div>
-					</div>
+					
 				</logic:present>
 
 				<logic:present name="RESEXTRAPARTYLIST">
-					<div class="row">
 						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
+							<table cellpadding="0" cellspacing="0" class="table" style="width: 100% !important;border-collapse: collapse;" border="1">
 								<thead>
-									<tr>
-										<th colspan="3">Respondent List</th>
+									<tr class="row1" >
+										<th colspan="4"><font style="color:#3d80eb">Respondent List</font></th>
 									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Party No</th>
-										<th>Party Name</th>
-										<th>Address</th>
+									<tr class="row1" >
+										<th class="cell" >Sl No.</th>
+										<th class="cell" >Party No</th>
+										<th class="cell" >Party Name</th>
+										<th class="cell" >Address</th>
 									</tr>
 								</thead>
 								<tbody>
 									<logic:iterate id="res" name="RESEXTRAPARTYLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${res.party_no}</td>
-											<td>${res.party_name}</td>
-											<td>${res.address}</td>
+										<tr class="row1" >
+											<td class="cell" >${i+1}</td>
+											<td class="cell" >${res.party_no}</td>
+											<td class="cell" >${res.party_name}</td>
+											<td class="cell" >${res.address}</td>
 										</tr>
 									</logic:iterate>
 								</tbody>
 							</table>
 						</div>
-					</div>
+					
 				</logic:present>
 
 				<logic:present name="IAFILINGLIST">
-					<div class="row">
+					
 						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
+							<table cellpadding="0" cellspacing="0" class="table" style="width: 100% !important;border-collapse: collapse;" border="1">
 								<thead>
-									<tr>
-										<th colspan="6">IAFilling List</th>
+									<tr class="row1" >
+										<th colspan="6"><font style="color:#3d80eb">IAFilling List</font></th>
 									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Sr No</th>
-										<th>IA NO</th>
-										<th>IA Petitioner Name</th>
-										<th>IA Petitioner Dispoasal</th>
-										<th>IA Date of Filling</th>
+									<tr class="row1" >
+										<th class="cell" >Sl No.</th>
+										<th class="cell" >Sr No</th>
+										<th class="cell" >IA NO</th>
+										<th class="cell" >IA Petitioner Name</th>
+										<th class="cell" >IA Petitioner Dispoasal</th>
+										<th class="cell" >IA Date of Filling</th>
 
 									</tr>
 								</thead>
 								<tbody>
 									<logic:iterate id="iafi" name="IAFILINGLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${iafi.sr_no}</td>
-											<td>${iafi.ia_no}</td>
-											<td>${iafi.ia_pet_name}</td>
-											<td>${iafi.ia_pend_disp}</td>
-											<td>${iafi.date_of_filing}</td>
+										<tr class="row1" >
+											<td class="cell" >${i+1}</td>
+											<td class="cell" >${iafi.sr_no}</td>
+											<td class="cell" >${iafi.ia_no}</td>
+											<td class="cell" >${iafi.ia_pet_name}</td>
+											<td class="cell" >${iafi.ia_pend_disp}</td>
+											<td class="cell" >${iafi.date_of_filing}</td>
 
 										</tr>
 
@@ -357,39 +377,35 @@ body {
 							</table>
 
 						</div>
-
-					</div>
 				</logic:present>
 
 				<logic:present name="INTERIMORDERSLIST">
-					<div class="row">
 						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
+							<table cellpadding="0" cellspacing="0" class="table" style="width: 100% !important;border-collapse: collapse;" border="1">
 								<thead>
-									<tr>
-										<th colspan="6">InterimOrder List</th>
+									<tr class="row1" >
+										<th colspan="6"><font style="color:#3d80eb">InterimOrder List</font></th>
 									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Sr No</th>
-										<th>Order NO</th>
-										<th>Order Date</th>
-										<th>Order Details</th>
-										<th>Order Document</th>
+									<tr class="row1" >
+										<th class="cell" >Sl No.</th>
+										<th class="cell" >Sr No</th>
+										<th class="cell" >Order NO</th>
+										<th class="cell" >Order Date</th>
+										<th class="cell" >Order Details</th>
+										<th class="cell" >Order Document</th>
 
 									</tr>
 								</thead>
 								<tbody>
 									<logic:iterate id="inter" name="INTERIMORDERSLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${inter.sr_no}</td>
-											<td>${inter.order_no}</td>
-											<td>${inter.order_date}</td>
-											<td>${inter.order_details}</td>
+										<tr class="row1" >
+											<td class="cell" >${i+1}</td>
+											<td class="cell" >${inter.sr_no}</td>
+											<td class="cell" >${inter.order_no}</td>
+											<td class="cell" >${inter.order_date}</td>
+											<td class="cell" >${inter.order_details}</td>
 
-											<td><logic:notEmpty name="inter"
+											<td class="cell" ><logic:notEmpty name="inter"
 													property="order_document_path">
 
 													<logic:notEqual value="-" name="inter"
@@ -411,33 +427,30 @@ body {
 								</tbody>
 							</table>
 						</div>
-					</div>
 				</logic:present>
 
 				<logic:present name="LINKCASESLIST">
-					<div class="row">
 						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
+							<table cellpadding="0" cellspacing="0" class="table" style="width: 100% !important;border-collapse: collapse;" border="1">
 								<thead>
-									<tr>
-										<th colspan="4">Case Link List</th>
+									<tr class="row1" >
+										<th colspan="4"><font style="color:#3d80eb">Case Link List</font></th>
 									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Sr No</th>
-										<th>Filling NO</th>
-										<th>Case Number</th>
+									<tr class="row1" >
+										<th class="cell" >Sl No.</th>
+										<th class="cell" >Sr No</th>
+										<th class="cell" >Filling NO</th>
+										<th class="cell" >Case Number</th>
 
 									</tr>
 								</thead>
 								<tbody>
 									<logic:iterate id="link" name="LINKCASESLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${link.sr_no}</td>
-											<td>${link.filing_number}</td>
-											<td>${link.case_number}</td>
+										<tr class="row1" >
+											<td class="cell" >${i+1}</td>
+											<td class="cell" >${link.sr_no}</td>
+											<td class="cell" >${link.filing_number}</td>
+											<td class="cell" >${link.case_number}</td>
 
 										</tr>
 									</logic:iterate>
@@ -446,80 +459,74 @@ body {
 							</table>
 
 						</div>
-
-					</div>
 				</logic:present>
 
 				<logic:present name="OBJECTIONSLIST">
-					<div class="row">
+			
 						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
+							<table cellpadding="0" cellspacing="0" class="table" style="width: 100% !important;border-collapse: collapse;" border="1">
 								<thead>
-									<tr>
-										<th colspan="6">Objections List</th>
+									<tr class="row1" >
+										<th colspan="6"><font style="color:#3d80eb">Objections List</font></th>
 									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Objection Number</th>
-										<th>Objection Description</th>
-										<th>Scrunity Date</th>
-										<th>Compliance Date</th>
-										<th>Receipt Date</th>
+									<tr class="row1" >
+										<th class="cell" >Sl No.</th>
+										<th class="cell" >Objection Number</th>
+										<th class="cell" >Objection Description</th>
+										<th class="cell" >Scrunity Date</th>
+										<th class="cell" >Compliance Date</th>
+										<th class="cell" >Receipt Date</th>
 
 									</tr>
 								</thead>
 								<tbody>
 									<logic:iterate id="obj" name="OBJECTIONSLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${obj.objection_no}</td>
-											<td>${obj.objection_desc}</td>
-											<td>${obj.scrutiny_date}</td>
-											<td>${obj.objections_compliance_by_date}</td>
-											<td>${obj.obj_reciept_date}</td>
+										<tr class="row1" >
+											<td class="cell" >${i+1}</td>
+											<td class="cell" >${obj.objection_no}</td>
+											<td class="cell" >${obj.objection_desc}</td>
+											<td class="cell" >${obj.scrutiny_date}</td>
+											<td class="cell" >${obj.objections_compliance_by_date}</td>
+											<td class="cell" >${obj.obj_reciept_date}</td>
 
 										</tr>
 									</logic:iterate>
 								</tbody>
 
 							</table>
-
-						</div>
 
 					</div>
 				</logic:present>
 
 				<logic:present name="CASEHISTORYLIST">
-					<div class="row">
+				
 						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
+							<table cellpadding="0" cellspacing="0" class="table" style="width: 100% !important;border-collapse: collapse;" border="1">
 								<thead>
-									<tr>
-										<th colspan="7">Case History Details</th>
+									<tr class="row1" >
+										<th colspan="7"><font style="color:#3d80eb">Case History Details</font></th>
 									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Sr No</th>
-										<th>Judge Name</th>
-										<th>Business Date</th>
-										<th>Hearing Date</th>
-										<th>Purpose of Listing</th>
-										<th>Cause Type</th>
+									<tr class="row1" >
+										<th class="cell" >Sl No.</th>
+										<th class="cell" >Sr No</th>
+										<th class="cell" >Judge Name</th>
+										<th class="cell" >Business Date</th>
+										<th class="cell" >Hearing Date</th>
+										<th class="cell" >Purpose of Listing</th>
+										<th class="cell" >Cause Type</th>
 
 									</tr>
 								</thead>
 								<tbody>
 									<logic:iterate id="history" name="CASEHISTORYLIST" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${history.sr_no}</td>
-											<td>${history.judge_name}</td>
-											<td>${history.business_date}</td>
-											<td>${history.hearing_date}</td>
-											<td>${history.purpose_of_listing}</td>
-											<td>${history.causelist_type}</td>
+										<tr class="row1" >
+											<td class="cell" >${i+1}</td>
+											<td class="cell" >${history.sr_no}</td>
+											<td class="cell" >${history.judge_name}</td>
+											<td class="cell" >${history.business_date}</td>
+											<td class="cell" >${history.hearing_date}</td>
+											<td class="cell" >${history.purpose_of_listing}</td>
+											<td class="cell" >${history.causelist_type}</td>
 
 
 
@@ -528,41 +535,36 @@ body {
 								</tbody>
 
 							</table>
-
-						</div>
-
 					</div>
 				</logic:present>
 
 				<logic:present name="orderlist">
-					<div class="row">
 						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
+							<table cellpadding="0" cellspacing="0" class="table" style="width: 100% !important;border-collapse: collapse;" border="1">
 								<thead>
-									<tr>
-										<th colspan="6">Final Order Details</th>
+									<tr class="row1" >
+										<th colspan="6"><font style="color:#3d80eb">Final Order Details</font></th>
 									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Sr No</th>
-										<th>Order NO</th>
-										<th>Order Date</th>
-										<th>Order Details</th>
-										<th>Order Document</th>
+									<tr class="row1" >
+										<th class="cell" >Sl No.</th>
+										<th class="cell" >Sr No</th>
+										<th class="cell" >Order NO</th>
+										<th class="cell" >Order Date</th>
+										<th class="cell" >Order Details</th>
+										<th class="cell" >Order Document</th>
 
 
 									</tr>
 								</thead>
 								<tbody>
 									<logic:iterate id="order" name="orderlist" indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${order.sr_no}</td>
-											<td>${order.order_no}</td>
-											<td>${order.order_date}</td>
-											<td>${order.order_details}</td>
-											<td><logic:notEmpty name="order"
+										<tr class="row1" >
+											<td class="cell" >${i+1}</td>
+											<td class="cell" >${order.sr_no}</td>
+											<td class="cell" >${order.order_no}</td>
+											<td class="cell" >${order.order_date}</td>
+											<td class="cell" >${order.order_details}</td>
+											<td class="cell" ><logic:notEmpty name="order"
 													property="order_document_path">
 													<logic:notEqual value="-" name="order"
 														property="order_document_path">
@@ -576,41 +578,38 @@ body {
 								</tbody>
 
 							</table>
-						</div>
 					</div>
 				</logic:present>
 
 
 				<logic:present name="ACTIVITIESDATA">
-					<div class="row">
 						<div class="col-md-12">
-							<table class="table table-striped table-bordered table-hover"
-								cellspacing="0" width="100%">
+							<table cellpadding="0" cellspacing="0" class="table" style="width: 100% !important;border-collapse: collapse;" border="1">
 								<thead>
-									<tr>
-										<th colspan="7">Case Activities</th>
+									<tr class="row1" >
+										<th colspan="7"><font style="color:#3d80eb">Case Activities</font></th>
 									</tr>
-									<tr>
-										<th>Sl No.</th>
-										<th>Date</th>
-										<th>Activity</th>
-										<th>Updated By</th>
-										<th>Assigned to</th>
-										<th>Remarks</th>
-										<th>Uploaded Document</th>
+									<tr class="row1" >
+										<th class="cell" >Sl No.</th>
+										<th class="cell" >Date</th>
+										<th class="cell" >Activity</th>
+										<th class="cell" >Updated By</th>
+										<th class="cell" >Assigned to</th>
+										<th class="cell" >Remarks</th>
+										<th class="cell" >Uploaded Document</th>
 									</tr>
 								</thead>
 								<tbody>
 									<logic:iterate id="activities" name="ACTIVITIESDATA"
 										indexId="i">
-										<tr>
-											<td>${i+1}</td>
-											<td>${activities.inserted_on}</td>
-											<td>${activities.action_type}</td>
-											<td>${activities.inserted_by}</td>
-											<td>${activities.assigned_to}</td>
-											<td>${activities.remarks }</td>
-											<td><logic:notEmpty name="activities"
+										<tr class="row1" >
+											<td class="cell" >${i+1}</td>
+											<td class="cell" >${activities.inserted_on}</td>
+											<td class="cell" >${activities.action_type}</td>
+											<td class="cell" >${activities.inserted_by}</td>
+											<td class="cell" >${activities.assigned_to}</td>
+											<td class="cell" >${activities.remarks }</td>
+											<td class="cell" ><logic:notEmpty name="activities"
 													property="uploaded_doc_path">
 													<logic:notEqual value="-" name="activities"
 														property="uploaded_doc_path">
@@ -623,157 +622,168 @@ body {
 								</tbody>
 
 							</table>
-						</div>
 					</div>
 				</logic:present>
 
 
 
 				<logic:present name="OLCMSCASEDATA">
+				<table cellpadding="0" cellspacing="0" class="table" style="width: 100% !important;border-collapse: collapse;" border="1">
+				       <thead>
+						<tr class="row1" >
+							<th colspan="6"><font style="color:#3d80eb">Uploaded Details</font></th>
+						</tr>
+					</thead>
+					<tbody>
 					<logic:iterate id="datamap" name="OLCMSCASEDATA">
 
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Uploaded Petition : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+						<tr class="row1" >
+							<td class="cell" align="right">
+								Uploaded Petition : 
+							</td>
+							<td class="cell" >
 								<logic:notEmpty name="datamap" property="petition_document">
 									<a href='${datamap.petition_document }' target='_new'
 										class="btn btn-sm btn-info">View Uploaded File</a>
 								</logic:notEmpty>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Case Status : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${datamap.ecourts_case_status }</div>
+							</td>
+							<td class="cell" align="right">
+								Case Status : 
+							</td>
+							<td class="cell" >
+								<b>${datamap.ecourts_case_status }</b></td>
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Uploaded Judgement Order : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+							<td class="cell" align="right">
+								Uploaded Judgement Order : 
+							</td>
+							<td class="cell" >
 								<logic:notEmpty name="datamap" property="judgement_order">
 									<a href='${datamap.judgement_order }' target='_new'
 										class="btn btn-sm btn-info">View Uploaded File</a>
 								</logic:notEmpty>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b>PWR Submitted Date: </b>
-							</div>
+							</td>
+						</tr>
+						<tr class="row1" >
+							<td class="cell"  align="right">
+								PWR Submitted Date: 
+							</td>
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${datamap.pwr_submitted_date }</div>
+							<td class="cell" >
+								<b>${datamap.pwr_submitted_date }</b></td>
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Uploaded Counter Filed : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+							<td class="cell" align="right">
+								Uploaded Counter Filed : 
+							</td>
+							<td class="cell" >
 								<logic:notEmpty name="datamap" property="counter_filed">
 									<a href='${datamap.counter_filed }' target='_new'
 										class="btn btn-sm btn-info">View Uploaded File</a>
 								</logic:notEmpty>
 
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2 pull-rightt">
-								<b>Remarks : </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${datamap.remarks }</div>
-						</div>
+							</td>
+							<td class="cell" align="right">
+								Remarks : 
+							</td>
+							<td class="cell" >
+								<b>${datamap.remarks }</b></td>
+						</tr>
 
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b>Corresponding GP: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${datamap.corresponding_gp }</div>
+						<tr class="row1" >
+							<td class="cell"  align="right">
+								Corresponding GP:
+							</td>
+							<td class="cell" >
+								<b>${datamap.corresponding_gp }</b></td>
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b> PWR Uploaded: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${datamap.pwr_uploaded }</div>
+							<td class="cell"  align="right">
+								 PWR Uploaded: 
+							</td>
+							<td class="cell" >
+								<b>${datamap.pwr_uploaded }</b></td>
 
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b>Action Taken Order</b>
-							</div>
+							<td class="cell"  align="right">
+								Action Taken Order
+							</td>
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+							<td class="cell" >
 								<logic:notEmpty name="datamap" property="action_taken_order">
 									<a href='${datamap.action_taken_order }' target='_new'
 										class="btn btn-sm btn-info">View Uploaded File</a>
 								</logic:notEmpty>
-							</div>
-						</div>
+							</td>
+						</tr>
 
 
 
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b>PWR Received Date: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${datamap.pwr_received_date }</div>
+						<tr class="row1" >
+							<td class="cell"  align="right">
+								PWR Received Date: 
+							</td>
+							<td class="cell" >
+								<b>${datamap.pwr_received_date }</b></td>
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b>PWR Approved GP: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${datamap.pwr_approved_gp }</div>
+							<td class="cell"  align="right">
+								PWR Approved GP: 
+							</td>
+							<td class="cell" >
+								<b>${datamap.pwr_approved_gp }</b></td>
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b>PWR Approved GP Date: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${datamap.pwr_gp_approved_date }</div>
-						</div>
+							<td class="cell"  align="right">
+								PWR Approved GP Date: 
+							</td>
+							<td class="cell" >
+								<b>${datamap.pwr_gp_approved_date }</b></td>
+						</tr>
 
-						<div class="row">
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b>Uploaded Appeal Filed: </b>
-							</div>
+						<tr class="row1" >
+							<td class="cell"  align="right">
+								Uploaded Appeal Filed: 
+							</td>
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+							<td class="cell" >
 								<logic:notEmpty name="datamap" property="appeal_filed">
 									<a href='${datamap.appeal_filed_copy }' target='_new'
 										class="btn btn-sm btn-info">View Uploaded File</a>
 								</logic:notEmpty>
 
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b>Appeal Filed: </b>
-							</div>
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${datamap.appeal_filed }</div>
+							</td>
+							<td class="cell"  align="right">
+								Appeal Filed: 
+							</td>
+							<td class="cell" >
+								<b>${datamap.appeal_filed }</b></td>
 
 
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b>Uploaded PWR File: </b>
-							</div>
+							<td class="cell"  align="right">
+								Uploaded PWR File: 
+							</td>
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+							<td class="cell" >
 								<logic:notEmpty name="datamap" property="pwr_uploaded">
 									<a href='${datamap.pwr_uploaded_copy }' target='_new'
 										class="btn btn-sm btn-info">View Uploaded File</a>
 								</logic:notEmpty>
 
-							</div>
+							</td>
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								<b>Appeal Filed Date: </b>
-							</div>
+							
 
-							<div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
-								${datamap.appeal_filed_date }</div>
+						</tr>
+						<tr>
+						<td class="cell"  align="right">
+								Appeal Filed Date: 
+							</td>
 
-						</div>
+							<td class="cell" colspan="5">
+								<b>${datamap.appeal_filed_date }</b></td>
+						</tr>
 
 
 					</logic:iterate>
+					</tbody>
+					</table>
 				</logic:present>
 
 				<%-- 
@@ -781,7 +791,7 @@ body {
 
 
 						<div class="parawiseRemarksdiv">
-							<div class="row">
+							<tr class="row1" >
 								<div class="col-sm-6 form-group">
 									<label>Parawise Remarks Submitted</label>
 									<html:select styleId="parawiseRemarksSubmitted"
@@ -807,7 +817,7 @@ body {
 								</div>
 							</div>
 
-							<div class="row">
+							<tr class="row1" >
 								<div class="col-sm-6 form-group parawiseRemarkssubmitteddiv">
 									<label>Upload Parawise Remarks</label>
 									<html:file styleClass="form-control"
@@ -872,7 +882,7 @@ body {
 							</div>
 						</div>
 						<div class="appealfileddiv">
-							<div class="row">
+							<tr class="row1" >
 								<div class="col-sm-6 form-group ">
 									<label>Appeal Filed</label>
 									<html:select styleId="appealFiled"
@@ -913,7 +923,7 @@ body {
 							</div>
 						</div>
 						<div class="counterfileddiv">
-							<div class="row">
+							<tr class="row1" >
 								<div class="col-sm-6 form-group ">
 									<label>Counter Filed</label>
 									<html:select styleId="counterFiled"
@@ -938,7 +948,7 @@ body {
 							</div>
 						</div>
 
-						<div class="row">
+						<tr class="row1" >
 							<div class="col-xs-12 col-sm-6 form-group">
 								<label class="font-bold">Remarks <font color="red">*</font>
 								</label>

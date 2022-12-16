@@ -224,7 +224,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Case Reg No.</th>
 									<th>Prayer</th>
 
-									<th>Filing No.</th>
+									<th>SR Number</th>
 									<th>Filing Year</th>
 									<th>Date of Next List</th>
 									<th>Bench</th>

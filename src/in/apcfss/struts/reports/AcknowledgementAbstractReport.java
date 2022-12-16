@@ -53,7 +53,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 						"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))
+			if (roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14")|| roleId.equals("17"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
@@ -136,7 +136,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 						+ "') ";
 			}
 
-			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14"))) {
+			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14") || roleId.equals("17"))) {
 				request.setAttribute("SHOWUSERWISE", "SHOWUSERWISE");
 			}
 
@@ -182,7 +182,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 						"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))
+			if (roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14") || roleId.equals("17"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
@@ -329,7 +329,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 						"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))
+			if (roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14") || roleId.equals("17"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
@@ -349,7 +349,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			cform.setDynaForm("caseTypesList",
 					DatabasePlugin.getSelectBox("select sno,case_full_name from case_type_master order by sno", con));
 
-			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14"))) {
+			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14") || roleId.equals("17"))) {
 				request.setAttribute("SHOWUSERWISE", "SHOWUSERWISE");
 			}
 
@@ -413,7 +413,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and replace(replace(petitioner_name,' ',''),'.','') ilike  '%"+cform.getDynaForm("petitionerName")+"%'";
 			}
 			
-			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))) {
+			if (!(roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14") || roleId.equals("17"))) {
 				sqlCondition += " and (dm.dept_code='" + deptCode + "' or dm.reporting_dept_code='" + deptCode + "') ";
 			}
 
@@ -453,7 +453,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 						"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))
+			if (roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14") || roleId.equals("17"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
@@ -473,7 +473,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			cform.setDynaForm("caseTypesList",
 					DatabasePlugin.getSelectBox("select sno,case_full_name from case_type_master order by sno", con));
 
-			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14"))) {
+			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14") || roleId.equals("17"))) {
 				request.setAttribute("SHOWUSERWISE", "SHOWUSERWISE");
 			}
 
@@ -660,7 +660,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				cform.setDynaForm("distList", DatabasePlugin.getSelectBox(
 						"select district_id,upper(district_name) from district_mst order by district_name", con));
 
-			if (roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14"))
+			if (roleId.equals("1") || roleId.equals("7") || roleId.equals("2") || roleId.equals("14") || roleId.equals("17"))
 				cform.setDynaForm("deptList", DatabasePlugin.getSelectBox(
 						"select dept_code,dept_code||'-'||upper(description) from dept_new where display=true order by dept_code",
 						con));
@@ -679,7 +679,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 
 			cform.setDynaForm("caseTypesList",
 					DatabasePlugin.getSelectBox("select sno,case_full_name from case_type_master order by sno", con));
-			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14"))) {
+			if ((roleId.equals("1") || roleId.equals("7") || roleId.equals("14") || roleId.equals("17"))) {
 				request.setAttribute("SHOWUSERWISE", "SHOWUSERWISE");
 			}
 

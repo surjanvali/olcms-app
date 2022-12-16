@@ -34,7 +34,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 </div>
 <div class="page-content fade-in-up">
-	<html:form method="post" action="/GPReport"
+	<html:form method="post" action="/InstructionsreplyCountReport"
 		styleId="HighCourtCasesListForm">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden styleId="selectedCaseIds" property="dynaForm(selectedCaseIds)" />
@@ -66,7 +66,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 
 
-			<logic:equal name="show_flag" value="Y">
+			<logic:notEmpty name="DATA">
 				<div class="ibox">
 					<div class="ibox-head">
 						<div class="ibox-title">
@@ -84,79 +84,72 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<thead>
 									<tr>
 										<th>Sl.No</th>
-										<th>Case Type</th>
-										<th>Case No./ Ack No</th>
-										<th>Registered Date</th>
-										<!-- <th>Reply to Instructions</th> -->
-										<th>Status</th>
+										<th>Department Code</th>
+										<th>Department Name</th>
+										<th>Department Count</th>
+										<th>Instructions Count</th>
+										<th>Reply Instructions Count</th>
 									</tr>
 								</thead>
 								<tbody>
-								<logic:notEmpty name="CASEWISEDATANEW">
-								<logic:iterate id="map" name="CASEWISEDATANEW" indexId="i">
-								    <%--  <logic:equal name="${yearId_2022}"  value="2022"> --%>
-								     <c:if test="${yearId_2022==2022 or yearId_2022==1 or yearId_2022==2023}" >
+								    <bean:define  id="dept_count_total" value="0" />
+								     <bean:define id="instructions_count_total" value="0" />
+								     <bean:define  id="reply_instructions_count_total" value="0" />
+									<logic:iterate id="map" name="DATA" indexId="i">
 										<tr>
-											<td>${i+1}.</td>
-											<td>${map.type_name_reg}</td>
-											<td><a href="./GPsReportNew.do?mode=caseStatusUpdate&caseCiNo=${map.cino}&caseType=${map.legacy_ack_flag}" class="btn btn-info btn-md"> 
-										 ${map.cino}</a></td>
-											<td style="text-align: center;">${map.dt_regis }</td>
-											<%-- <td>
-												 <input type="button" id="btnShowPopup" value="Reply to Instructions"
-												class="btn btn-sm btn-success waves-effect waves-light"
-												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}');" />
-											</td> --%>
-											<td style="text-align: center;">Pending</td>
-											<%-- 
-												<td><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}">${map.ack_date }</a></td>
-												<td style="text-align: right;">${map.total}</td>
-												<td style="text-align: right;"><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=NEW">${map.new_acks }</a></td>
-												<td style="text-align: right;"><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=OLD">${map.existing_acks }</a></td> 
-											--%>
-										</tr>
-										</c:if>
+											<td>${i+1}.
+									 
 											
-									</logic:iterate>
-									</logic:notEmpty>
-									<logic:notEmpty name="CASEWISEDATA">
-									<logic:iterate id="map" name="CASEWISEDATA" indexId="i">
-									<%-- <html:text property="total" value="${total}"/> --%>
-										<tr>
-											<td>${total+i+1}.</td>
-											<td>${map.type_name_reg}</td>
-											<td><a href="./GPReport.do?mode=caseStatusUpdate&caseCiNo=${map.cino}&caseType=${map.legacy_ack_flag}" class="btn btn-info btn-md"> 
-											${map.type_name_reg}/${map.reg_no}/${map.reg_year}</a></td>
-											<td style="text-align: center;">${map.dt_regis }</td>
-											<%-- <td>
-												 <input type="button" id="btnShowPopup" value="Reply to Instructions"
+											</td>
+											<td>${map.dept_code}</td>
+											<td>${map.dept_name}</td>
+											<td>
+											
+											<%-- <input type="button" id="btnShowPopup" value="${map.dept_count}"
 												class="btn btn-sm btn-success waves-effect waves-light"
-												onclick="javascript:viewCaseDetailsPopup1('${map.cino}','${map.legacy_ack_flag}');" />
-											</td> --%>
-											<td style="text-align: center;">Pending</td>
-											<%-- 
-												<td><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}">${map.ack_date }</a></td>
-												<td style="text-align: right;">${map.total}</td>
-												<td style="text-align: right;"><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=NEW">${map.new_acks }</a></td>
-												<td style="text-align: right;"><a href="GPOAck.do?mode=getAcknowledementsListAll&ackDate=${map.ack_date}&ackType=OLD">${map.existing_acks }</a></td> 
-											--%>
+												onclick="javascript:viewDetailsPopup1('viewdata','DeptCount','${map.dept_code}');" /> --%>
+											
+											<a href="#" class="btn btn-info btn-md"
+											onclick="javascript:viewDetailsPopup1('viewdata','DeptCount','${map.dept_code}');"> 
+											 ${map.dept_count}</a>
+											 
+											 <bean:define id="dept_count_total" value="${dept_count_total+map.dept_count}" />
+											</td>
+											<td>
+											<%-- <input type="button" id="btnShowPopup" value="${map.instructions_count}"
+												class="btn btn-sm btn-success waves-effect waves-light"
+												onclick="javascript:viewDetailsPopup1('viewdata','InstCount','${map.dept_code}');" /> --%>
+											
+											<a href="#" class="btn btn-info btn-md" onclick="javascript:viewDetailsPopup1('viewdata','InstCount','${map.dept_code}');"> 
+											 ${map.instructions_count}</a>
+											 <bean:define id="instructions_count_total" value="${instructions_count_total+map.instructions_count}" />
+											</td>
+											<td>
+											
+											<%-- <input type="button" id="btnShowPopup" value="${map.reply_instructions_count}"
+												class="btn btn-sm btn-success waves-effect waves-light"
+												onclick="javascript:viewDetailsPopup1('viewdata','ReplyInstCount','${map.dept_code}');" /> --%>
+												
+											<a href="#" class="btn btn-info btn-md" onclick="javascript:viewDetailsPopup1('viewdata','ReplyInstCount','${map.dept_code}');"> 
+											 ${map.reply_instructions_count}</a>
+											 <bean:define id="reply_instructions_count_total" value="${reply_instructions_count_total+map.reply_instructions_count}" />
+											</td>
 										</tr>
 									</logic:iterate>
-									</logic:notEmpty>
-								
-									
 								</tbody>
 								<tfoot>
-									<tR>
-										<td colspan="6" style="text-align: center;">&nbsp;</td>
-									</tR>
+									<tr>
+									    <td colspan="3">Total</td>
+									    <td>${dept_count_total}</td>
+									    <td>${instructions_count_total}</td>
+									    <td>${reply_instructions_count_total}</td>
+									</tr>
 								</tfoot>
 							</table>
 						</div>
 					</div>
 				</div>
-			</logic:equal>
-
+			</logic:notEmpty>
 		</div>
 	</html:form>
 </div>
@@ -351,6 +344,33 @@ $(document).ready(function() {
 		}
 	}
 
+	
+	
+	function viewDetailsPopup1(mode,flag,dept_code) {
+		
+		var datah="";
+		if(flag=="DeptCount")
+			{
+			datah="Department Count";
+			}else if(flag=="InstCount"){
+				datah="Instructions Count";
+			}else{
+				datah="Reply Instructions Count";
+			}
+		var heading = " View "+datah+" Details for "+dept_code;
+		var srclink = "";
+		if (dept_code != null && dept_code != "" && dept_code != "0") {
+			srclink = "./InstructionsreplyCountReport.do?mode="+mode+"&pwCounterFlag="+flag+"&dept_code="+dept_code+"&SHOWPOPUP=SHOWPOPUP";
+			// alert("LINK:"+srclink);
+			if (srclink != "") {
+				$("#MyPopup .modal-title").html(heading);
+				$("#page").prop("src", srclink)
+				//$("#MyPopup .modal-body").html(body);
+				$("#MyPopup").modal("show");
+			};
+		};
+	};
+	
 	
 	
 	function viewCaseDetailsPopup(cino) {

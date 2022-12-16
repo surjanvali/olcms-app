@@ -1,7 +1,6 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -92,7 +91,6 @@ label {
 				enctype="multipart/form-data">
 				<html:hidden styleId="mode" property="mode" />
 				<html:hidden styleId="ackId" property="dynaForm(ackId)" />
-				<html:hidden styleId="data2size" property="dynaForm(data2size)" value="${data2}"/>
 
 				<%-- <html:hidden property="dynaForm(regYear)" styleId="regYear" />
 				<html:hidden property="dynaForm(caseType)" styleId="caseType" /> --%>
@@ -132,7 +130,6 @@ label {
 											</tr>
 										</thead>
 										<tbody>
-										<c:if test="${data2 ==0}" >
 											<tr id="1">
 												<td>1.</td>
 												<td><html:select styleId="departmentId1"
@@ -258,137 +255,6 @@ label {
 														</logic:notEmpty>
 													</html:select></td> --%>
 											</tr>
-											</c:if>
-											<c:if test="${data2 !=0}" >
-											<c:forEach begin="1" end="${data2}" var="k">
-											<tr id="${k}">
-												<td>${k}.</td>
-												<td><html:select styleId="departmentId${k}"
-														property="dynaForm(departmentId${k})"
-														styleClass="select2Class" style="width: 100%;"
-														onchange="chkDeptAndDist('${k}');">
-														<html:option value="0">---SELECT---</html:option>
-														<html:option value="Department">Department</html:option>
-														<html:option value="District">District Collector</html:option>
-													</html:select></td>
-												<%-- <td><html:select styleId="departmentId"
-														property="dynaForm(departmentId)" styleClass="select2Class"
-														style="width: 100%;"
-														onchange="showRevenueClassification(1);">
-														<html:option value="0">---SELECT---</html:option>
-														<logic:notEmpty name="CommonForm"
-															property="dynaForm(deptList)">
-															<html:optionsCollection name="CommonForm"
-																property="dynaForm(departmentList)" />
-														</logic:notEmpty>
-													</html:select></td>
-												<td><html:select styleId="districtId"
-														property="dynaForm(districtId)" styleClass="select2Class"
-														style="width: 100%;"
-														onchange="showRevenueClassification(1);">
-														<html:option value="0">---SELECT---</html:option>
-														<logic:notEmpty name="CommonForm"
-															property="dynaForm(distList)">
-															<html:optionsCollection name="CommonForm"
-																property="dynaForm(distList)" />
-														</logic:notEmpty>
-													</html:select></td> --%>
-												<td>
-													<div class="deptClass" id="dispalyDept${k}"
-														style="display: none;">
-														<html:select styleId="deptId${k}"
-															property="dynaForm(deptId${k})" styleClass="select2Class"
-															style="width: 100%;"
-															onchange="showRevenueClassification('${k}');">
-															<html:option value="0">---SELECT---</html:option>
-															<logic:notEmpty name="CommonForm"
-																property="dynaForm(deptList)">
-																<html:optionsCollection name="CommonForm"
-																	property="dynaForm(deptList)" />
-															</logic:notEmpty>
-														</html:select>
-														<html:select styleId="deptCategory${k}"
-															property="dynaForm(deptCategory${k})"
-															styleClass="form-control"
-															style="width: 100%;display : none;">
-															<html:option value="0">---SELECT---</html:option>
-															<html:option value="General">General</html:option>
-															<html:option value="Assignment">Assignment</html:option>
-															<html:option value="Land Acquisition">Land Acquisition</html:option>
-
-														</html:select>
-													</div>
-													<div class="distClass" id="dispalyDist${k}"
-														style="display: none;">
-														<html:select styleId="distId${k}"
-															property="dynaForm(distId${k})" styleClass="select2Class"
-															style="width: 100%;">
-															<html:option value="0">---SELECT---</html:option>
-															<logic:notEmpty name="CommonForm"
-																property="dynaForm(distList)">
-																<html:optionsCollection name="CommonForm"
-																	property="dynaForm(distList)" />
-															</logic:notEmpty>
-														</html:select>
-													</div>
-												</td>
-												<td><html:select property="dynaForm(serviceType${k})"
-														styleClass="select2Class" style="width: 100%;"
-														styleId="serviceType${k}">
-														<html:option value="0">---SELECT---</html:option>
-														<html:option value="NON-SERVICES">NON-SERVICES</html:option>
-														<logic:notEmpty property="dynaForm(serviceTypesList)"
-															name="CommonForm">
-															<html:optionsCollection
-																property="dynaForm(serviceTypesList)" name="CommonForm" />
-														</logic:notEmpty>
-													</html:select></td>
-
-												<%-- <td><html:select styleId="designation${k}"
-														property="dynaForm(designation${k})" styleClass="select2Class"
-														style="width: 100%;">
-														<html:option value="0">---SELECT---</html:option>
-														<logic:notEmpty name="CommonForm"
-															property="dynaForm(designationList)">
-															<html:optionsCollection name="CommonForm"
-																property="dynaForm(designationList)" />
-														</logic:notEmpty>
-													</html:select></td>
-
-												<td><html:select styleId="distId${k}"
-														property="dynaForm(distId${k})" styleClass="select2Class"
-														style="width: 100%;">
-														<html:option value="0">---SELECT---</html:option>
-														<logic:notEmpty name="CommonForm"
-															property="dynaForm(distList)">
-															<html:optionsCollection name="CommonForm"
-																property="dynaForm(distList)" />
-														</logic:notEmpty>
-													</html:select></td>
-												<td><html:select styleId="mandalId${k}"
-														property="dynaForm(mandalId${k})" styleClass="select2Class"
-														style="width: 100%;">
-														<html:option value="0">---SELECT---</html:option>
-														<logic:notEmpty name="CommonForm"
-															property="dynaForm(mdlList)">
-															<html:optionsCollection name="CommonForm"
-																property="dynaForm(mdlList)" />
-														</logic:notEmpty>
-													</html:select></td>
-												<td><html:select styleId="villageId${k}"
-														property="dynaForm(villageId${k})" styleClass="select2Class"
-														style="width: 100%;">
-														<html:option value="0">---SELECT---</html:option>
-														<logic:notEmpty name="CommonForm"
-															property="dynaForm(vilList)">
-															<html:optionsCollection name="CommonForm"
-																property="dynaForm(vilList)" />
-														</logic:notEmpty>
-													</html:select></td> --%>
-											</tr>
-											</c:forEach>
-											
-											</c:if>
 										</tbody>
 									</table>
 								</div>
@@ -907,21 +773,6 @@ label {
 <script type="text/javascript">
 
 
-
-	$( document ).ready(function() {
-	
-	    var data2size=$("#data2size").val();
-	    if(data2size!=null && data2size>0)
-	    {
-	    //alert("data2size===>"+data2size);
-	    for(var i=1;i<=data2size;i++)
-	    {
-	    	chkDeptAndDist(i);
-	    }
-	    	$("#respondentIds").val(data2size);
-	    }
-	});
-
 	function showRevenueClassification(val) {
 		if ($("#deptId" + val).val() == "REV01-L") {
 			// show Clasification Select box
@@ -943,11 +794,7 @@ label {
 		$("#OLDCASEDIV").hide();
 
 		//$('#caseCategory [value="Others"]').prop('checked', true);
-		 var data2size=$("#data2size").val();
-	    if(data2size!=null && data2size==0)
-	    {
-			$('input[id=caseCategory][value="Others"]').prop('checked', true);
-		}
+		$('input[id=caseCategory][value="Others"]').prop('checked', true);
 		// $("input[name=type][value=" + value + "]").prop('checked', true);
 
 		if ($("#ackType").val() == "OLD") {
@@ -1123,8 +970,6 @@ label {
 			}*/
 
 		});
-		
-		
 		$("#removeResp").click(function() {
 			let rowfyable = $("#RESPSTABID").closest('table');
 			let rowCount = $("#RESPSTABID tbody tr").length;
@@ -1236,61 +1081,23 @@ label {
 			$("#distId").focus();
 			return false;
 		} else */
-		if ($("#departmentId1").val() == null || $("#departmentId1").val() == "" || $("#departmentId1").val() == "0") {
+		if ($("#deptId").val() == null || $("#deptId").val() == "" || $("#deptId").val() == "0") {
 			alert("Department Required");
-			$("#departmentId1").focus();
+			$("#deptId").focus();
 			return false;
-		}
-		else if ($("#serviceType1").val() == null || $("#serviceType1").val() == "" || $("#serviceType1").val() == "0") {
-			alert("Service Type Required");
-			$("#serviceType1").focus();
-			return false;
-		}
-		else if ($("#distId").val() == null || $("#distId").val() == "" || $("#distId").val() == "0") {
-			alert("District Required");
-			$("#distId").focus();
-			return false;
-		}
-		
-		 else if ($("#petitionerName").val() == null || $("#petitionerName").val() == "" || $("#petitionerName").val() == "0") {
-			alert("Petitioner Name Required");
-			$("#petitionerName").focus();
-			return false;
-		} 
-		 else if ($("#advocateName").val() == null || $("#advocateName").val() == "" || $("#advocateName").val() == "0") {
+		} else if ($("#advocateName").val() == null || $("#advocateName").val() == "" || $("#advocateName").val() == "0") {
 			alert("Advocate Name Required");
 			$("#advocateName").focus();
 			return false;
-		} 
-		else if ($("#advocateCCno").val() == null || $("#advocateCCno").val() == "" || $("#advocateCCno").val() == "0") {
+		} else if ($("#advocateCCno").val() == null || $("#advocateCCno").val() == "" || $("#advocateCCno").val() == "0") {
 			alert("Advocate CC No. Required");
 			$("#advocateCCno").focus();
 			return false;
-		} 
-		else if ($("#caseType").val() == null || $("#caseType").val() == "" || $("#caseType").val() == "0") {
-			alert("Nature of Petitioner (Case Type) Required");
+		} /* else if ($("#caseType").val() == null || $("#caseType").val() == "" || $("#caseType").val() == "0") {
+			alert("Case Type Required");
 			$("#caseType").focus();
 			return false;
-		}  
-		else if ($("#filingMode").val() == null || $("#filingMode").val() == "" || $("#filingMode").val() == "0") {
-			alert("Mode of Filing Required");
-			$("#filingMode").focus();
-			return false;
-		}  
-		
-		else if ($("#caseType1").val() == null || $("#caseType1").val() == "" || $("#caseType1").val() == "0") {
-			alert("Main Case No. Type Required");
-			$("#caseType1").focus();
-			return false;
-		}
-		
-		else if ($("#regYear1").val() == null || $("#regYear1").val() == "" || $("#regYear1").val() == "0") {
-			alert("Main Case No. Year Required");
-			$("#regYear1").focus();
-			return false;
-		} 
-		
-		else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
+		}  */ else if ($("#mainCaseNo").val() == null || $("#mainCaseNo").val() == "" || $("#mainCaseNo").val() == "0") {
 			alert("Main Case No. Required");
 			$("#mainCaseNo").focus();
 			return false;

@@ -968,8 +968,18 @@ System.out.println("resident_id--"+resident_id);
 				
 				System.out.println("deptCode::"+deptCode.substring(3, 5));
 				
+				/*
+				 * sql="select emp_user_id from ecourts_case_emp_assigned_dtls ad inner join ecourts_case_activities ea on (ad.cino=ea.cino) "
+				 * + "where ea.cino='"
+				 * +cIno+"' and ea.action_type ilike 'CASE ASSSIGNED%' and ea.inserted_by='"
+				 * +userId+"'   ";
+				 */
+				
 				sql="select emp_user_id from ecourts_case_emp_assigned_dtls ad inner join ecourts_case_activities ea on (ad.cino=ea.cino) "
-						+ "where ea.cino='"+cIno+"' and ea.action_type ilike 'CASE ASSSIGNED%' and ea.inserted_by='"+userId+"'   ";
+						+ "where ea.cino='"+cIno+"'  and ea.inserted_by='"+userId+"' order by ea.inserted_on desc";  //and ea.action_type ilike 'CASE FORWARDED%'
+				
+				sql=" select  emailid from section_officer_details ad inner join ecourts_case_activities ea on (ad.employeeid=ea.assigned_to) "
+						+ "where ea.cino='"+cIno+"' and ea.action_type ilike 'CASE ASSSIGNED%' order by ea.inserted_on desc ";
 				
 				String backToSectionUser = DatabasePlugin.getStringfromQuery(sql , con);
 				

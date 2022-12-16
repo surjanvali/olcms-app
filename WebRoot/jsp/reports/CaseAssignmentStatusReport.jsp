@@ -144,7 +144,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Case Type</th>
 									<th>Reg.No.</th>
 									<th>Reg. Year</th>
-									<th>Filing No.</th>
+									<th>SR Number</th>
 									<th>Filing Year</th>
 									<th>Date of Next List</th>
 									<th>Bench</th>

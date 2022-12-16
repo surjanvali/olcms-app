@@ -90,6 +90,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<th style="width: 150px !important;">Action / Status</th> -->
 								<th>Case Assigned To</th>
 								<th>Case Status</th>
+								<th>AGOLCMS Status</th>
 								<th>Response</th>
 								
 							</tr>
@@ -177,6 +178,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											
 											</td> --%>
 											<td>${map.assigned_to}</td>
+											<td>${map.ecourts_case_status}</td>
 											<td>${map.status}</td>
 											<td style="min-width: 50px;text-align: center;">${map.response}
 										<%-- <button class="btn btn-info btn-xs" data-container="body"

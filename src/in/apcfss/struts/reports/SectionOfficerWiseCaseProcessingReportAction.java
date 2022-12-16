@@ -44,6 +44,7 @@ public class SectionOfficerWiseCaseProcessingReportAction extends DispatchAction
 			saveToken(request);
 			DatabasePlugin.close(con, ps, null);
 		}
+		cform.setDynaForm("section_code","L");
 		return getCasesList(mapping, cform, request, response);
 	}
 
@@ -157,20 +158,50 @@ public class SectionOfficerWiseCaseProcessingReportAction extends DispatchAction
 			 * " order by a.inserted_time";
 			 */
 
-
+           String section=cform.getDynaForm("section_code").toString();
+           
 			if(session.getAttribute("role_id").equals("4") || session.getAttribute("role_id").equals("5")) {
 
+				if(section!=null && section.equals("N"))
+				{
+					sql="select fullname_en,global_org_name,designation_name_en,mobile1,b.assigned_to as email,employee_id as emp_id ,count(*)  as total  from section_officer_details a "
+		        	   		+ " inner join  ecourts_gpo_ack_depts b on (a.emailid=b.assigned_to)  "
+		        	   		+ " inner join (select distinct employee_id,employee_identity,global_org_name,fullname_en,designation_name_en,mobile1, email "
+		        	   		+ " from nic_data where coalesce(employee_id,'')!='') c on (a.employeeid=c.employee_id) "
+		        	   		+ " where a.inserted_by = '" + session.getAttribute("userid") +"' group by 1,2,3,4,5,6 ";
+					
+					/*
+					 * sql="select a.emailid as email,count(*)  as total  from section_officer_details a "
+					 * +
+					 * "		        	   		 inner join  ecourts_gpo_ack_depts b on (a.emailid=b.assigned_to)  "
+					 * + "		        	   		 where a.inserted_by = '" +
+					 * session.getAttribute("userid") +"' group by 1";
+					 */
+				}
+				else {
 				sql="select fullname_en,global_org_name,designation_name_en,mobile1,email,emp_id ,count(*)  as total "
 						+ " from ecourts_case_emp_assigned_dtls a inner join ecourts_case_data b on (a.cino=b.cino)"
 						+ " inner join (select distinct employee_id,employee_identity,global_org_name,fullname_en,designation_name_en,mobile1, email "
 						+ " from nic_data where coalesce(employee_id,'')!='') c on (a.emp_id=c.employee_id and a.emp_section=trim(c.employee_identity)) "
 						+ " where a.inserted_by='" + session.getAttribute("userid") +"' group by fullname_en,designation_name_en,global_org_name,mobile1,email,emp_id ";
+				}
 
 			}else {//if(session.getAttribute("role_id").equals("10"))
-				sql="select fullname_en,global_org_name,designation_name_en,emp_id,count(*)  as total from ecourts_case_emp_assigned_dtls a inner join ecourts_case_data b on (a.cino=b.cino)"
-						+ " inner join (select distinct employee_id,employee_identity,global_org_name,fullname_en,designation_name_en,mobile1, email,districtcode "
-						+ "from "+dist_table+" where coalesce(employee_id,'')!='' and districtcode='"+distCode+"') c on (a.emp_id=c.employee_id and a.emp_section=trim(c.employee_identity)) "
-						+ " where a.inserted_by='" + session.getAttribute("userid") + "' and districtcode='"+distCode+"' group by fullname_en,designation_name_en,global_org_name,mobile1,email,emp_id ";
+				if(section!=null && section.equals("N"))
+				{
+					sql="select fullname_en,global_org_name,designation_name_en,mobile1,email,employee_id as emp_id ,count(*)  as total  from section_officer_details a "
+		        	   		+ " inner join  ecourts_gpo_ack_depts b on (a.emailid=b.assigned_to)  "
+		        	   		+ " inner join (select distinct employee_id,employee_identity,global_org_name,fullname_en,designation_name_en,mobile1, email,districtcode "
+		        	   		+ " from "+dist_table+" where coalesce(employee_id,'')!='' and districtcode='"+distCode+"') c on (a.employeeid=c.employee_id) "
+		        	   		+ " where a.inserted_by = '" + session.getAttribute("userid") +"' and districtcode='"+distCode+"' group by 1,2,3,4,5,6 ";
+				}
+				else {
+					sql="select fullname_en,global_org_name,designation_name_en,emp_id,count(*)  as total from ecourts_case_emp_assigned_dtls a inner join ecourts_case_data b on (a.cino=b.cino)"
+							+ " inner join (select distinct employee_id,employee_identity,global_org_name,fullname_en,designation_name_en,mobile1, email,districtcode "
+							+ "from "+dist_table+" where coalesce(employee_id,'')!='' and districtcode='"+distCode+"') c on (a.emp_id=c.employee_id and a.emp_section=trim(c.employee_identity)) "
+							+ " where a.inserted_by='" + session.getAttribute("userid") + "' and districtcode='"+distCode+"' group by fullname_en,designation_name_en,global_org_name,mobile1,email,emp_id ";
+				}
+				
 			}
 
 			System.out.println("ecourts SQL:" + sql);
@@ -181,13 +212,17 @@ public class SectionOfficerWiseCaseProcessingReportAction extends DispatchAction
 			} else {
 				request.setAttribute("errorMsg", "No Records Found");
 			}
+			
+			request.setAttribute("section", section);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			
 			saveToken(request);
 			DatabasePlugin.close(con, ps, null);
 		}
+		
 
 		return mapping.findForward("success");
 	}
@@ -202,7 +237,7 @@ public class SectionOfficerWiseCaseProcessingReportAction extends DispatchAction
 		if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 			return mapping.findForward("Logout");
 		}
-		String sql = null, sqlCondition = "", actionType = "", email = "", deptName = "", heading = "";
+		String sql = null, sqlCondition = "", actionType = "", email = "", deptName = "",section="", heading = "";
 		try {
 
 			con = DatabasePlugin.connect();
@@ -210,10 +245,18 @@ public class SectionOfficerWiseCaseProcessingReportAction extends DispatchAction
 			actionType = CommonModels.checkStringObject(cform.getDynaForm("actionType"));
 			email = CommonModels.checkStringObject(cform.getDynaForm("email"));
 			deptName = CommonModels.checkStringObject(cform.getDynaForm("deptName"));
+			section = CommonModels.checkStringObject(cform.getDynaForm("section"));
 
 			heading = " Section Officer Wise Case Processing Report  ";
 
 
+			if(section!=null && section.equals("N"))
+			{
+				sql = "select a.ack_no,servicetpye,advocatename,advocateccno,casetype,maincaseno,petitioner_name,egd.inserted_time from ecourts_gpo_ack_depts  a inner join ecourts_gpo_ack_dtls egd on (a.ack_no=egd.ack_no) "
+						+ "where a.assigned_to='" + email+ "'  ";
+				
+			}
+			else {
 			sql = "select a.*, "
 					+ "coalesce(trim(a.scanned_document_path),'-') as scanned_document_path1, b.orderpaths, prayer, ra.address from ecourts_case_data a "
 					+ " left join nic_prayer_data np on (a.cino=np.cino)"
@@ -228,6 +271,8 @@ public class SectionOfficerWiseCaseProcessingReportAction extends DispatchAction
 					+ " and  POSITION('RECORD_NOT_FOUND' in order_document_path) = 0"
 					+ " and POSITION('INVALID_TOKEN' in order_document_path) = 0 ) order by cino, order_date desc) c group by cino ) b"
 					+ " on (a.cino=b.cino) inner join dept_new d on (a.dept_code=d.dept_code)  where assigned_to='" + email+ "' ";
+			
+			}
 
 
 
@@ -241,6 +286,8 @@ public class SectionOfficerWiseCaseProcessingReportAction extends DispatchAction
 			} else {
 				request.setAttribute("errorMsg", "No Records Found");
 			}
+			
+			request.setAttribute("section", section);
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -21,7 +21,7 @@ import org.apache.struts.actions.DispatchAction;
 
 import plugins.DatabasePlugin;
 
-public class HighCourtCasesAssignedReport extends DispatchAction {
+public class PullBackNewCasesAction extends DispatchAction {
 
 	@Override
 	public ActionForward unspecified(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -92,10 +92,19 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 			 */
 
 
-			sql="select cino,* from ecourts_case_data a inner join section_officer_details b on (a.assigned_to=b.emailid) "
-					+ " where b.inserted_by='"+session.getAttribute("userid")+"'    order by b.emailid ";   //and ecourts_case_status!='Private' 
+			/*
+			 * sql="select cino,* from ecourts_case_data a inner join section_officer_details b on (a.assigned_to=b.emailid) "
+			 * + " where b.inserted_by='"+session.getAttribute("userid")
+			 * +"' and ecourts_case_status!='Private'    order by b.emailid ";
+			 */
+			
+			sql=" select a.ack_no,* from ecourts_gpo_ack_dtls a inner join ecourts_gpo_ack_depts c on (a.ack_no=c.ack_no) "
+					+ "inner join section_officer_details b on (c.assigned_to=b.emailid)  "
+					+ "where b.inserted_by='"+session.getAttribute("userid")+"'   order by b.emailid";
+			
 
 			System.out.println("ecourts SQL:" + sql);
+			
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			// System.out.println("data=" + data);
 			if (data != null && !data.isEmpty() && data.size() > 0) {
@@ -125,6 +134,7 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 		if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 			return mapping.findForward("Logout");
 		}
+		String[] ids_split=null;
 		String sql = null, cIno = "", roleId=null, deptCode=null, distCode=null;
 		try {
 
@@ -138,6 +148,12 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 			if (cIno != null && !cIno.equals("")) {
 
 				con = DatabasePlugin.connect();
+				
+				String ids=cIno;
+				 ids_split=ids.split("@");
+				System.out.println("ids--"+ids_split[0]);
+				System.out.println("ids--"+ids_split[1]);
+				
 
 				// sql="select coalesce(case_status,0) as case_status,dept_code from ecourts_case_data where cino='"+cIno+"'";
 				// List<Map> currData = DatabasePlugin.executeQuery(con, sql);
@@ -155,9 +171,6 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 				else if(roleId.equals("10")) {//NO-DIST
 					backStatus = 8;
 					//distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
-				}else if(roleId.equals("2")) {//NO-DIST
-					backStatus = 7;
-					//distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
 				}
 
 				/*if(currentStatus==5 && currDept.substring(4,5).equals("01")) {
@@ -173,32 +186,32 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 				}*/
 				if(roleId.equals("10")) {
 
-					sql = "update ecourts_case_data set assigned=false, assigned_to=null, case_status="+backStatus+", dept_code='"+deptCode+"',dist_id='"+distCode+"'  where cino='" + cIno + "' ";
+					sql = "update ecourts_gpo_ack_depts set assigned=false, assigned_to=null, case_status="+backStatus+", dept_code='"+deptCode+"',dist_id='"+distCode+"'  where ack_no='" + ids_split[0] + "'   and respondent_slno='"+ids_split[1]+"'  ";
 					System.out.println("UPDATE SQL:"+sql);
 					a = DatabasePlugin.executeUpdate(sql, con);
 				}else if(roleId.equals("2")) {
 
-					sql = "update ecourts_case_data set assigned=false, assigned_to=null, case_status="+backStatus+", dist_id='"+distCode+"'  where cino='" + cIno + "' ";
+					sql = "update ecourts_gpo_ack_depts set assigned=false, assigned_to=null, case_status="+backStatus+", dist_id='"+distCode+"'  where ack_no='" + ids_split[0] + "' and respondent_slno='"+ids_split[1]+"' ";
 					System.out.println("UPDATE SQL:"+sql);
 					a = DatabasePlugin.executeUpdate(sql, con);
 				}else {
 
-					sql = "update ecourts_case_data set assigned=false, assigned_to=null, case_status="+backStatus+", dept_code='"+deptCode+"'  where cino='" + cIno + "' ";
+					sql = "update ecourts_gpo_ack_depts set assigned=false, assigned_to=null, case_status="+backStatus+", dept_code='"+deptCode+"'  where ack_no='" + ids_split[0] + "' and respondent_slno='"+ids_split[1]+"' ";
 					System.out.println("UPDATE SQL:"+sql);
 					a = DatabasePlugin.executeUpdate(sql, con);
 
 				}
 
-				sql = "insert into ecourts_case_emp_assigned_dtls_log select * from ecourts_case_emp_assigned_dtls where cino='" + cIno + "' ";
+				sql = "insert into ecourts_case_emp_assigned_dtls_log select * from ecourts_case_emp_assigned_dtls where cino='" + ids_split[0] + "' ";
 				System.out.println("UPDATE SQL:"+sql);
 				a += DatabasePlugin.executeUpdate(sql, con);
 
 				sql="insert into ecourts_case_activities (cino , action_type , inserted_by , inserted_ip, assigned_to , remarks ) "
-						+ "values ('" + cIno + "','CASE SENT BACK','"+session.getAttribute("userid")+"', '"+request.getRemoteAddr()+"', '"+session.getAttribute("userid")+"', null )";
+						+ "values ('" + ids_split[0] + "','CASE SENT BACK','"+session.getAttribute("userid")+"', '"+request.getRemoteAddr()+"', '"+session.getAttribute("userid")+"', null )";
 				System.out.println("INSERT ACTIVITIES SQL:"+sql);
 				a += DatabasePlugin.executeUpdate(sql, con);
 
-				sql = "delete from ecourts_case_emp_assigned_dtls where cino='" + cIno + "' ";
+				sql = "delete from ecourts_case_emp_assigned_dtls where cino='" + ids_split[0] + "' ";
 				System.out.println("DELETE SQL:"+sql);
 				a += DatabasePlugin.executeUpdate(sql, con);
 

@@ -550,7 +550,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<th>Case Reg Year.</th>
 									<th>Prayer</th>
 
-									<th>Filing No.</th>
+									<th>SR Number</th>
 									<th>Filing Year</th>
 									<th>Date of Next List</th>
 									<th>Bench</th>
@@ -586,7 +586,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												</logic:notEqual>
 											</logic:notEmpty></td>
 										<td nowrap="nowrap">
-											<%-- <span style="color: navy;font-weight: bold;text-align: center;"> ${map.current_status}</span> --%>
+											<span style="color: navy;font-weight: bold;text-align: center;"> ${map.current_status}</span>
 
 											<logic:notEmpty name="map" property="fullname">
 												<logic:notEqual value=" " name="map" property="fullname">

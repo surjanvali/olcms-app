@@ -19,7 +19,7 @@ import org.apache.struts.actions.DispatchAction;
 
 import plugins.DatabasePlugin;
 
-public class NextListingStatusAbstractReport extends DispatchAction {
+public class NextListingStatusAbstractReport2 extends DispatchAction {
 	@Override
 	public ActionForward unspecified(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -37,8 +37,8 @@ public class NextListingStatusAbstractReport extends DispatchAction {
 				return mapping.findForward("Logout");
 			}
 			
-			else  if(roleId.equals("5") || roleId.equals("9")) 
-			{
+			else  if(roleId.equals("5") || roleId.equals("9")) {
+				
 				return HODwisedetails(mapping, form, request, response);
 			}else if ((roleId.equals("6"))) {
 				condition = " inner join ecourts_mst_gp_dept_map emgm on (a.dept_code=emgm.dept_code)  ";
@@ -229,7 +229,7 @@ public class NextListingStatusAbstractReport extends DispatchAction {
 					+ " left join nic_prayer_data np on (a.cino=np.cino)"
 					+ " left join nic_resp_addr_data ra on (a.cino=ra.cino and party_no=1) "
 					+ " left join district_mst dim on (a.dist_id=dim.district_id) "
-					+ " left join ecourts_mst_case_status ecs on (a.case_status=ecs.status_id) "
+					+ " inner join ecourts_mst_case_status ecs on (a.case_status=ecs.status_id) "
 					+ " left join nic_data_all nda on (a.dept_code=substr(nda.global_org_name,1,5) and a.assigned_to=nda.email and nda.is_primary='t' and coalesce(a.dist_id,'0')=coalesce(nda.dist_id,'0')) "
 					
 					+ " left join"

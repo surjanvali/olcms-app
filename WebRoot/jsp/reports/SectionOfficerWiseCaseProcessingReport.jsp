@@ -17,6 +17,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				action="/SectionOfficerWiseCaseProcessingReport"
 				styleId="CaseAssignmentStatusForm">
 				<html:hidden property="dynaForm(email)" styleId="email" />
+				<html:hidden property="dynaForm(section)" styleId="section" />
 				<html:hidden styleId="mode" styleClass="form-control"
 					property="mode" />
 				<html:hidden styleId="cINO" property="dynaForm(cINO)" />
@@ -46,7 +47,28 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</div>
 						</div>
 					</div>
-
+					<div class="table-responsive">
+						<div class="col-sm-3 col-md-3 col-lg-3  col-xs-3" >
+						      Legacy / New <br/><br/>
+						</div>
+   						<div class="col-sm-6 col-md-6 col-lg-6  col-xs-6" >
+							<html:select styleId="section_code" property="dynaForm(section_code)" styleClass="select2Class"
+								style="width: 100%;">
+								<html:option value="0">---SELECT---</html:option>
+								<html:option value="L">---Legacy---</html:option>
+								<html:option value="N">---New---</html:option>
+							</html:select>
+						</div>
+						<div class="col-sm-3 col-md-3 col-lg-3  col-xs-3" >
+							<br/>
+						     
+						     <input type="button" name="Submit" value="Get Details" class="btn btn-success pull-right" onclick="getdata();" />
+						     <br/>
+						     <br/>
+						</div>
+						<br/>
+						     <br/>
+					</div>
 					<div class="table-responsive">
 						<logic:notEmpty name="CASESLIST">
 							<div class="table-responsive">
@@ -71,7 +93,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												</td>
 												<%-- <td>${map.total}</td> --%>
 												<td style="text-align: center;"><a
-													href="javascript:getCasesList('${map.email}');">${map.total}</a></td>
+													href="javascript:getCasesList('${map.email}','${section}');">${map.total}</a></td>
 											</tr>
 											<bean:define id="total" value="${total + map.total }"></bean:define>
 										</logic:iterate>
@@ -88,7 +110,53 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						</logic:notEmpty>
 
 						<logic:present name="CASESLISTDETAILS">
+                            <logic:equal value="N" name="section">
+                               <table id="example" class="table table-striped table-bordered"
+								style="width:100%">
+								<thead>
+									<tr>
+										<th>Sl.No</th>
+										<th>Ack  No</th>
+										<th>Service Type</th>
+										<th>Advocate Name</th>
+										<th>Advocate Code</th>
+										<th>Case Type</th>
+										<th>Main Case Number</th>
+										<th>Petitioner Name</th>
+										<th>Date</th>
+									</tr>
+								</thead>
+								<tbody>
 
+									<logic:iterate id="map" name="CASESLISTDETAILS" indexId="i">
+										<tr>
+											<td>${i+1 }.</td>
+											<td><input type="button" id="btnShowPopup"
+												value="${map.ack_no}"
+												class="btn btn-sm btn-info waves-effect waves-light"
+												onclick="javascript:viewCaseDetailsPopup('${map.ack_no}');" />
+
+											</td>
+											<td>${map.servicetpye }</td>
+											<td>${map.advocatename }</td>
+											<td>${map.advocateccno }</td>
+											<td>${map.casetype }</td>
+											<td>${map.maincaseno }</td>
+											<td>${map.petitioner_name }</td>
+											<td>${map.inserted_time }</td>
+
+										</tr>
+
+									</logic:iterate>
+								</tbody>
+								<tfoot>
+									<tR>
+										<td colspan="19">&nbsp;</td>
+									</tR>
+								</tfoot>
+							</table>
+                            </logic:equal>
+                            <logic:equal value="L" name="section">
 							<table id="example" class="table table-striped table-bordered"
 								style="width:100%">
 								<thead>
@@ -186,6 +254,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									</tR>
 								</tfoot>
 							</table>
+							</logic:equal>
 						</logic:present>
 
 					</div>
@@ -241,12 +310,23 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		}
 		;
 	};
-	function getCasesList(email) {
+	function getCasesList(email,section) {
 		$("#email").val(email);
+		$("#section").val(section);
 		$("#mode").val("getCasesDetails");
 		$("#CaseAssignmentStatusForm").submit();
 	}
 
+	function getdata()
+	{
+		if(document.forms[0].elements["dynaForm(section_code)"].value=="0")
+	 	{
+	       alert("Please Select The Lagacy / New");		
+		}else{
+			$("#mode").val("getCasesList");
+			document.forms[0].submit();
+		}
+	}
 	function sendBack(cid) {
 		$("#cINO").val(cid);
 		$("#mode").val("sendCaseBack");

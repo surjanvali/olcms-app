@@ -198,10 +198,10 @@ body {
 													Status</button>
 											</logic:notEqual>
 											
-											<input type="button" id="btnShowPopup"
+											<%-- <input type="button" id="btnShowPopup"
 												value="Submit Instructions"
 												class="btn btn-sm btn-primary waves-effect waves-light"
-												onclick="javascript:viewCaseDetailsPopup1('${map.cino}');" />
+												onclick="javascript:viewCaseDetailsPopup1('${map.cino}');" /> --%>
 											
 											</td>
 								</logic:iterate>

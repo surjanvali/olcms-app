@@ -82,7 +82,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<div class="col-md-4">
 										<html:select property="dynaForm(caseType1)"
 											styleClass="select2Class" style="width: 100%;"
-											styleId="caseType1" onchange="getCaseTypedetails();">
+											styleId="caseType1">
 											<html:option value="0">---SELECT---</html:option>
 											<logic:notEmpty property="dynaForm(caseTypesListShrt)"
 												name="CommonForm">
@@ -93,7 +93,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									</div>
 									<div class="col-md-4">
 										<html:select styleId="regYear1" property="dynaForm(regYear1)"
-											style="width: 100%;" onchange="getCaseTypedetails();"
+											style="width: 100%;"
 											styleClass="select2Class">
 											<html:option value="0">---SELECT---</html:option>
 											<logic:notEmpty name="CommonForm"
@@ -106,8 +106,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									<div class="col-md-4">
 										<html:text styleId="mainCaseNo" styleClass="form-control"
 											style="width: 100%;" property="dynaForm(mainCaseNo)"
-											onchange="getCaseTypedetails();" maxlength="7"
-											onkeypress="return isNumberKey(this);" />
+											 maxlength="7" onkeypress="return isNumberKey(this);" />
 									</div>
 								</div>
 							</div>
@@ -116,7 +115,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 					<div class="row NewTypediv">
 						<div class="col-md-4">
-							<label> Select Acknowledge Number </label>
+							<label> Select Acknowledgement Number </label>
 							<html:select styleId="ackNoo" property="dynaForm(ackNoo)"
 								style="width: 100%;" onchange="getCaseTypedetails();"
 								styleClass="select2Class">
@@ -674,28 +673,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		;
 	};
 
-	function getCaseTypedetails() {
-
-		var caseType = $("#caseType1").val();
-		var regYear = $("#regYear1").val();
-		var mainCaseNo = $("#mainCaseNo").val();
-
-		if ((caseType != null && caseType != "" && caseType != "0")
-				&& (regYear != null && regYear != "" && regYear != "0")
-				&& (mainCaseNo != null && mainCaseNo != "" && mainCaseNo != "0")) {
-			var caseTypeCode = caseType + "/" + regYear + "/" + mainCaseNo;
-			// alert("caseTypeCode--"+caseTypeCode)
-			var url = "./GPOAck.do?mode=getCaseTypedetails&&caseTypeCode="
-					+ caseTypeCode;
-			$.post(url, function(data) {
-				//alert("data--"+data);
-
-				$("#megId").html(data);
-				//$("#caseTypeCode").val(details['1']);
-
-			});
-		}
-	}
+	
 
 	//-----------------------
 	function caseTypeSelect() {

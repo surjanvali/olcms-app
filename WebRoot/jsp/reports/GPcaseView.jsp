@@ -1049,7 +1049,7 @@ body {
 
 																	</logic:notEmpty></td>
 															</tr>
-															<bean:define id="slno" value="${slno+1 }" />
+															<bean:define id="slno" value="${slno+1}" />
 														</logic:equal>
 
 													</logic:iterate>
@@ -1600,7 +1600,7 @@ body {
 	}
 
 	function gpApprove(val) {
-		alert("rms--"+$("#remarks").val())
+		//alert("rms--"+$("#remarks").val())
 		$("#mode").val("gpApprove");
 		$("#actionToPerform").val(val);
 		$("#AssignedCasesToSectionForm").submit();

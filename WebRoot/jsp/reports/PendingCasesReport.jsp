@@ -169,6 +169,35 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 							</div>
 						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Service Category</label>
+								<html:select styleId="categoryServiceId"
+									property="dynaForm(categoryServiceId)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---ALL---</html:option>
+									<logic:notEmpty name="CommonForm" property="dynaForm(categoryServiceList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(categoryServiceList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
+						</div>
+						
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="form-group">
+								<label>Respondent Advocate</label>
+								<html:select styleId="res_adv_Id"
+									property="dynaForm(res_adv_Id)"
+									styleClass="form-control select2Class">
+									<html:option value="0">---ALL---</html:option>
+									<logic:notEmpty name="CommonForm" property="dynaForm(ResAdvList)">
+										<html:optionsCollection name="CommonForm"
+											property="dynaForm(ResAdvList)" />
+									</logic:notEmpty>
+								</html:select>
+							</div>
+						</div>
 					</div>
 
 					<div class="row">
