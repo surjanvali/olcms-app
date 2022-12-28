@@ -18,7 +18,7 @@ import in.apcfss.struts.Forms.CommonForm;
 import in.apcfss.struts.commons.CommonModels;
 import plugins.DatabasePlugin;
 
-public class InstructionsReplyCountReportAction extends DispatchAction {
+public class InterimOrderCountReportAction extends DispatchAction {
 	@Override
 	public ActionForward unspecified(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception 
@@ -48,7 +48,7 @@ public class InstructionsReplyCountReportAction extends DispatchAction {
 					deptName = DatabasePlugin.getStringfromQuery(
 							"select upper(description) as description from dept_new where dept_code='" + deptId + "'", con);
 					
-					sqlCondition+=" and (d.reporting_dept_code='"+deptId+"' or a.dept_code='"+deptId+"')";
+					sqlCondition+=" and (d.reporting_dept_code='"+deptId+"' or b.dept_code='"+deptId+"')";
 					
 				}
 
@@ -80,27 +80,20 @@ public class InstructionsReplyCountReportAction extends DispatchAction {
 				 * " dept_new d on(a.dept_code=d.dept_code) "+condition+" " +
 				 * " where 1=1 "+sqlCondition+" " + " group by 1,2 order by dept_code ";
 				 */
-				sql = " SELECT "
-						+ "	distinct x.reporting_dept_code AS dept_code, "
-						+ "	d1.description  AS dept_name,'S' as flag, "
-						+ "	sum(dept_count) as dept_count, "
-						+ "	sum(instructions_count) as instructions_count, "
-						+ "	sum(reply_instructions_count ) as reply_instructions_count from (select a.dept_code,"
-						+ " case when reporting_dept_code='CAB01' then d.dept_code else reporting_dept_code end as reporting_dept_code,"
-						+ " sum(case when a.dept_code is not null then 1 else 0 end ) as dept_count, "
-						+ " sum(case when a.instructions is not null and a.instructions!='' then 1 else 0 end ) as instructions_count, "
-						+ " sum(case when a.reply_instructions is not null and a.reply_instructions!='' then 1 else 0 end ) as reply_instructions_count  "
-						+ " from  "
-						+ " ecourts_dept_instructions a  "
-						+ " inner join  "
-						+ " dept_new d on(a.dept_code=d.dept_code) "+condition+" "
+				sql = " select distinct x.reporting_dept_code AS dept_code,d1.description  AS dept_name,'S' as flag,"
+						+ " sum(order_document_path) as order_document_path  "
+						+ " from(select b.dept_code,case when reporting_dept_code='CAB01'  "
+						+ " then d.dept_code else reporting_dept_code end as reporting_dept_code,count(order_document_path) as order_document_path "
+						+ " from ecourts_case_interimorder a inner join ecourts_case_data b on(a.cino=b.cino) "
+						+ " inner join  dept_new d on(b.dept_code=d.dept_code) "+condition+" "
 						+ " where 1=1 "+sqlCondition+" "
-						+ " group by a.dept_code,d.dept_code,reporting_dept_code order by dept_code ) x inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code) "
+						+ " group by b.dept_code,d.dept_code,reporting_dept_code order by b.dept_code ) x "
+						+ " inner join dept_new d1 on (x.reporting_dept_code=d1.dept_code) "
 						+ " GROUP BY "
 						+ "	1,2 order by 1";
 				
 
-				request.setAttribute("HEADING", "Instructions Reply Count Report");
+				request.setAttribute("HEADING", "Interim Order Count Report");
 
 				System.out.println("SQL:==>" + sql);
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -173,7 +166,7 @@ public class InstructionsReplyCountReportAction extends DispatchAction {
 				
 				if(roleId!=null)
 				{
-					sqlCondition+=" and (d.reporting_dept_code='"+deptId+"' or a.dept_code='"+deptId+"')";
+					sqlCondition+=" and (d.reporting_dept_code='"+deptId+"' or b.dept_code='"+deptId+"')";
 					/*if(request.getParameter("flag")!=null && request.getParameter("flag").equals("S"))
 					{
 						sqlCondition+=" and (d.reporting_dept_code='"+deptId+"' or a.dept_code='"+deptId+"')";
@@ -193,19 +186,15 @@ public class InstructionsReplyCountReportAction extends DispatchAction {
 				 * " dept_new d on(a.dept_code=d.dept_code) "+condition+" " +
 				 * " where 1=1 "+sqlCondition+" " + " group by 1,2 order by dept_code ";
 				 */
-				sql = " select a.dept_code,d.description as dept_name,'N' as flag,"
-						+ " sum(case when a.dept_code is not null then 1 else 0 end ) as dept_count, "
-						+ " sum(case when a.instructions is not null and a.instructions!='' then 1 else 0 end ) as instructions_count, "
-						+ " sum(case when a.reply_instructions is not null and a.reply_instructions!='' then 1 else 0 end ) as reply_instructions_count  "
-						+ " from  "
-						+ " ecourts_dept_instructions a  "
-						+ " inner join  "
-						+ " dept_new d on(a.dept_code=d.dept_code) "+condition+" "
+				sql = " select b.dept_code,d.description as dept_name,'N' as flag,"
+						+ " count(order_document_path) as order_document_path  "
+						+ " from ecourts_case_interimorder a inner join ecourts_case_data b on(a.cino=b.cino)  "
+						+ "inner join  dept_new d on(b.dept_code=d.dept_code) "+condition+" "
 						+ " where 1=1 "+sqlCondition+" "
-						+ " group by 1,2 order by dept_code ";
+						+ " group by 1,2 order by b.dept_code ";
 				
 
-				request.setAttribute("HEADING", "Instructions Reply Count Report");
+				request.setAttribute("HEADING", "Interim Order Count Report");
 
 				System.out.println("SQL:==>" + sql);
 				List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
@@ -298,41 +287,29 @@ public class InstructionsReplyCountReportAction extends DispatchAction {
 				
 				if(request.getParameter("flag")!=null && request.getParameter("flag").equals("S"))
 				{
-					sqlCondition+=" and (d.reporting_dept_code='"+deptId+"' or a.dept_code='"+deptId+"')";
+					sqlCondition+=" and (d.reporting_dept_code='"+deptId+"' or b.dept_code='"+deptId+"')";
 				}else {
-					sqlCondition+=" and (a.dept_code='"+deptId+"')";
+					sqlCondition+=" and (b.dept_code='"+deptId+"')";
 				}
 				if(!viewDisplay.equals("") && viewDisplay.equals("SHOWPOPUP")) {
 					target = "datapopupview";
 				}
 				
-				condition+=" where a.dept_code is not null "+sqlCondition+"";
+				condition+=" where b.dept_code is not null "+sqlCondition+"";
 
-				if(counter_pw_flag.equals("DeptCount")) 
-				{
-					heading = "Department Count List for Instructions reply Count View Report";
-					// pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6' //  and action_to_perfom='Parawise Remarks'
-					//condition+=" and a.dept_code='"+dept_code+"'";
-				}else if(counter_pw_flag.equals("InstCount")) 
-				{
-					heading = "Instruction Count List for Instructions reply Count View Report";
-					// pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6' //  and action_to_perfom='Parawise Remarks'
-					condition+=" and a.instructions is not null and a.instructions!=''";//and a.dept_code='"+dept_code+"'
-				}
-				else if(counter_pw_flag.equals("ReplyInstCount")) 
-				{
-					heading = "Reply Instruction Count List for Instructions reply Count View Report";
-					// pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6' //  and action_to_perfom='Parawise Remarks'
-					condition+="  and a.reply_instructions is not null and a.reply_instructions!=''";//and a.dept_code='"+dept_code+"'
-				}
+				
+				
+				heading = "Interim Order View Report";
+				// pwr_uploaded='No' and (coalesce(pwr_approved_gp,'0')='0' or coalesce(pwr_approved_gp,'No')='No' ) and ecd.case_status='6' //  and action_to_perfom='Parawise Remarks'
+				condition+="  and a.order_document_path is not null and a.order_document_path!=''";
 			
 			}
 
-			sql = "select a.dept_code,d.description as dept_name,a.instructions,a.reply_instructions,mobile_no,cino  "
-					+ "from  "
-					+ "ecourts_dept_instructions a  "
-					+ "inner join  "
-					+ "dept_new d on(a.dept_code=d.dept_code) "+leftcondition+" "+condition+" order by dept_code,cino";
+			sql = "select b.dept_code,d.description as dept_name,mobile_no,a.cino,order_document_path   "
+					+ " from   "
+					+ " ecourts_case_interimorder a  inner join ecourts_case_data b on(a.cino=b.cino)  "
+					+ " inner join   "
+					+ " dept_new d on(b.dept_code=d.dept_code) "+leftcondition+" "+condition+" order by b.dept_code,cino";
 
 			
 			request.setAttribute("HEADING", heading);

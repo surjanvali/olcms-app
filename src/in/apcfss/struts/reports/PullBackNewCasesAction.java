@@ -91,17 +91,19 @@ public class PullBackNewCasesAction extends DispatchAction {
 			 * " where a.inserted_by='" + session.getAttribute("userid") + "' ";
 			 */
 
-
+			
 			/*
-			 * sql="select cino,* from ecourts_case_data a inner join section_officer_details b on (a.assigned_to=b.emailid) "
-			 * + " where b.inserted_by='"+session.getAttribute("userid")
-			 * +"' and ecourts_case_status!='Private'    order by b.emailid ";
+			 * sql=" select a.ack_no,* from ecourts_gpo_ack_dtls a inner join ecourts_gpo_ack_depts c on (a.ack_no=c.ack_no) "
+			 * + "inner join section_officer_details b on (c.assigned_to=b.emailid)  " +
+			 * "where b.inserted_by='"+session.getAttribute("userid")+"'   order by b.emailid";
 			 */
 			
-			sql=" select a.ack_no,* from ecourts_gpo_ack_dtls a inner join ecourts_gpo_ack_depts c on (a.ack_no=c.ack_no) "
-					+ "inner join section_officer_details b on (c.assigned_to=b.emailid)  "
-					+ "where b.inserted_by='"+session.getAttribute("userid")+"'   order by b.emailid";
-			
+			sql=" select a.ack_no,* from ecourts_gpo_ack_dtls a inner join ecourts_gpo_ack_depts f on (a.ack_no=f.ack_no)  "
+					+ " inner join (select emailid,inserted_by from nodal_officer_details b  where b.inserted_by='"+session.getAttribute("userid")+"' "
+					+ " union all "
+					+ " select emailid,inserted_by from mlo_details c  where c.inserted_by='"+session.getAttribute("userid")+"'  "
+					+ " union all "
+					+ " select emailid,inserted_by from section_officer_details d where d.inserted_by='"+session.getAttribute("userid")+"') e on (f.assigned_to=e.emailid) order by e.emailid";
 
 			System.out.println("ecourts SQL:" + sql);
 			

@@ -64,12 +64,17 @@ public class AssignmentOfCasesByAGAction extends DispatchAction {
 					"select emp_id,emp_name from  ag_office_employees where emp_id not in ('1','9','10') order by emp_id",
 					con));
 			
+			cform.setDynaForm("caseNoList", DatabasePlugin.getSelectBox(
+					 " select distinct reg_no,reg_no from ecourts_case_data order by reg_no   ", 
+					con));
+			
 			//cform.setDynaForm("regYear", "2022");
 			ArrayList selectData = new ArrayList();
 			for(int i=2022; i > 1980; i--) {
 				selectData.add(new LabelValueBean(i+"",i+""));
 			}
 			cform.setDynaForm("yearsList", selectData);
+			
 			cform.setDynaForm("ShowDefault", "ShowDefault");
 			
 			request.setAttribute("SHOWMESG", "SHOWMESG");

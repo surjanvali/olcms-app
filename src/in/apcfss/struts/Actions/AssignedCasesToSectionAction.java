@@ -4,6 +4,10 @@ import in.apcfss.struts.Forms.CommonForm;
 import in.apcfss.struts.commons.CommonModels;
 import in.apcfss.struts.commons.FileUploadUtilities;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +21,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
+
+import com.itextpdf.text.pdf.codec.Base64;
 
 import plugins.DatabasePlugin;
 
@@ -840,6 +846,10 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 						filePath="uploads/counters/";
 						newFileName="counter_"+CommonModels.randomTransactionNo();
 						counter_filed_document = fuu.saveFile(myDoc, filePath, newFileName);
+						String contextpath=request.getRealPath("") + "//" ;
+						String base64data=getBS64(contextpath+"/"+"uploads\\counters\\counter_1671784433033.pdf");//counter_filed_document
+						cform.setDynaForm("urls", base64data);
+						System.out.println("counter base64data-->"+base64data);
 						
 						updateSql += ", counter_filed_document='"+counter_filed_document+"'";
 						
@@ -855,6 +865,16 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 						filePath = "uploads/parawiseremarks/";
 						newFileName = "parawiseremarks_"+CommonModels.randomTransactionNo();
 						pwr_uploaded_copy = fuu.saveFile(myDoc, filePath, newFileName);
+						
+						
+					//	String contextpath=request.getRealPath("") + "//" ;
+						//System.out.println("contextpath:::::::::::::::::::::::::::::::::::::>>>>>>"+contextpath);
+						String base64data=getBS64(pwr_uploaded_copy);
+						cform.setDynaForm("urls", base64data);
+						cform.setDynaForm("sign_sno", "17000969");   
+						request.setAttribute("pdf_success", "pdf_success");
+						System.out.println("parawise remarks base64data-->"+base64data);
+						request.setAttribute("path", pwr_uploaded_copy);
 						
 						updateSql += ", pwr_uploaded_copy='"+pwr_uploaded_copy+"'";
 						
@@ -928,6 +948,8 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 						con.rollback();
 						request.setAttribute("errorMsg", "Error while updating the case details for Cino :" + cIno);
 					}
+					
+					
 					
 				}else if(cform.getDynaForm("ecourtsCaseStatus")!=null && cform.getDynaForm("ecourtsCaseStatus").toString().equals("Private")){
 					
@@ -1506,6 +1528,24 @@ public class AssignedCasesToSectionAction extends DispatchAction {
 			DatabasePlugin.closeConnection(con);
 		}
 		return unspecified(mapping, cform, request, response);
+	}
+	public static String getBS64(String uploadform)
+	{
+		
+		System.out.println("in :::: getBS64 :::::");
+		File originalFile = new File(uploadform);
+		String encodedBase64 = null;
+		try {
+			FileInputStream fileInputStreamReader = new FileInputStream(originalFile);
+			byte[] bytes = new byte[(int)originalFile.length()];
+			fileInputStreamReader.read(bytes);
+			encodedBase64 = new String(Base64.encodeBytes(bytes));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return encodedBase64;
 	}
 	
 }

@@ -28,7 +28,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 </div>
 <div class="page-content fade-in-up">
-	<html:form action="/InstructionsreplyCountReport">
+	<html:form action="/FinalOrderCountReport">
 		<html:hidden styleId="mode" property="mode" />
 
 				<logic:present name="CASEWISEDATA">
@@ -40,15 +40,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								class="table table-striped table-bordered oldTypediv"
 								style="width:100%"><thead>
 									<tr class="row1" >
-										<th colspan="7">${HEADING}</th>
+										<th colspan="6">${HEADING}</th>
 									</tr>
 									<tr class="row1" >
 										<th class="cell" >Sl No.</th>
 										<th class="cell" >Cino</th>
 										<th class="cell" >Department Code</th>
 										<th class="cell" >Department Name</th>
-										<th class="cell" >Instruction</th>
-										<th class="cell" >Reply Instruction</th>
+										<th class="cell" >Order Document</th>
 										<th class="cell" >Mobile</th>
 									</tr>
 								</thead>
@@ -74,8 +73,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											</td>
 											<td class="cell" >${ccd.dept_code}</td>
 											<td class="cell" >${ccd.dept_name}</td>
-											<td class="cell" >${ccd.instructions}</td>
-											<td class="cell" >${ccd.reply_instructions}</td>
+											<td class="cell" ><a href="<%=basePath%>${ccd.order_document_path}" target="_blank">View</a></td>
 											<td class="cell" >${ccd.mobile_no}</td>
 										</tr>
 									</logic:iterate>

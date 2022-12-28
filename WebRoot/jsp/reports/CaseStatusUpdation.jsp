@@ -1,9 +1,51 @@
+<%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+
+<%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles"%>
+<%-- <%@ taglib uri="/WEB-INF/struts-template.tld" prefix="template"%> --%>
+<%@ taglib uri="/WEB-INF/struts-nested.tld" prefix="nested"%>
+<%-- <%@page import="cfss.gov.login.SessionDetails"%> --%>
+<%@page import="java.text.SimpleDateFormat"%>
+
+
+<%@ page import="javax.smartcardio.CardException"%>
+<%@ page import="javax.smartcardio.CardTerminal"%>
+<%@ page import="javax.smartcardio.TerminalFactory"%>
+
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+Random rand = new Random(new Random().nextLong());  
+String exdata = String.valueOf(rand.nextLong());
+%>
+
+<%!  
+public String detectCradTypeAndGetName() 
+{
+String tokenName = null;
+try 
+{
+TerminalFactory factory = TerminalFactory.getDefault();
+List<CardTerminal> terminals = factory.terminals().list();
+for (CardTerminal terminal : terminals) 
+{
+if (terminal.isCardPresent()) 
+{
+String name = terminal.getName();
+tokenName = name.substring(0, name.indexOf(" "));
+tokenName = tokenName.trim();
+}
+}
+} 
+catch (CardException ex) 
+{
+ex.printStackTrace();
+tokenName=null;
+}
+return tokenName;
+}
 %>
 
 <link rel='stylesheet'
@@ -27,6 +69,164 @@ body {
 	overflow-y: auto;
 }
 </style>
+
+
+	<script type="text/javascript">
+	/*DIGI SIGN*/
+        	var subjectName = "";
+        	var issuerName = "";
+        	var resellerCode = 75;
+        	var strHash;
+        	var signerName;
+        	var offset;
+        	var signerCert;
+        	var outfile;
+        	var res;
+        	var myObj = _elk_desksignObj;
+        	var filecontent="";
+        	var pdf_data = "JVBERY=";
+        		function signmem()
+        	{
+        		myObj.ConfigSigBlock(256,20,30,1,0, "Digitally signed by",120,120);
+        		myObj.SignDataInMemoryEx("<%=exdata%>", "", true, true, 0, subjectName, issuerName, "", "", false, 0, resellerCode);
+        		
+        	}
+        		function preInvoke(signingfn,callback)
+        	{
+			alert("hloooooooooooooooooooooo");
+        	if(!myObj._elk_initialized)
+        	{
+        	myObj._elk_initialize(callback);
+        	window.setTimeout(signingfn, 200);
+        	}
+        	else
+        	signingfn();
+        	}
+
+        	function mycallback(apiName, status, params)
+        	{
+        	
+        	if(status != "Success")
+        	{
+        	alert("Certificate operation failed: " + status);
+        	document.getElementById("sign_loading").innerHTML="";
+        	return false;
+        	}
+        	if(apiName == "SignDataInMemoryEx")
+        	{
+        	document.getElementById("sign_loading").innerHTML="<i class='fa fa-spinner fa-spin' ></i> Preparing to Sign......";
+
+        	  if(typeof params.sig == "undefined" || params.sig == "")
+        	{retVal = "";
+        	}
+        	else{
+        	if(apiName == "SignDataInMemoryEx")
+        	{
+        	retVal = params.sig;
+        	var signValue = params.sig;
+        	var fileURL =document.getElementById("urls").value;
+        	var token_no=document.getElementById("sign_sno").value;
+        	var oParameters = { "sig" :signValue,"MyReason":"Remarks :  ", "MyLocation":"","SigBlockTitle":"", "PageNumber":"-1", "SigPosition":"4", "filetosign" :fileURL,"searchText":"Transport Commissioner","coordinatex":"1","coordinatey":"1","project":"jnanabhumi","pkey":"Jnb@123","token_name":"FT","token_sno":token_no};
+
+
+        	//var x="http://10.10.0.248:8080/digisigning/services/Sign/getCert";
+        	var x="https://digisign.apcfss.in/services/Sign/getCert";
+        	 $.ajax({url:x,data:oParameters,type:"POST", success: function(result){
+        	      console.log(result);
+        	     
+        	    var html = result;
+        	   
+        	      var res1 =html.split("*~*");
+        	     
+        	       strHash = res1[1] ;
+        	      signerName = res1[2] ;
+        	       var signerSubjectDN = signerName;
+        	      offset=res1[3] ;
+        	      signerCert = res1[4] ;
+        	      outfile = res1[5] ;
+        	      res=res1[0];
+        	       
+        	 
+        	     if(res==1)
+        	      myObj.SignEncodedDataInBatch(strHash,1, 0, 0, signerSubjectDN, "", "", "", 1, 0, resellerCode);
+        	      else
+        	      alert("Status:"+res1[1]);
+        	}});
+        	}
+        	}
+
+        	}
+        	else if(apiName == "SignEncodedDataInBatch")
+        	{  
+
+        	var signValue = params.sig;
+        	var signAPIUrl="https://digisign.apcfss.in/services/Sign/signHash";
+        	//var signAPIUrl="http://10.10.0.248:8080/digisigning/services/Sign/signHash";
+
+        	var oParameters = { "signature" :signValue, "offset" :offset, "hash" : strHash, "signerCert":signerCert,"outfile":outfile,"project":"jnanabhumi","pkey":"Jnb@123","res":res};
+        	$.ajax({url: signAPIUrl,data:oParameters, type:"POST", success: function(result){
+        	      console.log(result);
+        	      var html = result;
+        	   document.getElementById("sign_loading").innerHTML="";
+        	      var res1 =html.split("*~*");
+        	     
+        	      var signfilecontent = res1[1];
+        	       var srcURL = "data:application/pdf;base64," + signfilecontent;
+        	       if(res1[0]==1)
+        	{
+        	sweetAlert("Parawise Remarks, Signed Successfully");
+        	document.getElementById("signed_file").value=signfilecontent;
+        	document.forms[0].key.value = "saveDSK";
+        	document.forms[0].submit();
+        	}
+        	else
+        	{
+        	sweetAlert("Failed To Sign. Please Try Again");
+        	//document.forms[0].mode.value = "signProceeding";
+        	//document.forms[0].submit();
+        	}
+        	/* document.getElementById("idPdfView").innerHTML=("<iframe src='" + srcURL + "' width = '100%' height = '500px''></iframe>"); */
+        	   }});
+        	   document.getElementById("sign_loading").innerHTML="";  
+        	}
+        	}
+
+function mycallback2(apiName, status, params)
+{
+
+	if(apiName != "SignDataInMemoryEx")
+		return; 
+	if(status != "Success")
+	{
+		alert("Certificate operation failed: " + status);
+	}
+	else
+	{
+		if(apiName == "SignDataInMemoryEx")
+		{
+		document.getElementById("sign_loading").innerHTML="<i class='fa fa-spinner fa-spin' ></i> Registering Signature......";
+		var sigholder = params.sig;
+			var x="https://digisign.apcfss.in/services/Sign/doRegister";
+			var oParameters = { "sig" :sigholder,"tbsdata":<%=exdata%>,"project":"jnanabhumi","pkey":"Jnb@123","token_name":"FT"};
+		
+		$.ajax({url:x,data:oParameters,type:"POST", success: function(result){
+				       console.log(result);
+				       var html = result;
+				       var res1 =html.split("*~*");
+				       if(res1[0]==1)
+				       {
+				        document.getElementById("sign_sno").value=res1[1];
+				        preInvoke(signmem,mycallback);
+				       }
+				      document.getElementById("sign_loading").innerHTML="";
+				       }});
+		}
+	}
+	
+} 
+     /*DIGI SIGN END*/
+	</script>
+
 <!-- START PAGE CONTENT-->
 <%-- <div class="page-heading">
 	<h3 class="page-title" style="text-align:center">
@@ -41,6 +241,7 @@ body {
 		styleId="AssignedCasesToSectionForm" enctype="multipart/form-data">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden property="dynaForm(fileCino)" styleId="fileCino" />
+		<html:hidden property="dynaForm(urls)" styleId="urls"  ></html:hidden>
 		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<div class="dashboard-cat-title">
@@ -1237,7 +1438,7 @@ body {
 													.substr(filename
 															.lastIndexOf("."));
 											/* define allowed file types */
-											var allowedExtensionsRegx = /(\.pdf|\.PDF)$/i;
+											var allowedExtensionsRegx = /(\.pdf|\.PDF|\.doc|\.DOC||\.docx|\.DOCX)$/i;
 											/* testing extension with regular expression */
 											var isAllowed = allowedExtensionsRegx
 													.test(extension);
@@ -1259,6 +1460,83 @@ body {
 												return false;
 											}
 										});
+						
+						
+						$("#parawiseRemarksCopy")
+						.on(
+								"change",
+								function() {
+									/* current this object refer to input element */
+									var $input = $(this);
+									/* collect list of files choosen */
+									var files = $input[0].files;
+									var filename = files[0].name;
+									/* getting file extenstion eg- .jpg,.png, etc */
+									var extension = filename
+											.substr(filename
+													.lastIndexOf("."));
+									/* define allowed file types */
+									var allowedExtensionsRegx = /(\.pdf|\.PDF|\.doc|\.DOC||\.docx|\.DOCX)$/i;
+									/* testing extension with regular expression */
+									var isAllowed = allowedExtensionsRegx
+											.test(extension);
+									var fileSize = files[0].size;
+									/* 1024 = 1MB */
+									var size = Math
+											.round((fileSize / 1024));
+									/* checking for less than or equals to 2MB file size */
+
+									if (isAllowed == false) {
+										alert("Invalid File type for the upload.");
+										$(this).focus();
+										$(this).val("");
+										return false;
+									} else if (size > 100 * 1024) {
+										alert("Invalid file size");
+										$(this).focus();
+										$(this).val("");
+										return false;
+									}
+								});
+						
+						
+						
+						$("#counterFileCopy")
+						.on(
+								"change",
+								function() {
+									/* current this object refer to input element */
+									var $input = $(this);
+									/* collect list of files choosen */
+									var files = $input[0].files;
+									var filename = files[0].name;
+									/* getting file extenstion eg- .jpg,.png, etc */
+									var extension = filename
+											.substr(filename
+													.lastIndexOf("."));
+									/* define allowed file types */
+									var allowedExtensionsRegx = /(\.pdf|\.PDF|\.doc|\.DOC||\.docx|\.DOCX)$/i;
+									/* testing extension with regular expression */
+									var isAllowed = allowedExtensionsRegx
+											.test(extension);
+									var fileSize = files[0].size;
+									/* 1024 = 1MB */
+									var size = Math
+											.round((fileSize / 1024));
+									/* checking for less than or equals to 2MB file size */
+
+									if (isAllowed == false) {
+										alert("Invalid File type for the upload.");
+										$(this).focus();
+										$(this).val("");
+										return false;
+									} else if (size > 100 * 1024) {
+										alert("Invalid file size");
+										$(this).focus();
+										$(this).val("");
+										return false;
+									}
+								});
 
 					});
 </script>

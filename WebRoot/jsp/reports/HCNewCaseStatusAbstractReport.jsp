@@ -559,6 +559,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 											value="${map.ack_no}"
 											class="btn btn-sm btn-info waves-effect waves-light"
 											onclick="javascript:viewCaseDetailsPopup('${map.ack_no}');" />
+											<logic:notEqual value="-" name="map"
+													property="hc_ack_no">
+
+													<span style="color: navy;font-weight: bold;">${map.hc_ack_no }</span>
+
+												</logic:notEqual>
 										</td>
 										<%-- <td>${map.ack_no }<logic:notEqual value="-" name="map"
 													property="hc_ack_no">

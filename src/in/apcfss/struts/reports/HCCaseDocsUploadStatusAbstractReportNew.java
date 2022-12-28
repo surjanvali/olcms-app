@@ -93,6 +93,10 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 				
 				 return HODwisedetails(mapping, form, request, response); 
 			}
+			else  if(roleId.equals("3") ) {
+				
+				sqlCondition += " and (dn.reporting_dept_code='"+deptId+"' or dn.dept_code='"+deptId+"' ) ";
+			}
 			if ((roleId.equals("6"))) {
 				condition = " left join ecourts_mst_gp_dept_map egm on (egm.dept_code=dn.dept_code) ";
 				sqlCondition += " and egm.gp_id='" + userId + "'";
@@ -129,12 +133,12 @@ public class HCCaseDocsUploadStatusAbstractReportNew extends DispatchAction{
 					+ " sum(case when a.ecourts_case_status='Closed' then 1 else 0 end) as closed_cases,	"
 					+ " sum(case when a.ecourts_case_status='Pending' and pwr_uploaded_copy is not null and length(pwr_uploaded_copy)>10 then 1 else 0 end) as pwrcounter_uploaded,"
 					+ " sum(case when a.ecourts_case_status='Pending' and pwr_uploaded_copy is null then 1 else 0 end) as pwrcounter_not_uploaded,	"
-					+ " sum(case when ecod.pwr_approved_gp='Yes' then 1 else 0 end) as pwrcounter_approved_by_gp,	"
-					+ " sum(case when ecod.pwr_approved_gp='No' then 1 else 0 end) as pwrcounter_rejected_by_gp,	"
+					+ " sum(case when ecod.pwr_approved_gp='Yes' then 1 else 0 end) as pwrcounter_approved_by_gp ,	"
+					+ " sum(case when ecod.pwr_approved_gp='No' then 1 else 0 end) as pwrcounter_rejected_by_gp ,	"
 					+ " sum(case when a.ecourts_case_status='Pending' and counter_filed_document is not null and length(counter_filed_document)>10 then 1 else 0 end) as counter_uploaded,	"
 					+ " sum(case when a.ecourts_case_status='Pending' and counter_filed_document is null then 1 else 0 end) as counter_not_uploaded,	"
 					+ " sum(case when counter_approved_gp='Yes' then 1 else 0 end) as counter_approved_gp,	"
-					+ " sum(case when counter_approved_gp='NO' then 1 else 0 end) as counter_rejected_gp"
+					+ " sum(case when counter_approved_gp='NO' then 1 else 0 end) as counter_rejected_gp "
 					+ " from ecourts_gpo_ack_depts  a  left join ecourts_olcms_case_details ecod on(a.ack_no=ecod.cino and a.respondent_slno=ecod.respondent_slno)	"
 					+ " left join ecourts_gpo_ack_dtls  b using(ack_no) inner join dept_new dn on (a.dept_code=dn.dept_code)  "+condition+" "
 					+ " where  b.ack_type='NEW' " + sqlCondition ;

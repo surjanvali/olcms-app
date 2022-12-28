@@ -149,8 +149,11 @@ public class HighCourtCasesListAction extends DispatchAction {
 			else if(roleId.equals("10")) { //District Nodal Officer
 				sqlCondition +=" and a.case_status=8 and a.dist_id='"+distId+"'";
 			}
-			else if(roleId.equals("5") || roleId.equals("9")) {//NO & HOD
-				sqlCondition +=" and a.case_status in (3,4)";
+			else if(roleId.equals("5") ) {//NO 
+				sqlCondition +=" and a.case_status in (4)";
+			}
+			else if( roleId.equals("9")) {// HOD
+				sqlCondition +=" and a.case_status in (3)";
 			}
 			else if(roleId.equals("3") || roleId.equals("4")) {//MLO & Sect. Dept.
 				sqlCondition +=" and (a.case_status is null or a.case_status in (1, 2))";

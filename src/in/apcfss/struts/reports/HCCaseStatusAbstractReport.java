@@ -815,16 +815,22 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 					sqlCondition += " and (disposal_type='TRANSFERRED')";
 				}
 			}
+			
+			if ( roleId.equals("3") ) {
+				
+				//and (reporting_dept_code='FIN01' or A.dept_code='FIN01') 
+				sqlCondition += " and (d.reporting_dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' OR a.dept_code='"+CommonModels.checkStringObject(session.getAttribute("dept_code"))+"' )";
+			}
 
 			String condition="";
 			if (roleId.equals("6") )
 				condition= " inner join ecourts_mst_gp_dept_map c on a.dept_code=c.dept_code ";
 
 			//sql = "select disposal_type, count(*) as casescount from ecourts_case_data a where 1=1 " + sqlCondition;
-			sql="select disposal_type,b.dept_code,b.description,count(*) as casescount from ecourts_case_data a "+condition+" inner join dept_new b on a.dept_code=b.dept_code   where 1=1 " + sqlCondition;
+			sql="select disposal_type,b.dept_code,b.description,count(*) as casescount from ecourts_case_data a inner join dept_new d on (a.dept_code=d.dept_code) "+condition+" inner join dept_new b on a.dept_code=b.dept_code   where 1=1 " + sqlCondition;
 
-
-			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))
+			
+			if ( roleId.equals("4") || roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))
 				sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
 
 			sql += " group by disposal_type,b.description,b.dept_code";
@@ -1039,14 +1045,18 @@ public class HCCaseStatusAbstractReport extends DispatchAction {
 				}
 
 			}
-
+			if ( roleId.equals("3") ) {
+				
+				//and (reporting_dept_code='FIN01' or A.dept_code='FIN01') 
+				sqlCondition += " and (d.reporting_dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' OR a.dept_code='"+CommonModels.checkStringObject(session.getAttribute("dept_code"))+"' )";
+			}
 			String condition="";
 			if (roleId.equals("6") )
 				condition= " inner join ecourts_mst_gp_dept_map b on a.dept_code=b.dept_code ";
 
-			sql = "select disposal_type, count(*) as casescount from ecourts_case_data a "+condition+" where 1=1 " + sqlCondition;
+			sql = "select disposal_type, count(*) as casescount from ecourts_case_data a inner join dept_new d on (a.dept_code=d.dept_code) "+condition+" where 1=1 " + sqlCondition;
 
-			if (roleId.equals("3") || roleId.equals("4") || roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))
+			if ( roleId.equals("4") || roleId.equals("5") || roleId.equals("9") || roleId.equals("10"))
 				sql += " and a.dept_code='" + CommonModels.checkStringObject(session.getAttribute("dept_code")) + "' ";
 
 

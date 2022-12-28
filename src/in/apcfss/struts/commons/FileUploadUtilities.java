@@ -18,7 +18,7 @@ public class FileUploadUtilities {
 	
 	public long minSize = 0;
 	public long maxSize = MB200;
-	public FileTypes[] accepted_formats = {FileTypes.jpg,FileTypes.pdf,FileTypes.jpeg};
+	public FileTypes[] accepted_formats = {FileTypes.jpg,FileTypes.pdf,FileTypes.jpeg,FileTypes.doc,FileTypes.docx,FileTypes.DOC,FileTypes.DOCX};
 	public String basePath = ApplicationVariables.contextPath;;
 	
 	

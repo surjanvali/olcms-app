@@ -277,9 +277,29 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 														property="dynaForm(yearsList)" />
 												</logic:notEmpty>
 											</html:select></td>
-										<td><html:text styleId="caseNumber1"
+										<td>
+										
+										<html:select styleId="caseNumber1"
+												property="dynaForm(caseNumber1)"
+												styleClass="form-control select2Class">
+												<html:option value="0">---SELECT---</html:option>
+												<%-- <html:option value="ALL">ALL</html:option> --%>
+												<logic:notEmpty name="CommonForm"
+													property="dynaForm(caseNoList)">
+													<html:optionsCollection name="CommonForm"
+														property="dynaForm(caseNoList)" />
+												</logic:notEmpty>
+											</html:select>
+										
+										
+										
+										
+										
+										<%-- <html:text styleId="caseNumber1"
 												styleClass="form-control" style="height:30px;width:300px"
-												property="dynaForm(caseNumber1)" maxlength="50" onkeypress="return isNumberKey(this);"/></td>
+												property="dynaForm(caseNumber1)" maxlength="50" onkeypress="return isNumberKey(this);"/> --%>
+												
+												</td>
 
 									</tr>
 								</logic:notPresent>
@@ -659,11 +679,9 @@ function fnAssignCase(){
 													+ rowCount2
 													+ ".</td><td><select name='dynaForm(caseTypeId" + rowCount2 + ")' id='caseTypeId" + rowCount2 + "' style='width: 100%;' ></select></td><td>"
 													+ "<select name='dynaForm(regYear" + rowCount2 + ")' id='regYear" + rowCount2 + "' style='width: 100%;' ></select></td>"
-													+ "<td><input type='text' name='dynaForm(caseNumber"
-													+ rowCount2
-													+ ")' id='caseNumber"
-													+ rowCount2
-													+ "' style='height:30px;width:300px' ></text></td></tr>"+ "");  /* <td><input type='submit' name='submit' value='Case Details'onclick='return getData();' /></td> */
+													+ "<td><select name='dynaForm(caseNumber" + rowCount2 + ")' id='caseNumber" + rowCount2 + "' style='width: 100%;' ></select></td></tr>"+ "");  /* <td><input type='submit' name='submit' value='Case Details'onclick='return getData();' /></td> */
+
+													//+ "<td><input type='text' name='dynaForm(caseNumber"+ rowCount2+ ")' id='caseNumber"+ rowCount2+ "' style='height:30px;width:300px' ></text></td></tr>"+ "");  /* <td><input type='submit' name='submit' value='Case Details'onclick='return getData();' /></td> */
 							
 							$("#caseTypeId" + rowCount + " option").clone().appendTo("#caseTypeId" + rowCount2);
 							$("#caseTypeId" + rowCount2).select2();
@@ -674,6 +692,10 @@ function fnAssignCase(){
 							$("#regYear" + rowCount + " option").clone().appendTo("#regYear" + rowCount2);
 							$("#regYear" + rowCount2).select2();
 							$("#regYear" + rowCount2).select2("val", "0");
+							
+							$("#caseNumber" + rowCount + " option").clone().appendTo("#caseNumber" + rowCount2);
+							$("#caseNumber" + rowCount2).select2();
+							$("#caseNumber" + rowCount2).select2("val", "0");
 							
 
 							$("#respondentIds").val(

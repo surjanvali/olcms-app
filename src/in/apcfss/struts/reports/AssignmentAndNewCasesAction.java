@@ -181,7 +181,7 @@ public class AssignmentAndNewCasesAction extends DispatchAction {
 					+ " left join district_mst dm on (ad.dist_id=dm.district_id) "
 					+ " left join dept_new dmt on (ad.dept_code=dmt.dept_code)"
 					+ " inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
-					+ " where a.delete_status is false and coalesce(assigned,'f')='f' and ack_type='NEW' " //and respondent_slno=1 
+					+ " where a.delete_status is false and coalesce(assigned,'f')='f' and ack_type='NEW' and respondent_slno=1  " //and respondent_slno=1 
 					+ sqlCondition + " order by inserted_time desc";
 
 			System.out.println("CASES SQL:" + sql);

@@ -35,7 +35,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 </div>
 <div class="page-content fade-in-up">
-	<html:form method="post" action="/InstructionsreplyCountReport"
+	<html:form method="post" action="/FinalOrderCountReport"
 		styleId="HighCourtCasesListForm">
 		<html:hidden styleId="mode" property="mode" />
 		<html:hidden styleId="selectedCaseIds" property="dynaForm(selectedCaseIds)" />
@@ -81,15 +81,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 										<th>Sl.No</th>
 										<th>${sec_show}Department Code</th>
 										<th>${sec_show}Department Name</th>
-										<!-- <th>Department Count</th> -->
-										<th>Instructions Sent</th>
-										<th>Reply Instructions</th>
+										<th>Uploaded Documents</th>
 									</tr>
 								</thead>
 								<tbody>
 								    <bean:define  id="dept_count_total" value="0" />
-								     <bean:define id="instructions_count_total" value="0" />
-								     <bean:define  id="reply_instructions_count_total" value="0" />
+								     <bean:define id="order_document_path_total" value="0" />
 									<logic:iterate id="map" name="DATA" indexId="i">
 										<tr>
 											<td>${i+1}.
@@ -124,31 +121,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 												class="btn btn-sm btn-success waves-effect waves-light"
 												onclick="javascript:viewDetailsPopup1('viewdata','InstCount','${map.dept_code}');" /> --%>
 											
-											<a href="./InstructionsreplyCountReport.do?mode=viewdata&pwCounterFlag=InstCount&deptId=${map.dept_code}&flag=${map.flag}&SHOWPOPUP=SHOWPOPUP"  > 
-											 ${map.instructions_count}</a><!-- onclick="javascript:viewDetailsPopup1('viewdata','InstCount','${map.dept_code}');" -->
-											 <bean:define id="instructions_count_total" value="${instructions_count_total+map.instructions_count}" />
+											<a href="./FinalOrderCountReport.do?mode=viewdata&deptId=${map.dept_code}&flag=${map.flag}&SHOWPOPUP=SHOWPOPUP"  > 
+											 ${map.order_document_path}</a><!-- onclick="javascript:viewDetailsPopup1('viewdata','InstCount','${map.dept_code}');" -->
+											 <bean:define id="order_document_path_total" value="${order_document_path_total+map.order_document_path}" />
 											</td>
-											<td>
 											
-											<%-- <input type="button" id="btnShowPopup" value="${map.reply_instructions_count}"
-												class="btn btn-sm btn-success waves-effect waves-light"
-												onclick="javascript:viewDetailsPopup1('viewdata','ReplyInstCount','${map.dept_code}');" /> --%>
-												
-											<%-- <a href="#" class="btn btn-info btn-md" onclick="javascript:viewDetailsPopup1('viewdata','ReplyInstCount','${map.dept_code}');"> --%>
-											<a href="./InstructionsreplyCountReport.do?mode=viewdata&pwCounterFlag=ReplyInstCount&deptId=${map.dept_code}&flag=${map.flag}&SHOWPOPUP=SHOWPOPUP"  > 
-											 ${map.reply_instructions_count}</a>
-											 <bean:define id="reply_instructions_count_total" value="${reply_instructions_count_total+map.reply_instructions_count}" />
-											</td>
 										</tr>
 									</logic:iterate>
 								</tbody>
 								<tfoot>
 									<tr>
 									    <td colspan="3">Total</td>
-									   <%--  <td>${dept_count_total}</td> --%>
-									    <td>${instructions_count_total}</td>
-									    <td>${reply_instructions_count_total}</td>
-									</tr>
+									    <td>${order_document_path_total}</td>
+								    </tr>
 								</tfoot>
 							</table>
 						</div>
@@ -468,7 +453,7 @@ $(document).ready(function() {
 		$("#deptName").val(deptDesc);
 		$("#mode").val("HODwisedetails");
 		$("#HCCaseStatusAbstract").submit();*/
-		$(location).attr("href", "./InstructionsreplyCountReport.do?mode=getDetailsFromSecDept&deptName="+deptDesc+"&deptId="+deptId);
+		$(location).attr("href", "./FinalOrderCountReport.do?mode=getDetailsFromSecDept&deptName="+deptDesc+"&deptId="+deptId);
 	}
 		
 

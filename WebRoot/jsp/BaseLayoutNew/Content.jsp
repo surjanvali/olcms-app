@@ -104,7 +104,7 @@ $(document).ready(function(){
 									<div class="ibox bg-primary color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${totaldeptcases }</h2>
-											<div class="m-b-5">Total Cases</div>
+											<div class="m-b-5">Legacy Cases</div>
 											<i class="fa fa-file-text-o widget-stat-icon"></i>
 											<div>
 												<small> &nbsp;</small>
@@ -121,7 +121,7 @@ $(document).ready(function(){
 									<div class="ibox bg-primary color-white widget-stat">
 										<div class="ibox-body">
 											<h2 class="m-b-5 font-strong">${innerData.total }</h2>
-											<div class="m-b-5">Total Cases</div>
+											<div class="m-b-5">Legacy Cases</div>
 											<i class="fa fa-file-text-o widget-stat-icon"></i>
 											<div>
 												<small> &nbsp;</small>

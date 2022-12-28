@@ -159,7 +159,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			sql = "select distid,district_name,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad "
 					+ " inner join district_mst dm on (ad.distid=dm.district_id) "
 					+ " inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) "
-					+ "inner join dept_new dmt on (d.dept_code=dmt.dept_code) " + condition + " " + " where ack_type='NEW' " + sqlCondition //and respondent_slno=1 
+					+ "inner join dept_new dmt on (d.dept_code=dmt.dept_code) " + condition + " " + " where ack_type='NEW' and respondent_slno=1  " + sqlCondition //and respondent_slno=1 
 					+ " group by distid,dm.district_name order by district_name";
 
 			System.out.println("SQL:showDistWise" + sql);
@@ -257,8 +257,8 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 				sqlCondition += " and d.dept_code='" + cform.getDynaForm("deptId").toString().trim() + "' ";
 			}
 			
-			 cform.setDynaForm("toDate",stringDate);
-		      cform.setDynaForm("fromDate",stringDate);
+			 //cform.setDynaForm("toDate",stringDate);
+		     // cform.setDynaForm("fromDate",stringDate);
 
 			if (cform.getDynaForm("fromDate") != null && !cform.getDynaForm("fromDate").toString().contentEquals("")) {
 				sqlCondition += " and ad.inserted_time::date >= to_date('" + cform.getDynaForm("fromDate")+ "','dd-mm-yyyy') ";
@@ -306,7 +306,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 
 			sql = "select d.dept_code,upper(description) as description,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad  inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) "
 					+ "inner join dept_new dm on (d.dept_code=dm.dept_code) " + condition + " "
-					+ " where ack_type='NEW' " + sqlCondition //and respondent_slno=1 
+					+ " where ack_type='NEW' and respondent_slno=1  " + sqlCondition //and respondent_slno=1 
 					+ " group by d.dept_code,description " + " order by d.dept_code,description";
 
 			System.out.println("SQL:showDeptWise" + sql);
@@ -430,7 +430,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 			sql = "select inserted_by,count(distinct ad.ack_no) as acks from ecourts_gpo_ack_dtls ad "
 					+ " inner join district_mst dm on (ad.distid=dm.district_id) "
 					+ " inner join ecourts_gpo_ack_depts d on (ad.ack_no=d.ack_no) "
-					+ "inner join dept_new dmt on (d.dept_code=dmt.dept_code)" + " where ack_type='NEW' " + sqlCondition //and respondent_slno=1 
+					+ "inner join dept_new dmt on (d.dept_code=dmt.dept_code)" + " where ack_type='NEW' and respondent_slno=1  " + sqlCondition //and respondent_slno=1 
 					+ " group by inserted_by";
 
 			System.out.println("SQL:showUserWise" + sql);
@@ -636,7 +636,7 @@ public class AcknowledgementAbstractReport extends DispatchAction {
 					+ " inner join district_mst dm on (a.distid=dm.district_id) "
 					+ " inner join dept_new dmt on (ad.dept_code=dmt.dept_code)  " + condition + " "
 					+ " inner join case_type_master cm on (a.casetype=cm.sno::text or a.casetype=cm.case_short_name) "
-					+ " where a.delete_status is false and ack_type='NEW' " + sqlCondition //and respondent_slno=1 
+					+ " where a.delete_status is false and ack_type='NEW' and respondent_slno=1  " + sqlCondition //and respondent_slno=1 
 					+ " order by inserted_time desc";
 
 			System.out.println("SQL:" + sql);

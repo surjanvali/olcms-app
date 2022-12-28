@@ -57,10 +57,11 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 		if (session == null || session.getAttribute("userid") == null || session.getAttribute("role_id") == null) {
 			return mapping.findForward("Logout");
 		}
-		String sql = null, sqlCondition = "";
+		String sql = null, sqlCondition = "",roleId=null;
 		try {
 
 			con = DatabasePlugin.connect();
+			roleId = CommonModels.checkStringObject(session.getAttribute("role_id"));
 			/*
 			 * if (cform.getDynaForm("dofFromDate") != null &&
 			 * !cform.getDynaForm("dofFromDate").toString().contentEquals("")) {
@@ -91,10 +92,28 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 			 * " where a.inserted_by='" + session.getAttribute("userid") + "' ";
 			 */
 
-
-			sql="select cino,* from ecourts_case_data a inner join section_officer_details b on (a.assigned_to=b.emailid) "
-					+ " where b.inserted_by='"+session.getAttribute("userid")+"'    order by b.emailid ";   //and ecourts_case_status!='Private' 
-
+			
+			sql=" select cino,* from ecourts_case_data a "
+					+ " inner join (select emailid,inserted_by from nodal_officer_details b  where b.inserted_by='"+session.getAttribute("userid")+"' "
+					+ " union all "
+					+ " select emailid,inserted_by from  mlo_details c  where c.inserted_by='"+session.getAttribute("userid")+"' "
+					+ " union all "
+					+ " select emailid,inserted_by from  section_officer_details d  where  d.inserted_by='"+session.getAttribute("userid")+"')  e on (a.assigned_to=e.emailid) order by e.emailid ";   //and ecourts_case_status!='Private' 
+			
+			
+			/*
+			 * if(roleId.equals("4")) {
+			 * 
+			 * sql="select cino,* from ecourts_case_data a inner join section_officer_details b on (a.assigned_to=b.emailid) "
+			 * + " where b.inserted_by='"+session.getAttribute("userid")+"'    order by b.emailid "; //and ecourts_case_status!='Private'
+			 * 
+			 * }else if(roleId.equals("5")) {
+			 * 
+			 * sql="select cino,* from ecourts_case_data a inner join nodal_officer_details b on (a.assigned_to=b.emailid)   "
+			 * + " where b.inserted_by='"+session.getAttribute("userid")
+			 * +"' order by b.emailid "; //and ecourts_case_status!='Private' }
+			 */
+			
 			System.out.println("ecourts SQL:" + sql);
 			List<Map<String, Object>> data = DatabasePlugin.executeQuery(sql, con);
 			// System.out.println("data=" + data);
@@ -155,7 +174,7 @@ public class HighCourtCasesAssignedReport extends DispatchAction {
 				else if(roleId.equals("10")) {//NO-DIST
 					backStatus = 8;
 					//distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
-				}else if(roleId.equals("2")) {//NO-DIST
+				}else if(roleId.equals("2")) {//DIST
 					backStatus = 7;
 					//distCode = CommonModels.checkStringObject(session.getAttribute("dist_id"));
 				}
